@@ -1,0 +1,28 @@
+{
+	"name": "akeeba/engage",
+	"description": "Akeeba Engage - A simple articles comment system for Joomla!",
+	"keywords": [
+		"comments",
+		"joomla"
+	],
+	"type": "project",
+	"license": "GPL-3.0-or-later",
+	"homepage": "https://github.com/akeeba/engage",
+	"authors": [
+		{
+			"name": "Nicholas K. Dionysopoulos",
+			"email": "nicholas_NO_SPAM_PLEASE@akeebabackup.com",
+			"homepage": "http://www.dionysopoulos.me",
+			"role": "Lead Developer"
+		}
+	],
+
+	"config": {
+		"vendor-dir": "component/backend/vendor"
+	},
+	"minimum-stability": "stable",
+	"require": {
+		"php": ">=7.1.0",
+		"ext-json": "*"
+	}
+}
