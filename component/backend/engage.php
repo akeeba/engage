@@ -39,8 +39,6 @@ if (!@file_exists(JPATH_SITE . '/media/fef/fef.php'))
  * encounters an unexpected exception or a PHP fatal error. In both cases we capture the generated Throwable and
  * render an error page, making sure that the HTTP response code is set to an appropriate value (4xx or 5xx).
  */
-
-// PHP 5.4, 5.5 and 5.6. Only user exceptions can be caught.
 try
 {
 	if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
