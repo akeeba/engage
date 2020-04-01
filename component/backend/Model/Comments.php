@@ -10,6 +10,7 @@ namespace Akeeba\Engage\Admin\Model;
 use FOF30\Container\Container;
 use FOF30\Model\TreeModel;
 use JDatabaseQuery;
+use Joomla\CMS\User\User;
 use RuntimeException;
 
 /**
@@ -54,6 +55,7 @@ class Comments extends TreeModel
 	{
 		parent::check();
 
+		// Make sure we have EITHER a user OR both an email and full name
 		if (!empty($this->name) && !empty($this->email))
 		{
 			$this->created_by = 0;
@@ -70,27 +72,17 @@ class Comments extends TreeModel
 			throw new RuntimeException("You need to provide your name and email address to file a comment.");
 		}
 
+		// If we have a guest user, make sure we don't have another user with the same email address
+		if (($this->created_by <= 0) && !empty($this->getUserIdByEmail($this->email)))
+		{
+			throw new RuntimeException("This email address is already in use. Please log in to file a comment.");
+		}
+
+		// Make sure we have a hash for the comment record
 		if (empty($this->hash))
 		{
 			$this->hash = $this->createHash();
 		}
-	}
-
-	/**
-	 * Binds the 'depth' parameter in a meaningful way for the TreeModel
-	 *
-	 * @param   array  $data  The data array being bound to the object
-	 *
-	 * @return  void
-	 */
-	protected function onBeforeBind(array &$data)
-	{
-		if (!isset($data['depth']))
-		{
-			return;
-		}
-
-		$this->treeDepth = $data['depth'];
 	}
 
 	/**
@@ -142,6 +134,73 @@ class Comments extends TreeModel
 	}
 
 	/**
+	 * get() will return the comment tree of the specified asset, in infinite depth.
+	 *
+	 * @param   int  $asset_id  The asset ID to scope the tree for
+	 *
+	 * @return  void
+	 */
+	public function scopeAssetCommentTree(int $asset_id): void
+	{
+		$this->scopeNonRootNodes();
+		$this->where('asset_id', '=', $asset_id);
+	}
+
+	/**
+	 * Return a Joomla user object for the user that filed the comment.
+	 *
+	 * If the comment was not filed by a logged in user a guest record with the correct name and email is filed instead.
+	 *
+	 * @return  User
+	 */
+	public function getUser(): User
+	{
+		if ($this->created_by)
+		{
+			return $this->container->platform->getUser($this->created_by);
+		}
+
+		$user        = $this->container->platform->getUser(0);
+		$user->name  = $this->name;
+		$user->email = $this->email;
+	}
+
+	/**
+	 * Binds the 'depth' parameter in a meaningful way for the TreeModel
+	 *
+	 * @param   array  $data  The data array being bound to the object
+	 *
+	 * @return  void
+	 */
+	protected function onBeforeBind(array &$data)
+	{
+		if (!isset($data['depth']))
+		{
+			return;
+		}
+
+		$this->treeDepth = $data['depth'];
+	}
+
+	private function getUserIdByEmail(string $email): ?int
+	{
+		$db = $this->getDbo();
+		$q  = $db->getQuery(true)
+			->select($db->qn('id'))
+			->from($db->qn('#__users'))
+			->where($db->qn('email') . ' = ' . $db->q($email));
+
+		try
+		{
+			return $db->setQuery($q)->loadResult();
+		}
+		catch (\Exception $e)
+		{
+			return null;
+		}
+	}
+
+	/**
 	 * get() will return all descendants of the root node (even subtrees of subtrees!) but not the root.
 	 *
 	 * @return  void
@@ -157,19 +216,6 @@ class Comments extends TreeModel
 
 		$this->whereRaw($db->qn('node') . '.' . $fldLft . ' >= ' . $db->qn('parent') . '.' . $fldLft);
 		$this->whereRaw($db->qn('node') . '.' . $fldLft . ' <= ' . $db->qn('parent') . '.' . $fldRgt);
-	}
-
-	/**
-	 * get() will return the comment tree of the specified asset, in infinite depth.
-	 *
-	 * @param   int  $asset_id  The asset ID to scope the tree for
-	 *
-	 * @return  void
-	 */
-	public function scopeAssetCommentTree(int $asset_id): void
-	{
-		$this->scopeNonRootNodes();
-		$this->where('asset_id', '=', $asset_id);
 	}
 
 	/**
