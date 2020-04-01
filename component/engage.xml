@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   AkeebaEngage
+  ~ @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+
+<extension type="component" version="3.8.0" method="upgrade">
+	<name>ENGAGE</name>
+	<version>0.0.1</version>
+	<creationDate>2020-04-01</creationDate>
+
+	<author>Akeeba Ltd</author>
+	<authorEmail>no-reply@akeebabackup.com</authorEmail>
+	<authorUrl>https://www.akeebabackup.com</authorUrl>
+
+	<copyright>Copyright (c)2020-2020 Akeeba Ltd</copyright>
+	<license>GNU/GPL v3 or any later version</license>
+
+	<description>Akeeba Engage</description>
+
+	<!-- Public front end files -->
+	<files folder="frontend">
+		<folder>Controller</folder>
+		<folder>Helper</folder>
+		<folder>Model</folder>
+		<folder>View</folder>
+		<folder>ViewTemplates</folder>
+		<folder>views</folder>
+
+		<filename>engage.php</filename>
+
+		<filename>.htaccess</filename>
+		<filename>web.config</filename>
+	</files>
+
+	<!-- Front end translation files -->
+	<languages folder="language/frontend">
+		<language tag="en-GB">en-GB/en-GB.com_engage.ini</language>
+	</languages>
+
+	<!-- Media files -->
+	<media destination="com_engage" folder="media">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+		<filename>index.html</filename>
+	</media>
+
+	<!-- Administrator back-end section -->
+	<administration>
+		<!-- Administration menu -->
+		<menu>COM_ENGAGE</menu>
+
+		<!-- Back-end files -->
+		<files folder="backend">
+			<folder>Controller</folder>
+			<folder>Helper</folder>
+			<folder>Model</folder>
+			<folder>Toolbar</folder>
+			<folder>View</folder>
+			<folder>ViewTemplates</folder>
+			<folder>vendor</folder>
+
+			<folder>sql</folder>
+
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
+			<filename>fof.xml</filename>
+
+			<filename>engage.php</filename>
+
+			<filename>.htaccess</filename>
+			<filename>web.config</filename>
+		</files>
+
+		<!-- Back-end translation files -->
+		<languages folder="language/backend">
+			<language tag="en-GB">en-GB/en-GB.com_engage.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_engage.sys.ini</language>
+		</languages>
+	</administration>
+
+	<!-- Installation / uninstallation script file -->
+	<scriptfile>script.com_engage.php</scriptfile>
+</extension>
