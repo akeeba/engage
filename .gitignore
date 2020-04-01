@@ -34,3 +34,4 @@
 
 ### Release files
 /release
+/component/backend/version.php

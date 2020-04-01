@@ -20,7 +20,7 @@
     ====================================================================================================
     -->
 
-    <fileset dir="${dirs.component}" id="component-core">
+    <fileset dir="${dirs.component}" id="component">
         <include name="backend/**"/>
         <include name="frontend/**"/>
         <include name="language/**"/>
@@ -33,32 +33,8 @@
         <exclude name="backend/engage.xml"/>
     </fileset>
 
-    <fileset dir="${dirs.release}" id="package-core">
-        <include name="com_*-core.zip"/>
-        <include name="file_fef*.zip"/>
-        <include name="mod_*.zip"/>
-        <include name="plg_*.zip" />
-        <include name="lib_*.zip"/>
-        <include name="pkg_*.xml"/>
-        <include name="*.txt"/>
-        <include name="script.*.php"/>
-    </fileset>
-
-    <fileset dir="${dirs.component}" id="component-pro">
-        <include name="backend/**"/>
-        <include name="frontend/**"/>
-        <include name="language/**"/>
-        <include name="media/**"/>
-        <include name="*"/>
-
-        <exclude name="LICENSE.txt"/>
-        <exclude name="script.engage.php"/>
-
-        <exclude name="backend/engage.xml"/>
-    </fileset>
-
-    <fileset dir="${dirs.release}" id="package-pro">
-        <include name="com_*-pro.zip"/>
+    <fileset dir="${dirs.release}" id="package">
+        <include name="com_*.zip"/>
         <include name="file_*.zip"/>
         <include name="file_fef*.zip"/>
         <include name="mod_*.zip"/>
@@ -69,7 +45,7 @@
         <include name="script.*.php"/>
     </fileset>
 
-    <fileset dir="${dirs.component}/cli" id="cli-pro">
+    <fileset dir="${dirs.component}/cli" id="cli">
         <include name="*.php"/>
         <include name="file_engage.xml"/>
     </fileset>
