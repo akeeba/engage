@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   AkeebaEngage
+  ~ @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+
+<extension version="3.8.0" type="package" method="upgrade">
+    <name>Akeeba Engage package</name>
+    <version>##VERSION##</version>
+    <creationDate>##DATE##</creationDate>
+
+    <author>Akeeba Ltd</author>
+    <authorEmail>no-reply@akeebabackup.com</authorEmail>
+    <authorUrl>https://www.akeebabackup.com</authorUrl>
+
+    <packagename>engage</packagename>
+    <url>https://www.akeebabackup.com</url>
+    <packager>Akeeba Ltd</packager>
+    <packagerurl>https://www.akeebabackup.com</packagerurl>
+
+    <copyright>Copyright (c)2020-2020 Akeeba Ltd</copyright>
+    <license>GNU GPL v3 or later</license>
+
+    <description>Akeeba Engage installation package v.##VERSION##</description>
+
+    <!-- List of extensions to install -->
+    <files>
+        <!-- Component -->
+        <file type="component" id="com_engage">com_engage.zip</file>
+
+        <!-- Plugins: actionlog -->
+        <!--<file type="plugin" group="actionlog" id="engage">plg_actionlog_engage.zip</file>-->
+
+        <!-- Plugins: content -->
+        <!--<file type="plugin" group="content" id="engage">plg_content_engage.zip</file>-->
+
+        <!-- Plugins: engage -->
+        <!--<file type="plugin" group="engage" id="foobar">plg_engage_foobar.zip</file>-->
+
+        <!-- Plugins: user -->
+        <!--<file type="plugin" group="user" id="engage">plg_user_engage.zip</file>-->
+    </files>
+
+    <!-- Installation script -->
+    <scriptfile>script.engage.php</scriptfile>
+
+    <!-- Update servers -->
+    <!--
+    <updateservers>
+        <server type="extension" priority="1" name="Akeeba Engage Updates">https://cdn.akeebabackup.com/updates/pkg_engage.xml</server>
+    </updateservers>
+    -->
+</extension>

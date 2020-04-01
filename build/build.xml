@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!--
+  ~ @package   AkeebaEngage
+  ~ @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+
+<!--
+	Akeeba Engage build file for Phing
+	written by Nicholas K. Dionysopoulos
+
+	Run "phing git" from the build directory to build everything except the docs
+-->
+<project name="AkeebaEngage" description="Akeeba Engage" default="git">
+    <import file="${phing.dir}/../../buildfiles/phing/common.xml"/>
+
+    <!--
+    ====================================================================================================
+    File sets
+    ====================================================================================================
+    -->
+
+    <fileset dir="${dirs.component}" id="component-core">
+        <include name="backend/**"/>
+        <include name="frontend/**"/>
+        <include name="language/**"/>
+        <include name="media/**"/>
+        <include name="*"/>
+
+        <exclude name="LICENSE.txt"/>
+        <exclude name="script.engage.php"/>
+
+        <exclude name="backend/engage.xml"/>
+    </fileset>
+
+    <fileset dir="${dirs.release}" id="package-core">
+        <include name="com_*-core.zip"/>
+        <include name="file_fef*.zip"/>
+        <include name="mod_*.zip"/>
+        <include name="plg_*.zip" />
+        <include name="lib_*.zip"/>
+        <include name="pkg_*.xml"/>
+        <include name="*.txt"/>
+        <include name="script.*.php"/>
+    </fileset>
+
+    <fileset dir="${dirs.component}" id="component-pro">
+        <include name="backend/**"/>
+        <include name="frontend/**"/>
+        <include name="language/**"/>
+        <include name="media/**"/>
+        <include name="*"/>
+
+        <exclude name="LICENSE.txt"/>
+        <exclude name="script.engage.php"/>
+
+        <exclude name="backend/engage.xml"/>
+    </fileset>
+
+    <fileset dir="${dirs.release}" id="package-pro">
+        <include name="com_*-pro.zip"/>
+        <include name="file_*.zip"/>
+        <include name="file_fef*.zip"/>
+        <include name="mod_*.zip"/>
+        <include name="plg_*.zip"/>
+        <include name="lib_*.zip"/>
+        <include name="pkg_*.xml"/>
+        <include name="*.txt"/>
+        <include name="script.*.php"/>
+    </fileset>
+
+    <fileset dir="${dirs.component}/cli" id="cli-pro">
+        <include name="*.php"/>
+        <include name="file_engage.xml"/>
+    </fileset>
+
+    <!--
+    ====================================================================================================
+    Tasks - Documentation
+    ====================================================================================================
+    -->
+
+    <target name="documentation" description="The documentation"
+            depends="doc-j-pdf">
+    </target>
+
+    <target name="doc-j-pdf" description="Documentation for Joomla! in PDF format">
+        <phingcall target="docbook-pdf">
+            <property name="docs.input" value="engage-guide.xml"/>
+        </phingcall>
+    </target>
+
+    <target name="doc-j-epub" description="Documentation for Joomla! in ePub format">
+        <phingcall target="docbook-epub">
+            <property name="docs.input" value="akeeba-ticket-system.xml"/>
+        </phingcall>
+    </target>
+
+    <!--
+    ====================================================================================================
+    Tasks - Project management
+    ====================================================================================================
+    -->
+
+    <target name="docsdeploy-engage">
+        <phingcall target="docbook-deploy">
+            <property name="docsdeploy.path.source" value=""/>
+            <property name="docsdeploy.path.target" value="akeeba-engage"/>
+        </phingcall>
+    </target>
+
+    <target name="docsdeploy"
+            depends="docsdeploy-engage"/>
+</project>

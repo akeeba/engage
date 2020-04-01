@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ @package   AkeebaEngage
+  ~ @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+
+<schema>
+    <!-- Metadata -->
+    <meta>
+        <!-- Supported driver types -->
+        <drivers>
+            <driver>mysql</driver>
+            <driver>mysqli</driver>
+            <driver>pdomysql</driver>
+        </drivers>
+    </meta>
+
+    <!-- SQL commands to run on installation and update -->
+    <sql>
+        <!-- Comments table -->
+        <action table="#__engage_comments" canfail="0">
+            <condition type="missing" value="" />
+            <query><![CDATA[
+CREATE TABLE `#__engage_comments` (
+  `engage_comment_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `lft` int(10) unsigned NOT NULL,
+  `rgt` int(10) unsigned NOT NULL,
+  `hash` char(40) NOT NULL DEFAULT '',
+  `asset_id` int(10) unsigned NOT NULL,
+  `body` longtext NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `ip` varchar(64) DEFAULT NULL,
+  `enabled` tinyint(3) NOT NULL DEFAULT '0',
+  `created_on` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `modified_on` datetime DEFAULT NULL,
+  `modified_by` int(11) DEFAULT NULL,
+  PRIMARY KEY (`engage_comment_id`),
+  KEY `#__engage_comments_lft` (`lft`),
+  KEY `#__engage_comments_rgt` (`rgt`),
+  KEY `#__engage_comments_nested` (`lft`,`rgt`),
+  KEY `#__engage_comments_hash` (`hash`),
+  KEY `#__engage_comments_asset` (`asset_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ]]></query>
+        </action>
+
+        <!-- Comment: root node -->
+        <action table="#__engage_comments" canfail="1">
+            <condition type="equals" operator="not" value="1"><![CDATA[
+SELECT COUNT(*) FROM `#__engage_comments` WHERE `lft` = 1;
+            ]]></condition>
+            <query><![CDATA[
+INSERT INTO `#__engage_comments` (`lft`, `rgt`, `hash`, `asset_id`, `body`)
+VALUES (1, 1, "0000000000000000000000000000000000000000", 0, "ROOT NODE -- DO NOT DELETE");
+            ]]></query>
+        </action>
+    </sql>
+</schema>
