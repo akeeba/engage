@@ -137,6 +137,34 @@ class Comments extends TreeModel
 		return $query;
 	}
 
+	public function count()
+	{
+		if (!$this->treeNestedGet)
+		{
+			return parent::count();
+		}
+
+		// Get a "count all" query
+		$db = $this->getDbo();
+
+		$innerQuery = $this->buildQuery(true);
+		$innerQuery->clear('select')->clear('order')->select($db->qn('node.lft'));
+
+		// Run the "before build query" hook and behaviours
+		$this->triggerEvent('onBuildCountQuery', array(&$innerQuery));
+
+		$outerQuery = $db->getQuery(true)
+			->select('COUNT(*)')
+			->from('(' . $innerQuery . ') AS ' . $db->qn('a'));
+
+
+		$total = $db->setQuery($outerQuery)->loadResult();
+
+		return $total;
+
+	}
+
+
 	/**
 	 * get() will return the comment tree of the specified asset, in infinite depth.
 	 *
