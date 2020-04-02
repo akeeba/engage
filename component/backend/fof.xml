@@ -12,4 +12,14 @@
             <option name="rendererClass">FOF30\Render\FEF</option>
         </container>
     </common>
+
+    <frontend>
+        <container>
+            <option name="rendererClass">FOF30\Render\Joomla</option>
+        </container>
+
+        <dispatcher>
+            <option name="defaultView">Comments</option>
+        </dispatcher>
+    </frontend>
 </fof>
