@@ -15,7 +15,7 @@
 
     <div class="akengage-list-container">
     @if ($this->getItemCount())
-        @include('any:com_engage/Comments/default_list', ['items' => $this->getItems(), 'parent' => $this->rootNode])
+        @include('any:com_engage/Comments/default_list')
     @endif
     </div>
 
