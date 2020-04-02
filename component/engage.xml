@@ -17,7 +17,7 @@
 	<copyright>Copyright (c)2020-2020 Akeeba Ltd</copyright>
 	<license>GNU/GPL v3 or any later version</license>
 
-	<description>Akeeba Engage</description>
+	<description>COM_ENGAGE_XML_DESCRIPTION</description>
 
 	<!-- Public front end files -->
 	<files folder="frontend">

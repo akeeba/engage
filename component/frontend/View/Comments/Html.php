@@ -9,12 +9,21 @@ namespace Akeeba\Engage\Site\View\Comments;
 
 
 use Akeeba\Engage\Site\Model\Comments;
+use Exception;
 use FOF30\View\DataView\Html as DataHtml;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Pagination\Pagination;
 use RuntimeException;
 
 class Html extends DataHtml
 {
+	/**
+	 * Root node for all comments
+	 *
+	 * @var Comments
+	 */
+	public $rootNode;
+
 	/**
 	 * Executes before rendering the page for the Browse task.
 	 */
@@ -41,61 +50,70 @@ class Html extends DataHtml
 		// Display limits
 		$defaultLimit = $this->getDefaultListLimit();
 
-		$this->lists->limitStart = $model->getState('comments_limitstart', 0, 'int');
-		$this->lists->limit      = $model->getState('comments_limit', $defaultLimit, 'int');
+		$this->lists->limitStart = $model->getState('akengage_limitstart', 0, 'int');
+		$this->lists->limit      = $model->getState('akengage_limit', $defaultLimit, 'int');
 
 		$model->limitstart = $this->lists->limitStart;
 		$model->limit      = $this->lists->limit;
 
 		// Assign items to the view
-		$model = $model->getRoot();
+		$model          = $model->getRoot();
+		$this->rootNode = $model->getClone()->bind(['depth' => 0]);
+
 		$model->scopeAssetCommentTree($assetId);
 
 		$this->items     = $model->get(false);
 		$this->itemCount = $model->count();
 
-		// Ordering information
-		$this->lists->order     = $model->getState('filter_order', $model->getIdFieldName(), 'cmd');
-		$this->lists->order_Dir = $model->getState('filter_order_Dir', null, 'cmd');
-
-		if ($this->lists->order_Dir)
-		{
-			$this->lists->order_Dir = strtolower($this->lists->order_Dir);
-		}
-
 		// Pagination
-		$this->pagination = new Pagination($this->itemCount, $this->lists->limitStart, $this->lists->limit, 'comments_');
+		$this->pagination = new Pagination($this->itemCount, $this->lists->limitStart, $this->lists->limit, 'akengage_');
 
 		// Pass page params on frontend only
-		if ($this->container->platform->isFrontend())
+		if (!$this->container->platform->isFrontend())
 		{
-			/** @var \JApplicationSite $app */
-			$app              = \JFactory::getApplication();
-			$params           = $app->getParams();
-			$this->pageParams = $params;
+			return;
 		}
+
+		/** @var \JApplicationSite $app */
+		try
+		{
+			$app = Factory::getApplication();
+		}
+		catch (Exception $e)
+		{
+			return;
+		}
+
+		$params           = $app->getParams();
+		$this->pageParams = $params;
 	}
 
 	/**
-	 * @return int|mixed
-	 * @throws \Exception
+	 * Get the default list limit configured by the site administrator
+	 *
+	 * @return  int
 	 */
-	protected function getDefaultListLimit()
+	protected function getDefaultListLimit(): int
 	{
 		$defaultLimit = 20;
 
-		if (!$this->container->platform->isCli() && class_exists('JFactory'))
+		if ($this->container->platform->isCli() || !class_exists('Joomla\CMS\Factory'))
 		{
-			$app = \JFactory::getApplication();
+			return $defaultLimit;
+		}
 
-			if (method_exists($app, 'get'))
-			{
-				$defaultLimit = $app->get('list_limit');
-			}
-			else
-			{
-				$defaultLimit = 20;
-			}
+		try
+		{
+			$app = Factory::getApplication();
+		}
+		catch (Exception $e)
+		{
+			return $defaultLimit;
+		}
+
+		if (is_object($app) && method_exists($app, 'get'))
+		{
+			$defaultLimit = (int) $app->get('list_limit', 20);
 		}
 
 		return $defaultLimit;

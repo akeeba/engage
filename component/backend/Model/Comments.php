@@ -7,9 +7,11 @@
 
 namespace Akeeba\Engage\Admin\Model;
 
+use Exception;
 use FOF30\Container\Container;
 use FOF30\Model\TreeModel;
 use JDatabaseQuery;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\User\User;
 use RuntimeException;
 
@@ -56,26 +58,28 @@ class Comments extends TreeModel
 		parent::check();
 
 		// Make sure we have EITHER a user OR both an email and full name
-		if (!empty($this->name) && !empty($this->email))
+		$name = $this->getFieldValue('name');
+
+		if (!empty($name) && !empty($this->email))
 		{
 			$this->created_by = 0;
 		}
 
-		if (empty($this->name) || empty($this->email))
+		if (empty($name) || empty($this->email))
 		{
-			$this->name  = null;
+			$this->setFieldValue('name', null);
 			$this->email = null;
 		}
 
-		if (empty($this->created_by) && empty($this->name) && empty($this->email))
+		if (empty($this->created_by) && empty($name) && empty($this->email))
 		{
-			throw new RuntimeException("You need to provide your name and email address to file a comment.");
+			throw new RuntimeException(Text::_('COM_ENGAGE_COMMENTS_ERR_NO_NAME_OR_EMAIL'));
 		}
 
 		// If we have a guest user, make sure we don't have another user with the same email address
 		if (($this->created_by <= 0) && !empty($this->getUserIdByEmail($this->email)))
 		{
-			throw new RuntimeException("This email address is already in use. Please log in to file a comment.");
+			throw new RuntimeException(Text::sprintf('COM_ENGAGE_COMMENTS_ERR_EMAIL_IN_USE', $this->email));
 		}
 
 		// Make sure we have a hash for the comment record
@@ -161,8 +165,24 @@ class Comments extends TreeModel
 		}
 
 		$user        = $this->container->platform->getUser(0);
-		$user->name  = $this->name;
+		$user->name  = $this->getFieldValue('name');
 		$user->email = $this->email;
+
+		return $user;
+	}
+
+	public function getAvatarURL(int $size = 32): string
+	{
+		$hash = md5(strtolower(trim($this->getUser()->email)));
+
+		return 'https://www.gravatar.com/avatar/' . $hash . '?s=' . $size;
+	}
+
+	public function getProfileURL(): string
+	{
+		$hash = md5(strtolower(trim($this->getUser()->email)));
+
+		return 'https://www.gravatar.com/' . $hash;
 	}
 
 	/**
@@ -194,7 +214,7 @@ class Comments extends TreeModel
 		{
 			return $db->setQuery($q)->loadResult();
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			return null;
 		}
