@@ -50,8 +50,9 @@ class Html extends DataHtml
 		// Display limits
 		$defaultLimit = $this->getDefaultListLimit();
 
-		$this->lists->limitStart = $model->getState('akengage_limitstart', 0, 'int');
+		$this->lists->limitStart = $this->input->getInt('akengage_limitstart', 0);
 		$this->lists->limit      = $model->getState('akengage_limit', $defaultLimit, 'int');
+
 
 		$model->limitstart = $this->lists->limitStart;
 		$model->limit      = $this->lists->limit;
