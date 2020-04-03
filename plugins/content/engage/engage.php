@@ -8,6 +8,7 @@
 defined('_JEXEC') or die();
 
 use FOF30\Container\Container;
+use FOF30\Input\Input;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Registry\Registry;
@@ -59,23 +60,49 @@ class plgContentEngage extends CMSPlugin
 		parent::__construct($subject, $config);
 	}
 
-	public function onContentPrepare(?string $context, &$row, Registry &$params, ?int $page = 0): bool
+	public function onContentPrepare(?string $context, &$row, &$params, ?int $page = 0): bool
 	{
+		// We need to be enabled
 		if (!$this->enabled)
 		{
 			return true;
 		}
 
+		// We need to be given the right kind of data
+		if (!is_object($params) || !($params instanceof Registry) || !is_object($row))
+		{
+			return true;
+		}
+
+		// We need to be in the frontend of the site
+		$container = $this->getContainer();
+
+		if (!$container->platform->isFrontend())
+		{
+			return true;
+		}
+
+		// We need to have a supported context
 		if ($context !== 'com_content.article')
 		{
 			return true;
 		}
 
-		$container = $this->getContainer();
-		$input     = $container->input;
+		/**
+		 * Set a flag that we're allowed to show the comments browse page.
+		 *
+		 * Since this is a container flag it can only be set by backend code, not any request parameter. Since this is
+		 * not set by default it means that the only way to access the comments is going through this plugin. In other
+		 * words, someone trying to bypass the plugin and display all comments regardless would be really disappointed
+		 * at the results of their plan to surreptitiously pull comments.
+		 */
+		$container['commentsBrowseEnablingFlag'] = true;
 
-		$input->set('asset_id', $row->asset_id);
-		$input->set('task', 'browse');
+		$input   = $container->input;
+		$assetId = $row->asset_id;
+
+		$input->set('asset_id', $assetId);
+		$input->set('access', $row->access);
 
 		// Capture the output instead of pushing it to the browser
 		try
@@ -105,7 +132,15 @@ class plgContentEngage extends CMSPlugin
 			$this->container = Container::getInstance('com_engage', [
 				'tempInstance' => true,
 				'input'        => [
-					'View' => 'Comments',
+					'view'                => 'Comments',
+					'task'                => 'browse',
+					'asset_id'            => 0,
+					'access'              => 0,
+					'akengage_limitstart' => (new Input())->getInt('akengage_limitstart', 0),
+					'layout'              => null,
+					'tpl'                 => null,
+					'tmpl'                => null,
+					'format'              => 'html',
 				],
 			], 'site');
 		}

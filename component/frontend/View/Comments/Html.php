@@ -7,13 +7,13 @@
 
 namespace Akeeba\Engage\Site\View\Comments;
 
+defined('_JEXEC') or die();
 
 use Akeeba\Engage\Site\Model\Comments;
 use Exception;
 use FOF30\View\DataView\Html as DataHtml;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Pagination\Pagination;
-use RuntimeException;
 
 class Html extends DataHtml
 {
@@ -25,37 +25,34 @@ class Html extends DataHtml
 	public $rootNode;
 
 	/**
+	 * The asset ID to display comments for
+	 *
+	 * @var int
+	 */
+	public $assetId;
+
+	/**
 	 * Executes before rendering the page for the Browse task.
 	 */
 	protected function onBeforeBrowse()
 	{
+		// Load the CSS
 		$this->addCssFile('media://com_engage/css/comments.min.css');
 
-		// Create the lists object
-		$this->lists = new \stdClass();
-
-		// Load the model
+		// Load the model and persist its state in the session
 		/** @var Comments $model */
 		$model = $this->getModel();
 
-		// We want to persist the state in the session
 		$model->savestate(1);
-
-		// Get the asset_id
-		$assetId = $this->input->getInt('asset_id', 0);
-
-		if (empty($assetId))
-		{
-			throw new RuntimeException('Cannot display all comments in the frontend');
-		}
 
 		// Display limits
 		$defaultLimit = $this->getDefaultListLimit();
 
+		$this->lists             = new \stdClass();
 		$this->lists->limitStart = $this->input->getInt('akengage_limitstart', 0);
 		$this->lists->limit      = $model->getState('akengage_limit', $defaultLimit, 'int');
 
-
+		// Pass the display limits to the model
 		$model->limitstart = $this->lists->limitStart;
 		$model->limit      = $this->lists->limit;
 
@@ -63,7 +60,7 @@ class Html extends DataHtml
 		$model          = $model->getRoot();
 		$this->rootNode = $model->getClone()->bind(['depth' => 0]);
 
-		$model->scopeAssetCommentTree($assetId);
+		$model->scopeAssetCommentTree($this->assetId);
 
 		$this->items     = $model->get(false);
 		$this->itemCount = $model->count();
