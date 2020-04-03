@@ -296,4 +296,18 @@ class Comments extends TreeModel
 
 		return sha1($this->asset_id . microtime(false) . $name . $email);
 	}
+
+	public function recordDataToDatabaseData()
+	{
+		$ret = parent::recordDataToDatabaseData();
+
+		if (array_key_exists('depth', $ret))
+		{
+			unset($ret['depth']);
+		}
+
+		return $ret;
+	}
+
+
 }

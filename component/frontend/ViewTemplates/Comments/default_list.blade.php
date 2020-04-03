@@ -51,10 +51,6 @@ $canEditOwn = $myUser->authorise('core.edit.own', 'com_engage');
     $avatar = $comment->getAvatarURL();
     $profile = $comment->getProfileURL();
     $commentDate = new \FOF30\Date\Date($comment->created_on);
-    $permalink = \Joomla\CMS\Uri\Uri::getInstance();
-    $permalink->delVar('akengage_limitstart');
-    $permalink->delVar('akengage_limit');
-    $permalink->setFragment('akengage-comment-' . $comment->getId());
     $openListItem++;
 ?>
 <li class="akengage-comment-item">
@@ -85,9 +81,7 @@ $canEditOwn = $myUser->authorise('core.edit.own', 'com_engage');
             </div>
             <div class="akengage-comment-info">
                 <span class="akengage-comment-permalink">
-                    <a href="{{ $permalink->toString() }}">
-                        {{ $commentDate->format(\Joomla\CMS\Language\Text::_('DATE_FORMAT_LC2'), true) }}
-                    </a>
+                    {{ $commentDate->format(\Joomla\CMS\Language\Text::_('DATE_FORMAT_LC2'), true) }}
                 </span>
                 @if ($canEdit || (($myUser->id === $user->id) && $canEditOwn))
                 <span class="akengage-comment-edit">

@@ -19,10 +19,11 @@ defined('_JEXEC') or die();
           id="akengageCommentForm">
         <input type="hidden" name="option" value="com_engage">
         <input type="hidden" name="view" value="Comments">
-        <input type="hidden" name="task" value="save">
+        <input type="hidden" name="task" value="submit">
         <input type="hidden" name="@token(false)" value="1">
         <input type="hidden" name="asset_id" value="{{ $this->assetId }}">
         <input type="hidden" name="parent_id" value="0">
+        <input type="hidden" name="returnurl" value="{{ base64_encode(\Joomla\CMS\Uri\Uri::getInstance()->toString()) }}">
 
         <div id="akengage-comment-inreplyto-wrapper">
             @lang('COM_ENGAGE_COMMENTS_FORM_INREPLYTO_LABEL')
