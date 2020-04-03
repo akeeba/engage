@@ -15,6 +15,10 @@ defined('_JEXEC') or die();
 
 $previousLevel = 0;
 $openListItem = 0;
+$myUser = $this->container->platform->getUser();
+$canCreate = $myUser->authorise('core.create', 'com_engage');
+$canEdit = $myUser->authorise('core.edit', 'com_engage');
+$canEditOwn = $myUser->authorise('core.edit.own', 'com_engage');
 ?>
 @foreach ($this->getItems() as $comment)
 {{-- Deeper level comment. Indent with <ol> tags --}}
@@ -85,11 +89,13 @@ $openListItem = 0;
                         {{ $commentDate->format(\Joomla\CMS\Language\Text::_('DATE_FORMAT_LC2'), true) }}
                     </a>
                 </span>
+                @if ($canEdit || (($myUser->id === $user->id) && $canEditOwn))
                 <span class="akengage-comment-edit">
                     <button id="akengage-comment-edit-btn" data-akengageid="{{ $comment->getId() }}">
                         @lang('COM_ENGAGE_COMMENTS_BTN_EDIT')
                     </button>
                 </span>
+                @endif
             </div>
         </footer>
 
@@ -97,11 +103,13 @@ $openListItem = 0;
             {{ $comment->body }}
         </div>
 
+        @if ($canCreate)
         <div class="akengage-comment-reply">
             <button id="akengage-comment-reply-btn" data-akengageid="{{ $comment->getId() }}">
                 @lang('COM_ENGAGE_COMMENTS_BTN_REPLY')
             </button>
         </div>
+        @endif
     </article>
 
 

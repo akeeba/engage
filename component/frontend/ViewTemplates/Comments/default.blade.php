@@ -27,7 +27,7 @@ defined('_JEXEC') or die();
         </div>
     </div>
 
-    <div class="akengage-comment-form" id="akengage-comment-form">
-        {{-- TODO -- Comment form --}}
-    </div>
+    @if($this->container->platform->getUser()->authorise('core.create', 'com_engage'))
+        @include('any:com_engage/Comments/default_form')
+    @endif
 </section>

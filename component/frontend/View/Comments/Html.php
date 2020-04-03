@@ -32,6 +32,27 @@ class Html extends DataHtml
 	public $assetId;
 
 	/**
+	 * The last submitted comment's name, in case the validation failed
+	 *
+	 * @var string
+	 */
+	public $storedName = '';
+
+	/**
+	 * The last submitted comment's email address, in case the validation failed
+	 *
+	 * @var string
+	 */
+	public $storedEmail = '';
+
+	/**
+	 * The last submitted comment's text, in case the validation failed
+	 *
+	 * @var string
+	 */
+	public $storedComment = '';
+
+	/**
 	 * Executes before rendering the page for the Browse task.
 	 */
 	protected function onBeforeBrowse()

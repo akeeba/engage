@@ -112,6 +112,45 @@ section.akengage-outer-container {
         }
       }
     }
+  }
 
+  div#akengage-comment-form {
+    border-top: thin solid $grey;
+    padding: 1em;
+    margin: 1em 0;
+
+    h4 {
+      color: darken($teal, 10%);
+      font-size: 120%;
+    }
+
+    div#akengage-comment-inreplyto-wrapper {
+      display: none;
+      padding: 0.5em 1em;
+      border: 1px solid $teal;
+      border-radius: 0.5em;
+      color: $black;
+      background-color: lighten($teal, 45%);
+
+      span#akengage-comment-inreplyto-name {
+        font-weight: bold;
+      }
+
+      button#akengage-comment-inreplyto-cancel {
+        border: thin solid $red;
+        color: $red;
+        background-color: lighten($light-grey, 10%);
+        font-weight: bold;
+        padding: 0.25em 0.5em;
+        vertical-align: baseline;
+        margin-left: 1em;
+
+        &:hover {
+          background-color: lighten($red, 43%);
+          border: thin solid darken($red, 10%);
+          color: darken($red, 10%);
+        }
+      }
+    }
   }
 }

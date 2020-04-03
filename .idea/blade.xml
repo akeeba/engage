@@ -5,6 +5,7 @@
       <data directive="@append" />
       <data directive="@css" injection="true" prefix="&lt;?php echo $this-&gt;addCssFile(" suffix="); ?&gt;" />
       <data directive="@each" injection="true" prefix="&lt;?php echo $this-&gt;renderEach(" suffix="); ?&gt;" />
+      <data directive="@editor" injection="true" prefix="&lt;?php JEditor::getInstance($this-&gt;container-&gt;platform-&gt;getConfig()-&gt;get('editor', 'tinymce'))-&gt;display(" suffix="); ?&gt;" />
       <data directive="@else" />
       <data directive="@elseif" injection="true" prefix="&lt;?php elseif (" suffix="): ?&gt;" />
       <data directive="@empty" injection="true" prefix="&lt;?php if(empty(" suffix=")): ?&gt;" />
