@@ -5,6 +5,8 @@
  * @license   GNU General Public License version 3, or later
  */
 
+defined('_JEXEC') or die();
+
 /**
  * @var \Akeeba\Engage\Site\View\Comments\Html $this
  * @var \FOF30\Model\DataModel\Collection      $items
