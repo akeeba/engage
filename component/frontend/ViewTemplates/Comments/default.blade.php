@@ -23,9 +23,6 @@
         <div class="akengage-pagination-pages">
             {{ $this->getPagination()->getListFooter() }}
         </div>
-        <div class="akengage-pagination-limit">
-            {{ $this->getPagination()->getLimitBox() }}
-        </div>
     </div>
 
     <div class="akengage-comment-form" id="akengage-comment-form">

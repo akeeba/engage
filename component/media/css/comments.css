@@ -6,6 +6,7 @@
 section.akengage-outer-container {
   margin-top: 12pt;
   margin-bottom: 12pt;
+  border-bottom: thin solid #514F50;
 }
 section.akengage-outer-container h3.akengage-title {
   border-bottom: thin solid #514F50;
