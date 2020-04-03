@@ -22,7 +22,6 @@
 # Editor-based Rest Client
 .idea/httpRequests
 
-
 ### Akeeba BuildFiles integration
 /build/override.properties
 /build/release.json
@@ -30,8 +29,10 @@
 
 ### Extension files to be excluded
 /component/backend/encrypt_service_key.php
-/component/backend/vendor
+/component/backend/version.php
 
 ### Release files
 /release
-/component/backend/version.php
+
+### Composer
+/vendor
