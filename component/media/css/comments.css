@@ -1,0 +1,76 @@
+/*!
+ * @package   AkeebaEngage
+ * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @license   GNU General Public License version 3, or later
+ */
+section.akengage-outer-container {
+  margin-top: 12pt;
+  margin-bottom: 12pt;
+}
+section.akengage-outer-container h3.akengage-title {
+  border-bottom: thin solid #514F50;
+}
+section.akengage-outer-container div.akengage-list-container > ol.akengage-comment-list {
+  margin-left: 0;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list {
+  margin-top: 0.5em;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list button {
+  display: inline-block;
+  background: none;
+  border: none;
+  color: teal;
+  margin: 0;
+  padding: 0;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list button:hover {
+  color: #62c6c9;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item {
+  list-style: none;
+  margin-top: 1em;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  border-left: 4px solid #EFEFEF;
+  padding-left: 1em;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment footer.akengage-comment-properties {
+  background-color: #fcfcfc;
+  margin-bottom: 0.25em;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment footer.akengage-comment-properties img.akengage-commenter-avatar {
+  float: left;
+  max-width: 32px;
+  max-height: 32px;
+  margin-right: 1em;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment footer.akengage-comment-properties div.akengange-commenter-name {
+  font-weight: bold;
+  font-size: 110%;
+  color: #514F50;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-ismoderator {
+  color: #F0AD4E;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment footer.akengage-comment-properties span.akengage-comment-permalink > a {
+  color: #514F50;
+  text-underline: none;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment footer.akengage-comment-properties span.akengage-comment-edit {
+  float: right;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment div.akengage-comment-reply > button {
+  border: thin solid #EFEFEF;
+  padding: 0.25em 0.5em;
+  font-size: 115%;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment div.akengage-comment-reply > button:hover {
+  border-color: #514F50;
+  background-color: #f7f7f7;
+  color: #514F50;
+}
+
+/*# sourceMappingURL=comments.css.map */

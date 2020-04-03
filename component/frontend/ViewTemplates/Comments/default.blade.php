@@ -14,16 +14,21 @@
     </h3>
 
     <div class="akengage-list-container">
-    @if ($this->getItemCount())
-        @include('any:com_engage/Comments/default_list')
-    @endif
+        @if ($this->getItemCount())
+            @include('any:com_engage/Comments/default_list')
+        @endif
     </div>
 
     <div class="akengage-pagination">
-        {{ $this->getPagination()->getListFooter() }}
+        <div class="akengage-pagination-pages">
+            {{ $this->getPagination()->getListFooter() }}
+        </div>
+        <div class="akengage-pagination-limit">
+            {{ $this->getPagination()->getLimitBox() }}
+        </div>
     </div>
 
     <div class="akengage-comment-form" id="akengage-comment-form">
-    {{-- TODO -- Comment form --}}
+        {{-- TODO -- Comment form --}}
     </div>
 </section>

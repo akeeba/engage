@@ -68,18 +68,24 @@ $openListItem = 0;
             @endunless
             <div class="akengange-commenter-name">
                 {{{ $user->name }}}
+                {{-- TODO Add a real check for moderator user here --}}
+                @if ($user->authorise('core.manage', $comment->asset_id))
+                    <span class="akengage-commenter-ismoderator icon icon-star"></span>
+                @elseif(!$user->guest)
+                    <span class="akengage-commenter-isuser icon icon-user"></span>
+                @endif
             </div>
             <div class="akengage-comment-info">
-                        <span class="akengage-comment-permalink">
-                            <a href="{{ $permalink->toString() }}">
-                                {{ $commentDate->format(\Joomla\CMS\Language\Text::_('DATE_FORMAT_LC2'), true) }}
-                            </a>
-                        </span>
+                <span class="akengage-comment-permalink">
+                    <a href="{{ $permalink->toString() }}">
+                        {{ $commentDate->format(\Joomla\CMS\Language\Text::_('DATE_FORMAT_LC2'), true) }}
+                    </a>
+                </span>
                 <span class="akengage-comment-edit">
-                            <button id="akengage-comment-edit-btn" data-akengageid="{{ $comment->getId() }}">
-                                @lang('COM_ENGAGE_COMMENTS_BTN_EDIT')
-                            </button>
-                        </span>
+                    <button id="akengage-comment-edit-btn" data-akengageid="{{ $comment->getId() }}">
+                        @lang('COM_ENGAGE_COMMENTS_BTN_EDIT')
+                    </button>
+                </span>
             </div>
         </footer>
 

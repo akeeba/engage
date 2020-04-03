@@ -1,0 +1,106 @@
+/*!
+ * @package   AkeebaEngage
+ * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @license   GNU General Public License version 3, or later
+ */
+
+// Color Declarations
+$grey: #514F50;
+$teal: #40B5B8;
+$red: #E2363C;
+$light-grey: #EFEFEF;
+$white: #ffffff;
+$green: #93C34E;
+$orange: #F0AD4E;
+$black: #000000;
+
+section.akengage-outer-container {
+  margin-top: 12pt;
+  margin-bottom: 12pt;
+
+  h3.akengage-title {
+    border-bottom: thin solid $grey;
+  }
+
+  div.akengage-list-container {
+    // First level comments have no margin
+    & > ol.akengage-comment-list {
+      margin-left: 0;
+    }
+
+    ol.akengage-comment-list {
+      margin-top: 0.5em;
+
+      button {
+        display: inline-block;
+        background: none;
+        border: none;
+        color: teal;
+        margin: 0;
+        padding: 0;
+
+        &:hover {
+          color: lighten($teal, 10%);
+        }
+      }
+
+      li.akengage-comment-item {
+        list-style: none;
+        margin-top: 1em;
+
+        article.akengage-comment {
+          margin-top: 0.5em;
+          margin-bottom: 1em;
+          border-left: 4px solid $light-grey;
+          padding-left: 1em;
+
+          footer.akengage-comment-properties {
+            background-color: lighten($light-grey, 5%);
+            margin-bottom: 0.25em;
+
+            img.akengage-commenter-avatar {
+              float: left;
+              max-width: 32px;
+              max-height: 32px;
+              margin-right: 1em;
+            }
+
+            div.akengange-commenter-name {
+              font-weight: bold;
+              font-size: 110%;
+              color: $grey;
+
+              span.akengage-commenter-ismoderator {
+                color: $orange;
+              }
+            }
+
+            span.akengage-comment-permalink > a {
+              color: $grey;
+              text-underline: none;
+            }
+
+            span.akengage-comment-edit {
+              float: right;
+            }
+          }
+
+          div.akengage-comment-reply {
+            & > button {
+              border: thin solid $light-grey;
+              padding: 0.25em 0.5em;
+              font-size: 115%;
+
+              &:hover {
+                border-color: $grey;
+                background-color: lighten($light-grey, 3%);
+                color: $grey;
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+}

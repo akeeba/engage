@@ -29,6 +29,8 @@ class Html extends DataHtml
 	 */
 	protected function onBeforeBrowse()
 	{
+		$this->addCssFile('media://com_engage/css/comments.min.css');
+
 		// Create the lists object
 		$this->lists = new \stdClass();
 
