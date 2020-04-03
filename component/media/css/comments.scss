@@ -71,6 +71,16 @@ section.akengage-outer-container {
               font-size: 110%;
               color: $grey;
 
+              span.akengage-commenter-username {
+                font-family:Hack, "Fira Code Retina", Consolas, "SF Mono", "Courier New", Courier, monospace;
+                color: darken($green, 10%);
+              }
+
+              span.akengage-commenter-ismoderator,
+              span.akengage-commenter-isuser
+              {
+                padding-left: 1em;
+              }
               span.akengage-commenter-ismoderator {
                 color: $orange;
               }

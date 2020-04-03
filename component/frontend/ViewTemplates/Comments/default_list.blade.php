@@ -70,11 +70,13 @@ $openListItem = 0;
             @endunless
             <div class="akengange-commenter-name">
                 {{{ $user->name }}}
-                {{-- TODO Add a real check for moderator user here --}}
                 @if ($user->authorise('core.manage', $comment->asset_id))
                     <span class="akengage-commenter-ismoderator icon icon-star"></span>
                 @elseif(!$user->guest)
                     <span class="akengage-commenter-isuser icon icon-user"></span>
+                @endif
+                @if(!$user->guest)
+                    <span class="akengage-commenter-username">{{{ $user->username }}}</span>
                 @endif
             </div>
             <div class="akengage-comment-info">

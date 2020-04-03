@@ -53,6 +53,14 @@ section.akengage-outer-container div.akengage-list-container ol.akengage-comment
   font-size: 110%;
   color: #514F50;
 }
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-username {
+  font-family: Hack, "Fira Code Retina", Consolas, "SF Mono", "Courier New", Courier, monospace;
+  color: #79a638;
+}
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-ismoderator,
+section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-isuser {
+  padding-left: 1em;
+}
 section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article.akengage-comment footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-ismoderator {
   color: #F0AD4E;
 }
