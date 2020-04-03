@@ -10,6 +10,7 @@ defined('_JEXEC') or die();
 use FOF30\Container\Container;
 use FOF30\Input\Input;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Registry\Registry;
 
@@ -102,7 +103,6 @@ class plgContentEngage extends CMSPlugin
 		$assetId = $row->asset_id;
 
 		$input->set('asset_id', $assetId);
-		$input->set('access', $row->access);
 
 		// Capture the output instead of pushing it to the browser
 		try
@@ -125,6 +125,63 @@ class plgContentEngage extends CMSPlugin
 		return true;
 	}
 
+	public function onAkeebaEngageGetAssetAccess(int $assetId = 0): ?array
+	{
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true)
+			->select([
+				$db->qn('id'),
+			])
+			->from($db->qn('#__content'))
+			->where($db->qn('asset_id') . ' = ' . $db->q($assetId));
+		try
+		{
+			$articleId = $db->setQuery($query)->loadResult();
+		}
+		catch (Exception $e)
+		{
+			$articleId = null;
+		}
+
+		if (is_null($articleId))
+		{
+			return null;
+		}
+
+		/** @var ContentModelArticle $model */
+		try
+		{
+			$model = JModelLegacy::getInstance('Article', 'ContentModel');
+			$row   = $model->getItem($articleId);
+		}
+		catch (Exception $e)
+		{
+			$row = null;
+		}
+
+		if (is_null($row) || ($row === false) || is_object($row) && ($row instanceof Throwable))
+		{
+			return null;
+		}
+
+		return $this->getMetaForRow($row);
+	}
+
+	private function getMetaForRow($row): array
+	{
+		$ret = [
+			'published'   => $this->isRowPublished($row),
+			'access'      => $row->access ?? 0,
+		];
+
+		return $ret;
+	}
+
+	/**
+	 * Get the Akeeba Engage container, preloaded for comments display
+	 *
+	 * @return  Container
+	 */
 	private function getContainer(): Container
 	{
 		if (empty($this->container))
@@ -146,5 +203,61 @@ class plgContentEngage extends CMSPlugin
 		}
 
 		return $this->container;
+	}
+
+	/**
+	 * Is this article published?
+	 *
+	 * This takes into account the publish_up and publish_down dates, not just the publish state.
+	 *
+	 * @param   stdClass  $row  The article object returned by ContentModelArticle
+	 *
+	 * @return  bool
+	 */
+	private function isRowPublished($row)
+	{
+		// The article is unpublished, the point is moot
+		if ($row->state <= 0)
+		{
+			return false;
+		}
+
+		$db = Factory::getDbo();
+
+		// Do we have a publish up date?
+		if (!empty($row->publish_up) && ($row->publish_up != $db->getNullDate()))
+		{
+			try
+			{
+				$publishUp = new Joomla\CMS\Date\Date($row->publish_up);
+
+				if ($publishUp->toUnix() > time())
+				{
+					return false;
+				}
+			}
+			catch (Exception $e)
+			{
+			}
+		}
+
+		// Do we have a publish down date?
+		if (!empty($row->publish_down) && ($row->publish_down != $db->getNullDate()))
+		{
+			try
+			{
+				$publishDown = new Joomla\CMS\Date\Date($row->publish_down);
+
+				if ($publishDown->toUnix() < time())
+				{
+					return false;
+				}
+			}
+			catch (Exception $e)
+			{
+			}
+		}
+
+		return true;
 	}
 }

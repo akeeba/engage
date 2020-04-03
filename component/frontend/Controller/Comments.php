@@ -9,6 +9,7 @@ namespace Akeeba\Engage\Site\Controller;
 
 defined('_JEXEC') or die();
 
+use Akeeba\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Site\Model\Comments as CommentsModel;
 use Akeeba\Engage\Site\View\Comments\Html;
 use Exception;
@@ -153,11 +154,43 @@ class Comments extends DataController
 			throw new AccessForbidden();
 		}
 
-		// Get the asset_id and access level
+		// Get the asset_id and assert we have access to it
 		$assetId = $this->getAssetId();
 
-		// Make sure the user is allowed to view this asset (this is information returned by the plugin)
-		$access   = $this->input->getInt('access', 0);
+		// Pass the data to the view
+		/** @var Html $view */
+		$view             = $this->getView();
+		$sessionNamespace = $this->container->componentName . '.' . $this->name;
+		$platform         = $this->container->platform;
+
+		$view->assetId       = $assetId;
+		$view->storedName    = $platform->getSessionVar('name', '', $sessionNamespace);
+		$view->storedEmail   = $platform->getSessionVar('email', '', $sessionNamespace);
+		$view->storedComment = $platform->getSessionVar('comment', '', $sessionNamespace);
+	}
+
+	/**
+	 * Asserts that the user has view access to a published asset. Throws a RuntimeException otherwise.
+	 *
+	 * @param   int  $assetId
+	 *
+	 * @return  void
+	 *
+	 * @throws  AccessForbidden
+	 */
+	protected function assertAssetAccess(?int $assetId): void
+	{
+		// Get the asset access metadata
+		$assetMeta = Meta::getAssetMeta($assetId);
+
+		// Make sure the associated asset is published
+		if (!$assetMeta['published'])
+		{
+			throw new AccessForbidden();
+		}
+
+		// Make sure the user is allowed to view this asset
+		$access   = $assetMeta['access'];
 		$platform = $this->container->platform;
 		$user     = $platform->getUser();
 
@@ -165,16 +198,6 @@ class Comments extends DataController
 		{
 			throw new AccessForbidden();
 		}
-
-		// Pass the data to the view
-		/** @var Html $view */
-		$view             = $this->getView();
-		$sessionNamespace = $this->container->componentName . '.' . $this->name;
-
-		$view->assetId       = $assetId;
-		$view->storedName    = $platform->getSessionVar('name', '', $sessionNamespace);
-		$view->storedEmail   = $platform->getSessionVar('email', '', $sessionNamespace);
-		$view->storedComment = $platform->getSessionVar('comment', '', $sessionNamespace);
 	}
 
 	/**
@@ -204,6 +227,9 @@ class Comments extends DataController
 		{
 			throw new AccessForbidden();
 		}
+
+		// Make sure the asset is published and we have view access to it
+		$this->assertAssetAccess($assetId);
 
 		// Return the asset ID
 		return $assetId;
