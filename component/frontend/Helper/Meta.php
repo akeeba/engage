@@ -13,9 +13,16 @@ defined('_JEXEC') or die();
 
 final class Meta
 {
+	private static $cachedMeta = [];
+
 	public static function getAssetMeta(int $assetId = 0)
 	{
-		$ret = [
+		if (array_key_exists($assetId, self::$cachedMeta))
+		{
+			return self::$cachedMeta[$assetId];
+		}
+
+		self::$cachedMeta[$assetId] = [
 			'published'   => false,
 			'access'      => 0,
 		];
@@ -32,21 +39,21 @@ final class Meta
 
 		if (empty($pluginResults))
 		{
-			return $ret;
+			return self::$cachedMeta[$assetId];
 		}
 
 		$tempRet = array_shift($pluginResults);
 
-		foreach ($ret as $k => $v)
+		foreach (self::$cachedMeta[$assetId] as $k => $v)
 		{
 			if (!array_key_exists($k, $tempRet))
 			{
 				continue;
 			}
 
-			$ret[$k] = $tempRet[$k] ?? $v;
+			self::$cachedMeta[$assetId][$k] = $tempRet[$k] ?? $v;
 		}
 
-		return $ret;
+		return self::$cachedMeta[$assetId];
 	}
 }
