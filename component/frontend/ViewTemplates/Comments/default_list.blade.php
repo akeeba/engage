@@ -15,12 +15,16 @@ defined('_JEXEC') or die();
 
 $previousLevel = 0;
 $openListItem = 0;
+$parentIds = [0 => 0];
 $myUser = $this->container->platform->getUser();
 $canCreate = $myUser->authorise('core.create', 'com_engage');
 $canEdit = $myUser->authorise('core.edit', 'com_engage');
 $canEditOwn = $myUser->authorise('core.edit.own', 'com_engage');
 ?>
 @foreach ($this->getItems() as $comment)
+    <?php
+    $parentIds[$comment->getLevel()] = $comment->getId();
+    ?>
 {{-- Deeper level comment. Indent with <ol> tags --}}
 @if ($comment->getLevel() > $previousLevel)
     @for($level = $previousLevel + 1; $level <= $comment->getLevel(); $level++)
@@ -99,7 +103,10 @@ $canEditOwn = $myUser->authorise('core.edit.own', 'com_engage');
 
         @if ($canCreate)
         <div class="akengage-comment-reply">
-            <button id="akengage-comment-reply-btn" data-akengageid="{{ $comment->getId() }}">
+            {{-- You can reply to $this->maxLevel - 1 level comments only. Replies to deeper nested comments are to the $this->maxLevel - 1 level parent. --}}
+            <button id="akengage-comment-reply-btn"
+                    data-akengageid="{{ ($comment->getLevel() < $this->maxLevel) ? $comment->getId() : $parentIds[$this->maxLevel - 1] }}"
+            >
                 @lang('COM_ENGAGE_COMMENTS_BTN_REPLY')
             </button>
         </div>

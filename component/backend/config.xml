@@ -7,6 +7,21 @@
 <!--<config addfieldpath="/administrator/components/com_engage/Field/Joomla">-->
 <config addfieldpath="/administrator/components/com_engage/Field/Joomla">
     <fieldset
+            name="basic"
+            label="COM_ENGAGE_CONFIG_BASIC_FIELDSET_LABEL"
+            description="COM_ENGAGE_CONFIG_BASIC_FIELDSET_DESC"
+    >
+        <field name="max_level"
+               type="integer"
+               label="COM_ENGAGE_CONFIG_MAX_LEVEL_LABEL"
+               description="COM_ENGAGE_CONFIG_MAX_LEVEL_DESC"
+               default="3"
+               first="1" last="6" step="1"
+        />
+
+    </fieldset>
+
+    <fieldset
             name="permissions"
             label="JCONFIG_PERMISSIONS_LABEL"
             description="JCONFIG_PERMISSIONS_DESC"
