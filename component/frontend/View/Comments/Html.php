@@ -33,6 +33,26 @@ class Html extends DataHtml
 	public $assetId;
 
 	/**
+	 * Display title for the resource being commented on
+	 *
+	 * @var string|null
+	 */
+	public $title = null;
+
+	/**
+	 * Language key for displaying the header (number of comments).
+	 *
+	 * Generic default: COM_ENGAGE_COMMENTS_HEADER_N_COMMENTS
+	 *
+	 * You can define language strings such as COM_ENGAGE_COMMENTS_CONTENTTYPE_HEADER_N_COMMENTS where CONTENTTYPE is
+	 * the content type returned by the Akeeba Engage plugins. For example, for Joomla articles you can use the language
+	 * key COM_ENGAGE_COMMENTS_ARTICLE_HEADER_N_COMMENTS.
+	 *
+	 * @var string
+	 */
+	public $headerKey = 'COM_ENGAGE_COMMENTS_HEADER_N_COMMENTS';
+
+	/**
 	 * Maximum comment nesting level.
 	 *
 	 * This is only used for replies. You can reply directly to $maxLevel-1 level comments. Replies to $maxLevel or
@@ -120,6 +140,15 @@ class Html extends DataHtml
 		// Populate the pagination object
 		$this->pagination = new Pagination($this->itemCount, $this->lists->limitStart, $this->lists->limit, 'akengage_');
 
+		// Asset metadata-based properties
+		$meta        = Meta::getAssetAccessMeta($this->assetId);
+		$this->title = $meta['title'];
+
+		if (!empty($meta['title']))
+		{
+			$this->headerKey = $this->getHeaderKey($meta['type']) ?? 'COM_ENGAGE_COMMENTS_HEADER_N_COMMENTS';
+		}
+
 		// Populate properties based on component parameters
 		$params         = $this->container->params;
 		$this->maxLevel = $params->get('max_level', 3);
@@ -173,5 +202,20 @@ class Html extends DataHtml
 		}
 
 		return $defaultLimit;
+	}
+
+	/**
+	 * Get the appropriate language key for the content type provided
+	 *
+	 * @param   string  $type  Content type, e.g. 'article'
+	 *
+	 * @return  string|null  The custom language key or null if no appropriate key is found.
+	 */
+	private function getHeaderKey(string $type): ?string
+	{
+		$key  = sprintf('COM_ENGAGE_COMMENTS_%s_HEADER_N_COMMENTS', strtoupper($type));
+		$lang = $this->container->platform->getLanguage();
+
+		return $lang->hasKey($key) ? $key : null;
 	}
 }

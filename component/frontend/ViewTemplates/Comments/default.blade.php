@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 ?>
 <section class="akengage-outer-container">
     <h3 class="akengage-title">
-        @plural('COM_ENGAGE_COMMENTS_HEADER_N_COMMENTS', $this->getItemCount())
+        @plural($this->headerKey, $this->getItemCount(), $this->title)
     </h3>
 
     <div class="akengage-list-container">

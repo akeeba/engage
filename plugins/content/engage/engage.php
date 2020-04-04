@@ -12,6 +12,7 @@ use FOF30\Input\Input;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Router\Router;
 use Joomla\Registry\Registry;
 
 /**
@@ -38,6 +39,8 @@ class plgContentEngage extends CMSPlugin
 	 */
 	private $container;
 
+	private $cachedArticles = [];
+
 	/**
 	 * Constructor
 	 *
@@ -59,6 +62,8 @@ class plgContentEngage extends CMSPlugin
 		}
 
 		parent::__construct($subject, $config);
+
+		$this->loadLanguage();
 	}
 
 	public function onContentPrepare(?string $context, &$row, &$params, ?int $page = 0): bool
@@ -125,56 +130,46 @@ class plgContentEngage extends CMSPlugin
 		return true;
 	}
 
-	public function onAkeebaEngageGetAssetAccess(int $assetId = 0): ?array
+	/**
+	 * Returns the asset access information for an asset recognized by this plugin
+	 *
+	 * @param   int  $assetId
+	 *
+	 * @return  array|null  Asset access information. NULL when the asset is invalid or not recognized.
+	 */
+	public function onAkeebaEngageGetAssetMeta(int $assetId = 0): ?array
 	{
-		$db    = Factory::getDbo();
-		$query = $db->getQuery(true)
-			->select([
-				$db->qn('id'),
-			])
-			->from($db->qn('#__content'))
-			->where($db->qn('asset_id') . ' = ' . $db->q($assetId));
-		try
-		{
-			$articleId = $db->setQuery($query)->loadResult();
-		}
-		catch (Exception $e)
-		{
-			$articleId = null;
-		}
+		$row = $this->getArticleByAssetId($assetId);
 
-		if (is_null($articleId))
+		if (is_null($row))
 		{
 			return null;
 		}
 
-		/** @var ContentModelArticle $model */
-		try
-		{
-			$model = JModelLegacy::getInstance('Article', 'ContentModel');
-			$row   = $model->getItem($articleId);
-		}
-		catch (Exception $e)
-		{
-			$row = null;
-		}
+		// Get the link to the article
+		$container = Container::getInstance('com_engage');
+		$url       = '';
 
-		if (is_null($row) || ($row === false) || is_object($row) && ($row instanceof Throwable))
+		if ($container->platform->isFrontend())
 		{
-			return null;
+			$router = Router::getInstance('site');
+			$url    = $router->build('index.php?option=com_content&view=article&id=' . $row->id);
+		}
+		elseif ($container->platform->isBackend())
+		{
+			$url = 'index.php?option=com_content&task=article.edit&id=' . $row->id;
 		}
 
-		return $this->getMetaForRow($row);
-	}
+		return [
+			'type'          => 'article',
+			'published'     => $this->isRowPublished($row),
+			'access'        => $row->access ?? 0,
+			'parent_access' => $row->category_access,
+			'title'         => $row->title,
+			'category'      => $row->category_title,
+			'url'           => $url,
 
-	private function getMetaForRow($row): array
-	{
-		$ret = [
-			'published'   => $this->isRowPublished($row),
-			'access'      => $row->access ?? 0,
 		];
-
-		return $ret;
 	}
 
 	/**
@@ -259,5 +254,83 @@ class plgContentEngage extends CMSPlugin
 		}
 
 		return true;
+	}
+
+	/**
+	 * Returns article information based on the asset ID.
+	 *
+	 * It will try to use cached results to avoid expensive trips to the database.
+	 *
+	 * @param   int  $assetId  The asset ID to use
+	 *
+	 * @return  object|null  Partial article information. NULL when there is no article associated with this asset ID.
+	 */
+	private function getArticleByAssetId(int $assetId)
+	{
+		if (isset($this->cachedArticles[$assetId]))
+		{
+			return $this->cachedArticles[$assetId];
+		}
+
+		$this->cachedArticles[$assetId] = null;
+
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true)
+			->select([
+				$db->qn('id'),
+			])
+			->from($db->qn('#__content'))
+			->where($db->qn('asset_id') . ' = ' . $db->q($assetId));
+		try
+		{
+			$articleId = $db->setQuery($query)->loadResult();
+		}
+		catch (Exception $e)
+		{
+			$articleId = null;
+		}
+
+		if (is_null($articleId))
+		{
+			return null;
+		}
+
+		/** @var ContentModelArticle $model */
+		try
+		{
+			$model = JModelLegacy::getInstance('Article', 'ContentModel');
+			$row   = $model->getItem($articleId);
+		}
+		catch (Exception $e)
+		{
+			$row = null;
+		}
+
+		if (is_null($row) || ($row === false) || is_object($row) && ($row instanceof Throwable))
+		{
+			return null;
+		}
+
+		if (!is_object($row))
+		{
+			return null;
+		}
+
+		$this->cachedArticles[$assetId] = (object) [
+			'id'              => $row->id,
+			'asset_id'        => $row->asset_id,
+			'title'           => $row->title,
+			'alias'           => $row->alias,
+			'state'           => $row->state,
+			'catid'           => $row->catid,
+			'publish_up'      => $row->publish_up,
+			'publish_down'    => $row->publish_down,
+			'access'          => $row->access,
+			'category_title'  => $row->category_title,
+			'category_alias'  => $row->category_alias,
+			'category_access' => $row->category_access,
+		];
+
+		return $this->cachedArticles[$assetId];
 	}
 }

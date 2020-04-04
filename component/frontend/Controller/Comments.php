@@ -181,7 +181,7 @@ class Comments extends DataController
 	protected function assertAssetAccess(?int $assetId): void
 	{
 		// Get the asset access metadata
-		$assetMeta = Meta::getAssetMeta($assetId);
+		$assetMeta = Meta::getAssetAccessMeta($assetId);
 
 		// Make sure the associated asset is published
 		if (!$assetMeta['published'])
@@ -189,12 +189,18 @@ class Comments extends DataController
 			throw new AccessForbidden();
 		}
 
-		// Make sure the user is allowed to view this asset
-		$access   = $assetMeta['access'];
-		$platform = $this->container->platform;
-		$user     = $platform->getUser();
+		// Make sure the user is allowed to view this asset and its parent
+		$access       = $assetMeta['access'];
+		$parentAccess = $assetMeta['parent_access'];
+		$platform     = $this->container->platform;
+		$user         = $platform->getUser();
 
-		if (!in_array($access, $user->getAuthorisedViewLevels()))
+		if (!is_null($access) && !in_array($access, $user->getAuthorisedViewLevels()))
+		{
+			throw new AccessForbidden();
+		}
+
+		if (!is_null($parentAccess) && !in_array($parentAccess, $user->getAuthorisedViewLevels()))
 		{
 			throw new AccessForbidden();
 		}
