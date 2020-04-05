@@ -11,6 +11,7 @@ use FOF30\Container\Container;
 use FOF30\Input\Input;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModelLegacy;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Router\Router;
 use Joomla\Registry\Registry;
@@ -298,6 +299,11 @@ class plgContentEngage extends CMSPlugin
 		/** @var ContentModelArticle $model */
 		try
 		{
+			if (!class_exists('ContentModelArticle'))
+			{
+				JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_content/models');
+			}
+
 			$model = JModelLegacy::getInstance('Article', 'ContentModel');
 			$row   = $model->getItem($articleId);
 		}
