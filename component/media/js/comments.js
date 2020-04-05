@@ -16,9 +16,7 @@ if (typeof akeeba.Engage == "undefined")
 
 if (typeof akeeba.Engage.Comments == "undefined")
 {
-    akeeba.Engage.Comments = {
-        "onEditButton": null
-    };
+    akeeba.Engage.Comments = {};
 }
 
 akeeba.Engage.Comments.onEditButton = function (e)
@@ -45,15 +43,9 @@ akeeba.Engage.Comments.onEditButton = function (e)
      * Construct the edit URL for the comment. The akeeba.Engage.Comments.editURL script option key comes from the
      * components/com_engage\View\Comments\Html.php file.
      */
-    var id     = akeeba.System.data.get(clickedElement, "data-akengageid", "0");
-    var newURL = akeeba.System.getOptions("akeeba.Engage.Comments.editURL") + encodeURIComponent(id);
+    var id     = akeeba.System.data.get(clickedElement, "akengageid", "0");
 
-    if ((typeof part === "undefined") || (part !== ""))
-    {
-        newURL += "&part=" + part
-    }
-
-    window.location = newURL;
+    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.editURL") + encodeURIComponent(id);
 };
 
 akeeba.Engage.Comments.onReplyButton = function (e)
@@ -122,5 +114,6 @@ akeeba.System.documentReady(function ()
         akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onReplyButton);
     });
 
-    akeeba.System.addEventListener("akengage-comment-inreplyto-cancel", "click", akeeba.Engage.Comments.onCancelReplyButton);
+    akeeba.System.addEventListener(
+        "akengage-comment-inreplyto-cancel", "click", akeeba.Engage.Comments.onCancelReplyButton);
 });

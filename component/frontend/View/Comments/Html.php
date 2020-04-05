@@ -179,7 +179,7 @@ class Html extends DataHtml
 
 		// Script options
 		$router = Router::getInstance('site');
-		$platform->addScriptOptions('akeeba.Engage.Comments.editURL', $router->build('index.php?option=com_engage&view=Comments&task=edit&id='));
+		$platform->addScriptOptions('akeeba.Engage.Comments.editURL', $router->build('index.php?option=com_engage&view=Comments&task=edit&id=')->toString());
 	}
 
 	/**
