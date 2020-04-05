@@ -22,6 +22,7 @@
 	<!-- Public front end files -->
 	<files folder="frontend">
 		<folder>Controller</folder>
+		<folder>Dispatcher</folder>
 		<folder>Helper</folder>
 		<folder>Model</folder>
 		<folder>View</folder>
@@ -55,6 +56,7 @@
 		<!-- Back-end files -->
 		<files folder="backend">
 			<folder>Controller</folder>
+			<folder>Dispatcher</folder>
 			<folder>Helper</folder>
 			<folder>Model</folder>
 			<folder>Toolbar</folder>
