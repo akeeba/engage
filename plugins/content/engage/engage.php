@@ -154,7 +154,7 @@ class plgContentEngage extends CMSPlugin
 	 */
 	public function onContentPrepareForm(Form $form, $data): bool
 	{
-		if ($form->getName() != 'com_categories.categorycom_content')
+		if (!in_array($form->getName(), ['com_categories.categorycom_content', 'com_content.article']))
 		{
 			return true;
 		}
@@ -176,15 +176,22 @@ class plgContentEngage extends CMSPlugin
 	 *
 	 * @return  bool
 	 */
-	public function onContentBeforeSave(?string $context, &$table, $isNew, $data): bool
+	public function onContentBeforeSave(?string $context, $table, $isNew, $data): bool
 	{
-		if ($context !== 'com_categories.category')
+		if (!in_array($context, ['com_categories.category', 'com_content.article']))
 		{
 			return true;
 		}
 
-		$params        = @json_decode($table->params, true) ?? [];
-		$table->params = json_encode(array_merge($params, ['engage' => $data['engage']]));
+		if (!isset($data['engage']))
+		{
+			return true;
+		}
+
+		$key = ($context === 'com_categories.category') ? 'params' : 'attribs';
+
+		$params         = @json_decode($table->{$key}, true) ?? [];
+		$table->{$key} = json_encode(array_merge($params, ['engage' => $data['engage']]));
 
 		return true;
 	}
@@ -194,25 +201,27 @@ class plgContentEngage extends CMSPlugin
 	 *
 	 * This is used for both articles and article categories.
 	 *
-	 * @param   string|null   $context  Context for the content being loaded
-	 * @param   object        $data     Data being saved
+	 * @param   string|null  $context  Context for the content being loaded
+	 * @param   object       $data     Data being saved
 	 *
 	 * @return  bool
 	 */
 	public function onContentPrepareData(?string $context, &$data)
 	{
-		if ($context !== 'com_categories.category')
+		if (!in_array($context, ['com_categories.category', 'com_content.article']))
 		{
 			return true;
 		}
 
-		if (!isset($data->params) || !isset($data->params['engage']))
+		$key = ($context === 'com_categories.category') ? 'params' : 'attribs';
+
+		if (!isset($data->{$key}) || !isset($data->{$key}['engage']))
 		{
 			return true;
 		}
 
-		$data->engage = $data->params['engage'];
-		unset ($data->params['engage']);
+		$data->engage = $data->{$key}['engage'];
+		unset ($data->{$key}['engage']);
 	}
 
 	/**
