@@ -11,9 +11,11 @@ use FOF30\Container\Container;
 use FOF30\Input\Input;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModelLegacy;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Router\Router;
+use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 
 /**
@@ -138,6 +140,79 @@ class plgContentEngage extends CMSPlugin
 		}
 
 		return $comments;
+	}
+
+	/**
+	 * Runs when Joomla is preparing a form. Used to add extra fields to the Category edit page.
+	 *
+	 * Please note that due to frontend editing this MUST run in both the front- and backend of the site.
+	 *
+	 * @param   Form    $form  The Joomla Form object we are manipulating
+	 * @param   object  $data  The data assigned to the form.
+	 *
+	 * @return  bool  Always true (we never fail preparing the form)
+	 */
+	public function onContentPrepareForm(Form $form, $data): bool
+	{
+		if ($form->getName() != 'com_categories.categorycom_content')
+		{
+			return true;
+		}
+
+		// Add the registration fields to the form.
+		JForm::addFormPath(__DIR__ . '/forms');
+		$form->loadFile('engage', false);
+
+		return true;
+	}
+
+	/**
+	 * Triggered when Joomla is saving content. Used to save the Engage configuration.
+	 *
+	 * @param   string|null   $context  Context for the content being saved
+	 * @param   Table|object  $table    Joomla table object where the content is being saved to
+	 * @param   bool          $isNew    Is this a new record?
+	 * @param   object        $data     Data being saved
+	 *
+	 * @return  bool
+	 */
+	public function onContentBeforeSave(?string $context, &$table, $isNew, $data): bool
+	{
+		if ($context !== 'com_categories.category')
+		{
+			return true;
+		}
+
+		$params        = @json_decode($table->params, true) ?? [];
+		$table->params = json_encode(array_merge($params, ['engage' => $data['engage']]));
+
+		return true;
+	}
+
+	/**
+	 * Triggered when Joomla is loading content. Used to load the Engage configuration.
+	 *
+	 * This is used for both articles and article categories.
+	 *
+	 * @param   string|null   $context  Context for the content being loaded
+	 * @param   object        $data     Data being saved
+	 *
+	 * @return  bool
+	 */
+	public function onContentPrepareData(?string $context, &$data)
+	{
+		if ($context !== 'com_categories.category')
+		{
+			return true;
+		}
+
+		if (!isset($data->params) || !isset($data->params['engage']))
+		{
+			return true;
+		}
+
+		$data->engage = $data->params['engage'];
+		unset ($data->params['engage']);
 	}
 
 	/**

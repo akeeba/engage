@@ -16,6 +16,8 @@
     <license>GNU/GPL v3 or any later version</license>
 
     <files>
+        <folder>forms</folder>
+
         <filename plugin="engage">engage.php</filename>
         <filename>.htaccess</filename>
         <filename>web.config</filename>
