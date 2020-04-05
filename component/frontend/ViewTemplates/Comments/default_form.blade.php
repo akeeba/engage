@@ -17,6 +17,9 @@ $captcha = $this->getCaptchaField();
     <h4>
         @lang('COM_ENGAGE_COMMENTS_FORM_HEADER')
     </h4>
+
+    @modules('engage-before-reply')
+
     <form class="form-horizontal form-validate" action="index.php" method="post" name="akengageCommentForm"
           id="akengageCommentForm">
         <input type="hidden" name="option" value="com_engage">
@@ -88,4 +91,6 @@ $captcha = $this->getCaptchaField();
             </div>
         </div>
     </form>
+
+    @modules('engage-after-reply')
 </div>
