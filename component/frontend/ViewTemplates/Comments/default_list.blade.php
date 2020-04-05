@@ -16,6 +16,7 @@ defined('_JEXEC') or die();
 $previousLevel = 0;
 $openListItem = 0;
 $parentIds = [0 => 0];
+$parentNames = [0 => ''];
 $myUser = $this->container->platform->getUser();
 $canCreate = $myUser->authorise('core.create', 'com_engage');
 $canEdit = $myUser->authorise('core.edit', 'com_engage');
@@ -24,6 +25,7 @@ $canEditOwn = $myUser->authorise('core.edit.own', 'com_engage');
 @foreach ($this->getItems() as $comment)
     <?php
     $parentIds[$comment->getLevel()] = $comment->getId();
+    $parentNames[$comment->getLevel()] = $comment->getUser()->name;
     ?>
 {{-- Deeper level comment. Indent with <ol> tags --}}
 @if ($comment->getLevel() > $previousLevel)
@@ -89,7 +91,7 @@ $canEditOwn = $myUser->authorise('core.edit.own', 'com_engage');
                 </span>
                 @if ($canEdit || (($myUser->id === $user->id) && $canEditOwn))
                 <span class="akengage-comment-edit">
-                    <button id="akengage-comment-edit-btn" data-akengageid="{{ $comment->getId() }}">
+                    <button class="akengage-comment-edit-btn" data-akengageid="{{ $comment->getId() }}">
                         @lang('COM_ENGAGE_COMMENTS_BTN_EDIT')
                     </button>
                 </span>
@@ -104,8 +106,9 @@ $canEditOwn = $myUser->authorise('core.edit.own', 'com_engage');
         @if ($canCreate)
         <div class="akengage-comment-reply">
             {{-- You can reply to $this->maxLevel - 1 level comments only. Replies to deeper nested comments are to the $this->maxLevel - 1 level parent. --}}
-            <button id="akengage-comment-reply-btn"
+            <button class="akengage-comment-reply-btn"
                     data-akengageid="{{ ($comment->getLevel() < $this->maxLevel) ? $comment->getId() : $parentIds[$this->maxLevel - 1] }}"
+                    data-akengagereplyto="{{{ ($comment->getLevel() < $this->maxLevel) ? $user->name : $parentNames[$this->maxLevel - 1] }}}"
             >
                 @lang('COM_ENGAGE_COMMENTS_BTN_REPLY')
             </button>

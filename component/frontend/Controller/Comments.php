@@ -47,7 +47,7 @@ class Comments extends DataController
 		$this->csrfProtection();
 
 		$assetId   = $this->getAssetId();
-		$parentId  = $this->input->post->getInt('parent', 0);
+		$parentId  = $this->input->post->getInt('parent_id', 0);
 		$name      = $this->input->post->getString('name', null);
 		$email     = $this->input->post->getString('email', null);
 		$comment   = $this->input->post->getHtml('comment', null);
@@ -83,7 +83,7 @@ class Comments extends DataController
 		// Get the parent comment (default: common comments root)
 		/** @var CommentsModel $model */
 		$model  = $this->getModel();
-		$parent = $model->getRoot()->getClone();
+		$parent = $model->tmpInstance()->getClone()->getRoot();
 
 		if ($parentId !== 0)
 		{

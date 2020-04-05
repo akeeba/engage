@@ -15,6 +15,8 @@ use Exception;
 use FOF30\View\DataView\Html as DataHtml;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Pagination\Pagination;
+use Joomla\CMS\Router\Router;
+use Joomla\Registry\Registry;
 
 class Html extends DataHtml
 {
@@ -97,11 +99,14 @@ class Html extends DataHtml
 	 */
 	protected function onBeforeBrowse()
 	{
-		// Load the CSS
-		$this->addCssFile('media://com_engage/css/comments.min.css');
+		// Load the CSS and JavaScript
+		$this->addCssFile('media://com_engage/css/comments.min.css', $this->container->mediaVersion);
+		$this->addJavascriptFile('media://com_engage/js/system.min.js', $this->container->mediaVersion, 'text/javascript', true);
+		$this->addJavascriptFile('media://com_engage/js/comments.min.js', $this->container->mediaVersion, 'text/javascript', true);
 
 		// Get the current user
-		$user = $this->container->platform->getUser();
+		$platform = $this->container->platform;
+		$user     = $platform->getUser();
 
 		// Load the model and persist its state in the session
 		/** @var Comments $model */
@@ -154,23 +159,27 @@ class Html extends DataHtml
 		$this->maxLevel = $params->get('max_level', 3);
 
 		// Page parameters
-		if (!$this->container->platform->isFrontend())
-		{
-			return;
-		}
-
 		/** @var \JApplicationSite $app */
 		try
 		{
-			$app = Factory::getApplication();
+			$app        = Factory::getApplication();
+			$pageParams = $app->getParams();
+
+			if (is_object($pageParams) && ($pageParams instanceof Registry))
+			{
+				$this->pageParams = $pageParams;
+			}
 		}
 		catch (Exception $e)
 		{
-			return;
+			$this->pageParams = null;
 		}
 
-		$pageParams       = $app->getParams();
-		$this->pageParams = $pageParams;
+		$this->pageParams = $this->pageParams ?? new Registry();
+
+		// Script options
+		$router = Router::getInstance('site');
+		$platform->addScriptOptions('akeeba.Engage.Comments.editURL', $router->build('index.php?option=com_engage&view=Comments&task=edit&id='));
 	}
 
 	/**
