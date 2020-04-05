@@ -9,6 +9,8 @@ defined('_JEXEC') or die();
 
 /** @var \Akeeba\Engage\Site\View\Comments\Html $this */
 
+$captcha = $this->getCaptchaField();
+
 ?>
 @jhtml('behavior.formvalidator')
 <div class="akengage-comment-form" id="akengage-comment-form">
@@ -70,6 +72,13 @@ defined('_JEXEC') or die();
         @endif
 
         @editor('comment', $this->storedComment, '100%', '400', 50, 10, false, 'akengage-comment-editor')
+
+        @unless (empty($captcha))
+        <div class="akengage-comment-captcha-wrapper">
+            {{ $captcha }}
+        </div>
+        <div class="akengage-comment-captcha-clear"></div>
+        @endunless
 
         <div class="btn-toolbar">
             <div class="btn-group">

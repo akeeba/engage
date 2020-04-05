@@ -203,8 +203,8 @@ class Html extends DataHtml
 		}
 
 		$myComment = $comment->getClone();
-		$maxLevel = (int) $this->container->params->get('max_level', 3);
-		$maxLevel = max($maxLevel, 1);
+		$maxLevel  = (int) $this->container->params->get('max_level', 3);
+		$maxLevel  = max($maxLevel, 1);
 
 		do
 		{
@@ -212,6 +212,32 @@ class Html extends DataHtml
 			$parentNames[$myComment->getLevel()] = $myComment->getUser()->name;
 			$parentIds[$myComment->getLevel()]   = $myComment->getId();
 		} while ($myComment->getLevel() > ($maxLevel - 1));
+	}
+
+	protected function getCaptchaField(): string
+	{
+		$user          = $this->container->platform->getUser();
+		$useCaptchaFor = $this->container->params->get('captcha_for', 'guests');
+		$useCaptchaFor = in_array($useCaptchaFor, ['guests', 'all', 'nonmanager']) ? $useCaptchaFor : 'guests';
+
+		if (($useCaptchaFor === 'guests') && ($user->guest !== 1))
+		{
+			return '';
+		}
+
+		if (($useCaptchaFor === 'nonmanager') && !$user->authorise('core.manage', 'com_engage'))
+		{
+			return '';
+		}
+
+		$captcha = $this->rootNode->getCaptcha();
+
+		if (is_null($captcha))
+		{
+			return '';
+		}
+
+		return $captcha->display('captcha', 'akengage-comments-captcha');
 	}
 
 	/**

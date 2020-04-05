@@ -118,10 +118,13 @@ class Comments extends DataController
 			$model->created_by = $user->id;
 		}
 
-		// Try to save the comment
+		// Try to save the comment, checking for CAPTCHA when necessary
 		try
 		{
+			$model->useCaptcha(true);
+			$model->setState('captcha', $this->input->get('captcha', '', 'raw'));
 			$model->insertAsChildOf($parent);
+			$model->useCaptcha(false);
 		}
 		catch (Exception $e)
 		{

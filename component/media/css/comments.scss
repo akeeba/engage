@@ -152,5 +152,10 @@ section.akengage-outer-container {
         }
       }
     }
+
+    div.akengage-comment-captcha-wrapper,
+    div.akengage-comment-captcha-clear {
+      clear: both;
+    }
   }
 }

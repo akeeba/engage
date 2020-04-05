@@ -115,5 +115,9 @@ section.akengage-outer-container div#akengage-comment-form div#akengage-comment-
   border: thin solid #c81d23;
   color: #c81d23;
 }
+section.akengage-outer-container div#akengage-comment-form div.akengage-comment-captcha-wrapper,
+section.akengage-outer-container div#akengage-comment-form div.akengage-comment-captcha-clear {
+  clear: both;
+}
 
 /*# sourceMappingURL=comments.css.map */
