@@ -7,8 +7,20 @@
 
 namespace Akeeba\Engage\Site\Model;
 
+defined('_JEXEC') or die();
+
+use FOF30\Utils\Ip;
 
 class Comments extends \Akeeba\Engage\Admin\Model\Comments
 {
+	public function check()
+	{
+		parent::check();
 
+		// Add an IP address if none has been provided yet
+		if (empty($this->getFieldValue('ip')))
+		{
+			$this->ip = Ip::getIp();
+		}
+	}
 }
