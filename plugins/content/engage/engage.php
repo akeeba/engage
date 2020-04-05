@@ -67,18 +67,29 @@ class plgContentEngage extends CMSPlugin
 		$this->loadLanguage();
 	}
 
-	public function onContentPrepare(?string $context, &$row, &$params, ?int $page = 0): bool
+	/**
+	 * Returns the content to display after an article. Used to render the comments interface.
+	 *
+	 * @param   string|null  $context  The context of the content being prepared. We only repond to
+	 *                                 'com_content.article'
+	 * @param   object       $row      A simple object with the article information
+	 * @param   object       $params   The category parameters, computed through the categories' hierarchy
+	 * @param   int|null     $page     Page number for multi-page articles
+	 *
+	 * @return string
+	 */
+	public function onContentAfterDisplay(?string $context, &$row, &$params, ?int $page = 0): string
 	{
 		// We need to be enabled
 		if (!$this->enabled)
 		{
-			return true;
+			return '';
 		}
 
 		// We need to be given the right kind of data
 		if (!is_object($params) || !($params instanceof Registry) || !is_object($row))
 		{
-			return true;
+			return '';
 		}
 
 		// We need to be in the frontend of the site
@@ -86,13 +97,13 @@ class plgContentEngage extends CMSPlugin
 
 		if (!$container->platform->isFrontend())
 		{
-			return true;
+			return '';
 		}
 
 		// We need to have a supported context
 		if ($context !== 'com_content.article')
 		{
-			return true;
+			return '';
 		}
 
 		/**
@@ -126,9 +137,7 @@ class plgContentEngage extends CMSPlugin
 			$comments = '';
 		}
 
-		$row->text .= $comments;
-
-		return true;
+		return $comments;
 	}
 
 	/**
