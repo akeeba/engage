@@ -15,11 +15,15 @@ defined('_JEXEC') or die();
         @plural($this->headerKey, $this->getItemCount(), $this->title)
     </h3>
 
+    @modules('engage-before-comments')
+
     <div class="akengage-list-container">
         @if ($this->getItemCount())
             @include('any:com_engage/Comments/default_list')
         @endif
     </div>
+
+    @modules('engage-after-comments')
 
     <div class="akengage-pagination">
         <div class="akengage-pagination-pages">
@@ -28,6 +32,8 @@ defined('_JEXEC') or die();
     </div>
 
     @if($this->container->platform->getUser()->authorise('core.create', 'com_engage'))
+        @modules('engage-before-reply')
         @include('any:com_engage/Comments/default_form')
+        @modules('engage-after-reply')
     @endif
 </section>
