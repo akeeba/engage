@@ -183,11 +183,43 @@ class Html extends DataHtml
 	}
 
 	/**
+	 * Make sure the comment's parent information is cached in $parentIds and $parentNames.
+	 *
+	 * This is required when a page starts the listing with a comment of level 'max_level' (see config.xml) or deeper.
+	 * In these cases the reply information we need to pass is meant to be that of the last parent with a nesting level
+	 * of 'max_depth' minus 1. The following code makes sure that is the case.
+	 *
+	 * @param   Comments  $comment
+	 * @param   array     $parentIds
+	 * @param   array     $parentNames
+	 */
+	protected function ensureHasParentInfo(Comments $comment, array &$parentIds, array &$parentNames): void
+	{
+		$parentLevel = $comment->getLevel() - 1;
+
+		if (isset($parentIds[$parentLevel]) && isset($parentNames[$parentLevel]))
+		{
+			return;
+		}
+
+		$myComment = $comment->getClone();
+		$maxLevel = (int) $this->container->params->get('max_level', 3);
+		$maxLevel = max($maxLevel, 1);
+
+		do
+		{
+			$myComment                           = $myComment->getParent();
+			$parentNames[$myComment->getLevel()] = $myComment->getUser()->name;
+			$parentIds[$myComment->getLevel()]   = $myComment->getId();
+		} while ($myComment->getLevel() > ($maxLevel - 1));
+	}
+
+	/**
 	 * Get the default list limit configured by the site administrator
 	 *
 	 * @return  int
 	 */
-	protected function getDefaultListLimit(): int
+	private function getDefaultListLimit(): int
 	{
 		$defaultLimit = 20;
 

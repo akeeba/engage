@@ -58,6 +58,7 @@ $canEditOwn = $myUser->authorise('core.edit.own', 'com_engage');
     $profile = $comment->getProfileURL();
     $commentDate = new \FOF30\Date\Date($comment->created_on);
     $openListItem++;
+    $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 ?>
 <li class="akengage-comment-item">
 
