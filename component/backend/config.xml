@@ -20,6 +20,39 @@
         />
 
         <field
+                name="comments_show"
+                type="list"
+                label="COM_ENGAGE_COMMENTS_SHOW_LABEL"
+                description="COM_ENGAGE_COMMENTS_SHOW_DESC"
+                class="chzn-color"
+                default="-1"
+        >
+            <option value="1">JSHOW</option>
+            <option value="0">JHIDE</option>
+        </field>
+
+        <field
+                name="comments_enabled"
+                type="list"
+                label="COM_ENGAGE_COMMENTS_ENABLED_LABEL"
+                description="COM_ENGAGE_COMMENTS_ENABLED_DESC"
+                class="chzn-color"
+                default="-1"
+        >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field
+                name="comments_close_after"
+                type="integer"
+                label="COM_ENGAGE_COMMENTS_CLOSE_AFTER_LABEL"
+                description="COM_ENGAGE_COMMENTS_CLOSE_AFTER_DESC"
+                first="0" last="3650" step="1"
+                default="-1"
+        />
+
+        <field
                 name="captcha"
                 type="plugins"
                 label="COM_ENGAGE_CONFIG_CAPTCHA_LABEL"

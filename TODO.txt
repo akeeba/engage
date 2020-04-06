@@ -1,0 +1,72 @@
+Articles and article categories: choose comment options
+    ✔️comments_show: Show comments
+    ✔️comments_enabled: Allow comments
+    ✔️comments_close_after: Close comments after this many days
+
+    ✔️ Inject parameters to article categories
+    ✔️ Inject parameters to articles
+    ✔️ Global parameters in the component
+    Helper method to find the applicable parameters in the hierarchy article --> category --> com_engage options
+    Pass the applicable parameters as part of the asset ID metadata
+    Helper method in Html to determine if comments are closed
+    Honor do not display comments for an article in the plugin itself
+    Honor closed comments in the comments display
+    Honor closed comments in the Controller (when saving)
+
+Comments display, display following links based on privileges:
+    core.edit / core.edit.own
+        Edit
+    core.edit.state
+        Publish / Unpublish
+    core.manage / core.admin
+        IP Information https://whatismyipaddress.com/ip/{ip}
+        Also show spam rating info (may have to add a params field...)
+
+If I am a manager show me all comments, regardless of state.
+    But do visually differentiate unpublished (state=0) and spam (state=3) comments!
+
+Edit page
+    core.edit can also edit name and email if created_by is empty
+    core.edit can also see and edit the IP address of the user filing the comment
+    core.edit.own can only change the body text
+
+Deleting an item should promote its children one level up.
+
+Akismet integration plugin
+    Spam is automatically unpublished (state: -3)
+
+Project Honeypot integration plugin
+
+Send email notifications for new comments
+    The plugin is triggered by the onAfterSave event of the Comments model and only in the frontend.
+    Therefore it knows if it's a new comment or existing record being updated.
+    Same idea as Akeeba Subscriptions emails, really.
+
+    Content plugins convey manager email information for the asset (name, email address)
+    This is merged with the component admins (core.manage or core.admin) to get manager emails
+
+    Managers are always emailed for new comments, even if the comment is unpublished by default
+        State 0 (Unpublished): A new comment needs to be approved
+        State 1 (Published): A new comment was posted
+        State -3 (Spam): A new comment awaits moderation
+
+    If the comment is 2nd level or above we consider emailing the parent comment's author and all of the parent's children on the same level as our new comment but ONLY if it's published (state=1)
+        If it's a new comment we REMOVE the email addresses of the managers from that list of users to notify.
+
+
+Display: show "In reply to [name]" for 2nd level and deeper replies, linking back to the comment on the same page.
+    If the comment is not part of the items set, DO NOT make this a link.
+
+Display: when a parent is unpublished display a phantom comment ("This comment has been unpublished").
+
+Backend interface
+    Publish filter: 0: Unpublished, 1: Published, -3: Spam
+
+DataCompliance plugin
+    All comments filed by the user are unpublished and their text replaced with "This comment has been removed due to account deletion."
+
+User Actions Log plugin
+    Only for logged in users.
+    We do NOT log filing new comments as activity.
+
+Dark Mode, front- and backend, with an option to turn it on and off like all of our other software.
