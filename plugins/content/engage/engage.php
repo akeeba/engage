@@ -651,7 +651,7 @@ class plgContentEngage extends CMSPlugin
 				continue;
 			}
 
-			$ret[$k] = $this->container->params->get($k, $defaults->get($k));
+			$ret[$k] = $this->getContainer()->params->get($k, $defaults->get($k));
 		}
 
 		return new Registry($ret);
