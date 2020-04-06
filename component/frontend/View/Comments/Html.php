@@ -232,7 +232,7 @@ class Html extends DataHtml
 		/** @var Registry $params */
 		$params = $this->metadata['parameters'];
 
-		if ($params->get('comments_enabled', 0) == 1)
+		if ($params->get('comments_enabled', 0) != 1)
 		{
 			return true;
 		}

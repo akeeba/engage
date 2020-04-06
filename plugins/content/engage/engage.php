@@ -7,6 +7,7 @@
 
 defined('_JEXEC') or die();
 
+use Akeeba\Engage\Site\Helper\Meta;
 use FOF30\Container\Container;
 use FOF30\Input\Input;
 use Joomla\CMS\Component\ComponentHelper;
@@ -123,6 +124,14 @@ class plgContentEngage extends CMSPlugin
 
 		// We need to have a supported context
 		if ($context !== 'com_content.article')
+		{
+			return '';
+		}
+
+		// Am I supposed to display comments?
+		$commentParams = $this->getParametersForArticle($row);
+
+		if ($commentParams->get('comments_show', 1) != 1)
 		{
 			return '';
 		}
@@ -603,8 +612,8 @@ class plgContentEngage extends CMSPlugin
 
 		while (true)
 		{
-			$cat    = $model->getItem($catId);
-			$params = new Registry($cat->params);
+			$cat                = $model->getItem($catId);
+			$params             = new Registry($cat->params);
 			$hasInheritedParams = false;
 
 			// If I still have inherited parameters go through the component parameters
