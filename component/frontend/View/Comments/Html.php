@@ -146,7 +146,7 @@ class Html extends DataHtml
 		$this->pagination = new Pagination($this->itemCount, $this->lists->limitStart, $this->lists->limit, 'akengage_');
 
 		// Asset metadata-based properties
-		$meta        = Meta::getAssetAccessMeta($this->assetId);
+		$meta        = Meta::getAssetAccessMeta($this->assetId, true);
 		$this->title = $meta['title'];
 
 		if (!empty($meta['title']))

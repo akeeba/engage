@@ -8,6 +8,7 @@
 namespace Akeeba\Engage\Site\Helper;
 
 use FOF30\Container\Container;
+use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die();
 
@@ -41,14 +42,22 @@ final class Meta
 	 *
 	 * @return array
 	 */
-	public static function getAssetAccessMeta(int $assetId = 0): array
+	public static function getAssetAccessMeta(int $assetId = 0, bool $loadParameters = false): array
 	{
-		if (array_key_exists($assetId, self::$cachedMeta))
+		$metaKey    = md5($assetId . '_' . ($loadParameters ? 'with' : 'without') . '_parameters');
+		$altMetaKey = md5($assetId . '_with_parameters');
+
+		if (array_key_exists($metaKey, self::$cachedMeta))
 		{
-			return self::$cachedMeta[$assetId];
+			return self::$cachedMeta[$metaKey];
 		}
 
-		self::$cachedMeta[$assetId] = [
+		if (array_key_exists($altMetaKey, self::$cachedMeta))
+		{
+			return self::$cachedMeta[$altMetaKey];
+		}
+
+		self::$cachedMeta[$metaKey] = [
 			'type'          => 'unknown',
 			'title'         => '',
 			'category'      => null,
@@ -56,13 +65,14 @@ final class Meta
 			'published'     => false,
 			'access'        => 0,
 			'parent_access' => null,
+			'parameters'    => new Registry(),
 		];
 
 		$container = Container::getInstance('com_engage');
 		$platform  = $container->platform;
 
 		$platform->importPlugin('content');
-		$pluginResults = $platform->runPlugins('onAkeebaEngageGetAssetMeta', [$assetId]);
+		$pluginResults = $platform->runPlugins('onAkeebaEngageGetAssetMeta', [$assetId, $loadParameters]);
 
 		$pluginResults = array_filter($pluginResults, function ($x) {
 			return is_array($x);
@@ -70,21 +80,21 @@ final class Meta
 
 		if (empty($pluginResults))
 		{
-			return self::$cachedMeta[$assetId];
+			return self::$cachedMeta[$metaKey];
 		}
 
 		$tempRet = array_shift($pluginResults);
 
-		foreach (self::$cachedMeta[$assetId] as $k => $v)
+		foreach (self::$cachedMeta[$metaKey] as $k => $v)
 		{
 			if (!array_key_exists($k, $tempRet))
 			{
 				continue;
 			}
 
-			self::$cachedMeta[$assetId][$k] = $tempRet[$k] ?? $v;
+			self::$cachedMeta[$metaKey][$k] = $tempRet[$k] ?? $v;
 		}
 
-		return self::$cachedMeta[$assetId];
+		return self::$cachedMeta[$metaKey];
 	}
 }

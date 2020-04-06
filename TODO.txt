@@ -6,8 +6,7 @@ Articles and article categories: choose comment options
     ✔️ Inject parameters to article categories
     ✔️ Inject parameters to articles
     ✔️ Global parameters in the component
-    Helper method to find the applicable parameters in the hierarchy article --> category --> com_engage options
-    Pass the applicable parameters as part of the asset ID metadata
+    ✔️ Find the applicable parameters in the hierarchy article --> category --> com_engage options
     Helper method in Html to determine if comments are closed
     Honor do not display comments for an article in the plugin itself
     Honor closed comments in the comments display

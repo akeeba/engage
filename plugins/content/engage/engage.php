@@ -42,7 +42,26 @@ class plgContentEngage extends CMSPlugin
 	 */
 	private $container;
 
+	/**
+	 * A cache of basic article information keyed to the asset ID
+	 *
+	 * @var  object[]
+	 */
 	private $cachedArticles = [];
+
+	/**
+	 * The keys to the settings known to Akeeba Engage (see forms/engage.xml)
+	 *
+	 * @var  string[]
+	 */
+	private $parametersKeys = [];
+
+	/**
+	 * Default values of the component's parameters
+	 *
+	 * @var  array
+	 */
+	private $parameterDefaults = [];
 
 	/**
 	 * Constructor
@@ -190,7 +209,7 @@ class plgContentEngage extends CMSPlugin
 
 		$key = ($context === 'com_categories.category') ? 'params' : 'attribs';
 
-		$params         = @json_decode($table->{$key}, true) ?? [];
+		$params        = @json_decode($table->{$key}, true) ?? [];
 		$table->{$key} = json_encode(array_merge($params, ['engage' => $data['engage']]));
 
 		return true;
@@ -227,13 +246,14 @@ class plgContentEngage extends CMSPlugin
 	/**
 	 * Returns the asset access information for an asset recognized by this plugin
 	 *
-	 * @param   int  $assetId
+	 * @param   int   $assetId         The asset ID to get the information for
+	 * @param   bool  $loadParameters  Should I load the comment parameters? (It's slow!)
 	 *
 	 * @return  array|null  Asset access information. NULL when the asset is invalid or not recognized.
 	 */
-	public function onAkeebaEngageGetAssetMeta(int $assetId = 0): ?array
+	public function onAkeebaEngageGetAssetMeta(int $assetId = 0, bool $loadParameters = false): ?array
 	{
-		$row = $this->getArticleByAssetId($assetId);
+		$row = $this->getArticleByAssetId($assetId, $loadParameters);
 
 		if (is_null($row))
 		{
@@ -262,7 +282,7 @@ class plgContentEngage extends CMSPlugin
 			'title'         => $row->title,
 			'category'      => $row->category_title,
 			'url'           => $url,
-
+			'parameters'    => $row->parameters,
 		];
 	}
 
@@ -355,18 +375,27 @@ class plgContentEngage extends CMSPlugin
 	 *
 	 * It will try to use cached results to avoid expensive trips to the database.
 	 *
-	 * @param   int  $assetId  The asset ID to use
+	 * @param   int   $assetId         The asset ID to use
+	 * @param   bool  $loadParameters  Should I load the comment parameters? (It's slow!)
 	 *
 	 * @return  object|null  Partial article information. NULL when there is no article associated with this asset ID.
 	 */
-	private function getArticleByAssetId(int $assetId)
+	private function getArticleByAssetId(int $assetId, bool $loadParameters = false)
 	{
-		if (isset($this->cachedArticles[$assetId]))
+		$metaKey    = md5($assetId . '_' . ($loadParameters ? 'with' : 'without') . '_parameters');
+		$altMetaKey = md5($assetId . '_with_parameters');
+
+		if (isset($this->cachedArticles[$metaKey]))
 		{
-			return $this->cachedArticles[$assetId];
+			return $this->cachedArticles[$metaKey];
 		}
 
-		$this->cachedArticles[$assetId] = null;
+		if (isset($this->cachedArticles[$altMetaKey]))
+		{
+			return $this->cachedArticles[$altMetaKey];
+		}
+
+		$this->cachedArticles[$metaKey] = null;
 
 		$db    = Factory::getDbo();
 		$query = $db->getQuery(true)
@@ -415,21 +444,221 @@ class plgContentEngage extends CMSPlugin
 			return null;
 		}
 
-		$this->cachedArticles[$assetId] = (object) [
+		$this->cachedArticles[$metaKey] = (object) [
 			'id'              => $row->id,
 			'asset_id'        => $row->asset_id,
 			'title'           => $row->title,
 			'alias'           => $row->alias,
 			'state'           => $row->state,
 			'catid'           => $row->catid,
+			'attribs'         => $row->attribs,
 			'publish_up'      => $row->publish_up,
 			'publish_down'    => $row->publish_down,
 			'access'          => $row->access,
 			'category_title'  => $row->category_title,
 			'category_alias'  => $row->category_alias,
 			'category_access' => $row->category_access,
+			'parameters'      => $loadParameters ? $this->getParametersForArticle($row) : new Registry(),
 		];
 
-		return $this->cachedArticles[$assetId];
+		return $this->cachedArticles[$metaKey];
+	}
+
+	/**
+	 * Get the keys for the per-category and per-article comment parameters.
+	 *
+	 * These are automatically retrieved from the forms/engage.xml file.
+	 *
+	 * @return  array
+	 */
+	private function getParametersKeys(): array
+	{
+		if (!empty($this->parametersKeys))
+		{
+			return $this->parametersKeys;
+		}
+
+		$form     = new Form('engage_form');
+		$formData = file_get_contents(__DIR__ . '/forms/engage.xml');
+
+		if (!$form->load($formData))
+		{
+			return $this->parametersKeys;
+		}
+
+		$fields               = $form->getFieldset('engage');
+		$this->parametersKeys = array_keys($fields);
+
+		return $this->parametersKeys;
+	}
+
+	/**
+	 * Get the default values for the component parameters.
+	 *
+	 * This is required to set the value of inherited options when the corresponding component parameter does not have a
+	 * concrete value (the user has not yet saved the component's configuration).
+	 *
+	 * @return  array
+	 */
+	private function getParameterDefaults(): array
+	{
+		if (!empty($this->parameterDefaults))
+		{
+			return $this->parameterDefaults;
+		}
+
+		$form     = new Form('engage_component');
+		$formData = file_get_contents(JPATH_ADMINISTRATOR . '/components/com_engage/config.xml');
+		$formData = str_replace('<config', '<form', $formData);
+		$formData = str_replace('</config', '</form', $formData);
+
+		if (!$form->load($formData))
+		{
+			return $this->parameterDefaults;
+		}
+
+		$fieldSets               = $form->getFieldsets();
+		$this->parameterDefaults = [];
+
+		foreach (array_keys($fieldSets) as $fieldSet)
+		{
+			$fields = $form->getFieldset($fieldSet);
+
+			foreach ($fields as $name => $field)
+			{
+				$this->parameterDefaults[$name] = $field->value ?? null;
+			}
+		}
+
+		return $this->parameterDefaults;
+	}
+
+	/**
+	 * Get the comment parameters for an article.
+	 *
+	 * Inherited parameters will be retrieved from the category. If the category has inherited parameters they will
+	 * retrieved from its parent category. If we exhaust parent categories we will retrieve the inherited parameters
+	 * from the component configuration. If the component configuration values are not yet set (e.g. the user has not
+	 * yet saved the component's Options page) we will use the default values defined in config.xml.
+	 *
+	 * @param   object  $row  The article to get the parameters for
+	 *
+	 * @return  Registry
+	 */
+	private function getParametersForArticle($row): Registry
+	{
+		// Create a comment parameters array consisting of null values
+		$parametersKeys = $this->getParametersKeys();
+		$ret            = array_combine($parametersKeys, array_fill(
+			0, count($parametersKeys), null
+		));
+
+		// Populate the comment parameters with those defined in the article
+		$articleParams      = new Registry($row->attribs);
+		$hasInheritedParams = false;
+
+		foreach ($parametersKeys as $key)
+		{
+			$v                  = $articleParams->get('engage.' . $key, $ret[$key]);
+			$hasInheritedParams |= $this->isUseGlobal($v);
+		}
+
+		// If there are no "Use Global" parameters return what we've got so far.
+		if (!$hasInheritedParams)
+		{
+			return new Registry();
+		}
+
+		// Go through the categories hierarchy, replacing inherited parameters
+		if (!class_exists('CategoriesModelCategory'))
+		{
+			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/models');
+		}
+
+		if (!class_exists('CategoriesTableCategory'))
+		{
+			Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/tables');
+		}
+
+		$catId = $row->catid;
+		/** @var CategoriesModelCategory $model */
+		$model = JModelLegacy::getInstance('Category', 'CategoriesModel');
+
+		while (true)
+		{
+			$cat    = $model->getItem($catId);
+			$params = new Registry($cat->params);
+
+			// If I still have inherited parameters go through the component parameters
+			foreach ($ret as $k => $v)
+			{
+				if (!$this->isUseGlobal($v))
+				{
+					continue;
+				}
+
+				$ret[$k]            = $params->get('engage.' . $k, $ret[$k]);
+				$hasInheritedParams &= $this->isUseGlobal($ret[$k]);
+			}
+
+			if (!$hasInheritedParams)
+			{
+				return new Registry($ret);
+			}
+
+			if ($hasInheritedParams || empty($cat->parent_id))
+			{
+				break;
+			}
+
+			$catId = $cat->parent_id;
+		}
+
+		// If I still have inherited parameters go through the component parameters
+		$defaults = new Registry($this->getParameterDefaults());
+
+		foreach ($ret as $k => $v)
+		{
+			if (!$this->isUseGlobal($v))
+			{
+				continue;
+			}
+
+			$ret[$k] = $this->container->params->get($k, $defaults->get($k));
+		}
+
+		return new Registry($ret);
+	}
+
+	/**
+	 * Is the value of a settings field equivalent to "Use Global"?
+	 *
+	 * This happens if the value if null, an empty string or the integer value -1.
+	 *
+	 * @param   mixed  $value  The value to check
+	 *
+	 * @return  bool
+	 */
+	private function isUseGlobal($value): bool
+	{
+		if (is_null($value))
+		{
+			return true;
+		}
+
+		if (is_string($value) && (trim($value) === ''))
+		{
+			return true;
+		}
+
+		if (is_numeric($value))
+		{
+			if ((int) $value === -1)
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
