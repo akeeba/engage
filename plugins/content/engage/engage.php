@@ -274,9 +274,19 @@ class plgContentEngage extends CMSPlugin
 			$url = 'index.php?option=com_content&task=article.edit&id=' . $row->id;
 		}
 
+
+		$publishUp = new Joomla\CMS\Date\Date();
+		$db        = Factory::getDbo();
+
+		if ($db->getNullDate() != $row->publish_up)
+		{
+			$publishUp = new Joomla\CMS\Date\Date($row->publish_up);
+		}
+
 		return [
 			'type'          => 'article',
 			'published'     => $this->isRowPublished($row),
+			'published_on'  => $publishUp,
 			'access'        => $row->access ?? 0,
 			'parent_access' => $row->category_access,
 			'title'         => $row->title,
@@ -487,7 +497,14 @@ class plgContentEngage extends CMSPlugin
 		}
 
 		$fields               = $form->getFieldset('engage');
-		$this->parametersKeys = array_keys($fields);
+		$this->parametersKeys = array_map(function ($x) {
+			if (substr($x, 0, 7) == 'engage_')
+			{
+				$x = substr($x, 7);
+			}
+
+			return $x;
+		}, array_keys($fields));
 
 		return $this->parametersKeys;
 	}
@@ -560,7 +577,7 @@ class plgContentEngage extends CMSPlugin
 		foreach ($parametersKeys as $key)
 		{
 			$v                  = $articleParams->get('engage.' . $key, $ret[$key]);
-			$hasInheritedParams |= $this->isUseGlobal($v);
+			$hasInheritedParams = $hasInheritedParams || $this->isUseGlobal($v);
 		}
 
 		// If there are no "Use Global" parameters return what we've got so far.
@@ -588,6 +605,7 @@ class plgContentEngage extends CMSPlugin
 		{
 			$cat    = $model->getItem($catId);
 			$params = new Registry($cat->params);
+			$hasInheritedParams = false;
 
 			// If I still have inherited parameters go through the component parameters
 			foreach ($ret as $k => $v)
@@ -598,7 +616,7 @@ class plgContentEngage extends CMSPlugin
 				}
 
 				$ret[$k]            = $params->get('engage.' . $k, $ret[$k]);
-				$hasInheritedParams &= $this->isUseGlobal($ret[$k]);
+				$hasInheritedParams = $hasInheritedParams || $this->isUseGlobal($ret[$k]);
 			}
 
 			if (!$hasInheritedParams)

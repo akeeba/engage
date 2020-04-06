@@ -9,6 +9,8 @@ defined('_JEXEC') or die();
 
 /** @var \Akeeba\Engage\Site\View\Comments\Html $this */
 
+$closedComments = $this->areCommentsClosed();
+$canComment     = $this->container->platform->getUser()->authorise('core.create', 'com_engage');
 ?>
 <section class="akengage-outer-container">
     <h3 class="akengage-title">
@@ -31,7 +33,7 @@ defined('_JEXEC') or die();
         </div>
     @endif
 
-    @if($this->container->platform->getUser()->authorise('core.create', 'com_engage'))
+    @if($canComment && !$closedComments)
         @include('any:com_engage/Comments/default_form')
     @endif
 </section>

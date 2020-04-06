@@ -8,6 +8,7 @@
 namespace Akeeba\Engage\Site\Helper;
 
 use FOF30\Container\Container;
+use Joomla\CMS\Date\Date;
 use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die();
@@ -63,6 +64,7 @@ final class Meta
 			'category'      => null,
 			'url'           => null,
 			'published'     => false,
+			'published_on'  => new Date(),
 			'access'        => 0,
 			'parent_access' => null,
 			'parameters'    => new Registry(),

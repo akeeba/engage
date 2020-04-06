@@ -13,6 +13,7 @@ use Akeeba\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Site\Model\Comments;
 use Exception;
 use FOF30\View\DataView\Html as DataHtml;
+use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Pagination\Pagination;
 use Joomla\CMS\Router\Router;
@@ -93,6 +94,13 @@ class Html extends DataHtml
 	public $storedComment = '';
 
 	/**
+	 * The metadata of the loaded asset
+	 *
+	 * @var array
+	 */
+	public $metadata;
+
+	/**
 	 * Executes before rendering the page for the Browse task.
 	 *
 	 * @throws  Exception
@@ -146,12 +154,12 @@ class Html extends DataHtml
 		$this->pagination = new Pagination($this->itemCount, $this->lists->limitStart, $this->lists->limit, 'akengage_');
 
 		// Asset metadata-based properties
-		$meta        = Meta::getAssetAccessMeta($this->assetId, true);
-		$this->title = $meta['title'];
+		$this->metadata = Meta::getAssetAccessMeta($this->assetId, true);
+		$this->title    = $this->metadata['title'];
 
-		if (!empty($meta['title']))
+		if (!empty($this->metadata['title']))
 		{
-			$this->headerKey = $this->getHeaderKey($meta['type']) ?? 'COM_ENGAGE_COMMENTS_HEADER_N_COMMENTS';
+			$this->headerKey = $this->getHeaderKey($this->metadata['type']) ?? 'COM_ENGAGE_COMMENTS_HEADER_N_COMMENTS';
 		}
 
 		// Populate properties based on component parameters
@@ -214,6 +222,47 @@ class Html extends DataHtml
 		} while ($myComment->getLevel() > ($maxLevel - 1));
 	}
 
+	/**
+	 * Are the comments closed?
+	 *
+	 * @return bool
+	 */
+	protected function areCommentsClosed(): bool
+	{
+		/** @var Registry $params */
+		$params = $this->metadata['parameters'];
+
+		if ($params->get('comments_enabled', 0) == 1)
+		{
+			return true;
+		}
+
+		$closeAfter = $params->get('comments_close_after', 0);
+
+		if ($closeAfter <= 0)
+		{
+			return false;
+		}
+
+		// Check if the comments are auto-closed.
+		/** @var Date $date */
+		$date = $this->metadata['published_on'];
+
+		try
+		{
+			return ($date->add(new \DateInterval(sprintf('P%dD', $closeAfter)))->toUnix() <= time());
+		}
+		catch (Exception $e)
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Get the CAPTCHA field contents
+	 *
+	 * @return  string
+	 */
 	protected function getCaptchaField(): string
 	{
 		$user          = $this->container->platform->getUser();

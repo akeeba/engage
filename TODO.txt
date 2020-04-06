@@ -7,9 +7,8 @@ Articles and article categories: choose comment options
     ✔️ Inject parameters to articles
     ✔️ Global parameters in the component
     ✔️ Find the applicable parameters in the hierarchy article --> category --> com_engage options
-    Helper method in Html to determine if comments are closed
+    ✔️ Helper method in Html to determine if comments are closed
     Honor do not display comments for an article in the plugin itself
-    Honor closed comments in the comments display
     Honor closed comments in the Controller (when saving)
 
 Comments display, display following links based on privileges:
