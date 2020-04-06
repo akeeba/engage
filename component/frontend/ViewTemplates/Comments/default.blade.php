@@ -7,9 +7,11 @@
 
 defined('_JEXEC') or die();
 
+use Akeeba\Engage\Site\Helper\Meta;
+
 /** @var \Akeeba\Engage\Site\View\Comments\Html $this */
 
-$closedComments = $this->areCommentsClosed();
+$closedComments = Meta::areCommentsClosed($this->assetId);
 $canComment     = $this->container->platform->getUser()->authorise('core.create', 'com_engage');
 ?>
 <section class="akengage-outer-container">

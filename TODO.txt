@@ -1,16 +1,3 @@
-Articles and article categories: choose comment options
-    ✔️comments_show: Show comments
-    ✔️comments_enabled: Allow comments
-    ✔️comments_close_after: Close comments after this many days
-
-    ✔️ Inject parameters to article categories
-    ✔️ Inject parameters to articles
-    ✔️ Global parameters in the component
-    ✔️ Find the applicable parameters in the hierarchy article --> category --> com_engage options
-    ✔️ Helper method in Html to determine if comments are closed
-    ✔️ Honor do not display comments for an article in the plugin itself
-    Honor closed comments in the Controller (when saving)
-
 Comments display, display following links based on privileges:
     core.edit / core.edit.own
         Edit

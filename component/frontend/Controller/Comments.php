@@ -55,6 +55,12 @@ class Comments extends DataController
 		$platform  = $this->container->platform;
 		$user      = $platform->getUser();
 
+		// If the comments are disabled for this asset we will return a Not Authorized error
+		if (Meta::areCommentsClosed($assetId))
+		{
+			throw new AccessForbidden();
+		}
+
 		// Store the comment parameters in the session
 		$sessionNamespace = $this->container->componentName . '.' . $this->name;
 

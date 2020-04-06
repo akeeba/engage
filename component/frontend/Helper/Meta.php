@@ -7,6 +7,7 @@
 
 namespace Akeeba\Engage\Site\Helper;
 
+use Exception;
 use FOF30\Container\Container;
 use Joomla\CMS\Date\Date;
 use Joomla\Registry\Registry;
@@ -98,5 +99,45 @@ final class Meta
 		}
 
 		return self::$cachedMeta[$metaKey];
+	}
+
+	/**
+	 * Are the comments closed for the specified resource?
+	 *
+	 * @param   int  $assetId  The asset ID of the resource
+	 *
+	 * @return  bool
+	 */
+	public static function areCommentsClosed(int $assetId = 0)
+	{
+		$meta = self::getAssetAccessMeta($assetId, true);
+
+		/** @var Registry $params */
+		$params = $meta['parameters'];
+
+		if ($params->get('comments_enabled', 0) != 1)
+		{
+			return true;
+		}
+
+		$closeAfter = $params->get('comments_close_after', 0);
+
+		if ($closeAfter <= 0)
+		{
+			return false;
+		}
+
+		// Check if the comments are auto-closed.
+		/** @var Date $date */
+		$date = $meta['published_on'];
+
+		try
+		{
+			return ($date->add(new \DateInterval(sprintf('P%dD', $closeAfter)))->toUnix() <= time());
+		}
+		catch (Exception $e)
+		{
+			return false;
+		}
 	}
 }
