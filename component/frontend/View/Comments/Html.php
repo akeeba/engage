@@ -16,6 +16,7 @@ use FOF30\View\DataView\Html as DataHtml;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Pagination\Pagination;
 use Joomla\CMS\Router\Router;
+use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
 
 class Html extends DataHtml
@@ -93,6 +94,36 @@ class Html extends DataHtml
 	public $storedComment = '';
 
 	/**
+	 * Currently logged in user's permissions
+	 *
+	 * @var array
+	 */
+	public $perms = [
+		// Submit new comments
+		'create' => false,
+		// Edit any comment
+		'edit'   => false,
+		// Edit own comments
+		'own'    => false,
+		// Edit comments' state (pubished, unpublished, spam)
+		'state'  => false,
+	];
+
+	/**
+	 * Currently logged in user
+	 *
+	 * @var User
+	 */
+	public $user;
+
+	/**
+	 * Are the comments closed for this content item?
+	 *
+	 * @var bool
+	 */
+	public $areCommentsClosed = false;
+
+	/**
 	 * Executes before rendering the page for the Browse task.
 	 *
 	 * @throws  Exception
@@ -104,9 +135,16 @@ class Html extends DataHtml
 		$this->addJavascriptFile('media://com_engage/js/system.min.js', $this->container->mediaVersion, 'text/javascript', true);
 		$this->addJavascriptFile('media://com_engage/js/comments.min.js', $this->container->mediaVersion, 'text/javascript', true);
 
-		// Get the current user
-		$platform = $this->container->platform;
-		$user     = $platform->getUser();
+		// User and permissions
+		$platform   = $this->container->platform;
+		$this->user = $platform->getUser();
+		$this->perms = array_merge($this->perms, [
+				'create' => $this->user->authorise('core.create', 'com_engage'),
+				'edit'   => $this->user->authorise('core.edit', 'com_engage'),
+				'own'    => $this->user->authorise('core.edit.own', 'com_engage'),
+				'state'  => $this->user->authorise('core.edit.state', 'com_engage'),
+			]
+		);
 
 		// Load the model and persist its state in the session
 		/** @var Comments $model */
@@ -133,7 +171,7 @@ class Html extends DataHtml
 		$model->scopeAssetCommentTree($this->assetId);
 
 		// Only show unpublished comments to users who can publish and unpublish comments
-		if (!$user->authorise('core.edit.state', 'com_engage'))
+		if (!$this->perms['state'])
 		{
 			$model->enabled(1);
 		}
@@ -153,6 +191,8 @@ class Html extends DataHtml
 		{
 			$this->headerKey = $this->getHeaderKey($meta['type']) ?? 'COM_ENGAGE_COMMENTS_HEADER_N_COMMENTS';
 		}
+
+		$this->areCommentsClosed = Meta::areCommentsClosed($this->assetId);
 
 		// Populate properties based on component parameters
 		$params         = $this->container->params;

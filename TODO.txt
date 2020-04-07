@@ -11,9 +11,6 @@ If no replies are allowed to a guest user ask the user to log in or create and a
     Links should be customizable
     Include support for Akeeba SocialLogin
 
-If I am a manager show me all comments, regardless of state.
-    But do visually differentiate unpublished (state=0) and spam (state=3) comments!
-
 Edit page
     core.edit can also edit name and email if created_by is empty
     core.edit can also see and edit the IP address of the user filing the comment
