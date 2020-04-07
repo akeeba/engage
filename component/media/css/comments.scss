@@ -49,7 +49,7 @@ section.akengage-outer-container {
         list-style: none;
         margin-top: 1em;
 
-        article.akengage-comment {
+        article[class^=akengage-comment] {
           margin-top: 0.5em;
           margin-bottom: 1em;
           border-left: 4px solid $light-grey;
@@ -91,8 +91,30 @@ section.akengage-outer-container {
               text-underline: none;
             }
 
-            span.akengage-comment-edit {
+            span.akengage-comment-edit,
+            span.akengage-comment-publish_unpublish {
               float: right;
+              margin-left: 0.5em;
+            }
+          }
+
+          &[class*=--unpublished] {
+            border-left: 4px solid $orange;
+            background-color: lighten($orange, 36%);
+
+            footer.akengage-comment-properties {
+              background-color: lighten($orange, 30%);
+              margin-bottom: 0.25em;
+            }
+          }
+
+          &[class*=--spam] {
+            border-left: 4px solid $red;
+            background-color: lighten($red, 44%);
+
+            footer.akengage-comment-properties {
+              background-color: lighten($red, 40%);
+              margin-bottom: 0.25em;
             }
           }
 

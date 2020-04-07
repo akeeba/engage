@@ -62,7 +62,8 @@ $canEditOwn = $myUser->authorise('core.edit.own', 'com_engage');
 ?>
 <li class="akengage-comment-item">
 
-    <article class="akengage-comment" id="akengage-comment-{{ $comment->getId() }}">
+    <article class="akengage-comment--{{ ($comment->enabled == 1) ? 'published' : (($comment->enabled == -3) ? 'spam' : 'unpublished') }}"
+             id="akengage-comment-{{ $comment->getId() }}">
         <footer class="akengage-comment-properties">
             @unless(empty($avatar))
                 @if (empty($profile))

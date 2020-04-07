@@ -53,7 +53,7 @@ CREATE TABLE `#__engage_comments` (
 SELECT COUNT(*) FROM `#__engage_comments` WHERE `lft` = 1;
             ]]></condition>
             <query><![CDATA[
-INSERT INTO `#__engage_comments` (lft, rgt, hash, asset_id, body, name, email, ip, enabled, created_on, created_by, modified_on, modified_by) VALUES (1, 2, 'd80d4c81907935cbcad489ec5c666400cddffb5f', 0, 'ROOT NODE -- DO NOT DELETE', 'Root Node', 'root@localhost', null, 0, '2020-04-01 13:26:45', 0, null, null);
+INSERT INTO `#__engage_comments` (lft, rgt, hash, asset_id, body, name, email, ip, enabled, created_on, created_by, modified_on, modified_by) VALUES (1, 2, 'd80d4c81907935cbcad489ec5c666400cddffb5f', 0, 'ROOT NODE -- DO NOT DELETE', 'Root Node', 'root@localhost', null, 1, '2020-04-01 13:26:45', 0, null, null);
             ]]></query>
         </action>
     </sql>
