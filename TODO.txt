@@ -7,6 +7,10 @@ Comments display, display following links based on privileges:
         IP Information https://whatismyipaddress.com/ip/{ip}
         Also show spam rating info (may have to add a params field...)
 
+If no replies are allowed to a guest user ask the user to log in or create and account
+    Links should be customizable
+    Include support for Akeeba SocialLogin
+
 If I am a manager show me all comments, regardless of state.
     But do visually differentiate unpublished (state=0) and spam (state=3) comments!
 
@@ -47,7 +51,7 @@ Display: when a parent is unpublished display a phantom comment ("This comment h
 Backend interface
     Publish filter: 0: Unpublished, 1: Published, -3: Spam
 
-DataCompliance plugin
+DataCompliance and com_privacy plugins
     All comments filed by the user are unpublished and their text replaced with "This comment has been removed due to account deletion."
 
 User Actions Log plugin
