@@ -114,6 +114,7 @@ class Comments extends DataController
 		$model->name       = $name;
 		$model->email      = $email;
 		$model->body       = $comment;
+		$model->enabled    = 1;
 		$model->created_by = null;
 
 		// If it's a guest user we need to unset the name and email
