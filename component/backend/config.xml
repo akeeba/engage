@@ -75,8 +75,20 @@
             <option value="nonmanager">COM_ENGAGE_CONFIG_CAPTCHA_FOR_NONMANAGER</option>
             <option value="all">COM_ENGAGE_CONFIG_CAPTCHA_FOR_ALL</option>
         </field>
+    </fieldset>
 
+    <fieldset
+            name="advanced"
+            label="COM_ENGAGE_CONFIG_ADVANCED_FIELDSET_LABEL"
+            description="COM_ENGAGE_CONFIG_ADVANCED_FIELDSET_DESC"
 
+    >
+        <field
+            type="text"
+            name="iplookup"
+            default="https://whatismyipaddress.com/ip/%s"
+            label="COM_ENGAGE_CONFIG_IPLOOKUP_LABEL"
+            description="COM_ENGAGE_CONFIG_IPLOOKUP_DESC" />
     </fieldset>
 
     <fieldset

@@ -291,6 +291,30 @@ class Html extends DataHtml
 	}
 
 	/**
+	 * Get an IP lookup URL for the provided IP address
+	 *
+	 * @param   string|null  $ip  The IP address to look up
+	 *
+	 * @return  string  The lookup URL, empty if not applicable.
+	 */
+	protected function getIPLookupURL(?string $ip): string
+	{
+		if (empty($ip))
+		{
+			return '';
+		}
+
+		$protoURL = $this->container->params->get('iplookup', '');
+
+		if (empty($protoURL) || (strpos($protoURL, '%s') === false))
+		{
+			return '';
+		}
+
+		return sprintf($protoURL, $ip);
+	}
+
+	/**
 	 * Get the default list limit configured by the site administrator
 	 *
 	 * @return  int

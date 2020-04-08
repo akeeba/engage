@@ -53,6 +53,7 @@ $user          = $comment->getUser();
 $avatar        = $comment->getAvatarURL();
 $profile       = $comment->getProfileURL();
 $commentDate   = new Date($comment->created_on);
+$ipLookupURL  = $this->getIPLookupURL($comment->ip);
 $openListItem++;
 $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 ?>
@@ -108,6 +109,23 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
                         <?= Text::_('COM_ENGAGE_COMMENTS_BTN_EDIT') ?>
                     </button>
                 </span>
+				<?php endif; ?>
+				<?php if ($this->perms['edit'] || $user->authorise('core.manage', $comment->asset_id)): ?>
+					<br/>
+					<?php if (!empty($ipLookupURL)): ?>
+						<span class="akengage-comment-ip">
+							<a href="<?= $ipLookupURL ?>" target="_blank">
+								<?= Text::sprintf('COM_ENGAGE_COMMENTS_IP', $comment->ip ?? '???') ?>
+							</a>
+						</span>
+					<?php else: ?>
+						<span class="akengage-comment-ip">
+							<?= Text::sprintf('COM_ENGAGE_COMMENTS_IP', $comment->ip ?? '???') ?>
+						</span>
+					<?php endif; ?>
+					<span class="akengage-comment-publish-type">
+						<?= Text::_('COM_ENGAGE_COMMENTS_TYPE_' . (($comment->enabled == 1) ? 'published' : (($comment->enabled == -3) ? 'spam' : 'unpublished'))) ?>
+					</span>
 				<?php endif; ?>
 			</div>
 		</footer>
