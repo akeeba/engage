@@ -35,4 +35,4 @@
 /release
 
 ### Composer
-/vendor
+/component/backend/vendor

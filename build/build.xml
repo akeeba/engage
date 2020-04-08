@@ -31,6 +31,21 @@
         <exclude name="script.engage.php"/>
 
         <exclude name="backend/engage.xml"/>
+
+        <!-- HTML Purifier: Remove unneeded tests, optional code, irrelevant plugins etc -->
+        <exclude name="backend/vendor/ezyang/htmlpurifier/extras/**"/>
+        <exclude name="backend/vendor/ezyang/htmlpurifier/maintenance/**"/>
+        <exclude name="backend/vendor/ezyang/htmlpurifier/plugins/**"/>
+        <exclude name="backend/vendor/ezyang/htmlpurifier/tests/**"/>
+        <exclude name="backend/vendor/ezyang/htmlpurifier/CREDITS*"/>
+        <exclude name="backend/vendor/ezyang/htmlpurifier/INSTALL*"/>
+        <exclude name="backend/vendor/ezyang/htmlpurifier/NEWS*"/>
+        <exclude name="backend/vendor/ezyang/htmlpurifier/package.php"/>
+        <exclude name="backend/vendor/ezyang/htmlpurifier/phpdoc.ini"/>
+        <exclude name="backend/vendor/ezyang/htmlpurifier/test-*"/>
+        <exclude name="backend/vendor/ezyang/htmlpurifier/TODO"/>
+        <exclude name="backend/vendor/ezyang/htmlpurifier/update-for-release"/>
+        <exclude name="backend/vendor/ezyang/htmlpurifier/WHATSNEW"/>
     </fileset>
 
     <fileset dir="${dirs.release}" id="package">
