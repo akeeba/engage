@@ -20,11 +20,23 @@
         />
 
         <field
+                name="default_publish"
+                type="radio"
+                label="COM_ENGAGE_DEFAULT_PUBLISH_LABEL"
+                description="COM_ENGAGE_DEFAULT_PUBLISH_DESC"
+                class="btn-group btn-group-yesno"
+                default="1"
+        >
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+        </field>
+
+        <field
                 name="comments_show"
-                type="list"
+                type="radio"
                 label="COM_ENGAGE_COMMENTS_SHOW_LABEL"
                 description="COM_ENGAGE_COMMENTS_SHOW_DESC"
-                class="chzn-color"
+                class="btn-group btn-group-yesno"
                 default="1"
         >
             <option value="1">JSHOW</option>
@@ -33,10 +45,10 @@
 
         <field
                 name="comments_enabled"
-                type="list"
+                type="radio"
                 label="COM_ENGAGE_COMMENTS_ENABLED_LABEL"
                 description="COM_ENGAGE_COMMENTS_ENABLED_DESC"
-                class="chzn-color"
+                class="btn-group btn-group-yesno"
                 default="1"
         >
             <option value="1">JYES</option>
