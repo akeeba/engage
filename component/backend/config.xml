@@ -93,14 +93,23 @@
             name="advanced"
             label="COM_ENGAGE_CONFIG_ADVANCED_FIELDSET_LABEL"
             description="COM_ENGAGE_CONFIG_ADVANCED_FIELDSET_DESC"
-
+            addfieldpath="/administrator/components/com_engage/fields"
     >
+        <field
+            type="modulemodules"
+            name="login_module"
+            default="mod_login"
+            label="COM_ENGAGE_CONFIG_LOGIN_LABEL"
+            description="COM_ENGAGE_CONFIG_LOGIN_DESC" />
+
         <field
             type="text"
             name="iplookup"
             default="https://whatismyipaddress.com/ip/%s"
             label="COM_ENGAGE_CONFIG_IPLOOKUP_LABEL"
             description="COM_ENGAGE_CONFIG_IPLOOKUP_DESC" />
+
+
     </fieldset>
 
     <fieldset
