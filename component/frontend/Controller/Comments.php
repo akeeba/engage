@@ -18,6 +18,7 @@ use FOF30\Controller\DataController;
 use FOF30\Controller\Mixin\PredefinedTaskList;
 use FOF30\View\Exception\AccessForbidden;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Router;
 use Joomla\CMS\Table\Asset;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
@@ -222,14 +223,37 @@ class Comments extends DataController
 		}
 	}
 
+	/**
+	 * Runs after publishing a comment. Adjusts the redirection with the published comment's ID in the fragment.
+	 */
 	protected function onAfterPublish()
 	{
 		$this->addCommentFragmentToReturnURL();
 	}
 
+	/**
+	 * Runs after unpublishing a comment. Adjusts the redirection with the unpublished comment's ID in the fragment.
+	 */
 	protected function onAfterUnpublish()
 	{
 		$this->addCommentFragmentToReturnURL();
+	}
+
+	protected function onBeforeEdit()
+	{
+		$view = $this->getView();
+
+		$view->returnURL = '';
+
+		$redirectURL = $this->input->getBase64('returnurl');
+		$redirectURL = @base64_decode($redirectURL);
+
+		if (empty($redirectURL))
+		{
+			return;
+		}
+
+		$view->returnURL = $redirectURL;
 	}
 
 	/**
@@ -296,6 +320,16 @@ class Comments extends DataController
 		return $returnUrl;
 	}
 
+	/**
+	 * Adds the comment's ID to the fragment of the redirection.
+	 *
+	 * This only happens if there is no fragment yet and the ID of the item being edited / published / whatever is not
+	 * zero.
+	 *
+	 * This method directly modifies $this->redirect.
+	 *
+	 * @return  void
+	 */
 	private function addCommentFragmentToReturnURL(): void
 	{
 		if (empty($this->redirect))

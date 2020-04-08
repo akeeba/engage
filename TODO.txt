@@ -1,8 +1,3 @@
-Edit page
-    core.edit can also edit name and email if created_by is empty
-    core.edit can also see and edit the IP address of the user filing the comment
-    core.edit.own can only change the body text
-
 HTML filtering.
     For admin users: always use Joomla's built-in HTML filter.
     For everyone else: HTML Purifier or Joomla's built-in HTML filter (default: HTML Purifier)
@@ -44,6 +39,8 @@ Backend interface
 
 DataCompliance and com_privacy plugins
     All comments filed by the user are unpublished and their text replaced with "This comment has been removed due to account deletion."
+    Only applicable for comments filed while logged in.
+    Guest comments are NOT taken into account, even if the email address filled in matches that of the user.
 
 User Actions Log plugin
     Only for logged in users.

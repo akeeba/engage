@@ -7,6 +7,12 @@
 
 defined('_JEXEC') or die();
 
+/**
+ * View Template for the threaded display of comments.
+ *
+ * Called from default.php
+ */
+
 use FOF30\Date\Date;
 use Joomla\CMS\Language\Text;
 

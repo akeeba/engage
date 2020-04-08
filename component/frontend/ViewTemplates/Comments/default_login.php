@@ -7,6 +7,12 @@
 
 defined('_JEXEC') or die();
 
+/**
+ * View Template for the guest users login form
+ *
+ * Called from default.php
+ */
+
 use Joomla\CMS\Language\Text;
 
 /** @var \Akeeba\Engage\Site\View\Comments\Html $this */

@@ -7,6 +7,12 @@
 
 defined('_JEXEC') or die();
 
+/**
+ * View Template for the submitting new comments or replies to existing comments
+ *
+ * Called from default.php
+ */
+
 use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;

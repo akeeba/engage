@@ -7,6 +7,19 @@
 
 defined('_JEXEC') or die();
 
+/**
+ * View Template for comments display
+ *
+ * This is the main view template used when comments are being displayed e.g. at the end of an article.
+ *
+ * This provides the outer HTML structure of the comments.
+ *
+ * It loads the following view templates:
+ * - default_list.php  The threaded list of comments
+ * - default_login.php  Login form for guest users
+ * - default_form.php  Comment / reply submission form
+ */
+
 use Joomla\CMS\Language\Text;
 
 /** @var \Akeeba\Engage\Site\View\Comments\Html $this */
