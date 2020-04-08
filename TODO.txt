@@ -7,6 +7,9 @@ Comments display, display following links based on privileges:
         IP Information https://whatismyipaddress.com/ip/{ip}
         Also show spam rating info (may have to add a params field...)
 
+Option for default publish state of new comments: published or unpublished
+    Comments file by comment administrators are always published immediately.
+
 If no replies are allowed to a guest user ask the user to log in or create and account
     Links should be customizable
     Include support for Akeeba SocialLogin
@@ -15,6 +18,13 @@ Edit page
     core.edit can also edit name and email if created_by is empty
     core.edit can also see and edit the IP address of the user filing the comment
     core.edit.own can only change the body text
+
+HTML filtering.
+    For admin users: always use Joomla's built-in HTML filter.
+    For everyone else: HTML Purifier or Joomla's built-in HTML filter (default: HTML Purifier)
+    HTML Purifier options
+        They apply when Joomla's text filter preferences is set to Default Blacklist or a custom blacklist, since
+        HTML Purifier only allows for whitelisting.
 
 Deleting an item should promote its children one level up.
 

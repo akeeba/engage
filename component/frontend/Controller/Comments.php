@@ -216,6 +216,16 @@ class Comments extends DataController
 		}
 	}
 
+	protected function onAfterPublish()
+	{
+		$this->addCommentFragmentToReturnURL();
+	}
+
+	protected function onAfterUnpublish()
+	{
+		$this->addCommentFragmentToReturnURL();
+	}
+
 	/**
 	 * Get the asset ID from the request and verify it is real
 	 *
@@ -278,5 +288,31 @@ class Comments extends DataController
 		}
 
 		return $returnUrl;
+	}
+
+	private function addCommentFragmentToReturnURL(): void
+	{
+		if (empty($this->redirect))
+		{
+			return;
+		}
+
+		$uri = new Uri($this->redirect);
+
+		if (!empty($uri->getFragment()))
+		{
+			return;
+		}
+
+		$id = $this->input->getInt('id', 0);
+
+		if ($id <= 0)
+		{
+			return;
+		}
+
+		$uri->setFragment('akengage-comment-' . $id);
+
+		$this->redirect = $uri->toString();
 	}
 }

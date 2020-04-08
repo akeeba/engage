@@ -19,10 +19,8 @@ if (typeof akeeba.Engage.Comments == "undefined")
     akeeba.Engage.Comments = {};
 }
 
-akeeba.Engage.Comments.onEditButton = function (e)
+akeeba.Engage.Comments.getElementFromEvent = function (e)
 {
-    e.preventDefault();
-
     var clickedElement = null;
 
     if (typeof e.target === "object")
@@ -34,34 +32,71 @@ akeeba.Engage.Comments.onEditButton = function (e)
         clickedElement = e.srcElement;
     }
 
+    return clickedElement;
+};
+
+akeeba.Engage.Comments.getAssetIdFromEvent = function (e)
+{
+    var clickedElement = akeeba.Engage.Comments.getElementFromEvent(e);
+
     if (clickedElement === null)
     {
-        return false;
+        return 0;
     }
+
+    return akeeba.System.data.get(clickedElement, "akengageid", "0");
+};
+
+akeeba.Engage.Comments.onEditButton = function (e)
+{
+    e.preventDefault();
 
     /**
      * Construct the edit URL for the comment. The akeeba.Engage.Comments.editURL script option key comes from the
      * components/com_engage\View\Comments\Html.php file.
      */
-    var id     = akeeba.System.data.get(clickedElement, "akengageid", "0");
+    var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.editURL") + encodeURIComponent(id);
+    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.editURL") + encodeURIComponent(id)
+        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
+        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+};
+
+akeeba.Engage.Comments.onPublishButton = function (e)
+{
+    e.preventDefault();
+
+    /**
+     * Construct the edit URL for the comment. The akeeba.Engage.Comments.publishURL script option key comes from the
+     * components/com_engage\View\Comments\Html.php file.
+     */
+    var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
+
+    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.publishURL") + encodeURIComponent(id)
+        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
+        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+};
+
+akeeba.Engage.Comments.onUnpublishButton = function (e)
+{
+    e.preventDefault();
+
+    /**
+     * Construct the edit URL for the comment. The akeeba.Engage.Comments.unpublishURL script option key comes from
+     * the components/com_engage\View\Comments\Html.php file.
+     */
+    var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
+
+    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.unpublishURL") + encodeURIComponent(id)
+        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
+        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
 };
 
 akeeba.Engage.Comments.onReplyButton = function (e)
 {
     e.preventDefault();
 
-    var clickedElement = null;
-
-    if (typeof e.target === "object")
-    {
-        clickedElement = e.target;
-    }
-    else if (typeof e.srcElement === "object")
-    {
-        clickedElement = e.srcElement;
-    }
+    var clickedElement = akeeba.Engage.Comments.getElementFromEvent(e);
 
     if (clickedElement === null)
     {
@@ -112,6 +147,16 @@ akeeba.System.documentReady(function ()
     akeeba.System.iterateNodes("button.akengage-comment-reply-btn", function (elButton)
     {
         akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onReplyButton);
+    });
+
+    akeeba.System.iterateNodes("button.akengage-comment-unpublish-btn", function (elButton)
+    {
+        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onUnpublishButton);
+    });
+
+    akeeba.System.iterateNodes("button.akengage-comment-publish-btn", function (elButton)
+    {
+        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onPublishButton);
     });
 
     akeeba.System.addEventListener(

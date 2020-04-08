@@ -16,6 +16,7 @@ use FOF30\View\DataView\Html as DataHtml;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Pagination\Pagination;
 use Joomla\CMS\Router\Router;
+use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
 
@@ -136,8 +137,8 @@ class Html extends DataHtml
 		$this->addJavascriptFile('media://com_engage/js/comments.min.js', $this->container->mediaVersion, 'text/javascript', true);
 
 		// User and permissions
-		$platform   = $this->container->platform;
-		$this->user = $platform->getUser();
+		$platform    = $this->container->platform;
+		$this->user  = $platform->getUser();
 		$this->perms = array_merge($this->perms, [
 				'create' => $this->user->authorise('core.create', 'com_engage'),
 				'edit'   => $this->user->authorise('core.edit', 'com_engage'),
@@ -218,8 +219,12 @@ class Html extends DataHtml
 		$this->pageParams = $this->pageParams ?? new Registry();
 
 		// Script options
-		$router = Router::getInstance('site');
-		$platform->addScriptOptions('akeeba.Engage.Comments.editURL', $router->build('index.php?option=com_engage&view=Comments&task=edit&id=')->toString());
+		$router   = Router::getInstance('site');
+		$protoURL = 'index.php?option=com_engage&view=Comments&task=%s&id=';
+		$platform->addScriptOptions('akeeba.Engage.Comments.returnURL', base64_encode(Uri::getInstance()->toString()));
+		$platform->addScriptOptions('akeeba.Engage.Comments.editURL', $router->build(sprintf($protoURL, 'edit'))->toString());
+		$platform->addScriptOptions('akeeba.Engage.Comments.publishURL', $router->build(sprintf($protoURL, 'publish'))->toString());
+		$platform->addScriptOptions('akeeba.Engage.Comments.unpublishURL', $router->build(sprintf($protoURL, 'unpublish'))->toString());
 	}
 
 	/**
