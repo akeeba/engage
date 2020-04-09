@@ -81,12 +81,6 @@ class Comments extends TreeModel
 		{
 			throw new RuntimeException(Text::sprintf('COM_ENGAGE_COMMENTS_ERR_EMAIL_IN_USE', $this->email));
 		}
-
-		// Make sure we have a hash for the comment record
-		if (empty($this->hash))
-		{
-			$this->hash = $this->createHash();
-		}
 	}
 
 	/**
@@ -272,37 +266,6 @@ class Comments extends TreeModel
 
 		$this->whereRaw($db->qn('node') . '.' . $fldLft . ' >= ' . $db->qn('parent') . '.' . $fldLft);
 		$this->whereRaw($db->qn('node') . '.' . $fldLft . ' <= ' . $db->qn('parent') . '.' . $fldRgt);
-	}
-
-	/**
-	 * Create a hash for a new record.
-	 *
-	 * This is necessary since we do not have a 'slug' column in the table.
-	 *
-	 * @return  string
-	 */
-	private function createHash(): string
-	{
-		$name  = $this->name;
-		$email = $this->email;
-
-		if (empty($name) || empty($email))
-		{
-			if ($this->created_by)
-			{
-				$jUser = $this->container->platform->getUser($this->created_by);
-				$name  = $jUser->name;
-				$email = $jUser->email;
-			}
-		}
-
-		if (empty($name) || empty($email))
-		{
-			$name  = 'No Name';
-			$email = 'nobody@localhost';
-		}
-
-		return sha1($this->asset_id . microtime(false) . $name . $email);
 	}
 
 	public function recordDataToDatabaseData()
