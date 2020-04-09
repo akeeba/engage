@@ -1,9 +1,6 @@
 HTML filtering.
-    For admin users: always use Joomla's built-in HTML filter.
-    For everyone else: HTML Purifier or Joomla's built-in HTML filter (default: HTML Purifier)
-    HTML Purifier options
-        They apply when Joomla's text filter preferences is set to Default Blacklist or a custom blacklist, since
-        HTML Purifier only allows for whitelisting.
+
+Can I get rid of the hash column in #__engage_comments? I am not using it anywhere and it's an index I don't really need but slows me down.
 
 Deleting an item should promote its children one level up.
 

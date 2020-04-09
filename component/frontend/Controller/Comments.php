@@ -9,6 +9,7 @@ namespace Akeeba\Engage\Site\Controller;
 
 defined('_JEXEC') or die();
 
+use Akeeba\Engage\Site\Helper\Filter;
 use Akeeba\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Site\Model\Comments as CommentsModel;
 use Akeeba\Engage\Site\View\Comments\Html;
@@ -114,7 +115,7 @@ class Comments extends DataController
 		$model->asset_id   = $assetId;
 		$model->name       = $name;
 		$model->email      = $email;
-		$model->body       = $comment;
+		$model->body       = Filter::filterText($comment);
 		$model->enabled    = 1;
 		$model->created_by = null;
 
