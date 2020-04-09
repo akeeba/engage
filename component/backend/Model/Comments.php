@@ -113,6 +113,14 @@ class Comments extends TreeModel
 				return !in_array($x, ['lft', 'depth']);
 			});
 
+			$dir = strtoupper($this->getState('filter_order_Dir', null, 'cmd'));
+
+			if (!in_array($dir, array('ASC', 'DESC')))
+			{
+				$dir = 'ASC';
+				$this->setState('filter_order_Dir', $dir);
+			}
+
 			$query
 				->clear('select')
 				->select(array_merge(array_map([$query, 'qn'], array_map(function ($x) {
@@ -129,7 +137,7 @@ class Comments extends TreeModel
 				}, $allFields))))
 				->clear('order')
 				->order(
-					$query->qn('node.lft') . ' ASC'
+					$query->qn('node.lft') . ' ' . $dir
 				);
 
 		}

@@ -7,7 +7,6 @@
 
 defined('_JEXEC') or die();
 
-use Akeeba\Engage\Site\Helper\Meta;
 use FOF30\Container\Container;
 use FOF30\Input\Input;
 use Joomla\CMS\Component\ComponentHelper;
@@ -150,6 +149,7 @@ class plgContentEngage extends CMSPlugin
 		$assetId = $row->asset_id;
 
 		$input->set('asset_id', $assetId);
+		$input->set('filter_order_Dir', $commentParams->get('comments_ordering'));
 
 		// Capture the output instead of pushing it to the browser
 		try

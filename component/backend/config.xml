@@ -32,39 +32,6 @@
         </field>
 
         <field
-                name="comments_show"
-                type="radio"
-                label="COM_ENGAGE_COMMENTS_SHOW_LABEL"
-                description="COM_ENGAGE_COMMENTS_SHOW_DESC"
-                class="btn-group btn-group-yesno"
-                default="1"
-        >
-            <option value="1">JSHOW</option>
-            <option value="0">JHIDE</option>
-        </field>
-
-        <field
-                name="comments_enabled"
-                type="radio"
-                label="COM_ENGAGE_COMMENTS_ENABLED_LABEL"
-                description="COM_ENGAGE_COMMENTS_ENABLED_DESC"
-                class="btn-group btn-group-yesno"
-                default="1"
-        >
-            <option value="1">JYES</option>
-            <option value="0">JNO</option>
-        </field>
-
-        <field
-                name="comments_close_after"
-                type="integer"
-                label="COM_ENGAGE_COMMENTS_CLOSE_AFTER_LABEL"
-                description="COM_ENGAGE_COMMENTS_CLOSE_AFTER_DESC"
-                first="0" last="3650" step="1"
-                default="0"
-        />
-
-        <field
                 name="captcha"
                 type="plugins"
                 label="COM_ENGAGE_CONFIG_CAPTCHA_LABEL"
@@ -87,6 +54,63 @@
             <option value="nonmanager">COM_ENGAGE_CONFIG_CAPTCHA_FOR_NONMANAGER</option>
             <option value="all">COM_ENGAGE_CONFIG_CAPTCHA_FOR_ALL</option>
         </field>
+
+        <field
+            name="header_overridable"
+            type="note"
+            label="COM_ENGAGE_CONFIG_HEADER_OVERRIDABLE_HEADER"
+        />
+
+        <field
+            type="note"
+            class="alert alert-info"
+            description="COM_ENGAGE_CONFIG_HEADER_OVERRIDABLE_DESC"
+        />
+
+        <field
+                name="comments_show"
+                type="radio"
+                label="COM_ENGAGE_COMMENTS_SHOW_LABEL"
+                description="COM_ENGAGE_COMMENTS_SHOW_DESC"
+                class="btn-group btn-group-yesno"
+                default="1"
+        >
+            <option value="1">JSHOW</option>
+            <option value="0">JHIDE</option>
+        </field>
+
+        <field
+                name="comments_ordering"
+                type="list"
+                label="COM_ENGAGE_COMMENTS_ORDERING_LABEL"
+                description="COM_ENGAGE_COMMENTS_ORDERING_DESC"
+                class="chzn-color"
+                default="asc"
+        >
+            <option value="asc">JGLOBAL_ORDER_ASCENDING</option>
+            <option value="desc">JGLOBAL_ORDER_DESCENDING</option>
+        </field>
+
+        <field
+                name="comments_enabled"
+                type="radio"
+                label="COM_ENGAGE_COMMENTS_ENABLED_LABEL"
+                description="COM_ENGAGE_COMMENTS_ENABLED_DESC"
+                class="btn-group btn-group-yesno"
+                default="1"
+        >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field
+                name="comments_close_after"
+                type="integer"
+                label="COM_ENGAGE_COMMENTS_CLOSE_AFTER_LABEL"
+                description="COM_ENGAGE_COMMENTS_CLOSE_AFTER_DESC"
+                first="0" last="3650" step="1"
+                default="0"
+        />
     </fieldset>
 
     <fieldset
@@ -119,9 +143,12 @@
 
 
         <field
-                type="text"
+                type="textarea"
                 name="htmlpurifier_configstring"
                 default="p,b,a[href],i,u,strong,em,small,big,span[style],font[size],font[color],ul,ol,li,br,img[src],img[width],img[height],code,pre,blockquote"
+                class="input-xlarge"
+                cols="50"
+                rows="10"
                 label="COM_ENGAGE_CONFIG_HTMLPURIFIER_CONFIGSTRING_LABEL"
                 description="COM_ENGAGE_CONFIG_HTMLPURIFIER_CONFIGSTRING_DESC"
         />
