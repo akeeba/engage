@@ -111,7 +111,7 @@ final class Filter
 	 */
 	private static function getFilterMode(): string
 	{
-		if (!is_numeric(self::$filterMode))
+		if (!is_null(self::$filterMode))
 		{
 			return self::$filterMode;
 		}
@@ -198,6 +198,8 @@ final class Filter
 		{
 			return self::$purifier;
 		}
+
+		self::includeHTMLPurifier();
 
 		// Get the HTML purifier fallback configuration
 		$defaultWhitelist = 'p,b,a[href],i,u,strong,em,small,big,span[style],font[size],font[color],ul,ol,li,br,img[src],img[width],img[height],code,pre,blockquote';
