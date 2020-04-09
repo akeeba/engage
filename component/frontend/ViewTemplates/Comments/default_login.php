@@ -33,9 +33,9 @@ if (empty($moduleContent) && empty($positionContent))
 }
 ?>
 <footer id="akeeba-engage-login">
-	<h3>
+	<h4>
 		<?= Text::_('COM_ENGAGE_COMMENTS_LOGIN_HEAD') ?>
-	</h3>
+	</h4>
 
 	<?= $moduleContent ?>
 	<?= $positionContent ?>

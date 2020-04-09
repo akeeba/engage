@@ -19,7 +19,6 @@ use FOF30\Controller\DataController;
 use FOF30\Controller\Mixin\PredefinedTaskList;
 use FOF30\View\Exception\AccessForbidden;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Router\Router;
 use Joomla\CMS\Table\Asset;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
@@ -36,6 +35,8 @@ class Comments extends DataController
 		$this->setPredefinedTaskList([
 			'browse', 'submit', 'edit', 'save', 'cancel', 'publish', 'unpublish', 'remove',
 		]);
+
+		$this->taskPrivileges['submit'] = 'core.create';
 	}
 
 	/**
