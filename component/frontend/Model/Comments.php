@@ -39,6 +39,14 @@ class Comments extends \Akeeba\Engage\Admin\Model\Comments
 		{
 			$this->ip = Ip::getIp();
 		}
+
+		// Log the User Agent string if none was provided
+		if (empty($this->getFieldValue('user_agent')))
+		{
+			$this->user_agent = $this->container->platform->isCli()
+				? ''
+				: trim($this->input->server->getString('HTTP_USER_AGENT', ''));
+		}
 	}
 
 	/**

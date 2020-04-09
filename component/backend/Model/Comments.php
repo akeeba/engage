@@ -25,6 +25,7 @@ use RuntimeException;
  * @property string|null $name              Commenter's name
  * @property string|null $email             Commenter's email address
  * @property string      $ip                IP address used to file the comment
+ * @property string      $user_agent        The User Agent string used to file the comment
  * @property int         $enabled           Is this comment published?
  *
  * Filters:

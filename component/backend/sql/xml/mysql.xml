@@ -31,6 +31,7 @@ CREATE TABLE `#__engage_comments` (
   `name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `ip` varchar(64) DEFAULT NULL,
+  `user_agent` varchar(255) NOT NULL,
   `enabled` tinyint(3) NOT NULL DEFAULT '0',
   `created_on` datetime DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
