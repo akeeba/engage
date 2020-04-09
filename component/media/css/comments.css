@@ -6,136 +6,114 @@
 section.akengage-outer-container {
   margin-top: 12pt;
   margin-bottom: 12pt;
-  border-bottom: thin solid #514F50;
-}
-section.akengage-outer-container h3.akengage-title {
-  border-bottom: thin solid #514F50;
-}
-section.akengage-outer-container div.akengage-list-container > ol.akengage-comment-list {
-  margin-left: 0;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list {
-  margin-top: 0.5em;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list button {
-  display: inline-block;
-  background: none;
-  border: none;
-  color: teal;
-  margin: 0;
-  padding: 0;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list button:hover {
-  color: #62c6c9;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item {
-  list-style: none;
-  margin-top: 1em;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] {
-  margin-top: 0.5em;
-  margin-bottom: 1em;
-  border-left: 4px solid #EFEFEF;
-  padding-left: 1em;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties {
-  background-color: #fcfcfc;
-  margin-bottom: 0.25em;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties img.akengage-commenter-avatar {
-  float: left;
-  max-width: 32px;
-  max-height: 32px;
-  margin-right: 1em;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties div.akengange-commenter-name {
-  font-weight: bold;
-  font-size: 110%;
-  color: #514F50;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-username {
-  font-family: Hack, "Fira Code Retina", Consolas, "SF Mono", "Courier New", Courier, monospace;
-  color: #79a638;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-ismoderator,
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-isuser {
-  padding-left: 1em;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-ismoderator {
-  color: #F0AD4E;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-permalink > a {
-  color: #514F50;
-  text-underline: none;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-edit,
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-publish_unpublish {
-  float: right;
-  margin-left: 0.5em;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment][class*="--unpublished"] {
-  border-left: 4px solid #F0AD4E;
-  background-color: #fefbf7;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment][class*="--unpublished"] footer.akengage-comment-properties {
-  background-color: #fceedb;
-  margin-bottom: 0.25em;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment][class*="--spam"] {
-  border-left: 4px solid #E2363C;
-  background-color: #fefafa;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment][class*="--spam"] footer.akengage-comment-properties {
-  background-color: #fce8e9;
-  margin-bottom: 0.25em;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] div.akengage-comment-reply > button {
-  border: thin solid #EFEFEF;
-  padding: 0.25em 0.5em;
-  font-size: 115%;
-}
-section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] div.akengage-comment-reply > button:hover {
-  border-color: #514F50;
-  background-color: #f7f7f7;
-  color: #514F50;
-}
-section.akengage-outer-container div#akengage-comment-form {
-  border-top: thin solid #514F50;
-  padding: 1em;
-  margin: 1em 0;
-}
-section.akengage-outer-container div#akengage-comment-form h4 {
-  color: #339092;
-  font-size: 120%;
-}
-section.akengage-outer-container div#akengage-comment-form div#akengage-comment-inreplyto-wrapper {
-  display: none;
-  padding: 0.5em 1em;
-  border: 1px solid #40B5B8;
-  border-radius: 0.5em;
-  color: #000000;
-  background-color: #e7f6f7;
-}
-section.akengage-outer-container div#akengage-comment-form div#akengage-comment-inreplyto-wrapper span#akengage-comment-inreplyto-name {
-  font-weight: bold;
-}
-section.akengage-outer-container div#akengage-comment-form div#akengage-comment-inreplyto-wrapper button#akengage-comment-inreplyto-cancel {
-  border: thin solid #E2363C;
-  color: #E2363C;
-  background-color: white;
-  font-weight: bold;
-  padding: 0.25em 0.5em;
-  vertical-align: baseline;
-  margin-left: 1em;
-}
-section.akengage-outer-container div#akengage-comment-form div#akengage-comment-inreplyto-wrapper button#akengage-comment-inreplyto-cancel:hover {
-  background-color: #fef6f6;
-  border: thin solid #c81d23;
-  color: #c81d23;
-}
-section.akengage-outer-container div#akengage-comment-form div.akengage-comment-captcha-wrapper,
-section.akengage-outer-container div#akengage-comment-form div.akengage-comment-captcha-clear {
-  clear: both;
-}
+  border-bottom: thin solid #514F50; }
+  section.akengage-outer-container h3.akengage-title {
+    border-bottom: thin solid #514F50; }
+  section.akengage-outer-container div.akengage-list-container > ol.akengage-comment-list {
+    margin-left: 0; }
+  section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list {
+    margin-top: .5em; }
+    section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list button {
+      background: none;
+      border: 2px solid rgba(0, 0, 0, 0);
+      color: #40B5B8;
+      display: inline-block;
+      margin: 0;
+      padding: .25em .5em;
+      vertical-align: center; }
+      section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list button:hover {
+        color: #62c6c9; }
+    section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item {
+      list-style: none;
+      margin-top: 1em; }
+      section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] {
+        border-left: 4px solid #EFEFEF;
+        margin-bottom: 1em;
+        margin-top: .5em;
+        padding-left: 1em; }
+        section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties {
+          background-color: #fcfcfc;
+          margin-bottom: .25em; }
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties img.akengage-commenter-avatar {
+            float: left;
+            margin-right: 1em;
+            max-height: 32px;
+            max-width: 32px; }
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties div.akengange-commenter-name {
+            color: #514F50;
+            font-size: 110%;
+            font-weight: bold; }
+            section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-username {
+              color: #79a638;
+              font-family: Hack, "Fira Code Retina", Consolas, "SF Mono", "Courier New", Courier, monospace; }
+            section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-ismoderator,
+            section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-isuser {
+              padding-left: 1em; }
+            section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties div.akengange-commenter-name span.akengage-commenter-ismoderator {
+              color: #F0AD4E; }
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-permalink > a {
+            color: #514F50;
+            text-underline: none; }
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-edit,
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-delete,
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-publish_unpublish {
+            float: right; }
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-delete button {
+            color: #E2363C; }
+            section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-delete button:hover {
+              background-color: #fce8e9;
+              border: 2px solid #c81d23;
+              color: #c81d23; }
+        section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment][class*=--unpublished] {
+          background-color: #fefbf7;
+          border-left: 4px solid #F0AD4E; }
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment][class*=--unpublished] footer.akengage-comment-properties {
+            background-color: #fceedb;
+            margin-bottom: .25em; }
+        section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment][class*=--spam] {
+          background-color: #fefafa;
+          border-left: 4px solid #E2363C; }
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment][class*=--spam] footer.akengage-comment-properties {
+            background-color: #fce8e9;
+            margin-bottom: .25em; }
+        section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] div.akengage-comment-reply > button {
+          border: thin solid #EFEFEF;
+          font-size: 115%;
+          padding: .25em .5em; }
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] div.akengage-comment-reply > button:hover {
+            background-color: #f7f7f7;
+            border-color: #514F50;
+            color: #514F50; }
+  section.akengage-outer-container div#akengage-comment-form {
+    border-top: thin solid #514F50;
+    margin: 1em 0;
+    padding: 1em; }
+    section.akengage-outer-container div#akengage-comment-form h4 {
+      color: #339092;
+      font-size: 120%; }
+    section.akengage-outer-container div#akengage-comment-form div#akengage-comment-inreplyto-wrapper {
+      background-color: #e7f6f7;
+      border: 1px solid #40B5B8;
+      border-radius: .5em;
+      color: #000000;
+      display: none;
+      padding: .5em 1em; }
+      section.akengage-outer-container div#akengage-comment-form div#akengage-comment-inreplyto-wrapper span#akengage-comment-inreplyto-name {
+        font-weight: bold; }
+      section.akengage-outer-container div#akengage-comment-form div#akengage-comment-inreplyto-wrapper button#akengage-comment-inreplyto-cancel {
+        background-color: white;
+        border: thin solid #E2363C;
+        color: #E2363C;
+        font-weight: bold;
+        margin-left: 1em;
+        padding: .25em .5em;
+        vertical-align: baseline; }
+        section.akengage-outer-container div#akengage-comment-form div#akengage-comment-inreplyto-wrapper button#akengage-comment-inreplyto-cancel:hover {
+          background-color: #fef6f6;
+          border: thin solid #c81d23;
+          color: #c81d23; }
+    section.akengage-outer-container div#akengage-comment-form div.akengage-comment-captcha-wrapper,
+    section.akengage-outer-container div#akengage-comment-form div.akengage-comment-captcha-clear {
+      clear: both; }
 
 /*# sourceMappingURL=comments.css.map */

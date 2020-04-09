@@ -109,8 +109,15 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
                     <?php endif; ?>
                 </span>
 				<?php endif; ?>
+				<?php if ($this->perms['edit']): ?>
+				<span class="akengage-comment-delete">
+                    <button class="akengage-comment-delete-btn" data-akengageid="<?= $comment->getId() ?>">
+                        <?= Text::_('COM_ENGAGE_COMMENTS_BTN_DELETE') ?>
+                    </button>
+                </span>
+				<?php endif; ?>
 				<?php if ($this->perms['edit'] || (($this->user->id === $user->id) && $this->perms['own'])): ?>
-					<span class="akengage-comment-edit">
+				<span class="akengage-comment-edit">
                     <button class="akengage-comment-edit-btn" data-akengageid="<?= $comment->getId() ?>">
                         <?= Text::_('COM_ENGAGE_COMMENTS_BTN_EDIT') ?>
                     </button>

@@ -1,5 +1,3 @@
-Deleting an item should promote its children one level up.
-
 Akismet integration plugin
     Spam is automatically unpublished (state: -3)
 

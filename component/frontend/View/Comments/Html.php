@@ -14,6 +14,7 @@ use Akeeba\Engage\Site\Model\Comments;
 use Exception;
 use FOF30\View\DataView\Html as DataHtml;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Pagination\Pagination;
 use Joomla\CMS\Router\Router;
 use Joomla\CMS\Uri\Uri;
@@ -218,13 +219,16 @@ class Html extends DataHtml
 
 		$this->pageParams = $this->pageParams ?? new Registry();
 
-		// Script options
+		// Script options and langauge keys
 		$router   = Router::getInstance('site');
 		$protoURL = 'index.php?option=com_engage&view=Comments&task=%s&id=';
 		$platform->addScriptOptions('akeeba.Engage.Comments.returnURL', base64_encode(Uri::getInstance()->toString()));
 		$platform->addScriptOptions('akeeba.Engage.Comments.editURL', $router->build(sprintf($protoURL, 'edit'))->toString());
+		$platform->addScriptOptions('akeeba.Engage.Comments.deleteURL', $router->build(sprintf($protoURL, 'remove'))->toString());
 		$platform->addScriptOptions('akeeba.Engage.Comments.publishURL', $router->build(sprintf($protoURL, 'publish'))->toString());
 		$platform->addScriptOptions('akeeba.Engage.Comments.unpublishURL', $router->build(sprintf($protoURL, 'unpublish'))->toString());
+
+		Text::script('COM_ENGAGE_COMMENTS_DELETE_PROMPT');
 	}
 
 	/**

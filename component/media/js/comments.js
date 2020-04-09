@@ -62,6 +62,28 @@ akeeba.Engage.Comments.onEditButton = function (e)
         encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
 };
 
+akeeba.Engage.Comments.onDeleteButton = function (e)
+{
+    e.preventDefault();
+
+    var shouldProceed = confirm(akeeba.System.Text._('COM_ENGAGE_COMMENTS_DELETE_PROMPT'));
+
+    if (!shouldProceed)
+    {
+        return;
+    }
+
+    /**
+     * Construct the edit URL for the comment. The akeeba.Engage.Comments.editURL script option key comes from the
+     * components/com_engage\View\Comments\Html.php file.
+     */
+    var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
+
+    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.deleteURL") + encodeURIComponent(id)
+        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
+        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+};
+
 akeeba.Engage.Comments.onPublishButton = function (e)
 {
     e.preventDefault();
@@ -142,6 +164,11 @@ akeeba.System.documentReady(function ()
     akeeba.System.iterateNodes("button.akengage-comment-edit-btn", function (elButton)
     {
         akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onEditButton);
+    });
+
+    akeeba.System.iterateNodes("button.akengage-comment-delete-btn", function (elButton)
+    {
+        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onDeleteButton);
     });
 
     akeeba.System.iterateNodes("button.akengage-comment-reply-btn", function (elButton)

@@ -30,15 +30,16 @@ section.akengage-outer-container {
     }
 
     ol.akengage-comment-list {
-      margin-top: 0.5em;
+      margin-top: .5em;
 
       button {
-        display: inline-block;
         background: none;
-        border: none;
-        color: teal;
+        border: 2px solid rgba(0, 0, 0, 0);
+        color: $teal;
+        display: inline-block;
         margin: 0;
-        padding: 0;
+        padding: .25em .5em;
+        vertical-align: center;
 
         &:hover {
           color: lighten($teal, 10%);
@@ -50,37 +51,37 @@ section.akengage-outer-container {
         margin-top: 1em;
 
         article[class^=akengage-comment] {
-          margin-top: 0.5em;
-          margin-bottom: 1em;
           border-left: 4px solid $light-grey;
+          margin-bottom: 1em;
+          margin-top: .5em;
           padding-left: 1em;
 
           footer.akengage-comment-properties {
             background-color: lighten($light-grey, 5%);
-            margin-bottom: 0.25em;
+            margin-bottom: .25em;
 
             img.akengage-commenter-avatar {
               float: left;
-              max-width: 32px;
-              max-height: 32px;
               margin-right: 1em;
+              max-height: 32px;
+              max-width: 32px;
             }
 
             div.akengange-commenter-name {
-              font-weight: bold;
-              font-size: 110%;
               color: $grey;
+              font-size: 110%;
+              font-weight: bold;
 
               span.akengage-commenter-username {
-                font-family:Hack, "Fira Code Retina", Consolas, "SF Mono", "Courier New", Courier, monospace;
                 color: darken($green, 10%);
+                font-family: Hack, "Fira Code Retina", Consolas, "SF Mono", "Courier New", Courier, monospace;
               }
 
               span.akengage-commenter-ismoderator,
-              span.akengage-commenter-isuser
-              {
+              span.akengage-commenter-isuser {
                 padding-left: 1em;
               }
+
               span.akengage-commenter-ismoderator {
                 color: $orange;
               }
@@ -92,41 +93,53 @@ section.akengage-outer-container {
             }
 
             span.akengage-comment-edit,
+            span.akengage-comment-delete,
             span.akengage-comment-publish_unpublish {
               float: right;
-              margin-left: 0.5em;
+            }
+
+            span.akengage-comment-delete {
+              button {
+                color: $red;
+
+                &:hover {
+                  background-color: lighten($red, 40%);
+                  border: 2px solid darken($red, 10%);
+                  color: darken($red, 10%);
+                }
+              }
             }
           }
 
           &[class*=--unpublished] {
-            border-left: 4px solid $orange;
             background-color: lighten($orange, 36%);
+            border-left: 4px solid $orange;
 
             footer.akengage-comment-properties {
               background-color: lighten($orange, 30%);
-              margin-bottom: 0.25em;
+              margin-bottom: .25em;
             }
           }
 
           &[class*=--spam] {
-            border-left: 4px solid $red;
             background-color: lighten($red, 44%);
+            border-left: 4px solid $red;
 
             footer.akengage-comment-properties {
               background-color: lighten($red, 40%);
-              margin-bottom: 0.25em;
+              margin-bottom: .25em;
             }
           }
 
           div.akengage-comment-reply {
             & > button {
               border: thin solid $light-grey;
-              padding: 0.25em 0.5em;
               font-size: 115%;
+              padding: .25em .5em;
 
               &:hover {
-                border-color: $grey;
                 background-color: lighten($light-grey, 3%);
+                border-color: $grey;
                 color: $grey;
               }
             }
@@ -138,8 +151,8 @@ section.akengage-outer-container {
 
   div#akengage-comment-form {
     border-top: thin solid $grey;
-    padding: 1em;
     margin: 1em 0;
+    padding: 1em;
 
     h4 {
       color: darken($teal, 10%);
@@ -147,25 +160,25 @@ section.akengage-outer-container {
     }
 
     div#akengage-comment-inreplyto-wrapper {
-      display: none;
-      padding: 0.5em 1em;
-      border: 1px solid $teal;
-      border-radius: 0.5em;
-      color: $black;
       background-color: lighten($teal, 45%);
+      border: 1px solid $teal;
+      border-radius: .5em;
+      color: $black;
+      display: none;
+      padding: .5em 1em;
 
       span#akengage-comment-inreplyto-name {
         font-weight: bold;
       }
 
       button#akengage-comment-inreplyto-cancel {
+        background-color: lighten($light-grey, 10%);
         border: thin solid $red;
         color: $red;
-        background-color: lighten($light-grey, 10%);
         font-weight: bold;
-        padding: 0.25em 0.5em;
-        vertical-align: baseline;
         margin-left: 1em;
+        padding: .25em .5em;
+        vertical-align: baseline;
 
         &:hover {
           background-color: lighten($red, 43%);
