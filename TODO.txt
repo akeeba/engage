@@ -1,6 +1,10 @@
 Akismet integration plugin
     Spam is automatically unpublished (state: -3)
 
+Guest posts: option to save name and email in this browser (use HTML5 storage)
+
+Avatar as a plugin, fallback to Gravatar
+
 Project Honeypot integration plugin
 
 Send email notifications for new comments
@@ -19,14 +23,18 @@ Send email notifications for new comments
     If the comment is 2nd level or above we consider emailing the parent comment's author and all of the parent's children on the same level as our new comment but ONLY if it's published (state=1)
         If it's a new comment we REMOVE the email addresses of the managers from that list of users to notify.
 
-
-Display: show "In reply to [name]" for 2nd level and deeper replies, linking back to the comment on the same page.
-    If the comment is not part of the items set, DO NOT make this a link.
+    People need to opt out of emails
+        Add a contact field, default 1
+        Create controller task which allows you to unset the contact field
+        The task requires a hash of commenter's name, email, ID and site secret to be provided for authentication (guest comments) OR the user to be already logged in (logged in comments).
+        If the email loop sees at least one 0 flag the email is removed from the emails to be contacted by email
+        Emails sent need to have the unsubscribe link at their bottom to comply with US CAN-SPAM Act and similar legislation
 
 Display: when a parent is unpublished display a phantom comment ("This comment has been unpublished").
 
 Backend interface
     Publish filter: 0: Unpublished, 1: Published, -3: Spam
+    Warn about deleting a comment (its children comments will be removed as well)
 
 DataCompliance and com_privacy plugins
     All comments filed by the user are unpublished and their text replaced with "This comment has been removed due to account deletion."
@@ -38,3 +46,9 @@ User Actions Log plugin
     We do NOT log filing new comments as activity.
 
 Dark Mode, front- and backend, with an option to turn it on and off like all of our other software.
+
+Per-category or per-article comment settings
+    Comment privilege injected in com_content / com_categories?
+    How does that interact with the com_engage privilege?
+    Do I need my own permissions checker instead of going through Joomla?
+    Maybe leave it for version 2?

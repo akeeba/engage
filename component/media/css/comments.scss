@@ -92,22 +92,33 @@ section.akengage-outer-container {
               text-underline: none;
             }
 
-            span.akengage-comment-edit,
-            span.akengage-comment-delete,
-            span.akengage-comment-publish_unpublish {
-              float: right;
-            }
+            span.akengage-comment-actions
+            {
+              span.akengage-comment-edit,
+              span.akengage-comment-delete,
+              span.akengage-comment-publish_unpublish {
+                display: block;
+                float: right;
+                position: relative;
+                top: -.5em;
+              }
 
-            span.akengage-comment-delete {
-              button {
-                color: $red;
+              span.akengage-comment-delete {
+                button {
+                  color: $red;
 
-                &:hover {
-                  background-color: lighten($red, 40%);
-                  border: 2px solid darken($red, 10%);
-                  color: darken($red, 10%);
+                  &:hover {
+                    background-color: lighten($red, 40%);
+                    border: 2px solid darken($red, 10%);
+                    color: darken($red, 10%);
+                  }
                 }
               }
+            }
+
+            span.akengage-comment-publish-type {
+              display: block;
+              font-weight: bold;
             }
           }
 
@@ -192,5 +203,27 @@ section.akengage-outer-container {
     div.akengage-comment-captcha-clear {
       clear: both;
     }
+  }
+}
+
+// Small screens
+@media only screen and (max-width: 600px) {
+  span.akengage-comment-actions {
+    display: block;
+    padding: .25em 0;
+
+    span.akengage-comment-actions {
+      span.akengage-comment-edit,
+      span.akengage-comment-delete,
+      span.akengage-comment-publish_unpublish {
+        display: inline-block;
+        float: none;
+      }
+    }
+  }
+
+  span.akengage-comment-ip {
+    clear: both;
+    display: block;
   }
 }

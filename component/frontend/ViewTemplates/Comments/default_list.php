@@ -96,50 +96,52 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
                 <span class="akengage-comment-permalink">
                     <?= $commentDate->format(Text::_('DATE_FORMAT_LC2'), true) ?>
                 </span>
-				<?php if ($this->perms['state']): ?>
-					<span class="akengage-comment-publish_unpublish">
-                    <?php if ($comment->enabled == 1): ?>
-						<button class="akengage-comment-unpublish-btn" data-akengageid="<?= $comment->getId() ?>">
-                            <?= Text::_('COM_ENGAGE_COMMENTS_BTN_UNPUBLISH') ?>
-                        </button>
-                    <?php else: ?>
-						<button class="akengage-comment-publish-btn" data-akengageid="<?= $comment->getId() ?>">
-                            <?= Text::_('COM_ENGAGE_COMMENTS_BTN_PUBLISH') ?>
-                        </button>
-                    <?php endif; ?>
-                </span>
-				<?php endif; ?>
-				<?php if ($this->perms['edit']): ?>
-				<span class="akengage-comment-delete">
-                    <button class="akengage-comment-delete-btn" data-akengageid="<?= $comment->getId() ?>">
-                        <?= Text::_('COM_ENGAGE_COMMENTS_BTN_DELETE') ?>
-                    </button>
-                </span>
-				<?php endif; ?>
-				<?php if ($this->perms['edit'] || (($this->user->id === $user->id) && $this->perms['own'])): ?>
-				<span class="akengage-comment-edit">
-                    <button class="akengage-comment-edit-btn" data-akengageid="<?= $comment->getId() ?>">
-                        <?= Text::_('COM_ENGAGE_COMMENTS_BTN_EDIT') ?>
-                    </button>
-                </span>
-				<?php endif; ?>
-				<?php if ($this->perms['edit'] || $user->authorise('core.manage', $comment->asset_id)): ?>
-					<br/>
-					<?php if (!empty($ipLookupURL)): ?>
-						<span class="akengage-comment-ip">
-							<a href="<?= $ipLookupURL ?>" target="_blank">
+				<span class="akengage-comment-actions">
+					<?php if ($this->perms['state']): ?>
+						<span class="akengage-comment-publish_unpublish">
+						<?php if ($comment->enabled == 1): ?>
+							<button class="akengage-comment-unpublish-btn" data-akengageid="<?= $comment->getId() ?>">
+								<?= Text::_('COM_ENGAGE_COMMENTS_BTN_UNPUBLISH') ?>
+							</button>
+						<?php else: ?>
+							<button class="akengage-comment-publish-btn" data-akengageid="<?= $comment->getId() ?>">
+								<?= Text::_('COM_ENGAGE_COMMENTS_BTN_PUBLISH') ?>
+							</button>
+						<?php endif; ?>
+					</span>
+					<?php endif; ?>
+					<?php if ($this->perms['edit']): ?>
+					<span class="akengage-comment-delete">
+						<button class="akengage-comment-delete-btn" data-akengageid="<?= $comment->getId() ?>">
+							<?= Text::_('COM_ENGAGE_COMMENTS_BTN_DELETE') ?>
+						</button>
+					</span>
+					<?php endif; ?>
+					<?php if ($this->perms['edit'] || (($this->user->id === $user->id) && $this->perms['own'])): ?>
+					<span class="akengage-comment-edit">
+						<button class="akengage-comment-edit-btn" data-akengageid="<?= $comment->getId() ?>">
+							<?= Text::_('COM_ENGAGE_COMMENTS_BTN_EDIT') ?>
+						</button>
+					</span>
+					<?php endif; ?>
+					<?php if ($this->perms['edit'] || $user->authorise('core.manage', $comment->asset_id)): ?>
+						<br/>
+						<?php if (!empty($ipLookupURL)): ?>
+							<span class="akengage-comment-ip">
+								<a href="<?= $ipLookupURL ?>" target="_blank">
+									<?= Text::sprintf('COM_ENGAGE_COMMENTS_IP', $comment->ip ?? '???') ?>
+								</a>
+							</span>
+						<?php else: ?>
+							<span class="akengage-comment-ip">
 								<?= Text::sprintf('COM_ENGAGE_COMMENTS_IP', $comment->ip ?? '???') ?>
-							</a>
-						</span>
-					<?php else: ?>
-						<span class="akengage-comment-ip">
-							<?= Text::sprintf('COM_ENGAGE_COMMENTS_IP', $comment->ip ?? '???') ?>
+							</span>
+						<?php endif; ?>
+						<span class="akengage-comment-publish-type">
+							<?= Text::_('COM_ENGAGE_COMMENTS_TYPE_' . (($comment->enabled == 1) ? 'published' : (($comment->enabled == -3) ? 'spam' : 'unpublished'))) ?>
 						</span>
 					<?php endif; ?>
-					<span class="akengage-comment-publish-type">
-						<?= Text::_('COM_ENGAGE_COMMENTS_TYPE_' . (($comment->enabled == 1) ? 'published' : (($comment->enabled == -3) ? 'spam' : 'unpublished'))) ?>
-					</span>
-				<?php endif; ?>
+				</span>
 			</div>
 		</footer>
 

@@ -54,16 +54,22 @@ section.akengage-outer-container {
           section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-permalink > a {
             color: #514F50;
             text-underline: none; }
-          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-edit,
-          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-delete,
-          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-publish_unpublish {
-            float: right; }
-          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-delete button {
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-actions span.akengage-comment-edit,
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-actions span.akengage-comment-delete,
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-actions span.akengage-comment-publish_unpublish {
+            display: block;
+            float: right;
+            position: relative;
+            top: -.5em; }
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-actions span.akengage-comment-delete button {
             color: #E2363C; }
-            section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-delete button:hover {
+            section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-actions span.akengage-comment-delete button:hover {
               background-color: #fce8e9;
               border: 2px solid #c81d23;
               color: #c81d23; }
+          section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment] footer.akengage-comment-properties span.akengage-comment-publish-type {
+            display: block;
+            font-weight: bold; }
         section.akengage-outer-container div.akengage-list-container ol.akengage-comment-list li.akengage-comment-item article[class^=akengage-comment][class*=--unpublished] {
           background-color: #fefbf7;
           border-left: 4px solid #F0AD4E; }
@@ -115,5 +121,19 @@ section.akengage-outer-container {
     section.akengage-outer-container div#akengage-comment-form div.akengage-comment-captcha-wrapper,
     section.akengage-outer-container div#akengage-comment-form div.akengage-comment-captcha-clear {
       clear: both; }
+
+@media only screen and (max-width: 600px) {
+  span.akengage-comment-actions {
+    display: block;
+    padding: .25em 0; }
+    span.akengage-comment-actions span.akengage-comment-actions span.akengage-comment-edit,
+    span.akengage-comment-actions span.akengage-comment-actions span.akengage-comment-delete,
+    span.akengage-comment-actions span.akengage-comment-actions span.akengage-comment-publish_unpublish {
+      display: inline-block;
+      float: none; }
+
+  span.akengage-comment-ip {
+    clear: both;
+    display: block; } }
 
 /*# sourceMappingURL=comments.css.map */
