@@ -1,17 +1,5 @@
 Auto-clean spam after 15 days (configurable)
 
-Avatar as a plugin
-    Add plg_engage_gravatar to pkg_engage.xml
-    Configuration (see https://en.gravatar.com/site/implement/images/)
-        Show Gravatar profile link: Yes / No
-        Allowed Rating: G (default), PG, R, X
-        Default Image: Mystery Person, Identicon, MonsterID, Wavatar, Retro, RoboHash, Blank, Custom
-        Custom Default Image: URL field
-        Use default image: Always, When Avatar unavailable (default)
-    onEngageUserAvatarURL(User $user, int $size = 32): ?string
-    onEngageUserProfileURL(User $user): ?string
-    [x] Comments model: use the aforementioned events
-
 Guest posts: option to save name and email in this browser (use HTML5 storage)
 
 Project Honeypot integration plugin

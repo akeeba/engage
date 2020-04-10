@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   AkeebaEngage
+  ~ @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+<extension version="3.9.0" type="plugin" group="engage" method="upgrade">
+    <name>PLG_ENGAGE_GRAVATAR</name>
+    <description>PLG_ENGAGE_GRAVATAR_XML_DESC</description>
+    <version>1.0.0</version>
+    <creationDate>2020-04-01</creationDate>
+    <author>Akeeba Ltd</author>
+    <authorEmail>no-reply@akeebabackup.com</authorEmail>
+    <authorUrl>https://www.akeebabackup.com</authorUrl>
+    <copyright>Copyright (c)2020-2020 Akeeba Ltd</copyright>
+    <license>GNU/GPL v3 or any later version</license>
+
+    <files>
+        <filename plugin="gravatar">gravatar.php</filename>
+        <filename>.htaccess</filename>
+        <filename>web.config</filename>
+    </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.plg_engage_gravatar.ini</language>
+        <language tag="en-GB">en-GB/en-GB.plg_engage_gravatar.sys.ini</language>
+    </languages>
+
+    <scriptfile>script.php</scriptfile>
+
+    <config>
+        <fields name="params">
+            <fieldset
+                name="basic"
+                label="PLG_ENGAGE_GRAVATAR_FIELDSET_BASIC_LABEL"
+                description="PLG_ENGAGE_GRAVATAR_FIELDSET_BASIC_DESC"
+            >
+
+                <field
+                    name="profile_link"
+                    type="radio"
+                    label="PLG_ENGAGE_GRAVATAR_PROFILE_LINK_LABEL"
+                    description="PLG_ENGAGE_GRAVATAR_PROFILE_LINK_DESC"
+                    class="btn-group btn-group-yesno"
+                    default="1"
+                >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+
+                <field
+                    name="rating"
+                    type="list"
+                    label="PLG_ENGAGE_GRAVATAR_RATING_LABEL"
+                    description="PLG_ENGAGE_GRAVATAR_RATING_DESC"
+                    default="G"
+                >
+                    <option value="G">PLG_ENGAGE_GRAVATAR_RATING_G</option>
+                    <option value="PG">PLG_ENGAGE_GRAVATAR_RATING_PG</option>
+                    <option value="R">PLG_ENGAGE_GRAVATAR_RATING_R</option>
+                    <option value="X">PLG_ENGAGE_GRAVATAR_RATING_X</option>
+                </field>
+
+                <field
+                    name="default_image"
+                    type="list"
+                    label="PLG_ENGAGE_GRAVATAR_DEFAULT_IMAGE_LABEL"
+                    description="PLG_ENGAGE_GRAVATAR_DEFAULT_IMAGE_DESC"
+                    default="mp"
+                >
+                    <option value="mp">PLG_ENGAGE_GRAVATAR_DEFAULT_IMAGE_MP</option>
+                    <option value="identicon">PLG_ENGAGE_GRAVATAR_DEFAULT_IMAGE_IDENTICON</option>
+                    <option value="monsterid">PLG_ENGAGE_GRAVATAR_DEFAULT_IMAGE_MONSTERID</option>
+                    <option value="wavatar">PLG_ENGAGE_GRAVATAR_DEFAULT_IMAGE_WAVATAR</option>
+                    <option value="retro">PLG_ENGAGE_GRAVATAR_DEFAULT_IMAGE_RETRO</option>
+                    <option value="robohash">PLG_ENGAGE_GRAVATAR_DEFAULT_IMAGE_ROBOHASH</option>
+                    <option value="blank">PLG_ENGAGE_GRAVATAR_DEFAULT_IMAGE_BLANK</option>
+                    <option value="custom">PLG_ENGAGE_GRAVATAR_DEFAULT_IMAGE_CUSTOM</option>
+                </field>
+
+                <field
+                    name="custom_default"
+                    type="media"
+                    label="PLG_ENGAGE_GRAVATAR_CUSTOM_DEFAULT_LABEL"
+                    description="PLG_ENGAGE_GRAVATAR_CUSTOM_DEFAULT_DESC"
+                    default=""
+                />
+
+                <field
+                    name="force_default"
+                    type="radio"
+                    label="PLG_ENGAGE_GRAVATAR_FORCE_DEFAULT_LABEL"
+                    description="PLG_ENGAGE_GRAVATAR_FORCE_DEFAULT_DESC"
+                    class="btn-group btn-group-yesno"
+                    default="0"
+                >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+
+            </fieldset>
+        </fields>
+    </config>
+</extension>
