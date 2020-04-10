@@ -19,6 +19,8 @@ use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 
 /**
+ * Akeeba Engage – Configure and show comments in Joomla core content (articles) and categories
+ *
  * @package   AkeebaEngage
  * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later

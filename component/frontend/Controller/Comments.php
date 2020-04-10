@@ -9,6 +9,7 @@ namespace Akeeba\Engage\Site\Controller;
 
 defined('_JEXEC') or die();
 
+use Akeeba\Engage\Admin\Model\Exception\BlatantSpam;
 use Akeeba\Engage\Site\Helper\Filter;
 use Akeeba\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Site\Model\Comments as CommentsModel;
@@ -44,6 +45,7 @@ class Comments extends DataController
 	/**
 	 * Submit a new comment
 	 *
+	 * @throws BlatantSpam If the comment was reported to be blatant spam
 	 * @throws Exception
 	 */
 	public function submit(): void
