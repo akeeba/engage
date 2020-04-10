@@ -1,14 +1,39 @@
 Akismet integration plugin
-    Spam is automatically unpublished (state: -3)
+    Add plg_engage_akismet to pkg_engage.xml
+    https://akismet.com/development/api/#detailed-docs
+    Configuration
+        Akismet key
+        Check Akismet key (with com_ajax; requires backend, anti-CSRF token, non-empty key)
+        Check for spam: All Comments, Non-manager Comments (default), Guest Comments
+    onEngageCheckSpam($comment): ?bool  True if positively spam, false if ham (not spam), null if not applicable
+    onEngageReportSpam($comment): void  Report a comment as spam (reports false negative as actually being spam)
+    onEngageReportHam($comment): void  Report a comment as ham (reports false positive as actually NOT being spam)
+    [x] Comments controller: spam gets automatically unpublished (state: -3)
+        Feedback to the user if the comment is detected to be spam
+    [x] Comments controller: task reportspam, requires core.edit.state
+    [x] Comments controller: task reportham, requires core.edit.state
+    “Spam” and “Not Spam” buttons in the interface, requires core.edit.state
+
+Avatar as a plugin
+    Add plg_engage_gravatar to pkg_engage.xml
+    Configuration (see https://en.gravatar.com/site/implement/images/)
+        Show Gravatar profile link: Yes / No
+        Allowed Rating: G (default), PG, R, X
+        Default Image: Mystery Person, Identicon, MonsterID, Wavatar, Retro, RoboHash, Blank, Custom
+        Custom Default Image: URL field
+        Use default image: Always, When Avatar unavailable (default)
+    onEngageUserAvatarURL(User $user, int $size = 32): ?string
+    onEngageUserProfileURL(User $user): ?string
+    [x] Comments model: use the aforementioned events
 
 Guest posts: option to save name and email in this browser (use HTML5 storage)
 
-Avatar as a plugin, fallback to Gravatar
-
 Project Honeypot integration plugin
+    onEngageCheckSpam($comment): ?bool  True if positively spam, false if ham (not spam), null if not applicable
 
 Send email notifications for new comments
     The plugin is triggered by the onAfterSave event of the Comments model and only in the frontend.
+        Use FOF plugin events to trigger it
     Therefore it knows if it's a new comment or existing record being updated.
     Same idea as Akeeba Subscriptions emails, really.
 
@@ -35,6 +60,7 @@ Display: when a parent is unpublished display a phantom comment ("This comment h
 Backend interface
     Publish filter: 0: Unpublished, 1: Published, -3: Spam
     Warn about deleting a comment (its children comments will be removed as well)
+    Report Spam / Mark as Not Spam links
 
 DataCompliance and com_privacy plugins
     All comments filed by the user are unpublished and their text replaced with "This comment has been removed due to account deletion."

@@ -110,7 +110,7 @@ class Comments extends TreeModel
 
 			$dir = strtoupper($this->getState('filter_order_Dir', null, 'cmd'));
 
-			if (!in_array($dir, array('ASC', 'DESC')))
+			if (!in_array($dir, ['ASC', 'DESC']))
 			{
 				$dir = 'ASC';
 				$this->setState('filter_order_Dir', $dir);
@@ -140,6 +140,7 @@ class Comments extends TreeModel
 		return $query;
 	}
 
+	/** @inheritDoc */
 	public function count()
 	{
 		if (!$this->treeNestedGet)
@@ -154,7 +155,7 @@ class Comments extends TreeModel
 		$innerQuery->clear('select')->clear('order')->select($db->qn('node.lft'));
 
 		// Run the "before build query" hook and behaviours
-		$this->triggerEvent('onBuildCountQuery', array(&$innerQuery));
+		$this->triggerEvent('onBuildCountQuery', [&$innerQuery]);
 
 		$outerQuery = $db->getQuery(true)
 			->select('COUNT(*)')
@@ -166,7 +167,6 @@ class Comments extends TreeModel
 		return $total;
 
 	}
-
 
 	/**
 	 * get() will return the comment tree of the specified asset, in infinite depth.
@@ -202,18 +202,73 @@ class Comments extends TreeModel
 		return $user;
 	}
 
+	/**
+	 * Returns a URL for the user's avatar image, empty if no avatar is available.
+	 *
+	 * @param   int  $size  Size of the avatar in pixels (avatars are meant to be square)
+	 *
+	 * @return  string  The avatar URL, empty if no avatar is available.
+	 */
 	public function getAvatarURL(int $size = 32): string
 	{
-		$hash = md5(strtolower(trim($this->getUser()->email)));
+		$platform = $this->container->platform;
 
-		return 'https://www.gravatar.com/avatar/' . $hash . '?s=' . $size;
+		$platform->importPlugin('engage');
+
+		$results = $platform->runPlugins('onEngageUserAvatarURL', [$this->getUser(), $size]);
+		$results = array_filter($results, function ($x) {
+			return is_string($x) && !empty($x);
+		});
+
+		if (empty($results))
+		{
+			return '';
+		}
+
+		return array_shift($results);
 	}
 
+	/**
+	 * Returns the URL for the user's profile page, empty if no profile is available
+	 *
+	 * @return  string  The user's profile page, empty if no profile is available
+	 */
 	public function getProfileURL(): string
 	{
-		$hash = md5(strtolower(trim($this->getUser()->email)));
+		$platform = $this->container->platform;
 
-		return 'https://www.gravatar.com/' . $hash;
+		$platform->importPlugin('engage');
+
+		$results = $platform->runPlugins('onEngageUserProfileURL', [$this->getUser()]);
+		$results = array_filter($results, function ($x) {
+			return is_string($x) && !empty($x);
+		});
+
+		if (empty($results))
+		{
+			return '';
+		}
+
+		return array_shift($results);
+	}
+
+	/**
+	 * Pre-process the record data before saving them to the database.
+	 *
+	 * Used to remove virtual fields which do not exist in the table.
+	 *
+	 * @return  array  The pre-processed data
+	 */
+	public function recordDataToDatabaseData()
+	{
+		$ret = parent::recordDataToDatabaseData();
+
+		if (array_key_exists('depth', $ret))
+		{
+			unset($ret['depth']);
+		}
+
+		return $ret;
 	}
 
 	/**
@@ -233,6 +288,13 @@ class Comments extends TreeModel
 		$this->treeDepth = $data['depth'];
 	}
 
+	/**
+	 * Returns the user ID given their email address.
+	 *
+	 * @param   string  $email  The email to check
+	 *
+	 * @return  int|null  The corresponding user ID, null if no user matches this email address
+	 */
 	private function getUserIdByEmail(string $email): ?int
 	{
 		$db = $this->getDbo();
@@ -268,18 +330,4 @@ class Comments extends TreeModel
 		$this->whereRaw($db->qn('node') . '.' . $fldLft . ' >= ' . $db->qn('parent') . '.' . $fldLft);
 		$this->whereRaw($db->qn('node') . '.' . $fldLft . ' <= ' . $db->qn('parent') . '.' . $fldRgt);
 	}
-
-	public function recordDataToDatabaseData()
-	{
-		$ret = parent::recordDataToDatabaseData();
-
-		if (array_key_exists('depth', $ret))
-		{
-			unset($ret['depth']);
-		}
-
-		return $ret;
-	}
-
-
 }

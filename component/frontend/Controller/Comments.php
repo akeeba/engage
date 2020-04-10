@@ -33,10 +33,12 @@ class Comments extends DataController
 		parent::__construct($container, $config);
 
 		$this->setPredefinedTaskList([
-			'browse', 'submit', 'edit', 'save', 'cancel', 'publish', 'unpublish', 'remove',
+			'browse', 'submit', 'edit', 'save', 'cancel', 'publish', 'unpublish', 'remove', 'reportspam', 'reportham',
 		]);
 
-		$this->taskPrivileges['submit'] = 'core.create';
+		$this->taskPrivileges['submit']     = 'core.create';
+		$this->taskPrivileges['reportspam'] = 'core.edit.state';
+		$this->taskPrivileges['reportham']  = 'core.edit.state';
 	}
 
 	/**
@@ -134,6 +136,19 @@ class Comments extends DataController
 			$model->created_by = $user->id;
 		}
 
+		// Populates the IP address and User Agent, required for the spam check
+		$model->useCaptcha(false);
+		$model->check();
+
+		// Spam check
+		$platform->importPlugin('engage');
+		$spamResults = $platform->runPlugins('onEngageCheckSpam', [$model]);
+
+		if (in_array(true, $spamResults, true))
+		{
+			$model->enabled = -3;
+		}
+
 		// Try to save the comment, checking for CAPTCHA when necessary
 		try
 		{
@@ -156,6 +171,30 @@ class Comments extends DataController
 		$platform->unsetSessionVar('comment', $sessionNamespace);
 
 		$this->setRedirect($returnUrl, Text::_('COM_ENGAGE_COMMENTS_MSG_SUCCESS'));
+	}
+
+	/**
+	 * Report a message as spam
+	 *
+	 * It is up to the plugins to make a sensible report of spam to a remote service.
+	 *
+	 * @throws  Exception
+	 */
+	public function reportspam(): void
+	{
+		$this->reportMessage(true);
+	}
+
+	/**
+	 * Report a message as ham (non-spam mistakenly recognized as such)
+	 *
+	 * It is up to the plugins to make a sensible report of ham to a remote service.
+	 *
+	 * @throws  Exception
+	 */
+	public function reportham(): void
+	{
+		$this->reportMessage(false);
 	}
 
 	/**
@@ -356,5 +395,66 @@ class Comments extends DataController
 		$uri->setFragment('akengage-comment-' . $id);
 
 		$this->redirect = $uri->toString();
+	}
+
+	/**
+	 * Report a message as ham or spam. The actual reporting is taken care of by the plugins.
+	 *
+	 * @param   bool  $asSpam  True to report as spam, false to report as ham.
+	 *
+	 * @return  void
+	 * @throws  Exception
+	 */
+	private function reportMessage(bool $asSpam = true): void
+	{
+		$this->csrfProtection();
+
+		$model    = $this->getModel()->savestate(false);
+		$ids      = $this->getIDsFromRequest($model, false);
+		$error    = null;
+		$platform = $this->container->platform;
+
+		$platform->importPlugin('engage');
+
+		try
+		{
+			foreach ($ids as $id)
+			{
+				$event = $asSpam ? 'onEngageReportSpam' : 'onEngageReportHam';
+
+				$model->find($id);
+
+				$platform->runPlugins($event, [$model]);
+
+				// If reporting ham also publish the comment
+				if (!$asSpam)
+				{
+					$model->publish();
+				}
+			}
+		}
+		catch (Exception $e)
+		{
+			$error = $e->getMessage();
+		}
+
+		// Redirect
+		if ($customURL = $this->input->getBase64('returnurl', ''))
+		{
+			$customURL = base64_decode($customURL);
+		}
+
+		$url = !empty($customURL) ? $customURL : 'index.php';
+
+		if (!empty($error))
+		{
+			$this->setRedirect($url, $error, 'error');
+		}
+		else
+		{
+			$message = $asSpam ? 'COM_ENGAGE_COMMENTS_REPORTED_SPAM' : 'COM_ENGAGE_COMMENTS_REPORTED_HAM';
+
+			$this->setRedirect($url, Text::_($message));
+		}
 	}
 }
