@@ -206,7 +206,7 @@ class plgContentEngage extends CMSPlugin
 	 *
 	 * @return  bool
 	 */
-	public function onContentBeforeSave(?string $context, $table, $isNew, $data): bool
+	public function onContentBeforeSave(?string $context, $table, $isNew = false, $data = null)
 	{
 		if (!in_array($context, ['com_categories.category', 'com_content.article']))
 		{
