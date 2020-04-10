@@ -98,19 +98,44 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
                 </span>
 				<span class="akengage-comment-actions">
 					<?php if ($this->perms['state']): ?>
-						<span class="akengage-comment-publish_unpublish">
 						<?php if ($comment->enabled == 1): ?>
-							<button class="akengage-comment-unpublish-btn" data-akengageid="<?= $comment->getId() ?>">
-								<?= Text::_('COM_ENGAGE_COMMENTS_BTN_UNPUBLISH') ?>
-							</button>
-						<?php else: ?>
-							<button class="akengage-comment-publish-btn" data-akengageid="<?= $comment->getId() ?>">
-								<?= Text::_('COM_ENGAGE_COMMENTS_BTN_PUBLISH') ?>
-							</button>
+							<span class="akengage-comment-publish_unpublish">
+								<button class="akengage-comment-unpublish-btn" data-akengageid="<?= $comment->getId() ?>">
+									<?= Text::_('COM_ENGAGE_COMMENTS_BTN_UNPUBLISH') ?>
+								</button>
+							</span>
+						<?php elseif ($comment->enabled == 0): ?>
+							<span class="akengage-comment-publish_unpublish">
+								<button class="akengage-comment-publish-btn" data-akengageid="<?= $comment->getId() ?>">
+									<?= Text::_('COM_ENGAGE_COMMENTS_BTN_PUBLISH') ?>
+								</button>
+							</span>
 						<?php endif; ?>
-					</span>
+						<?php if($comment->enabled == -3): ?>
+							<span class="akengage-comment-mark-ham">
+								<button class="akengage-comment-markham-btn" data-akengageid="<?= $comment->getId() ?>"
+									title="<?= Text::_('COM_ENGAGE_COMMENTS_BTN_MARKHAM_TITLE') ?>">
+									<?= Text::_('COM_ENGAGE_COMMENTS_BTN_MARKHAM') ?>
+								</button>
+							</span>
+							<?php if ($this->perms['delete']): ?>
+							<span class="akengage-comment-mark-spam">
+								<button class="akengage-comment-markspam-btn" data-akengageid="<?= $comment->getId() ?>"
+									title="<?= Text::_('COM_ENGAGE_COMMENTS_BTN_MARKSPAM_TITLE') ?>">
+									<?= Text::_('COM_ENGAGE_COMMENTS_BTN_MARKSPAM') ?>
+								</button>
+							</span>
+							<?php endif; ?>
+						<?php else: ?>
+							<span class="akengage-comment-mark-possiblespam">
+								<button class="akengage-comment-possiblespam-btn" data-akengageid="<?= $comment->getId() ?>"
+									title="<?= Text::_('COM_ENGAGE_COMMENTS_BTN_POSSIBLESPAM_TITLE') ?>">
+									<?= Text::_('COM_ENGAGE_COMMENTS_BTN_POSSIBLESPAM') ?>
+								</button>
+							</span>
+						<?php endif; ?>
 					<?php endif; ?>
-					<?php if ($this->perms['edit']): ?>
+					<?php if ($this->perms['delete']): ?>
 					<span class="akengage-comment-delete">
 						<button class="akengage-comment-delete-btn" data-akengageid="<?= $comment->getId() ?>">
 							<?= Text::_('COM_ENGAGE_COMMENTS_BTN_DELETE') ?>

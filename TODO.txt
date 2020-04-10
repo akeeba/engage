@@ -1,20 +1,3 @@
-Akismet integration plugin
-    Add plg_engage_akismet to pkg_engage.xml
-    https://akismet.com/development/api/#detailed-docs
-    [x] Configuration
-        [x] Akismet key
-        [x] Check Akismet key (with com_ajax; requires backend, anti-CSRF token, non-empty key)
-        [x] Check for spam: All Comments, Non-manager Comments (default), Guest Comments
-    [x] onEngageCheckSpam($comment, bool $isNew = true): ?bool  True if positively spam, false if ham (not spam), null if not applicable
-        [x] Option to auto-discard blatant spam (throws a BlatantSpam exception). If Akismet X-akismet-pro-tip == "discard"
-    onEngageReportSpam($comment): void  Report a comment as spam (reports false negative as actually being spam)
-    onEngageReportHam($comment): void  Report a comment as ham (reports false positive as actually NOT being spam)
-    [x] Comments controller: spam gets automatically unpublished (state: -3)
-        Feedback to the user if the comment is detected to be spam
-    [x] Comments controller: task reportspam, requires core.edit.state
-    [x] Comments controller: task reportham, requires core.edit.state
-    “Spam” and “Not Spam” buttons in the interface, requires core.edit.state
-
 Auto-clean spam after 15 days (configurable)
 
 Avatar as a plugin

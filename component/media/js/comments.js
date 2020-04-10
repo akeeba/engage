@@ -114,6 +114,39 @@ akeeba.Engage.Comments.onUnpublishButton = function (e)
         encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
 };
 
+akeeba.Engage.Comments.onMarkHamButton = function (e)
+{
+    e.preventDefault();
+
+    var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
+
+    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.markhamURL") + encodeURIComponent(id)
+        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
+        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+};
+
+akeeba.Engage.Comments.onMarkSpamButton = function (e)
+{
+    e.preventDefault();
+
+    var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
+
+    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.markspamURL") + encodeURIComponent(id)
+        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
+        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+};
+
+akeeba.Engage.Comments.onMarkPossibleSpamButton = function (e)
+{
+    e.preventDefault();
+
+    var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
+
+    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.possiblespamURL") + encodeURIComponent(id)
+        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
+        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+};
+
 akeeba.Engage.Comments.onReplyButton = function (e)
 {
     e.preventDefault();
@@ -184,6 +217,21 @@ akeeba.System.documentReady(function ()
     akeeba.System.iterateNodes("button.akengage-comment-publish-btn", function (elButton)
     {
         akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onPublishButton);
+    });
+
+    akeeba.System.iterateNodes("button.akengage-comment-markham-btn", function (elButton)
+    {
+        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onMarkHamButton);
+    });
+
+    akeeba.System.iterateNodes("button.akengage-comment-markspam-btn", function (elButton)
+    {
+        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onMarkSpamButton);
+    });
+
+    akeeba.System.iterateNodes("button.akengage-comment-possiblespam-btn", function (elButton)
+    {
+        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onMarkPossibleSpamButton);
     });
 
     akeeba.System.addEventListener(

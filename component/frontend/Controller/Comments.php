@@ -31,15 +31,19 @@ class Comments extends DataController
 	/** @inheritDoc */
 	public function __construct(Container $container, array $config = [])
 	{
+		$config['taskPrivileges'] = [
+			'submit'       => 'core.create',
+			'reportspam'   => '@remove',
+			'reportham'    => '@publish',
+			'possiblespam' => '@publish',
+		];
+
 		parent::__construct($container, $config);
 
 		$this->setPredefinedTaskList([
-			'browse', 'submit', 'edit', 'save', 'cancel', 'publish', 'unpublish', 'remove', 'reportspam', 'reportham',
+			'browse', 'submit', 'edit', 'save', 'publish', 'unpublish', 'remove', 'reportspam', 'reportham',
+			'possiblespam',
 		]);
-
-		$this->taskPrivileges['submit']     = 'core.create';
-		$this->taskPrivileges['reportspam'] = 'core.edit.state';
-		$this->taskPrivileges['reportham']  = 'core.edit.state';
 	}
 
 	/**
@@ -176,7 +180,7 @@ class Comments extends DataController
 	}
 
 	/**
-	 * Report a message as spam
+	 * Report a message as spam and delete it
 	 *
 	 * It is up to the plugins to make a sensible report of spam to a remote service.
 	 *
@@ -188,7 +192,7 @@ class Comments extends DataController
 	}
 
 	/**
-	 * Report a message as ham (non-spam mistakenly recognized as such)
+	 * Report a message as ham (non-spam mistakenly recognized as such) and pubish it
 	 *
 	 * It is up to the plugins to make a sensible report of ham to a remote service.
 	 *
@@ -197,6 +201,66 @@ class Comments extends DataController
 	public function reportham(): void
 	{
 		$this->reportMessage(false);
+
+		$this->addCommentFragmentToReturnURL();
+	}
+
+	/**
+	 * Mark a message as possible spam (unpublish with state -3)
+	 *
+	 * @throws Exception
+	 */
+	public function possiblespam(): void
+	{
+		// CSRF prevention
+		$this->csrfProtection();
+
+		$model = $this->getModel()->savestate(false);
+		$ids   = $this->getIDsFromRequest($model, false);
+		$error = false;
+
+		try
+		{
+			$status = true;
+
+			foreach ($ids as $id)
+			{
+				$model->find($id);
+
+				$userId = $this->container->platform->getUser()->id;
+
+				if ($model->isLocked($userId))
+				{
+					$model->checkIn($userId);
+				}
+
+				$model->publish(-3);
+			}
+		}
+		catch (Exception $e)
+		{
+			$status = false;
+			$error  = $e->getMessage();
+		}
+
+		// Redirect
+		if ($customURL = $this->input->getBase64('returnurl', ''))
+		{
+			$customURL = base64_decode($customURL);
+		}
+
+		$url = !empty($customURL) ? $customURL : 'index.php';
+
+		if (!$status)
+		{
+			$this->setRedirect($url, $error, 'error');
+		}
+		else
+		{
+			$this->setRedirect($url);
+		}
+
+		$this->addCommentFragmentToReturnURL();
 	}
 
 	/**
@@ -432,6 +496,11 @@ class Comments extends DataController
 				if (!$asSpam)
 				{
 					$model->publish();
+				}
+				// If reporting as positively spam also delete the comment
+				else
+				{
+					$model->delete();
 				}
 			}
 		}

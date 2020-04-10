@@ -109,6 +109,8 @@ class Html extends DataHtml
 		'own'    => false,
 		// Edit comments' state (pubished, unpublished, spam)
 		'state'  => false,
+		// Delete comments
+		'delete' => false,
 	];
 
 	/**
@@ -145,6 +147,7 @@ class Html extends DataHtml
 				'edit'   => $this->user->authorise('core.edit', 'com_engage'),
 				'own'    => $this->user->authorise('core.edit.own', 'com_engage'),
 				'state'  => $this->user->authorise('core.edit.state', 'com_engage'),
+				'delete' => $this->user->authorise('core.delete', 'com_engage'),
 			]
 		);
 
@@ -227,6 +230,9 @@ class Html extends DataHtml
 		$platform->addScriptOptions('akeeba.Engage.Comments.deleteURL', $router->build(sprintf($protoURL, 'remove'))->toString());
 		$platform->addScriptOptions('akeeba.Engage.Comments.publishURL', $router->build(sprintf($protoURL, 'publish'))->toString());
 		$platform->addScriptOptions('akeeba.Engage.Comments.unpublishURL', $router->build(sprintf($protoURL, 'unpublish'))->toString());
+		$platform->addScriptOptions('akeeba.Engage.Comments.markhamURL', $router->build(sprintf($protoURL, 'reportham'))->toString());
+		$platform->addScriptOptions('akeeba.Engage.Comments.markspamURL', $router->build(sprintf($protoURL, 'reportspam'))->toString());
+		$platform->addScriptOptions('akeeba.Engage.Comments.possiblespamURL', $router->build(sprintf($protoURL, 'possiblespam'))->toString());
 
 		Text::script('COM_ENGAGE_COMMENTS_DELETE_PROMPT');
 	}

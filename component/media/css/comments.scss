@@ -92,10 +92,12 @@ section.akengage-outer-container {
               text-underline: none;
             }
 
-            span.akengage-comment-actions
-            {
+            span.akengage-comment-actions {
               span.akengage-comment-edit,
               span.akengage-comment-delete,
+              span.akengage-comment-mark-ham,
+              span.akengage-comment-mark-spam,
+              span.akengage-comment-mark-possiblespam,
               span.akengage-comment-publish_unpublish {
                 display: block;
                 float: right;
@@ -103,7 +105,8 @@ section.akengage-outer-container {
                 top: -.5em;
               }
 
-              span.akengage-comment-delete {
+              span.akengage-comment-delete,
+              span.akengage-comment-mark-spam {
                 button {
                   color: $red;
 
@@ -111,6 +114,30 @@ section.akengage-outer-container {
                     background-color: lighten($red, 40%);
                     border: 2px solid darken($red, 10%);
                     color: darken($red, 10%);
+                  }
+                }
+              }
+
+              span.akengage-comment-mark-ham {
+                button {
+                  color: darken($green, 20%);
+
+                  &:hover {
+                    background-color: lighten($green, 40%);
+                    border: 2px solid darken($green, 10%);
+                    color: darken($green, 10%);
+                  }
+                }
+              }
+
+              span.akengage-comment-mark-possiblespam {
+                button {
+                  color: darken($orange, 20%);
+
+                  &:hover {
+                    background-color: lighten($orange, 30%);
+                    border: 2px solid darken($orange, 10%);
+                    color: darken($orange, 10%);
                   }
                 }
               }
