@@ -10,6 +10,11 @@ Akeeba Engage is currently in pre-alpha stage, under active development. It is n
 
 Akeeba Engage is a very simple comment solution for Joomla. It is meant to be used with core content (articles) only. There is no intention of supporting non-core content.
 
+## Requirements
+
+* Joomla 3.9
+* PHP 7.1 or later (7.3 recommended)
+
 ## Features
 
 * Comments allow for full HTML, edited using the WYSIWYG editor configured in Joomla. HTML filtering is performed by Joomla itself; if you didn't already know, you can set it up in the Global Configuration of your site.
