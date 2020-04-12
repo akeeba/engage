@@ -334,7 +334,12 @@ class Comments extends TreeModel
 	 */
 	private function cleanSpamChunk(int $maxDays = 15): int
 	{
-		$maxDays = max(1, $maxDays);
+		$maxDays = max(0, $maxDays);
+
+		if ($maxDays === 0)
+		{
+			return 0;
+		}
 
 		try
 		{

@@ -81,11 +81,12 @@ class EngageCleanSpam extends FOFApplicationCLI
 		// Load the language
 		$container->platform->loadTranslations('com_engage');
 
-		$maxTime = $this->input->getInt('max-time', 10);
-		$maxDays = $this->input->getInt('max-days', 15);
+		$defaultMaxDays = (int) $container->params->get('max_spam_age', 15);
+		$maxTime        = $this->input->getInt('max-time', 10);
+		$maxDays        = $this->input->getInt('max-days', $defaultMaxDays);
 
 		$maxTime = max($maxTime, 1);
-		$maxDays = max($maxDays, 1);
+		$maxDays = max($maxDays, 0);
 
 		$this->out(Text::plural('COM_ENGAGE_CRON_SPAM_MSG_DELETINGOLDSPAM_N', $maxDays));
 		$this->out(Text::plural('COM_ENGAGE_CRON_SPAM_MSG_RUNNINGFOR_N', $maxTime));

@@ -175,6 +175,16 @@
             description="COM_ENGAGE_CONFIG_IPLOOKUP_DESC" />
 
         <field
+            type="integer"
+            name="max_spam_age"
+            first="0"
+            last="365"
+            step="1"
+            default="15"
+            label="COM_ENGAGE_CONFIG_MAX_SPAM_AGE_LABEL"
+            description="COM_ENGAGE_CONFIG_MAX_SPAM_AGE_DESC" />
+
+        <field
                 type="list"
                 name="htmlpurifier_include"
                 default="composer"
