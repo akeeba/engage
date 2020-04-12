@@ -7,9 +7,13 @@
 
 namespace Akeeba\Engage\Admin\Model;
 
+use DateInterval;
 use Exception;
 use FOF30\Container\Container;
+use FOF30\Date\Date;
+use FOF30\Model\DataModel\Collection as DataCollection;
 use FOF30\Model\TreeModel;
+use FOF30\Timer\Timer;
 use JDatabaseQuery;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\User\User;
@@ -272,6 +276,39 @@ class Comments extends TreeModel
 	}
 
 	/**
+	 * Automatically deletes obsolete spam messages older than this many days, using an upper execution time limit.
+	 *
+	 * If there are numerous spam messages this method will delete at least one chunk (100 messages). It will keep on
+	 * going until the maxExecutionTime limit is reached or exceeded; or until there are no more spam messages left to
+	 * delete.
+	 *
+	 * Use $maxExecutionTime=0 to only delete up to 100 messages.
+	 *
+	 * @param   int  $maxDays           Spam older than this many days will be automatically deleted
+	 * @param   int  $maxExecutionTime  Maximum time to spend cleaning obsolete spam
+	 *
+	 * @return  int  Total number of spam messages deleted.
+	 */
+	public function cleanSpam(int $maxDays = 15, int $maxExecutionTime = 1): int
+	{
+		$timer   = new Timer($maxExecutionTime, 100);
+		$deleted = 0;
+
+		do
+		{
+			$deletedNow = $this->cleanSpamChunk($maxDays);
+			$deleted    += $deletedNow;
+
+			if ($deletedNow === 0)
+			{
+				break;
+			}
+		} while ($timer->getTimeLeft() > 0.01);
+
+		return $deleted;
+	}
+
+	/**
 	 * Binds the 'depth' parameter in a meaningful way for the TreeModel
 	 *
 	 * @param   array  $data  The data array being bound to the object
@@ -286,6 +323,41 @@ class Comments extends TreeModel
 		}
 
 		$this->treeDepth = $data['depth'];
+	}
+
+	/**
+	 * Automatically deletes up to 100 spam messages which are older than this many days.
+	 *
+	 * @param   int  $maxDays
+	 *
+	 * @return  int  Number of spam comments deleted
+	 */
+	private function cleanSpamChunk(int $maxDays = 15): int
+	{
+		$maxDays = max(1, $maxDays);
+
+		try
+		{
+			$interval     = new DateInterval(sprintf('P%uD', $maxDays));
+			$earliestDate = (new Date())->sub($interval);
+		}
+		catch (Exception $e)
+		{
+			return 0;
+		}
+
+		/** @var DataCollection $obsoleteSpam */
+		$obsoleteSpam = $this
+			->getClone()
+			->enabled(-3)
+			->where('created_on', 'lt', $earliestDate->toSql())
+			->get(false, 0, 100);
+
+		$numComments = $obsoleteSpam->count();
+
+		$obsoleteSpam->delete();
+
+		return $numComments;
 	}
 
 	/**
