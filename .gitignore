@@ -36,3 +36,6 @@
 
 ### Composer
 /component/backend/vendor
+
+### Junk
+/component/media/css/.sass-cache

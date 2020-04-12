@@ -27,10 +27,17 @@
         <include name="media/**"/>
         <include name="*"/>
 
+        <!-- License file. Included in the package extensions's root -->
         <exclude name="LICENSE.txt"/>
+
+        <!-- Package extension script -->
         <exclude name="script.engage.php"/>
 
+        <!-- XML Manifest in backend folder. This is included in the component package's root -->
         <exclude name="backend/engage.xml"/>
+
+        <!-- SCSS compilation cache -->
+        <exclude name="component/media/css/.sass-cache/**"/>
 
         <!-- HTML Purifier: Remove unneeded tests, optional code, irrelevant plugins etc -->
         <exclude name="backend/vendor/ezyang/htmlpurifier/extras/**"/>
