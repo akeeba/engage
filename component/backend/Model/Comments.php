@@ -53,7 +53,7 @@ class Comments extends TreeModel
 		}
 
 		$config['fieldsSkipChecks'] = [
-			'lft', 'rgt'
+			'lft', 'rgt',
 		];
 
 		parent::__construct($container, $config);
@@ -315,6 +315,50 @@ class Comments extends TreeModel
 		return $deleted;
 	}
 
+	protected function onBeforeBuildQuery(JDatabaseQuery &$query)
+	{
+		$this->filterByAssetTitle($query);
+
+		$filterEmail = $this->getState('filter_email');
+		$filterEmail = trim($filterEmail);
+
+		if (empty($filterEmail))
+		{
+			return;
+		}
+
+		$filterEmail = (strpos($filterEmail, '%') === false) ? "%$filterEmail%" : $filterEmail;
+		$db          = $this->dbo;
+
+		$conditions = [
+			$db->qn('email') . ' LIKE ' . $db->q($filterEmail),
+		];
+
+		// Get user IDs matching partial email
+		$q       = $db->getQuery(true)
+			->select([$db->qn('id')])
+			->from($db->qn('#__users'))
+			->where($db->qn('email') . ' LIKE ' . $db->q($filterEmail));
+		$userIDs = $db->setQuery($q)->loadColumn();
+
+		if (empty($userIDs))
+		{
+			$query->where($conditions[0]);
+
+			return;
+		}
+
+		// Filter by these IDs **OR** a matching email field
+		$userIDs = array_map([$db, 'q'], $userIDs);
+		$conditions[] = $db->qn('created_by') . ' IN(' . implode(',', $userIDs) . ')';
+
+		$conditions = array_map(function ($condition) {
+			return '(' . $condition . ')';
+		}, $conditions);
+
+		$query->where('(' . implode(' OR ', $conditions) . ')');
+	}
+
 	/**
 	 * Binds the 'depth' parameter in a meaningful way for the TreeModel
 	 *
@@ -330,6 +374,48 @@ class Comments extends TreeModel
 		}
 
 		$this->treeDepth = $data['depth'];
+	}
+
+	/**
+	 * Apply comments filtering by asset title
+	 *
+	 * @param   JDatabaseQuery  $query  The SELECT query we're modifying
+	 *
+	 * @return  void
+	 */
+	private function filterByAssetTitle(JDatabaseQuery &$query): void
+	{
+		$fltAssetTitle = $this->getState('asset_title');
+
+		if ($fltAssetTitle)
+		{
+			$this->container->platform->importPlugin('content');
+			$this->container->platform->importPlugin('engage');
+			$results = $this->container->platform->runPlugins('onAkeebaEngageGetAssetIDsByTitle', [$fltAssetTitle]);
+			$ids     = [];
+
+			array_walk($results, function ($someIDs) use (&$ids) {
+				if (empty($someIDs))
+				{
+					return;
+				}
+
+				$ids = array_merge($ids, $someIDs);
+			});
+
+			$ids = array_map(function ($x) {
+				return max(0, (int) $x);
+			}, $ids);
+
+			$ids = array_filter($ids, function ($x) {
+				return !empty($x);
+			});
+
+			$ids = empty($ids) ? [-1] : array_unique($ids);
+			$ids = array_map([$query, 'q'], $ids);
+
+			$query->where($query->qn('asset_id') . ' IN (' . implode(',', $ids) . ')');
+		}
 	}
 
 	/**

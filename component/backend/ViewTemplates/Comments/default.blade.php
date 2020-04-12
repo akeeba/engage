@@ -36,7 +36,7 @@ $purifier = new HTMLPurifier($config);
     </div>
 
     <div class="akeeba-filter-element akeeba-form-group">
-        @searchfilter('email', 'email', 'COM_ENGAGE_COMMENTS_FILTER_EMAIL')
+        @searchfilter('filter_email', 'filter_email', 'COM_ENGAGE_COMMENTS_FILTER_EMAIL')
     </div>
 
     <div class="akeeba-filter-element akeeba-form-group">

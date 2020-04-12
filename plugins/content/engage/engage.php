@@ -310,6 +310,36 @@ class plgContentEngage extends CMSPlugin
 		];
 	}
 
+	public function onAkeebaEngageGetAssetIDsByTitle(?string $filter): ?array
+	{
+		$filter = trim($filter ?? '');
+
+		if (empty($filter))
+		{
+			return [];
+		}
+
+		if (strpos($filter, '%') === false)
+		{
+			$filter = '%' . $filter . '%';
+		}
+
+		try
+		{
+			$db    = Factory::getDbo();
+			$query = $db->getQuery(true)
+				->select([$db->qn('asset_id')])
+				->from($db->qn('#__content'))
+				->where($db->qn('title') . ' LIKE ' . $db->q($filter));
+
+			return $db->setQuery($query)->loadColumn();
+		}
+		catch (Exception $e)
+		{
+			return [];
+		}
+	}
+
 	/**
 	 * Get the Akeeba Engage container, preloaded for comments display
 	 *

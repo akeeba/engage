@@ -1,0 +1,28 @@
+/*!
+ * @package   AkeebaEngage
+ * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @license   GNU General Public License version 3, or later
+ */
+#akeeba-renderer-fef .engage-userfield .engage-usersfield-avatar {
+  margin: 0 .5em .25em 0; }
+#akeeba-renderer-fef .engage-userfield .engage-usersfield-usertype {
+  padding: .25em .5em; }
+  #akeeba-renderer-fef .engage-userfield .engage-usersfield-usertype .akion-star {
+    color: #F0AD4E; }
+  #akeeba-renderer-fef .engage-userfield .engage-usersfield-usertype .akion-person {
+    color: #93C34E; }
+  #akeeba-renderer-fef .engage-userfield .engage-usersfield-usertype .akion-person-stalker {
+    color: #514F50; }
+#akeeba-renderer-fef .engage-userfield .engage-usersfield-name {
+  font-weight: bold; }
+#akeeba-renderer-fef .engage-userfield .engage-usersfield-username {
+  color: #5d802b; }
+#akeeba-renderer-fef .engage-userfield .engage-usersfield-email {
+  display: block; }
+#akeeba-renderer-fef .engage_ip {
+  font-family: Consolas, Menlo, monospace;
+  font-size: 95%; }
+#akeeba-renderer-fef tr {
+  vertical-align: top; }
+
+/*# sourceMappingURL=backend.css.map */
