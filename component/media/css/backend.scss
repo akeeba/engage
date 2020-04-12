@@ -14,6 +14,30 @@ $green: #93C34E;
 $orange: #F0AD4E;
 $black: #000000;
 
+$ionicon-var-flag: "\f279";
+$ionicon-var-sad: "\f34a";
+$ionicon-var-happy: "\f31c";
+
+[class ^= "icon-engage"], [class ^= "icon-engage"]:before {
+  color: black !important;
+  display: inline-block;
+  font-family: "AKIonicons" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-engage-possiblespam:before { content: "\f42d"; }
+.icon-engage-spam:before { content: "\f42d"; }
+.icon-engage-reportspam:before { content: "\f100"; }
+.icon-engage-reportham:before { content: "\f42c"; }
+
 #akeeba-renderer-fef {
   .engage-userfield {
     .engage-usersfield-avatar {

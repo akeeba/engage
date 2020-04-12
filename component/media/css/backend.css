@@ -3,6 +3,32 @@
  * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
+[class^="icon-engage"], [class^="icon-engage"]:before {
+  color: black !important;
+  display: inline-block;
+  font-family: "AKIonicons" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.icon-engage-possiblespam:before {
+  content: "\f42d"; }
+
+.icon-engage-spam:before {
+  content: "\f42d"; }
+
+.icon-engage-reportspam:before {
+  content: "\f100"; }
+
+.icon-engage-reportham:before {
+  content: "\f42c"; }
+
 #akeeba-renderer-fef .engage-userfield .engage-usersfield-avatar {
   margin: 0 .5em .25em 0; }
 #akeeba-renderer-fef .engage-userfield .engage-usersfield-usertype {

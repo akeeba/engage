@@ -121,10 +121,7 @@ $purifier = new HTMLPurifier($config);
                 {{ (new FOF30\Date\Date($item->created_on))->format(\Joomla\CMS\Language\Text::_('DATE_FORMAT_LC2'), true, true) }}
             </td>
             <td>
-                @if ($item->enabled === -3)
-                @else
-                    @jhtml('jgrid.published', $item->enabled, $i, '', $canChange)
-                @endif
+                {{ \Akeeba\Engage\Admin\Helper\Grid::published($item->enabled, $i, '', $canChange) }}
             </td>
         </tr>
     @endforeach
