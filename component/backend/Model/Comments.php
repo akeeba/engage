@@ -276,18 +276,20 @@ class Comments extends TreeModel
 	}
 
 	/**
-	 * Automatically deletes obsolete spam messages older than this many days, using an upper execution time limit.
+	 * Automatically deletes obsolete spam comments older than this many days, using an upper execution time limit.
 	 *
-	 * If there are numerous spam messages this method will delete at least one chunk (100 messages). It will keep on
-	 * going until the maxExecutionTime limit is reached or exceeded; or until there are no more spam messages left to
+	 * If the $maxDays == 0 nothing is deleted; we return without querying the database.
+	 *
+	 * If there are numerous spam comments this method will delete at least one chunk (100 comments). It will keep on
+	 * going until the maxExecutionTime limit is reached or exceeded; or until there are no more spam comments left to
 	 * delete.
 	 *
-	 * Use $maxExecutionTime=0 to only delete up to 100 messages.
+	 * Use $maxExecutionTime=0 to only delete up to 100 comments.
 	 *
 	 * @param   int  $maxDays           Spam older than this many days will be automatically deleted
 	 * @param   int  $maxExecutionTime  Maximum time to spend cleaning obsolete spam
 	 *
-	 * @return  int  Total number of spam messages deleted.
+	 * @return  int  Total number of spam comments deleted.
 	 */
 	public function cleanSpam(int $maxDays = 15, int $maxExecutionTime = 1): int
 	{
@@ -326,7 +328,7 @@ class Comments extends TreeModel
 	}
 
 	/**
-	 * Automatically deletes up to 100 spam messages which are older than this many days.
+	 * Automatically deletes up to 100 spam comments which are older than this many days.
 	 *
 	 * @param   int  $maxDays
 	 *

@@ -7,6 +7,7 @@
 
 defined('_JEXEC') or die();
 
+use Akeeba\Engage\Admin\Model\Comments;
 use FOF30\Container\Container;
 use FOF30\Input\Input;
 use Joomla\CMS\Component\ComponentHelper;
@@ -88,6 +89,8 @@ class plgContentEngage extends CMSPlugin
 		parent::__construct($subject, $config);
 
 		$this->loadLanguage();
+
+		$this->autoCleanSpam();
 	}
 
 	/**
@@ -689,5 +692,42 @@ class plgContentEngage extends CMSPlugin
 		}
 
 		return false;
+	}
+
+	/**
+	 * Automatically delete spam comments older than the configured age limit at most once every 8 horus
+	 *
+	 * @return  void
+	 */
+	private function autoCleanSpam(): void
+	{
+		// Run once every 8 hours
+		$container = $this->getContainer();
+		$cParams   = $container->params;
+		$lastRun   = $cParams->get('spam_lastRun', 0);
+		$nextRun   = $lastRun + (8 * 3600);
+
+		if ($nextRun > time())
+		{
+			return;
+		}
+
+		// I need to run. Save the current timestamp in the component parameters.
+		$cParams->set('spam_lastRun', time());
+		$cParams->save();
+
+		// Get the model and delete comments. No problem if we fail for any reason.
+
+		try
+		{
+			$maxDays = $cParams->get('max_spam_age', 15);
+			/** @var Comments $model */
+			$model = $container->factory->model('Comments')->tmpInstance();
+			$model->cleanSpam($maxDays, 1);
+		}
+		catch (Exception $e)
+		{
+			return;
+		}
 	}
 }
