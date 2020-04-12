@@ -29,8 +29,6 @@ class Comments extends \Akeeba\Engage\Admin\Model\Comments
 	/** @inheritDoc */
 	public function check()
 	{
-		parent::check();
-
 		// Check the CAPTCHA
 		$this->assertCaptchaSolved();
 
@@ -47,6 +45,8 @@ class Comments extends \Akeeba\Engage\Admin\Model\Comments
 				? ''
 				: trim($this->input->server->getString('HTTP_USER_AGENT', ''));
 		}
+
+		parent::check();
 	}
 
 	/**

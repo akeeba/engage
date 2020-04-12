@@ -55,7 +55,7 @@ HTMLHelper::_('behavior.formvalidator');
 		<?php if ($this->user->guest): ?>
 			<div class="control-group">
 				<div class="control-label">
-					<label id="akengage-comment-form-name" for="akengage-comment-form-name"
+					<label for="akengage-comment-form-name"
 						   class="required"
 					>
 						<?= Text::_('COM_ENGAGE_COMMENTS_FORM_NAME_LABEL'); ?>
@@ -74,7 +74,7 @@ HTMLHelper::_('behavior.formvalidator');
 
 			<div class="control-group">
 				<div class="control-label">
-					<label id="akengage-comment-form-email" for="akengage-comment-form-email"
+					<label for="akengage-comment-form-email"
 						   class="required"
 					>
 						<?= Text::_('COM_ENGAGE_COMMENTS_FORM_EMAIL_LABEL'); ?>
@@ -91,6 +91,17 @@ HTMLHelper::_('behavior.formvalidator');
 						   size="30">
 				</div>
 			</div>
+
+			<div class="control-group">
+				<div class="controls">
+					<label for="akengage-comment-form-saveinfo" class="checkbox">
+						<input type="checkbox" id="akengage-comment-form-saveinfo"
+							   name="akengage-comment-form-saveinfo">
+						<?= Text::_('COM_ENGAGE_COMMENTS_FORM_REMEMBERME') ?>
+					</label>
+				</div>
+			</div>
+
 		<?php endif; ?>
 
 		<?= Editor::getInstance($this->container->platform->getConfig()->get('editor', 'tinymce'))

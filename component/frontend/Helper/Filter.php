@@ -213,14 +213,14 @@ final class Filter
 
 		// Set up HTML Purifier's configuration
 		$config = HTMLPurifier_Config::createDefault();
-		$config->set('Core', 'Encoding', 'UTF-8');
-		$config->set('HTML', 'Doctype', 'HTML 4.01 Transitional');
-		$config->set('Cache', 'SerializerPath', self::getCachePath());
+		$config->set('Core.Encoding', 'UTF-8');
+		$config->set('HTML.Doctype', 'HTML 4.01 Transitional');
+		$config->set('Cache.SerializerPath', self::getCachePath());
 
 		// If we are given an explicit configuration we will not go through Joomla's text filters configuration.
 		if (self::getParam('htmlpurifier_config_joomla', 0) == 0)
 		{
-			$config->set('HTML', 'Allowed', $whitelist);
+			$config->set('HTML.Allowed', $whitelist);
 		}
 		else
 		{
@@ -230,20 +230,20 @@ final class Filter
 			switch ($joomlaFiltering['filterType'])
 			{
 				case 'noHTML':
-					$config->set('HTML', 'Allowed', $whitelist);
+					$config->set('HTML.Allowed', $whitelist);
 					break;
 
 				case 'none':
 					break;
 
 				case 'blacklist':
-					$config->set('HTML', 'ForbiddenElements', $joomlaFiltering['blacklistTags']);
-					$config->set('HTML', 'ForbiddenAttributes', $joomlaFiltering['blacklistTags']);
+					$config->set('HTML.ForbiddenElements', $joomlaFiltering['blacklistTags']);
+					$config->set('HTML.ForbiddenAttributes', $joomlaFiltering['blacklistTags']);
 					break;
 
 				case 'whitelist':
-					$config->set('HTML', 'AllowedElements', $joomlaFiltering['whitelistTags']);
-					$config->set('HTML', 'AllowedAttributes', array_map(function ($x) {
+					$config->set('HTML.AllowedElements', $joomlaFiltering['whitelistTags']);
+					$config->set('HTML.AllowedAttributes', array_map(function ($x) {
 						return '*.' . $x;
 					}, $joomlaFiltering['whitelistTags']));
 					break;

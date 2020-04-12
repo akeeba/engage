@@ -52,6 +52,10 @@ class Comments extends TreeModel
 			$config['behaviours'][] = 'filters';
 		}
 
+		$config['fieldsSkipChecks'] = [
+			'lft', 'rgt'
+		];
+
 		parent::__construct($container, $config);
 
 		$this->addKnownField('depth', 0);
@@ -60,6 +64,7 @@ class Comments extends TreeModel
 	/** @inheritDoc */
 	public function check()
 	{
+
 		parent::check();
 
 		// Make sure we have EITHER a user OR both an email and full name
