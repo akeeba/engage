@@ -447,7 +447,7 @@ class plgContentEngage extends CMSPlugin
 		{
 			if (!class_exists('ContentModelArticle'))
 			{
-				JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_content/models');
+				JModelLegacy::addIncludePath(JPATH_BASE . '/components/com_content/models');
 			}
 
 			$model = JModelLegacy::getInstance('Article', 'ContentModel');
@@ -479,9 +479,9 @@ class plgContentEngage extends CMSPlugin
 			'publish_up'      => $row->publish_up,
 			'publish_down'    => $row->publish_down,
 			'access'          => $row->access,
-			'category_title'  => $row->category_title,
-			'category_alias'  => $row->category_alias,
-			'category_access' => $row->category_access,
+			'category_title'  => $row->category_title ?? '',
+			'category_alias'  => $row->category_alias ?? 0,
+			'category_access' => $row->category_access ?? $row->access,
 			'parameters'      => $loadParameters ? $this->getParametersForArticle($row) : new Registry(),
 		];
 

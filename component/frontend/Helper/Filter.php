@@ -73,6 +73,74 @@ final class Filter
 	}
 
 	/**
+	 * Make sure HTML Purifier's classes can be loaded.
+	 *
+	 * @return  void
+	 */
+	public static function includeHTMLPurifier(): void
+	{
+		// Make sure HTML Purifier is already loaded
+		if (class_exists('HTMLPurifier_Config') && class_exists('HTMLPurifier'))
+		{
+			return;
+		}
+
+		$container   = self::getContainer();
+		$includeMode = self::getParam('htmlpurifier_include', 'composer');
+
+		switch ($includeMode)
+		{
+			case 'composer':
+			default:
+				require_once $container->backEndPath . '/vendor/autoload.php';
+				break;
+
+			case 'auto':
+				require_once $container->backEndPath . '/vendor/ezyang/htmlpurifier/library/HTMLPUrifier.auto.php';
+				break;
+
+			case 'all':
+				require_once $container->backEndPath . '/vendor/ezyang/htmlpurifier/library/HTMLPUrifier.includes.php';
+				break;
+		}
+	}
+
+	/**
+	 * Get the cache path for HTML Purifier to store serialized definitions
+	 *
+	 * @return string|null
+	 */
+	public static function getCachePath(): ?string
+	{
+		if (!is_writable(JPATH_CACHE))
+		{
+			return null;
+		}
+
+		$cachePath = JPATH_CACHE . '/' . self::getContainer()->componentName . '/htmlpurifier';
+
+		if (@file_exists($cachePath) && !@is_dir($cachePath))
+		{
+			return null;
+		}
+
+		if (!@file_exists($cachePath))
+		{
+			if (!@mkdir($cachePath, 0755, true))
+			{
+				return null;
+			}
+		}
+
+		if (!is_writeable($cachePath))
+		{
+			return null;
+		}
+
+		return $cachePath;
+	}
+
+	/**
 	 * Returns the component's container (temporary instance)
 	 *
 	 * @return  Container|null
@@ -158,39 +226,6 @@ final class Filter
 		return self::getHTMLPurifier()->purify($text);
 	}
 
-	/**
-	 * Make sure HTML Purifier's classes can be loaded.
-	 *
-	 * @return  void
-	 */
-	private static function includeHTMLPurifier(): void
-	{
-		// Make sure HTML Purifier is already loaded
-		if (class_exists('HTMLPurifier_Config') && class_exists('HTMLPurifier'))
-		{
-			return;
-		}
-
-		$container   = self::getContainer();
-		$includeMode = self::getParam('htmlpurifier_include', 'composer');
-
-		switch ($includeMode)
-		{
-			case 'composer':
-			default:
-				require_once $container->backEndPath . '/vendor/autoload.php';
-				break;
-
-			case 'auto':
-				require_once $container->backEndPath . '/vendor/ezyang/htmlpurifier/library/HTMLPUrifier.auto.php';
-				break;
-
-			case 'all':
-				require_once $container->backEndPath . '/vendor/ezyang/htmlpurifier/library/HTMLPUrifier.includes.php';
-				break;
-		}
-	}
-
 	private static function getHTMLPurifier(): HTMLPurifier
 	{
 		// Return the cached object if it exists
@@ -253,41 +288,6 @@ final class Filter
 		self::$purifier = new HTMLPurifier($config);
 
 		return self::$purifier;
-	}
-
-	/**
-	 * Get the cache path for HTML Purifier to store serialized definitions
-	 *
-	 * @return string|null
-	 */
-	private static function getCachePath(): ?string
-	{
-		if (!is_writable(JPATH_CACHE))
-		{
-			return null;
-		}
-
-		$cachePath = JPATH_CACHE . '/' . self::getContainer()->componentName . '/htmlpurifier';
-
-		if (@file_exists($cachePath) && !@is_dir($cachePath))
-		{
-			return null;
-		}
-
-		if (!@file_exists($cachePath))
-		{
-			if (!@mkdir($cachePath, 0755, true))
-			{
-				return null;
-			}
-		}
-
-		if (!is_writeable($cachePath))
-		{
-			return null;
-		}
-
-		return $cachePath;
 	}
 
 	private static function getJoomlaFilterSettings(): array

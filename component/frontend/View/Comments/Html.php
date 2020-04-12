@@ -9,6 +9,7 @@ namespace Akeeba\Engage\Site\View\Comments;
 
 defined('_JEXEC') or die();
 
+use Akeeba\Engage\Admin\Helper\Format;
 use Akeeba\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Site\Model\Comments;
 use Exception;
@@ -309,19 +310,7 @@ class Html extends DataHtml
 	 */
 	protected function getIPLookupURL(?string $ip): string
 	{
-		if (empty($ip))
-		{
-			return '';
-		}
-
-		$protoURL = $this->container->params->get('iplookup', '');
-
-		if (empty($protoURL) || (strpos($protoURL, '%s') === false))
-		{
-			return '';
-		}
-
-		return sprintf($protoURL, $ip);
+		return Format::getIPLookupURL($ip);
 	}
 
 	/**
