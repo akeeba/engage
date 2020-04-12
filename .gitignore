@@ -30,6 +30,8 @@
 ### Extension files to be excluded
 /component/backend/encrypt_service_key.php
 /component/backend/version.php
+/component/backend/engage.xml
+/component/cli/file_engage.xml
 
 ### Release files
 /release

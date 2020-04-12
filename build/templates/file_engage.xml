@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   AkeebaEngage
+  ~ @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+<extension version="3.9.0" type="file" method="upgrade">
+    <name>file_engage</name>
+    <version>##VERSION##</version>
+    <creationDate>##DATE##</creationDate>
+
+    <author>Akeeba Ltd</author>
+    <authorEmail>no-reply@akeebabackup.com</authorEmail>
+    <authorUrl>https://www.akeebabackup.com</authorUrl>
+
+    <copyright>Copyright (c)2020-2020 Akeeba Ltd</copyright>
+    <license>GNU GPL v3 or later</license>
+
+    <description>Akeeba Engage CLI scripts v.##VERSION##</description>
+
+    <fileset>
+        <files target="cli">
+            <file>engage-clean-spam.php</file>
+        </files>
+    </fileset>
+</extension>

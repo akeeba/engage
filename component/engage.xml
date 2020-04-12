@@ -5,7 +5,7 @@
   ~ @license   GNU General Public License version 3, or later
   -->
 
-<extension type="component" version="3.8.0" method="upgrade">
+<extension type="component" version="3.9.0" method="upgrade">
 	<name>ENGAGE</name>
 	<version>0.0.1</version>
 	<creationDate>2020-04-01</creationDate>
