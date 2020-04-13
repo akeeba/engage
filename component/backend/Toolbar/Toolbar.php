@@ -45,4 +45,23 @@ class Toolbar extends BaseToolbar
 			ToolbarHelper::deleteList('COM_ENGAGE_COMMENTS_CONFIRM_DELETE');
 		}
 	}
+
+	public function onCommentsEdit()
+	{
+		$this->renderSubmenu();
+
+		// Set toolbar title
+		ToolbarHelper::title(Text::_('COM_ENGAGE') . ' <small>' . Text::_('COM_ENGAGE_TITLE_COMMENTS_EDIT') . '</small>', 'engage');
+
+		if ($this->perms->edit || $this->perms->editown)
+		{
+			// Show the apply button only if I can edit the record, otherwise I'll return to the edit form and get a
+			// 403 error since I can't do that
+			ToolbarHelper::apply();
+		}
+
+		ToolbarHelper::save();
+
+		ToolbarHelper::link('index.php?option=com_engage&view=Comments', 'JCANCEL', 'cancel');
+	}
 }

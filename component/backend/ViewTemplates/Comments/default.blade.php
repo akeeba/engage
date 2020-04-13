@@ -16,7 +16,6 @@ $config->set('Cache.SerializerPath', \Akeeba\Engage\Site\Helper\Filter::getCache
 $config->set('HTML.Allowed', 'p,b,a[href],i,u,strong,em,small,big,ul,ol,li,br,img[src],img[width],img[height],code,pre,blockquote');
 $purifier = new HTMLPurifier($config);
 
-
 ?>
 @extends('admin:com_engage/Common/browse')
 
@@ -139,17 +138,31 @@ $purifier = new HTMLPurifier($config);
             <td class="engage-comment-preview">
                 @if ($item->getLevel() > 1)
                 <?php
-                    $parent = $item->getParent();
-                    $limitStart = \Akeeba\Engage\Site\Helper\Meta::getLimitStartForComment($parent);
-                    $public_uri = new \Joomla\CMS\Uri\Uri($meta['public_url']);
-		            $public_uri->setFragment('akengage-comment-' . $parent->getId());
-		            $public_uri->setVar('akengage_limitstart', $limitStart);
-                ?>
-                <div class="engage-in-reply-to">
-                    @sprintf('COM_ENGAGE_COMMENTS_LBL_INREPLYTO', $public_uri->toString(), $parent->getUser()->name)
-                </div>
+                    try
+                    {
+                        $parent     = $item->getParent();
+                        $limitStart = \Akeeba\Engage\Site\Helper\Meta::getLimitStartForComment($parent);
+                        $public_uri = new \Joomla\CMS\Uri\Uri($meta['public_url']);
+                        $public_uri->setFragment('akengage-comment-' . $parent->getId());
+                        $public_uri->setVar('akengage_limitstart', $limitStart);
+                    }
+                    catch (Exception $e)
+                    {
+                    	$parent = null;
+                    }
+		            ?>
+                    @unless(is_null($parent))
+                    <div class="engage-in-reply-to">
+                        @sprintf('COM_ENGAGE_COMMENTS_LBL_INREPLYTO', $public_uri->toString(), $parent->getUser()->name)
+                    </div>
+                    @endunless
                 @endif
                 {{ $purifier->purify($item->body) }}
+                <div class="engage-edit-link">
+                    <a href="@route('index.php?option=com_engage&view=Comments&task=edit&id=' . $item->getId())">
+                        @lang('JGLOBAL_EDIT')
+                    </a>
+                </div>
             </td>
             <td>
                 <div class="engage-content-title">

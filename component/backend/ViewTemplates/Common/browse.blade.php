@@ -127,7 +127,7 @@ use FOF30\Utils\FEFHelper\Html as FEFHtml;
         @yield('browse-table-footer')
         </tfoot>
         <tbody>
-        @unless(count($this->items))
+        @unless($this->items->count())
         @yield('browse-table-body-norecords')
         @else
         @yield('browse-table-body-withrecords')
