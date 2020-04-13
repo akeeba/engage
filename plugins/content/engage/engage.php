@@ -278,10 +278,12 @@ class plgContentEngage extends CMSPlugin
 		$container = Container::getInstance('com_engage');
 		$url       = '';
 
+		$router     = Router::getInstance('site');
+		$public_url = $router->build('index.php?option=com_content&view=article&id=' . $row->id);
+
 		if ($container->platform->isFrontend())
 		{
-			$router = Router::getInstance('site');
-			$url    = $router->build('index.php?option=com_content&view=article&id=' . $row->id);
+			$url = $public_url;
 		}
 		elseif ($container->platform->isBackend())
 		{
@@ -306,6 +308,7 @@ class plgContentEngage extends CMSPlugin
 			'title'         => $row->title,
 			'category'      => $row->category_title,
 			'url'           => $url,
+			'public_url'    => $public_url,
 			'parameters'    => $row->parameters,
 		];
 	}

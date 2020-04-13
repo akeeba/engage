@@ -7,6 +7,7 @@
 
 namespace Akeeba\Engage\Site\Helper;
 
+use Akeeba\Engage\Admin\Model\Comments;
 use Exception;
 use FOF30\Container\Container;
 use Joomla\CMS\Date\Date;
@@ -17,11 +18,32 @@ defined('_JEXEC') or die();
 final class Meta
 {
 	/**
+	 * A temporary instance of the component's container
+	 *
+	 * @var  Container|null
+	 */
+	private static $container = null;
+
+	/**
 	 * Cached results of resource metadata per asset ID
 	 *
 	 * @var  array
 	 */
 	private static $cachedMeta = [];
+
+	/**
+	 * Number of comments per asset ID
+	 *
+	 * @var  int[]
+	 */
+	private static $numCommentsPerAsset = [];
+
+	/**
+	 * IDs of comments per asset in the same order they are paginated in the front-end
+	 *
+	 * @var  array
+	 */
+	private static $commentIDsPerAsset = [];
 
 	/**
 	 * Returns the metadata of an asset.
@@ -64,6 +86,7 @@ final class Meta
 			'title'         => '',
 			'category'      => null,
 			'url'           => null,
+			'public_url'    => null,
 			'published'     => false,
 			'published_on'  => new Date(),
 			'access'        => 0,
@@ -139,5 +162,96 @@ final class Meta
 		{
 			return false;
 		}
+	}
+
+	/**
+	 * Returns the total number of comments for a specific asset ID
+	 *
+	 * @param   int  $asset_id  The asset ID to check for the total number of comments
+	 *
+	 * @return  int
+	 */
+	public static function getNumCommentsForAsset(int $asset_id): int
+	{
+		if (isset(self::$numCommentsPerAsset[$asset_id]))
+		{
+			return self::$numCommentsPerAsset[$asset_id];
+		}
+
+		/** @var Comments $model */
+		$model                                = self::getContainer()->factory->model('Comments')->tmpInstance();
+		self::$numCommentsPerAsset[$asset_id] = $model->asset_id($asset_id)->count() ?? 0;
+
+		return self::$numCommentsPerAsset[$asset_id];
+	}
+
+	/**
+	 * Returns the comments IDs for an asset, in the same order as they are paginated in the frontend
+	 *
+	 * @param   int  $asset_id
+	 *
+	 * @return  array
+	 */
+	public static function getPaginatedCommentIDsForAsset(int $asset_id): array
+	{
+		if (isset(self::$commentIDsPerAsset[$asset_id]))
+		{
+			return self::$commentIDsPerAsset[$asset_id];
+		}
+
+		/** @var Comments $model */
+		$model = self::getContainer()->factory->model('Comments')->tmpInstance();
+		$model->asset_id($asset_id);
+		$query = $model->buildQuery(true);
+		$query->clear('select')->select($query->qn('node.engage_comment_id'));
+
+		self::$commentIDsPerAsset[$asset_id] = self::getContainer()->db->setQuery($query)->loadColumn() ?? [];
+
+		return self::$commentIDsPerAsset[$asset_id];
+	}
+
+	/**
+	 * Returns the limitstart required to reach a specific comment in the frontend comments display.
+	 *
+	 * @param   Comments  $comment          The comment we're looking for
+	 * @param   int|null  $commentsPerPage  Number of comments per page. NULL to use global configuration.
+	 *
+	 * @return  int
+	 */
+	public static function getLimitStartForComment(Comments $comment, ?int $commentsPerPage = 20): int
+	{
+		// No limit set. Use the configured list limit, must be at least 5.
+		if (is_null($commentsPerPage))
+		{
+			$commentsPerPage = self::getContainer()->platform->getConfig()->get('list_limit', 20);
+			$commentsPerPage = max((int) $commentsPerPage, 5);
+		}
+
+		$comments      = self::getPaginatedCommentIDsForAsset($comment->asset_id);
+		$index         = array_search($comment->getId(), $comments);
+
+		if ($index === false)
+		{
+			return 0;
+		}
+
+		return intdiv($index, $commentsPerPage) * $commentsPerPage;
+	}
+
+	/**
+	 * Returns the component's container (temporary instance)
+	 *
+	 * @return  Container|null
+	 */
+	private static function getContainer(): Container
+	{
+		if (is_null(self::$container))
+		{
+			self::$container = Container::getInstance('com_engage', [
+				'tempInstance' => true,
+			]);
+		}
+
+		return self::$container;
 	}
 }

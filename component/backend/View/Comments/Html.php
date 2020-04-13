@@ -13,6 +13,8 @@ use FOF30\View\DataView\Html as HtmlView;
 
 class Html extends HtmlView
 {
+	private $commentsPerAsset = [];
+
 	public function onBeforeBrowse()
 	{
 		$this->addCssFile('media://com_engage/css/backend.css');

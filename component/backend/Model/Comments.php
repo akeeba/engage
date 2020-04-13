@@ -170,7 +170,6 @@ class Comments extends TreeModel
 			->select('COUNT(*)')
 			->from('(' . $innerQuery . ') AS ' . $db->qn('a'));
 
-
 		$total = $db->setQuery($outerQuery)->loadResult();
 
 		return $total;

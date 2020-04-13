@@ -81,4 +81,55 @@ $ionicon-var-happy: "\f31c";
   tr {
     vertical-align: top;
   }
+
+  a.engage-filter-by-content {
+    display: inline-block;
+    padding: 0 .75em;
+    min-width: 2em;
+    height: 2em;
+    font-size: 95%;
+    border-radius: 5px;
+    background-color: $grey;
+    color: $white;
+    line-height: 1.9;
+    text-align: center;
+    text-decoration: none !important;
+
+    &:after {
+      content: "";
+      display: block;
+      margin-left: .75em;
+      width: 0;
+      height: 0;
+      border-top: .5em solid $grey;
+      border-right: .5em solid transparent;
+    }
+  }
+
+  .engage-in-reply-to {
+    font-size: 105%;
+    color: $grey;
+    margin-bottom: 0.5em;
+  }
+
+  div.engage-content-title {
+    a {
+      font-weight: bold;
+      text-decoration: none;
+    }
+  }
+
+  .engage-sr-only {
+    border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    -webkit-clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    word-wrap: normal !important;
+  }
 }

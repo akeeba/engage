@@ -63,6 +63,12 @@ use FOF30\Utils\FEFHelper\Html as FEFHtml;
 {{-- Filters above the table. --}}
 @stop
 
+@section('browse-ordering')
+    {{-- Table ordering --}}
+    @jhtml('FEFHelper.browse.orderjs', $this->lists->order)
+    @jhtml('FEFHelper.browse.orderheader', $this)
+@stop
+
 @section('browse-table-header')
 {{-- Table header. Column headers and optional filters displayed above the column headers. --}}
 @stop
@@ -109,8 +115,7 @@ use FOF30\Utils\FEFHelper\Html as FEFHtml;
             @yield('browse-filters')
         </div>
 		<div class="akeeba-filter-bar akeeba-filter-bar--right">
-			@jhtml('FEFHelper.browse.orderjs', $this->lists->order)
-			@jhtml('FEFHelper.browse.orderheader', $this)
+            @yield('browse-ordering')
 		</div>
 	</section>
 

@@ -18,13 +18,27 @@ $purifier = new HTMLPurifier($config);
 
 
 ?>
-{{-- Old PHP version reminder --}}
-@include('admin:com_engage/Common/phpversion_warning', [
-    'softwareName'  => 'Akeeba Engage',
-    'minPHPVersion' => '7.1.0',
-])
-
 @extends('admin:com_engage/Common/browse')
+
+@section('browse-page-top')
+    {{-- Old PHP version reminder --}}
+    @include('admin:com_engage/Common/phpversion_warning', [
+        'softwareName'  => 'Akeeba Engage',
+        'minPHPVersion' => '7.1.0',
+    ])
+@stop
+
+@section('browse-ordering')
+    {{-- Table ordering --}}
+    @jhtml('FEFHelper.browse.orderjs', $this->lists->order)
+
+    <div class="akeeba-filter-element akeeba-form-group">
+        <label for="limit" class="element-invisible">
+            @lang('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC')
+        </label>
+        {{ $this->pagination->getLimitBox() }}
+    </div>
+@stop
 
 @section('browse-filters')
     <div class="akeeba-filter-element akeeba-form-group">
@@ -80,9 +94,10 @@ $purifier = new HTMLPurifier($config);
 	?>
     @foreach ($this->items as $item)
 		<?php
-        $meta = \Akeeba\Engage\Site\Helper\Meta::getAssetAccessMeta($item->asset_id, false);
+		$meta = \Akeeba\Engage\Site\Helper\Meta::getAssetAccessMeta($item->asset_id, false);
+		$numComments = \Akeeba\Engage\Site\Helper\Meta::getNumCommentsForAsset($item->asset_id);
 		$ipLookupUrl = \Akeeba\Engage\Admin\Helper\Format::getIPLookupURL($item->ip);
-		$jBrowser = \Joomla\CMS\Environment\Browser::getInstance($item->user_agent)
+		$jBrowser = \Joomla\CMS\Environment\Browser::getInstance($item->user_agent);
 		?>
         <tr>
             <td>
@@ -100,22 +115,65 @@ $purifier = new HTMLPurifier($config);
                     </span>
                     <span class="engage_ip">
                         @unless (empty($ipLookupUrl))
-                            <a href="{{ $ipLookupUrl }}">
+                            <a href="{{ $ipLookupUrl }}" target="_blank">
+                                <span class="engage-sr-only">
+                                    @lang('COM_ENGAGE_COMMENTS_FILTER_IP')
+                                </span>
                                 {{{ $item->ip }}}
                             </a>
                         @else
                             {{{ $item->ip }}}
                         @endunless
                     </span>
+                    <a href="@route('index.php?option=com_engage&view=Comments&ip=' . urlencode($item->ip))&limitstart=0"
+                       class="akeeba-btn--mini hasTooltip"
+                       title="@lang('JSEARCH_FILTER_LABEL')"
+                    >
+                        <span class="akion-search" aria-hidden="true"></span>
+                        <span class="engage-sr-only">
+                            @lang('JSEARCH_FILTER_LABEL')
+                        </span>
+                    </a>
                 </div>
             </td>
             <td class="engage-comment-preview">
+                @if ($item->getLevel() > 1)
+                <?php
+                    $parent = $item->getParent();
+                    $limitStart = \Akeeba\Engage\Site\Helper\Meta::getLimitStartForComment($parent);
+                    $public_uri = new \Joomla\CMS\Uri\Uri($meta['public_url']);
+		            $public_uri->setFragment('akengage-comment-' . $parent->getId());
+		            $public_uri->setVar('akengage_limitstart', $limitStart);
+                ?>
+                <div class="engage-in-reply-to">
+                    @sprintf('COM_ENGAGE_COMMENTS_LBL_INREPLYTO', $public_uri->toString(), $parent->getUser()->name)
+                </div>
+                @endif
                 {{ $purifier->purify($item->body) }}
             </td>
             <td>
-                <a href="{{ $meta['url'] }}">
-                    {{{ $meta['title'] }}}
-                </a>
+                <div class="engage-content-title">
+                    <a href="{{ $meta['url'] }}">
+                        {{{ $meta['title'] }}}
+                    </a>
+                </div>
+                <div class="engage-content-link">
+                    <a href="{{ $meta['public_url'] }}" target="_blank" class="hasTooltip"
+                        title="@lang('COM_ENGAGE_COMMENTS_LBL_VIEWCONTENT_DESC')">
+                        @lang('COM_ENGAGE_COMMENTS_LBL_VIEWCONTENT')
+                    </a>
+                </div>
+                <div class="engage-content-comments-filter">
+                    <a href="@route('index.php?option=com_engage&view=Comments&asset_title=' . urlencode($meta['title']))&limitstart=0"
+                       class="engage-filter-by-content">
+                        <span aria-hidden="true">
+                            {{ $numComments }}
+                        </span>
+                        <span class="engage-sr-only">
+                            @plural('COM_ENGAGE_COMMENTS_LBL_NUMCOMMENTS', $numComments)
+                        </span>
+                    </a>
+                </div>
             </td>
             <td>
                 {{ (new FOF30\Date\Date($item->created_on))->format(\Joomla\CMS\Language\Text::_('DATE_FORMAT_LC2'), true, true) }}
