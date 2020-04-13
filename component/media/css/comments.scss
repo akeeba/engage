@@ -10,12 +10,15 @@ section.akengage-outer-container {
   margin-top: 12pt;
   margin-bottom: 12pt;
   border-bottom: thin solid $grey;
+  padding: .5em 0;
 
   h3.akengage-title {
     border-bottom: thin solid $grey;
   }
 
   div.akengage-list-container {
+    padding: 0 .5em;
+
     // First level comments have no margin
     & > ol.akengage-comment-list {
       margin-left: 0;

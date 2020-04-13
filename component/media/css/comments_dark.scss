@@ -1,0 +1,33 @@
+/*!
+ * @package   AkeebaEngage
+ * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @license   GNU General Public License version 3, or later
+ */
+
+@import "sources/variables";
+
+/**
+ * Dark Mode
+ *
+ * This applies the color modifications to both forced dark mode and automatic dark mode
+ */
+section.akengage-outer-container--dark {
+  :root {
+    color-scheme: dark;
+  }
+
+  background-color: $grey;
+  color: $light-grey;
+
+  @import 'sources/site_dark';
+
+}
+
+@media (prefers-color-scheme: dark) {
+  section.akengage-outer-container {
+    background-color: $grey;
+    color: $light-grey;
+
+    @import 'sources/site_dark';
+  }
+}

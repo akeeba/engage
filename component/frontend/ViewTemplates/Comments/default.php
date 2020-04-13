@@ -24,8 +24,9 @@ use Joomla\CMS\Language\Text;
 
 /** @var \Akeeba\Engage\Site\View\Comments\Html $this */
 
+$darkMode  = $this->container->params->get('dark_mode_backend', -1);
 ?>
-<section class="akengage-outer-container">
+<section class="akengage-outer-container<?= ($darkMode == 1) ? '--dark' : '' ?>">
 	<h3 class="akengage-title">
 		<?= Text::plural($this->headerKey, $this->getItemCount(), $this->title) ?>
 	</h3>
