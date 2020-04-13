@@ -4,19 +4,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-// Color Declarations
-$grey: #514F50;
-$teal: #40B5B8;
-$red: #E2363C;
-$light-grey: #EFEFEF;
-$white: #ffffff;
-$green: #93C34E;
-$orange: #F0AD4E;
-$black: #000000;
-
-$ionicon-var-flag: "\f279";
-$ionicon-var-sad: "\f34a";
-$ionicon-var-happy: "\f31c";
+@import "sources/variables";
 
 [class ^= "icon-engage"], [class ^= "icon-engage"]:before {
   color: black !important;

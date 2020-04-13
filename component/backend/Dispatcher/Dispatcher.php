@@ -37,12 +37,16 @@ class Dispatcher extends FOFDispatcher
 
 		if ($darkMode != 0)
 		{
-			$customCss[] = 'media://com_engage/css/dark.min.css';
+			$customCss[] = 'media://com_engage/css/backend_dark.min.css';
 		}
 
 		$this->container->renderer->setOptions([
+			'load_fef'      => true,
+			'fef_reset'     => true,
 			'custom_css' => implode(",", $customCss),
 			'fef_dark'   => $darkMode,
+			// Render submenus as drop-down navigation bars powered by Bootstrap
+			'linkbar_style' => 'classic',
 		]);
 
 		// Load the version.php file and set up the mediaVersion container key

@@ -11,44 +11,45 @@
             label="COM_ENGAGE_CONFIG_BASIC_FIELDSET_LABEL"
             description="COM_ENGAGE_CONFIG_BASIC_FIELDSET_DESC"
     >
-        <field name="max_level"
-               type="integer"
-               label="COM_ENGAGE_CONFIG_MAX_LEVEL_LABEL"
-               description="COM_ENGAGE_CONFIG_MAX_LEVEL_DESC"
-               default="3"
-               first="1" last="6" step="1"
+        <field
+            name="max_level"
+            type="integer"
+            label="COM_ENGAGE_CONFIG_MAX_LEVEL_LABEL"
+            description="COM_ENGAGE_CONFIG_MAX_LEVEL_DESC"
+            default="3"
+            first="1" last="6" step="1"
         />
 
         <field
-                name="default_publish"
-                type="radio"
-                label="COM_ENGAGE_DEFAULT_PUBLISH_LABEL"
-                description="COM_ENGAGE_DEFAULT_PUBLISH_DESC"
-                class="btn-group btn-group-yesno"
-                default="1"
+            name="default_publish"
+            type="radio"
+            label="COM_ENGAGE_DEFAULT_PUBLISH_LABEL"
+            description="COM_ENGAGE_DEFAULT_PUBLISH_DESC"
+            class="btn-group btn-group-yesno"
+            default="1"
         >
             <option value="1">JPUBLISHED</option>
             <option value="0">JUNPUBLISHED</option>
         </field>
 
         <field
-                name="captcha"
-                type="plugins"
-                label="COM_ENGAGE_CONFIG_CAPTCHA_LABEL"
-                description="COM_ENGAGE_CONFIG_CAPTCHA_DESC"
-                folder="captcha"
-                filter="cmd"
-                useglobal="true"
+            name="captcha"
+            type="plugins"
+            label="COM_ENGAGE_CONFIG_CAPTCHA_LABEL"
+            description="COM_ENGAGE_CONFIG_CAPTCHA_DESC"
+            folder="captcha"
+            filter="cmd"
+            useglobal="true"
         >
             <option value="0">JOPTION_DO_NOT_USE</option>
         </field>
 
         <field
-                name="captcha_for"
-                type="list"
-                label="COM_ENGAGE_CONFIG_CAPTCHA_FOR_LABEL"
-                description="COM_ENGAGE_CONFIG_CAPTCHA_FOR_DESC"
-                default="hide"
+            name="captcha_for"
+            type="list"
+            label="COM_ENGAGE_CONFIG_CAPTCHA_FOR_LABEL"
+            description="COM_ENGAGE_CONFIG_CAPTCHA_FOR_DESC"
+default="hide"
         >
             <option value="guests">COM_ENGAGE_CONFIG_CAPTCHA_FOR_GUESTS</option>
             <option value="nonmanager">COM_ENGAGE_CONFIG_CAPTCHA_FOR_NONMANAGER</option>
@@ -68,48 +69,48 @@
         />
 
         <field
-                name="comments_show"
-                type="radio"
-                label="COM_ENGAGE_COMMENTS_SHOW_LABEL"
-                description="COM_ENGAGE_COMMENTS_SHOW_DESC"
-                class="btn-group btn-group-yesno"
-                default="1"
+            name="comments_show"
+            type="radio"
+            label="COM_ENGAGE_COMMENTS_SHOW_LABEL"
+            description="COM_ENGAGE_COMMENTS_SHOW_DESC"
+            class="btn-group btn-group-yesno"
+            default="1"
         >
             <option value="1">JSHOW</option>
             <option value="0">JHIDE</option>
         </field>
 
         <field
-                name="comments_ordering"
-                type="list"
-                label="COM_ENGAGE_COMMENTS_ORDERING_LABEL"
-                description="COM_ENGAGE_COMMENTS_ORDERING_DESC"
-                class="chzn-color"
-                default="asc"
+            name="comments_ordering"
+            type="list"
+            label="COM_ENGAGE_COMMENTS_ORDERING_LABEL"
+            description="COM_ENGAGE_COMMENTS_ORDERING_DESC"
+            class="chzn-color"
+            default="asc"
         >
             <option value="asc">JGLOBAL_ORDER_ASCENDING</option>
             <option value="desc">JGLOBAL_ORDER_DESCENDING</option>
         </field>
 
         <field
-                name="comments_enabled"
-                type="radio"
-                label="COM_ENGAGE_COMMENTS_ENABLED_LABEL"
-                description="COM_ENGAGE_COMMENTS_ENABLED_DESC"
-                class="btn-group btn-group-yesno"
-                default="1"
+            name="comments_enabled"
+            type="radio"
+            label="COM_ENGAGE_COMMENTS_ENABLED_LABEL"
+            description="COM_ENGAGE_COMMENTS_ENABLED_DESC"
+            class="btn-group btn-group-yesno"
+            default="1"
         >
             <option value="1">JYES</option>
             <option value="0">JNO</option>
         </field>
 
         <field
-                name="comments_close_after"
-                type="integer"
-                label="COM_ENGAGE_COMMENTS_CLOSE_AFTER_LABEL"
-                description="COM_ENGAGE_COMMENTS_CLOSE_AFTER_DESC"
-                first="0" last="3650" step="1"
-                default="0"
+            name="comments_close_after"
+            type="integer"
+            label="COM_ENGAGE_COMMENTS_CLOSE_AFTER_LABEL"
+            description="COM_ENGAGE_COMMENTS_CLOSE_AFTER_DESC"
+            first="0" last="3650" step="1"
+            default="0"
         />
     </fieldset>
 
@@ -143,8 +144,8 @@
 
 
         <field
-                type="textarea"
                 name="htmlpurifier_configstring"
+                type="textarea"
                 default="p,b,a[href],i,u,strong,em,small,big,span[style],font[size],font[color],ul,ol,li,br,img[src],img[width],img[height],code,pre,blockquote"
                 class="input-xlarge"
                 cols="50"
@@ -161,22 +162,22 @@
             addfieldpath="/administrator/components/com_engage/fields"
     >
         <field
-            type="modulemodules"
             name="login_module"
+            type="modulemodules"
             default="mod_login"
             label="COM_ENGAGE_CONFIG_LOGIN_LABEL"
             description="COM_ENGAGE_CONFIG_LOGIN_DESC" />
 
         <field
-            type="text"
             name="iplookup"
+            type="text"
             default="https://whatismyipaddress.com/ip/%s"
             label="COM_ENGAGE_CONFIG_IPLOOKUP_LABEL"
             description="COM_ENGAGE_CONFIG_IPLOOKUP_DESC" />
 
         <field
-            type="integer"
             name="max_spam_age"
+            type="integer"
             first="0"
             last="365"
             step="1"
@@ -185,14 +186,37 @@
             description="COM_ENGAGE_CONFIG_MAX_SPAM_AGE_DESC" />
 
         <field
-                type="list"
-                name="htmlpurifier_include"
-                default="composer"
-                label="COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_LABEL"
-                description="COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_DESC">
+            name="htmlpurifier_include"
+            type="list"
+            default="composer"
+            label="COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_LABEL"
+            description="COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_DESC">
             <option value="composer">COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_COMPOSER</option>
             <option value="auto">COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_AUTO</option>
             <option value="all">COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_ALL</option>
+        </field>
+
+        <field
+            name="dark_mode_backend"
+            type="radio"
+            default="-1"
+               label="COM_ENGAGE_CONFIG_DARKMODE_BACKEND_LABEL"
+               description="COM_ENGAGE_CONFIG_DARKMODE_BACKEND_DESC"
+               class="switcher btn-group">
+            <option value="-1">COM_ENGAGE_CONFIG_DARKMODE_AUTO</option>
+            <option value="0">COM_ENGAGE_CONFIG_DARKMODE_NEVER</option>
+            <option value="1">COM_ENGAGE_CONFIG_DARKMODE_ALWAYS</option>
+        </field>
+
+        <field name="dark_mode_frontend"
+               type="radio"
+               default="-1"
+               label="COM_ENGAGE_CONFIG_DARKMODE_FRONTEND_LABEL"
+               description="COM_ENGAGE_CONFIG_DARKMODE_FRONTEND_DESC"
+               class="switcher btn-group">
+            <option value="-1">COM_ENGAGE_CONFIG_DARKMODE_AUTO</option>
+            <option value="0">COM_ENGAGE_CONFIG_DARKMODE_NEVER</option>
+            <option value="1">COM_ENGAGE_CONFIG_DARKMODE_ALWAYS</option>
         </field>
     </fieldset>
 

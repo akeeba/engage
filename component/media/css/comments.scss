@@ -4,15 +4,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-// Color Declarations
-$grey: #514F50;
-$teal: #40B5B8;
-$red: #E2363C;
-$light-grey: #EFEFEF;
-$white: #ffffff;
-$green: #93C34E;
-$orange: #F0AD4E;
-$black: #000000;
+@import "sources/variables";
 
 section.akengage-outer-container {
   margin-top: 12pt;

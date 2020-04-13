@@ -1,0 +1,48 @@
+/*!
+ * @package   AkeebaEngage
+ * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @license   GNU General Public License version 3, or later
+ */
+
+@import "variables";
+
+[class ^= "icon-engage"], [class ^= "icon-engage"]:before {
+  color: $light-grey !important;
+  background-color: $grey !important;
+}
+
+#akeeba-renderer-fef {
+  .engage-userfield {
+    .engage-usersfield-usertype {
+      .akion-star {
+        color: $orange;
+      }
+
+      .akion-person {
+        color: $green;
+      }
+
+      .akion-person-stalker {
+        color: $grey;
+      }
+    }
+
+    .engage-usersfield-username {
+      color: lighten($green, 20%);
+    }
+  }
+
+  .engage-in-reply-to {
+    color: $light-grey;
+  }
+
+  a.engage-filter-by-content {
+    background-color: $light-grey;
+    color: $grey;
+
+    &:after {
+      border-top: .5em solid $light-grey;
+    }
+  }
+
+}

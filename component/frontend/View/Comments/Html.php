@@ -136,7 +136,6 @@ class Html extends DataHtml
 	protected function onBeforeBrowse()
 	{
 		// Load the CSS and JavaScript
-		$this->addCssFile('media://com_engage/css/comments.min.css', $this->container->mediaVersion);
 		$this->addJavascriptFile('media://com_engage/js/system.min.js', $this->container->mediaVersion, 'text/javascript', true);
 		$this->addJavascriptFile('media://com_engage/js/comments.min.js', $this->container->mediaVersion, 'text/javascript', true);
 

@@ -119,7 +119,7 @@ use FOF30\Utils\FEFHelper\Html as FEFHtml;
 		</div>
 	</section>
 
-    <table class="akeeba-table akeeba-table--striped--hborder--hover" id="itemsList">
+    <table class="akeeba-table akeeba-table--striped--hborder" id="itemsList">
         <thead>
         @yield('browse-table-header')
         </thead>
