@@ -41,6 +41,13 @@ final class Email
 	 */
 	private static $container;
 
+	/**
+	 * Sanitized versions of comments, keyed by comment ID
+	 *
+	 * @var string[]
+	 */
+	private static $purifiedComments = [];
+
 	public static function loadEmailTemplateFromDB($key, User $user = null): LoadedTemplate
 	{
 		// Initialise
@@ -144,15 +151,6 @@ HTML;
 			$recipient = $container->platform->getUser();
 		}
 
-		Filter::includeHTMLPurifier();
-
-		$config = HTMLPurifier_Config::createDefault();
-		$config->set('Core.Encoding', 'UTF-8');
-		$config->set('HTML.Doctype', 'HTML 4.01 Transitional');
-		$config->set('Cache.SerializerPath', \Akeeba\Engage\Site\Helper\Filter::getCachePath());
-		$config->set('HTML.Allowed', 'p,b,a[href],i,u,strong,em,small,big,ul,ol,li,br,img[src],img[width],img[height],code,pre,blockquote');
-		$purifier = new HTMLPurifier($config);
-
 		$router      = Router::getInstance('site');
 		$commentUser = $comment->getUser();
 		$meta        = Meta::getAssetAccessMeta($comment->asset_id);
@@ -179,20 +177,23 @@ HTML;
 
 		$returnUrl        = base64_encode($meta['public_url']);
 		$returnUrlComment = base64_encode($publicUri->toString());
+		$token            = md5($commentUser->name . $commentUser->email . $comment->getId() . $container->platform->getConfig()->get('secret'));
 
 		$replacements = [
 			'[SITENAME]'          => $container->platform->getConfig()->get('sitename'),
 			'[SITEURL]'           => Uri::base(false),
-			'[NAME]'              => $commentUser->name,
-			'[EMAIL]'             => $commentUser->email,
-			'[IP]'                => $comment->ip,
-			'[USER_AGENT]'        => $comment->user_agent,
+			'[RECIPIENT:NAME]'    => htmlentities($recipient->name),
+			'[RECIPIENT:EMAIL]'   => htmlentities($recipient->email),
+			'[NAME]'              => htmlentities($commentUser->name),
+			'[EMAIL]'             => htmlentities($commentUser->email),
+			'[IP]'                => htmlentities($comment->ip),
+			'[USER_AGENT]'        => htmlentities($comment->user_agent),
 			'[COMMENT]'           => $comment->body,
-			'[COMMENT_SANITIZED]' => $purifier->purify($comment->body),
+			'[COMMENT_SANITIZED]' => self::purifyComment($comment),
 			'[DATE_ISO]'          => $jCreatedOn->toISO8601(),
 			'[DATE_UTC]'          => $jCreatedOn->format($dateFormat, false),
 			'[DATE_LOCAL]'        => $jCreatedOn->format($dateFormat, true),
-			'[CONTENT_TITLE]'     => $meta['title'],
+			'[CONTENT_TITLE]'     => htmlentities($meta['title']),
 			'[CONTENT_LINK]'      => $meta['public_url'],
 			'[COMMENT_LINK]'      => $publicUri->toString(),
 			'[PUBLISH_URL]'       => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=publish&id=%d&returnurl=%s', $comment->getId(), $returnUrlComment))->toString(),
@@ -201,6 +202,8 @@ HTML;
 			'[POSSIBLESPAM_URL]'  => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=possiblespam&id=%d&returnurl=%s', $comment->getId(), $returnUrl))->toString(),
 			'[SPAM_URL]'          => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=reportspam&id=%d&returnurl=%s', $comment->getId(), $returnUrl))->toString(),
 			'[UNSPAM_URL]'        => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=reportham&id=%d&returnurl=%s', $comment->getId(), $returnUrl))->toString(),
+			'[UNUBSCRIBE_URL]'    => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=unsubscribe&id=%d&returnurl=%s&token=%s', $comment->getId(), $returnUrl, $token))->toString(),
+			'[AVATAR_URL]'        => $comment->getAvatarURL(48),
 		];
 
 		foreach (['template', 'subject'] as $prop)
@@ -373,5 +376,43 @@ HTML;
 		self::$container = Container::getInstance('com_engage');
 
 		return self::$container;
+	}
+
+	/**
+	 * Returns a purified version of the comment text.
+	 *
+	 * The purified version permits a very small, highly controllable subset of HTML to go through. While this removes a
+	 * lot of formatting it also protects against security issues if a comment with malicious content is previewed in a
+	 * mail client. Normally this should NOT be necessary. However, initial filtering of the HTML content of the comment
+	 * is up to Joomla's text filters and the site owner's configuration of Akeeba Engage. Nothing stops a misguided
+	 * site owner from allowing unfiltered HTML from strangers without even a CAPTCHA, opening up their site to a host
+	 * of vulnerabilities. We can provide sane defaults, we can document things but ultimately it's not up to us to
+	 * protect misguided users against themselves.
+	 *
+	 * @param   Comments  $comment
+	 *
+	 * @return  string
+	 */
+	protected function purifyComment(Comments $comment): string
+	{
+		$id = $comment->getId();
+
+		if (isset(self::$purifiedComments[$id]))
+		{
+			return self::$purifiedComments[$id];
+		}
+
+		Filter::includeHTMLPurifier();
+
+		$config = HTMLPurifier_Config::createDefault();
+		$config->set('Core.Encoding', 'UTF-8');
+		$config->set('HTML.Doctype', 'HTML 4.01 Transitional');
+		$config->set('Cache.SerializerPath', \Akeeba\Engage\Site\Helper\Filter::getCachePath());
+		$config->set('HTML.Allowed', 'p,b,a[href],i,u,strong,em,small,big,ul,ol,li,br,img[src],img[width],img[height],code,pre,blockquote');
+		$purifier = new HTMLPurifier($config);
+
+		self::$purifiedComments[$id] = $purifier->purify($comment->body);
+
+		return self::$purifiedComments[$id];
 	}
 }
