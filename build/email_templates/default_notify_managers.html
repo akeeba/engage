@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>A new comment on “[CONTENT_TITLE]” awaits your moderation</title>
+	<title>A new comment was submitted on “[CONTENT_TITLE]”</title>
 	<style type="text/css">
 		:root {
 			color-scheme: light dark;
@@ -212,7 +212,7 @@
 								Hello [RECIPIENT:NAME],
 							</p>
 							<p>
-								A new comment was filed on “<a href="[CONTENT_LINK]">[CONTENT_TITLE]</a>”. The comment is currently unpublished and awaits your moderation.
+								A new comment was filed on “<a href="[CONTENT_LINK]">[CONTENT_TITLE]</a>”. The comment is already published.
 							</p>
 							<p>
 								Please find the comment details below.
@@ -245,8 +245,8 @@
 								<a class="engageemail-button" href="[COMMENT_LINK]">
 									View Comment
 								</a>
-								<a class="engageemail-button engageemail-button-success" href="[PUBLISH_URL]">
-									Publish
+								<a class="engageemail-button engageemail-button-warning" href="[UNPUBLISH_URL]">
+									Unpublish
 								</a>
 								<a class="engageemail-button engageemail-button-danger" href="[DELETE_URL]">
 									Delete
@@ -264,10 +264,13 @@
 					<!-- Legal info -->
 					<div class="engageemail-legalinfo">
 						<p>
-							You are receiving this email because you are a comments manager for the content that was commented on.
+							You are receiving this email because you are a comments administrator for the content that was commented on.
 						</p>
 						<p>
-							You <em>cannot</em> unsubscribe from these emails because you are a comments manager.
+							If you do not wish to receive these emails for this content you can <a href="[UNSUBSCRIBE_URL]">unsubscribe</a>.
+						</p>
+						<p>
+							The Unsubscribe link only affects notifications for the content this comment was submitted on. It does not unsubscribe you from notifications for comments filed on any other content you may have already commented on our site. Submitting a new comment on that content will resubscribe you to the notifications.
 						</p>
 						<p>
 							Please do not reply to this email, it's sent from an unmonitored email address.

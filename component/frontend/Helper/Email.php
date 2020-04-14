@@ -181,7 +181,7 @@ HTML;
 
 		$returnUrl        = base64_encode($meta['public_url']);
 		$returnUrlComment = base64_encode($publicUri->toString());
-		$token            = md5($commentUser->name . $commentUser->email . $comment->getId() . $container->platform->getConfig()->get('secret'));
+		$token            = md5($recipient->email . '-' . $comment->asset_id . '-' . $container->platform->getConfig()->get('secret'));
 
 		$replacements = [
 			'[SITENAME]'          => $container->platform->getConfig()->get('sitename'),
@@ -206,7 +206,7 @@ HTML;
 			'[POSSIBLESPAM_URL]'  => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=possiblespam&id=%d&returnurl=%s', $comment->getId(), $returnUrl))->toString(),
 			'[SPAM_URL]'          => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=reportspam&id=%d&returnurl=%s', $comment->getId(), $returnUrl))->toString(),
 			'[UNSPAM_URL]'        => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=reportham&id=%d&returnurl=%s', $comment->getId(), $returnUrl))->toString(),
-			'[UNUBSCRIBE_URL]'    => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=unsubscribe&id=%d&returnurl=%s&token=%s', $comment->getId(), $returnUrl, $token))->toString(),
+			'[UNUBSCRIBE_URL]'    => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=unsubscribe&id=%d&returnurl=%s&token=%s&email=%s', $comment->getId(), $returnUrl, $token, $recipient->email))->toString(),
 			'[AVATAR_URL]'        => $comment->getAvatarURL(48),
 		];
 

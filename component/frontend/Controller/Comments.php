@@ -177,6 +177,21 @@ class Comments extends DataController
 		$platform->unsetSessionVar('email', $sessionNamespace);
 		$platform->unsetSessionVar('comment', $sessionNamespace);
 
+		// If the user was unsubscribed from comments we need to resubscribe them
+		$db = $this->container->db;
+		$query = $db->getQuery(true)
+			->delete($db->qn('#__engage_unsubscribe'))
+			->where($db->qn('asset_id') . ' = ' . $db->q($model->asset_id))
+			->where($db->qn('email') . ' = ' . $db->q($model->getUser()->email));
+		try
+		{
+			$db->setQuery($query)->execute();
+		}
+		catch (Exception $e)
+		{
+			// Ignore any failures, they are not important.
+		}
+
 		$this->setRedirect($returnUrl, Text::_('COM_ENGAGE_COMMENTS_MSG_SUCCESS'));
 	}
 
@@ -271,9 +286,11 @@ class Comments extends DataController
 	 */
 	public function unsubscribe()
 	{
-		$id = $this->input->getInt('id', 0);
+		// I need at least a comment ID and an email to unsubscribe
+		$id               = $this->input->getInt('id', 0);
+		$unsubscribeEmail = $this->input->getString('email', '');
 
-		if ($id <= 0)
+		if (($id <= 0) || empty($unsubscribeEmail))
 		{
 			throw new AccessForbidden();
 		}
@@ -291,31 +308,19 @@ class Comments extends DataController
 			throw new AccessForbidden();
 		}
 
-		// If I am logged in but not the same user: fail
-		$user        = $this->container->platform->getUser();
-		$commentUser = $comment->getUser();
+		// Validate the token
+		$token      = $this->input->getString('token');
+		$validToken = md5($unsubscribeEmail . '-' . $comment->asset_id . '-' . $this->container->platform->getConfig()->get('secret'));
 
-		if (!$user->guest && ($user->id != $commentUser->id))
+		if ($token != $validToken)
 		{
 			throw new AccessForbidden();
-		}
-
-		// If I am a guest I need to pass the validation check
-		if ($user->guest)
-		{
-			$token      = $this->input->getString('token');
-			$validToken = md5($commentUser->name . $commentUser->email . $comment->getId() . $this->container->platform->getConfig()->get('secret'));
-
-			if ($token != $validToken)
-			{
-				throw new AccessForbidden();
-			}
 		}
 
 		// Try to unsubscribe -- if already unsubscribed redirect back with an error
 		$o  = (object) [
 			'asset_id' => $comment->asset_id,
-			'email'    => $commentUser->email,
+			'email'    => $unsubscribeEmail,
 		];
 		$db = $this->container->db;
 
@@ -323,7 +328,7 @@ class Comments extends DataController
 		{
 			$db->insertObject($db->qn('#__engage_unsubscribe'), $o);
 
-			$message = Text::_('COM_ENGAGE_COMMENTS_LBL_UNSUBSCRIBED');
+			$message = Text::sprintf('COM_ENGAGE_COMMENTS_LBL_UNSUBSCRIBED', $unsubscribeEmail);
 			$msgType = 'info';
 		}
 		catch (Exception $e)
