@@ -277,7 +277,8 @@ class plgEngageEmail extends CMSPlugin
 
 			$templateInfo = Email::loadEmailTemplateFromDB($type, $thisUser);
 
-			if (empty($templateInfo->subject) && empty($templateInfo->template))
+			// Dynamic properties. DO NOT use is_null() or empty()
+			if (($templateInfo->subject === null) && ($templateInfo->template === null))
 			{
 				continue;
 			}
@@ -309,6 +310,7 @@ class plgEngageEmail extends CMSPlugin
 	protected function getUserIDsByEmail(array $emails): array
 	{
 		$db    = $this->db ?? Factory::getDbo();
+		$emails = array_map([$db, 'q'], $emails);
 		$query = $db->getQuery(true)
 			->select([
 				$db->qn('email'),

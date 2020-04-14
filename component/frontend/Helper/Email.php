@@ -17,13 +17,11 @@ use FOF30\Container\Container;
 use FOF30\Date\Date;
 use HTMLPurifier;
 use HTMLPurifier_Config;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Mail\Mail;
-use Joomla\CMS\Router\Router;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
-use phpmailerException;
 
 final class Email
 {
@@ -89,7 +87,6 @@ final class Email
 		$model->enabled(1);
 		$model->where('language', 'in', $languages);
 
-		/** @var EmailTemplates $emailTemplate */
 		$allTemplates = $model->get(true);
 
 		if (empty($allTemplates))
@@ -99,7 +96,17 @@ final class Email
 			return self::$loadedTemplates[$hash];
 		}
 
-		$emailTemplate  = $allTemplates->take(1);
+		/** @var EmailTemplates $emailTemplate */
+		$emailTemplate = $allTemplates->first();
+
+		if (empty($emailTemplate))
+		{
+			self::$loadedTemplates[$hash] = new LoadedTemplate();
+
+			return self::$loadedTemplates[$hash];
+		}
+
+
 		$loadedLanguage = $allTemplates->reduce(function ($ret, EmailTemplates $t) {
 			if ($ret !== '*')
 			{
@@ -155,7 +162,6 @@ HTML;
 			$recipient = $container->platform->getUser();
 		}
 
-		$router      = Router::getInstance('site');
 		$commentUser = $comment->getUser();
 		$meta        = Meta::getAssetAccessMeta($comment->asset_id);
 		$publicUri   = Uri::getInstance($meta['public_url']);
@@ -200,13 +206,13 @@ HTML;
 			'[CONTENT_TITLE]'     => htmlentities($meta['title']),
 			'[CONTENT_LINK]'      => $meta['public_url'],
 			'[COMMENT_LINK]'      => $publicUri->toString(),
-			'[PUBLISH_URL]'       => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=publish&id=%d&returnurl=%s', $comment->getId(), $returnUrlComment))->toString(),
-			'[UNPUBLISH_URL]'     => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=unpublish&id=%d&returnurl=%s', $comment->getId(), $returnUrl))->toString(),
-			'[DELETE_URL]'        => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=remove&id=%d&returnurl=%s', $comment->getId(), $returnUrl))->toString(),
-			'[POSSIBLESPAM_URL]'  => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=possiblespam&id=%d&returnurl=%s', $comment->getId(), $returnUrl))->toString(),
-			'[SPAM_URL]'          => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=reportspam&id=%d&returnurl=%s', $comment->getId(), $returnUrl))->toString(),
-			'[UNSPAM_URL]'        => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=reportham&id=%d&returnurl=%s', $comment->getId(), $returnUrl))->toString(),
-			'[UNUBSCRIBE_URL]'    => $router->build(sprintf('index.php?option=com_engage&view=Comments&task=unsubscribe&id=%d&returnurl=%s&token=%s&email=%s', $comment->getId(), $returnUrl, $token, $recipient->email))->toString(),
+			'[PUBLISH_URL]'       => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=publish&id=%d&returnurl=%s', $comment->getId(), $returnUrlComment), true, Route::TLS_IGNORE, true),
+			'[UNPUBLISH_URL]'     => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=unpublish&id=%d&returnurl=%s', $comment->getId(), $returnUrl), true, Route::TLS_IGNORE, true),
+			'[DELETE_URL]'        => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=remove&id=%d&returnurl=%s', $comment->getId(), $returnUrl), true, Route::TLS_IGNORE, true),
+			'[POSSIBLESPAM_URL]'  => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=possiblespam&id=%d&returnurl=%s', $comment->getId(), $returnUrl), true, Route::TLS_IGNORE, true),
+			'[SPAM_URL]'          => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=reportspam&id=%d&returnurl=%s', $comment->getId(), $returnUrl), true, Route::TLS_IGNORE, true),
+			'[UNSPAM_URL]'        => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=reportham&id=%d&returnurl=%s', $comment->getId(), $returnUrl), true, Route::TLS_IGNORE, true),
+			'[UNSUBSCRIBE_URL]'    => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=unsubscribe&id=%d&returnurl=%s&token=%s&email=%s', $comment->getId(), $returnUrl, $token, $recipient->email), true, Route::TLS_IGNORE, true),
 			'[AVATAR_URL]'        => $comment->getAvatarURL(48),
 		];
 
@@ -283,6 +289,44 @@ HTML;
 
 		// Return the processed email content
 		return $templateText;
+	}
+
+	/**
+	 * Returns a purified version of the comment text.
+	 *
+	 * The purified version permits a very small, highly controllable subset of HTML to go through. While this removes a
+	 * lot of formatting it also protects against security issues if a comment with malicious content is previewed in a
+	 * mail client. Normally this should NOT be necessary. However, initial filtering of the HTML content of the comment
+	 * is up to Joomla's text filters and the site owner's configuration of Akeeba Engage. Nothing stops a misguided
+	 * site owner from allowing unfiltered HTML from strangers without even a CAPTCHA, opening up their site to a host
+	 * of vulnerabilities. We can provide sane defaults, we can document things but ultimately it's not up to us to
+	 * protect misguided users against themselves.
+	 *
+	 * @param   Comments  $comment
+	 *
+	 * @return  string
+	 */
+	protected static function purifyComment(Comments $comment): string
+	{
+		$id = $comment->getId();
+
+		if (isset(self::$purifiedComments[$id]))
+		{
+			return self::$purifiedComments[$id];
+		}
+
+		Filter::includeHTMLPurifier();
+
+		$config = HTMLPurifier_Config::createDefault();
+		$config->set('Core.Encoding', 'UTF-8');
+		$config->set('HTML.Doctype', 'HTML 4.01 Transitional');
+		$config->set('Cache.SerializerPath', \Akeeba\Engage\Site\Helper\Filter::getCachePath());
+		$config->set('HTML.Allowed', 'p,b,a[href],i,u,strong,em,small,big,ul,ol,li,br,img[src],img[width],img[height],code,pre,blockquote');
+		$purifier = new HTMLPurifier($config);
+
+		self::$purifiedComments[$id] = $purifier->purify($comment->body);
+
+		return self::$purifiedComments[$id];
 	}
 
 	/**
@@ -380,43 +424,5 @@ HTML;
 		self::$container = Container::getInstance('com_engage');
 
 		return self::$container;
-	}
-
-	/**
-	 * Returns a purified version of the comment text.
-	 *
-	 * The purified version permits a very small, highly controllable subset of HTML to go through. While this removes a
-	 * lot of formatting it also protects against security issues if a comment with malicious content is previewed in a
-	 * mail client. Normally this should NOT be necessary. However, initial filtering of the HTML content of the comment
-	 * is up to Joomla's text filters and the site owner's configuration of Akeeba Engage. Nothing stops a misguided
-	 * site owner from allowing unfiltered HTML from strangers without even a CAPTCHA, opening up their site to a host
-	 * of vulnerabilities. We can provide sane defaults, we can document things but ultimately it's not up to us to
-	 * protect misguided users against themselves.
-	 *
-	 * @param   Comments  $comment
-	 *
-	 * @return  string
-	 */
-	protected function purifyComment(Comments $comment): string
-	{
-		$id = $comment->getId();
-
-		if (isset(self::$purifiedComments[$id]))
-		{
-			return self::$purifiedComments[$id];
-		}
-
-		Filter::includeHTMLPurifier();
-
-		$config = HTMLPurifier_Config::createDefault();
-		$config->set('Core.Encoding', 'UTF-8');
-		$config->set('HTML.Doctype', 'HTML 4.01 Transitional');
-		$config->set('Cache.SerializerPath', \Akeeba\Engage\Site\Helper\Filter::getCachePath());
-		$config->set('HTML.Allowed', 'p,b,a[href],i,u,strong,em,small,big,ul,ol,li,br,img[src],img[width],img[height],code,pre,blockquote');
-		$purifier = new HTMLPurifier($config);
-
-		self::$purifiedComments[$id] = $purifier->purify($comment->body);
-
-		return self::$purifiedComments[$id];
 	}
 }

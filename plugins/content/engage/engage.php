@@ -15,7 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModelLegacy;
 use Joomla\CMS\Plugin\CMSPlugin;
-use Joomla\CMS\Router\Router;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 
@@ -278,8 +278,7 @@ class plgContentEngage extends CMSPlugin
 		$container = Container::getInstance('com_engage');
 		$url       = '';
 
-		$router     = Router::getInstance('site');
-		$public_url = $router->build('index.php?option=com_content&view=article&id=' . $row->id);
+		$public_url = Route::link('site', 'index.php?option=com_content&view=article&id=' . $row->id, false, Route::TLS_IGNORE, true);
 
 		if ($container->platform->isFrontend())
 		{

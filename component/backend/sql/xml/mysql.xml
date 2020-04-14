@@ -47,7 +47,7 @@ CREATE TABLE `#__engage_comments` (
         </action>
 
         <!-- Email templates table -->
-        <action table="`#__engage_emailtemplates`" canfail="0">
+        <action table="#__engage_emailtemplates" canfail="0">
             <condition type="missing" value="" />
             <query><![CDATA[
 CREATE TABLE `#__engage_emailtemplates` (
@@ -68,7 +68,7 @@ CREATE TABLE `#__engage_emailtemplates` (
         </action>
 
         <!-- Unsubscribed emails -->
-        <action table="`#__engage_unsubscribe`" canfail="0">
+        <action table="#__engage_unsubscribe" canfail="0">
             <condition type="missing" value="" />
             <query><![CDATA[
 CREATE TABLE `#__engage_unsubscribe` (
@@ -89,12 +89,12 @@ INSERT INTO `#__engage_comments` (lft, rgt, asset_id, body, name, email, ip, ena
             ]]></query>
         </action>
 
-        <action table="`#__engage_emailtemplates`" canfail="0">
-            <condition type="equals" operator="not" value="1"><![CDATA[
-SELECT COUNT(*) FROM ``#__engage_emailtemplates`` WHERE `engage_emailtemplate_id` = 1;
+        <action table="#__engage_emailtemplates" canfail="0">
+            <condition type="equals" value="0"><![CDATA[
+SELECT COUNT(*) FROM `#__engage_emailtemplates` WHERE `engage_emailtemplate_id` = 1;
             ]]></condition>
             <query><![CDATA[
-INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language, subject, template, enabled, created_on, created_by, modified_on, modified_by) VALUES (1, 'manage', '*', 'A new comment on “[CONTENT_TITLE]” awaits your moderation', '<html lang="en">
+INSERT INTO `#__engage_emailtemplates` (`engage_emailtemplate_id`, `key`, `language`, `subject`, `template`, `enabled`, `created_on`, `created_by`, `modified_on`, `modified_by`) VALUES (1, 'manage', '*', 'A new comment on “[CONTENT_TITLE]” awaits your moderation', '<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>A new comment on “[CONTENT_TITLE]” awaits your moderation</title>
@@ -333,9 +333,7 @@ INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language
 								</span>
 							</div>
 							<div class="engageemail-comment">
-								<p>
-									This is the comment text.
-								</p>
+								[COMMENT_SANITIZED]
 							</div>
 							<div>
 								<a class="engageemail-button" href="[COMMENT_LINK]">
@@ -378,7 +376,9 @@ INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language
 
 </body>
 </html>', 1, '2020-04-01 00:00:00', 0, '2020-04-01 00:00:00', 0);
-INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language, subject, template, enabled, created_on, created_by, modified_on, modified_by) VALUES (2, 'spam', '*', 'A new spam comment on “[CONTENT_TITLE]” awaits your moderation', '<html lang="en">
+            ]]></query>
+            <query><![CDATA[
+INSERT INTO `#__engage_emailtemplates` (`engage_emailtemplate_id`, `key`, `language`, `subject`, `template`, `enabled`, `created_on`, `created_by`, `modified_on`, `modified_by`) VALUES (2, 'spam', '*', 'A new spam comment on “[CONTENT_TITLE]” awaits your moderation', '<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>A new spam comment on “[CONTENT_TITLE]” awaits your moderation</title>
@@ -617,9 +617,7 @@ INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language
 								</span>
 							</div>
 							<div class="engageemail-comment">
-								<p>
-									This is the comment text.
-								</p>
+								[COMMENT_SANITIZED]
 							</div>
 							<div>
 								<a class="engageemail-button" href="[COMMENT_LINK]">
@@ -662,7 +660,9 @@ INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language
 
 </body>
 </html>', 1, '2020-04-01 00:00:00', 0, '2020-04-01 00:00:00', 0);
-INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language, subject, template, enabled, created_on, created_by, modified_on, modified_by) VALUES (3, 'notify', '*', 'New reply to your comment on “[CONTENT_TITLE]”', '<html lang="en">
+            ]]></query>
+            <query><![CDATA[
+INSERT INTO `#__engage_emailtemplates` (`engage_emailtemplate_id`, `key`, `language`, `subject`, `template`, `enabled`, `created_on`, `created_by`, `modified_on`, `modified_by`) VALUES (3, 'notify', '*', 'New reply to your comment on “[CONTENT_TITLE]”', '<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>New reply to your comment on “[CONTENT_TITLE]”</title>
@@ -901,9 +901,7 @@ INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language
 								</span>
 							</div>
 							<div class="engageemail-comment">
-								<p>
-									This is the comment text.
-								</p>
+								[COMMENT_SANITIZED]
 							</div>
 							<div>
 								<a class="engageemail-button" href="[COMMENT_LINK]">
@@ -937,7 +935,9 @@ INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language
 
 </body>
 </html>', 1, '2020-04-01 00:00:00', 0, '2020-04-01 00:00:00', 0);
-INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language, subject, template, enabled, created_on, created_by, modified_on, modified_by) VALUES (4, 'notify_managers', '*', 'A new comment was submitted on “[CONTENT_TITLE]”', '<html lang="en">
+            ]]></query>
+            <query><![CDATA[
+INSERT INTO `#__engage_emailtemplates` (`engage_emailtemplate_id`, `key`, `language`, `subject`, `template`, `enabled`, `created_on`, `created_by`, `modified_on`, `modified_by`) VALUES (4, 'notify_managers', '*', 'A new comment was submitted on “[CONTENT_TITLE]”', '<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>A new comment was submitted on “[CONTENT_TITLE]”</title>
@@ -1176,9 +1176,7 @@ INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language
 								</span>
 							</div>
 							<div class="engageemail-comment">
-								<p>
-									This is the comment text.
-								</p>
+								[COMMENT_SANITIZED]
 							</div>
 							<div>
 								<a class="engageemail-button" href="[COMMENT_LINK]">
@@ -1224,7 +1222,9 @@ INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language
 
 </body>
 </html>', 1, '2020-04-01 00:00:00', 0, '2020-04-01 00:00:00', 0);
-INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language, subject, template, enabled, created_on, created_by, modified_on, modified_by) VALUES (5, 'notify_author', '*', 'A new comment was submitted on “[CONTENT_TITLE]”', '<html lang="en">
+            ]]></query>
+            <query><![CDATA[
+INSERT INTO `#__engage_emailtemplates` (`engage_emailtemplate_id`, `key`, `language`, `subject`, `template`, `enabled`, `created_on`, `created_by`, `modified_on`, `modified_by`) VALUES (5, 'notify_author', '*', 'A new comment was submitted on “[CONTENT_TITLE]”', '<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>A new comment was submitted on “[CONTENT_TITLE]”</title>
@@ -1463,9 +1463,7 @@ INSERT INTO `#__engage_emailtemplates` (engage_emailtemplate_id, `key`, language
 								</span>
 							</div>
 							<div class="engageemail-comment">
-								<p>
-									This is the comment text.
-								</p>
+								[COMMENT_SANITIZED]
 							</div>
 							<div>
 								<a class="engageemail-button" href="[COMMENT_LINK]">

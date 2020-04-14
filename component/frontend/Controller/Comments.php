@@ -43,8 +43,21 @@ class Comments extends DataController
 
 		$this->setPredefinedTaskList([
 			'browse', 'submit', 'edit', 'save', 'publish', 'unpublish', 'remove', 'reportspam', 'reportham',
-			'possiblespam', 'unsubscribe',
+			'possiblespam', 'unsubscribe', 'debug',
 		]);
+	}
+
+	public function debug()
+	{
+		$comment = $this->getModel();
+		$comment->load($this->input->getInt('id'));
+
+		$this->container->platform->importPlugin('engage');
+		$this->container->platform->runPlugins('onComEngageModelCommentsAfterCreate', [$comment]);
+
+		echo "OK";
+
+		$this->container->platform->closeApplication();
 	}
 
 	/**
@@ -178,7 +191,7 @@ class Comments extends DataController
 		$platform->unsetSessionVar('comment', $sessionNamespace);
 
 		// If the user was unsubscribed from comments we need to resubscribe them
-		$db = $this->container->db;
+		$db    = $this->container->db;
 		$query = $db->getQuery(true)
 			->delete($db->qn('#__engage_unsubscribe'))
 			->where($db->qn('asset_id') . ' = ' . $db->q($model->asset_id))

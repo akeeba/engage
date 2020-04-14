@@ -17,7 +17,7 @@ use FOF30\View\DataView\Html as DataHtml;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Pagination\Pagination;
-use Joomla\CMS\Router\Router;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
@@ -223,16 +223,15 @@ class Html extends DataHtml
 		$this->pageParams = $this->pageParams ?? new Registry();
 
 		// Script options and langauge keys
-		$router   = Router::getInstance('site');
 		$protoURL = 'index.php?option=com_engage&view=Comments&task=%s&id=';
 		$platform->addScriptOptions('akeeba.Engage.Comments.returnURL', base64_encode(Uri::getInstance()->toString()));
-		$platform->addScriptOptions('akeeba.Engage.Comments.editURL', $router->build(sprintf($protoURL, 'edit'))->toString());
-		$platform->addScriptOptions('akeeba.Engage.Comments.deleteURL', $router->build(sprintf($protoURL, 'remove'))->toString());
-		$platform->addScriptOptions('akeeba.Engage.Comments.publishURL', $router->build(sprintf($protoURL, 'publish'))->toString());
-		$platform->addScriptOptions('akeeba.Engage.Comments.unpublishURL', $router->build(sprintf($protoURL, 'unpublish'))->toString());
-		$platform->addScriptOptions('akeeba.Engage.Comments.markhamURL', $router->build(sprintf($protoURL, 'reportham'))->toString());
-		$platform->addScriptOptions('akeeba.Engage.Comments.markspamURL', $router->build(sprintf($protoURL, 'reportspam'))->toString());
-		$platform->addScriptOptions('akeeba.Engage.Comments.possiblespamURL', $router->build(sprintf($protoURL, 'possiblespam'))->toString());
+		$platform->addScriptOptions('akeeba.Engage.Comments.editURL', Route::_(sprintf($protoURL, 'edit'), true, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.deleteURL', Route::_(sprintf($protoURL, 'remove'), true, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.publishURL', Route::_(sprintf($protoURL, 'publish'), true, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.unpublishURL', Route::_(sprintf($protoURL, 'unpublish'), true, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.markhamURL', Route::_(sprintf($protoURL, 'reportham'), true, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.markspamURL', Route::_(sprintf($protoURL, 'reportspam'), true, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.possiblespamURL', Route::_(sprintf($protoURL, 'possiblespam'), true, Route::TLS_IGNORE, true));
 
 		Text::script('COM_ENGAGE_COMMENTS_DELETE_PROMPT');
 	}

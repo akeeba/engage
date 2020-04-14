@@ -16,7 +16,7 @@ defined('_JEXEC') or die();
 use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Router\Router;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 
 /** @var \Akeeba\Engage\Site\View\Comments\Html $this */
@@ -33,7 +33,7 @@ HTMLHelper::_('behavior.formvalidator');
 	<?= $this->container->template->loadPosition('engage-before-reply'); ?>
 
 	<form class="form-horizontal form-validate"
-		  action="<?= Router::getInstance('site')->build('index.php') ?>"
+		  action="<?= Route::_('index.php', true, Route::TLS_IGNORE, true) ?>"
 		  method="post" name="akengageCommentForm"
 		  id="akengageCommentForm">
 		<input type="hidden" name="option" value="com_engage">
