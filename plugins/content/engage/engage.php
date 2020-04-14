@@ -278,7 +278,7 @@ class plgContentEngage extends CMSPlugin
 		$container = Container::getInstance('com_engage');
 		$url       = '';
 
-		$public_url = Route::link('site', 'index.php?option=com_content&view=article&id=' . $row->id, false, Route::TLS_IGNORE, true);
+		$public_url = Route::link('site', sprintf("index.php?option=com_content&view=article&id=%s&catid=%s", $row->id, $row->catid), false, Route::TLS_IGNORE, true);
 
 		if ($container->platform->isFrontend())
 		{
