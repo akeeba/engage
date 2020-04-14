@@ -190,11 +190,12 @@ final class Meta
 	/**
 	 * Returns the comments IDs for an asset, in the same order as they are paginated in the frontend
 	 *
-	 * @param   int  $asset_id
+	 * @param   int   $asset_id   Asset ID
+	 * @param   bool  $asManager  True to take into account unpublished comments
 	 *
 	 * @return  array
 	 */
-	public static function getPaginatedCommentIDsForAsset(int $asset_id): array
+	public static function getPaginatedCommentIDsForAsset(int $asset_id, bool $asManager = false): array
 	{
 		if (isset(self::$commentIDsPerAsset[$asset_id]))
 		{
@@ -203,7 +204,14 @@ final class Meta
 
 		/** @var Comments $model */
 		$model = self::getContainer()->factory->model('Comments')->tmpInstance();
+		$model->scopeAssetCommentTree($asset_id);
 		$model->asset_id($asset_id);
+
+		if (!$asManager)
+		{
+			$model->enabled(1);
+		}
+
 		$query = $model->buildQuery(true);
 		$query->clear('select')->select($query->qn('node.engage_comment_id'));
 
@@ -217,10 +225,11 @@ final class Meta
 	 *
 	 * @param   Comments  $comment          The comment we're looking for
 	 * @param   int|null  $commentsPerPage  Number of comments per page. NULL to use global configuration.
+	 * @param   bool      $asManager        True to take into account unpublished / spam comments.
 	 *
 	 * @return  int
 	 */
-	public static function getLimitStartForComment(Comments $comment, ?int $commentsPerPage = 20): int
+	public static function getLimitStartForComment(Comments $comment, ?int $commentsPerPage = null, bool $asManager = false): int
 	{
 		// No limit set. Use the configured list limit, must be at least 5.
 		if (is_null($commentsPerPage))
@@ -229,7 +238,7 @@ final class Meta
 			$commentsPerPage = max((int) $commentsPerPage, 5);
 		}
 
-		$comments = self::getPaginatedCommentIDsForAsset($comment->asset_id);
+		$comments = self::getPaginatedCommentIDsForAsset($comment->asset_id, $asManager);
 		$index    = array_search($comment->getId(), $comments);
 
 		if ($index === false)

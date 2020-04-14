@@ -141,7 +141,7 @@ $purifier = new HTMLPurifier($config);
                     try
                     {
                         $parent     = $item->getParent();
-                        $limitStart = \Akeeba\Engage\Site\Helper\Meta::getLimitStartForComment($parent);
+                        $limitStart = \Akeeba\Engage\Site\Helper\Meta::getLimitStartForComment($parent, null, $user->authorise('core.edit.state', 'com_engage'));
                         $public_uri = new \Joomla\CMS\Uri\Uri($meta['public_url']);
                         $public_uri->setFragment('akengage-comment-' . $parent->getId());
                         $public_uri->setVar('akengage_limitstart', $limitStart);

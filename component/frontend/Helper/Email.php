@@ -167,7 +167,7 @@ HTML;
 		$publicUri   = Uri::getInstance($meta['public_url']);
 
 		$publicUri->setFragment('akengage-comment-' . $comment->getId());
-		$publicUri->setVar('akengage_limitstart', Meta::getLimitStartForComment($comment));
+		$publicUri->setVar('akengage_limitstart', Meta::getLimitStartForComment($comment, null, $recipient->authorise('core.edit.state', 'com_engage')));
 
 		$zone = $recipient->getParam('timezone', $container->platform->getConfig()->get('offset', 'UTC'));
 
