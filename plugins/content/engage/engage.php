@@ -301,14 +301,16 @@ class plgContentEngage extends CMSPlugin
 
 		return [
 			'type'          => 'article',
+			'title'         => $row->title,
+			'category'      => $row->category_title,
+			'author_name'   => $row->author_name,
+			'author_email'  => $row->author_email,
+			'url'           => $url,
+			'public_url'    => $public_url,
 			'published'     => $this->isRowPublished($row),
 			'published_on'  => $publishUp,
 			'access'        => $row->access ?? 0,
 			'parent_access' => $row->category_access,
-			'title'         => $row->title,
-			'category'      => $row->category_title,
-			'url'           => $url,
-			'public_url'    => $public_url,
 			'parameters'    => $row->parameters,
 		];
 	}
@@ -501,6 +503,8 @@ class plgContentEngage extends CMSPlugin
 			return null;
 		}
 
+		$authorUser = self::getContainer()->platform->getUser($row->created_by);
+
 		$this->cachedArticles[$metaKey] = (object) [
 			'id'              => $row->id,
 			'asset_id'        => $row->asset_id,
@@ -515,6 +519,8 @@ class plgContentEngage extends CMSPlugin
 			'category_title'  => $row->category_title ?? '',
 			'category_alias'  => $row->category_alias ?? 0,
 			'category_access' => $row->category_access ?? $row->access,
+			'author_name'     => !empty($row->created_by_alias) ? $row->created_by_alias : $authorUser->name,
+			'author_email'    => $authorUser->email,
 			'parameters'      => $loadParameters ? $this->getParametersForArticle($row) : new Registry(),
 		];
 

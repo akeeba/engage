@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   AkeebaEngage
+  ~ @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+<extension version="3.9.0" type="plugin" group="engage" method="upgrade">
+    <name>PLG_ENGAGE_EMAIL</name>
+    <description>PLG_ENGAGE_EMAIL_XML_DESC</description>
+    <version>1.0.0</version>
+    <creationDate>2020-04-01</creationDate>
+    <author>Akeeba Ltd</author>
+    <authorEmail>no-reply@akeebabackup.com</authorEmail>
+    <authorUrl>https://www.akeebabackup.com</authorUrl>
+    <copyright>Copyright (c)2020-2020 Akeeba Ltd</copyright>
+    <license>GNU/GPL v3 or any later version</license>
+
+    <files>
+        <filename plugin="email">email.php</filename>
+        <filename>.htaccess</filename>
+        <filename>web.config</filename>
+    </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.plg_engage_email.ini</language>
+        <language tag="en-GB">en-GB/en-GB.plg_engage_email.sys.ini</language>
+    </languages>
+
+    <scriptfile>script.php</scriptfile>
+
+    <config>
+        <fields name="params">
+            <fieldset
+                    name="basic"
+                    label="PLG_ENGAGE_EMAIL_FIELDSET_BASIC_LABEL"
+                    description="PLG_ENGAGE_EMAIL_FIELDSET_BASIC_DESC"
+            >
+                <field
+                        name="managers_notify"
+                        type="radio"
+                        label="PLG_ENGAGE_EMAIL_MANAGERS_TOPLEVEL_NOTIFY_LABEL"
+                        description="PLG_ENGAGE_EMAIL_MANAGERS_TOPLEVEL_NOTIFY_DESC"
+                        class="btn-group btn-group-yesno"
+                        default="0"
+                >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+
+            </fieldset>
+        </fields>
+    </config>
+</extension>

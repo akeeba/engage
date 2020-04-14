@@ -49,6 +49,8 @@ final class Select
 			HTMLHelper::_('select.option', 'manage', Text::_('COM_ENGAGE_EMAILTEMPLATES_KEY_MANAGE' . $suffix)),
 			HTMLHelper::_('select.option', 'spam', Text::_('COM_ENGAGE_EMAILTEMPLATES_KEY_SPAM' . $suffix)),
 			HTMLHelper::_('select.option', 'notify', Text::_('COM_ENGAGE_EMAILTEMPLATES_KEY_NOTIFY' . $suffix)),
+			HTMLHelper::_('select.option', 'notify_managers', Text::_('COM_ENGAGE_EMAILTEMPLATES_KEY_NOTIFY_MANAGERS' . $suffix)),
+			HTMLHelper::_('select.option', 'notify_author', Text::_('COM_ENGAGE_EMAILTEMPLATES_KEY_NOTIFY_AUTHOR' . $suffix)),
 		];
 	}
 

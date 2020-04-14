@@ -27,6 +27,9 @@
 /build/release.json
 /release.json
 
+### Joomla Configuration (symlink used for phpStorm integration)
+/configuration.php
+
 ### Extension files to be excluded
 /component/backend/encrypt_service_key.php
 /component/backend/version.php

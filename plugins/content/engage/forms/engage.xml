@@ -61,6 +61,32 @@
                     default="-1"
                 />
 
+            <field
+                    name="comments_notify_author"
+                    type="radio"
+                    label="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_AUTHOR_LABEL"
+                    description="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_AUTHOR_DESC"
+                    class="btn-group btn-group-yesno"
+                    useglobal="true"
+                    default="1"
+            >
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+
+            <field
+                    name="comments_notify_users"
+                    type="radio"
+                    label="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_USERS_LABEL"
+                    description="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_USERS_DESC"
+                    class="btn-group btn-group-yesno"
+                    useglobal="true"
+                    default="1"
+            >
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+
         </fieldset>
     </fields>
 </form>

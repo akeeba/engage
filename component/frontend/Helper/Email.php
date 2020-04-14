@@ -42,6 +42,13 @@ final class Email
 	private static $container;
 
 	/**
+	 * Cache of loaded templates by the hash of their type and languages searched
+	 *
+	 * @var  LoadedTemplate[]
+	 */
+	private static $loadedTemplates = [];
+
+	/**
 	 * Sanitized versions of comments, keyed by comment ID
 	 *
 	 * @var string[]
@@ -51,22 +58,30 @@ final class Email
 	public static function loadEmailTemplateFromDB($key, User $user = null): LoadedTemplate
 	{
 		// Initialise
-		$templateText = '';
-		$subject      = '';
-		$container    = self::getContainer();
+		$container = self::getContainer();
 
 		$user = $user ?? $container->platform->getUser();
 
-		// Look for desired languages
-		$jLang     = Factory::getLanguage();
+		// Determine the languages we should be searching for and in which order to search them.
+		$jLang     = $container->platform->getLanguage();
 		$userLang  = $user->getParam('language', '');
-		$languages = [
+		$languages = array_filter([
 			$userLang,
 			$jLang->getTag(),
 			$jLang->getDefault(),
 			'en-GB',
 			'*',
-		];
+		], function ($l) {
+			return !empty($l);
+		});
+
+		$languages = array_unique($languages);
+		$hash      = md5($key . '-' . json_encode($languages));
+
+		if (isset(self::$loadedTemplates[$hash]))
+		{
+			return self::$loadedTemplates[$hash];
+		}
 
 		/** @var EmailTemplates $model */
 		$model = $container->factory->model('EmailTemplates')->tmpInstance();
@@ -75,7 +90,15 @@ final class Email
 		$model->where('language', 'in', $languages);
 
 		/** @var EmailTemplates $emailTemplate */
-		$allTemplates   = $model->get(true);
+		$allTemplates = $model->get(true);
+
+		if (empty($allTemplates))
+		{
+			self::$loadedTemplates[$hash] = new LoadedTemplate();
+
+			return self::$loadedTemplates[$hash];
+		}
+
 		$emailTemplate  = $allTemplates->take(1);
 		$loadedLanguage = $allTemplates->reduce(function ($ret, EmailTemplates $t) {
 			if ($ret !== '*')
@@ -86,52 +109,33 @@ final class Email
 			return ($t->language === '*') ? $ret : $t->language;
 		}, '*');
 
-		$return = new LoadedTemplate([
+		self::$loadedTemplates[$hash] = new LoadedTemplate([
 			'subject'        => $emailTemplate->subject,
 			'template'       => $emailTemplate->template,
 			'loadedLanguage' => $loadedLanguage,
 		]);
 
 		// Because SpamAssassin demands there is a body and surrounding html tag even though it's not necessary.
-		if (strpos($return->template, '<body') == false)
+		if (strpos(self::$loadedTemplates[$hash]->template, '<body') == false)
 		{
-			$return->template = '<body>' . $return->template . '</body>';
+			self::$loadedTemplates[$hash]->template = '<body>' . self::$loadedTemplates[$hash]->template . '</body>';
 		}
 
-		if (strpos($return->template, '<html') == false)
+		if (strpos(self::$loadedTemplates[$hash]->template, '<html') == false)
 		{
-			$return->template = <<< HTML
+			$subject                                = self::$loadedTemplates[$hash]->subject;
+			$template                               = self::$loadedTemplates[$hash]->template;
+			self::$loadedTemplates[$hash]->template = <<< HTML
 <html>
 <head>
-<title>{$return->subject}</title>
+<title>{$subject}</title>
 </head>
-$return->template
+{$template}
 </html>
 HTML;
-
 		}
 
-		return $return;
-	}
-
-	/**
-	 * Returns a new Joomla Mail object, set up to send UTF-8 encoded, HTML emails.
-	 *
-	 * @return  Mail  The mailer object
-	 *
-	 * @throws  phpmailerException
-	 */
-	public static function &getMailer(): Mail
-	{
-		$mailer = Factory::getMailer();
-
-		// We always send HTML emails
-		$mailer->isHtml(true);
-
-		// Required to not get broken characters in emails
-		$mailer->CharSet = 'UTF-8';
-
-		return $mailer;
+		return self::$loadedTemplates[$hash];
 	}
 
 	/**
@@ -222,7 +226,7 @@ HTML;
 	 *
 	 * @return  string
 	 */
-	private static function inlineImages($templateText, Mail $mailer)
+	public static function inlineImages($templateText, Mail $mailer)
 	{
 		// RegEx patterns to detect images
 		$patterns = [

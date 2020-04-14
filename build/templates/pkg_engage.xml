@@ -33,10 +33,11 @@
         <!--<file type="plugin" group="actionlog" id="engage">plg_actionlog_engage.zip</file>-->
 
         <!-- Plugins: content -->
-        <!--<file type="plugin" group="content" id="engage">plg_content_engage.zip</file>-->
+        <file type="plugin" group="content" id="engage">plg_content_engage.zip</file>
 
         <!-- Plugins: engage -->
         <file type="plugin" group="engage" id="akismet">plg_engage_akismet.zip</file>
+        <file type="plugin" group="engage" id="email">plg_email_gravatar.zip</file>
         <file type="plugin" group="engage" id="gravatar">plg_engage_gravatar.zip</file>
 
         <!-- Plugins: user -->

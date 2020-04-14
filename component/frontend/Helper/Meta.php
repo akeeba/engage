@@ -85,6 +85,8 @@ final class Meta
 			'type'          => 'unknown',
 			'title'         => '',
 			'category'      => null,
+			'author_name'   => null,
+			'author_email'  => null,
 			'url'           => null,
 			'public_url'    => null,
 			'published'     => false,
@@ -227,8 +229,8 @@ final class Meta
 			$commentsPerPage = max((int) $commentsPerPage, 5);
 		}
 
-		$comments      = self::getPaginatedCommentIDsForAsset($comment->asset_id);
-		$index         = array_search($comment->getId(), $comments);
+		$comments = self::getPaginatedCommentIDsForAsset($comment->asset_id);
+		$index    = array_search($comment->getId(), $comments);
 
 		if ($index === false)
 		{

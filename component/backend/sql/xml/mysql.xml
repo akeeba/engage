@@ -42,7 +42,7 @@ CREATE TABLE `#__engage_comments` (
   KEY `#__engage_comments_rgt` (`rgt`),
   KEY `#__engage_comments_nested` (`lft`,`rgt`),
   KEY `#__engage_comments_asset` (`asset_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) DEFAULT COLLATE utf8_general_ci COMMENT='Content comments';
             ]]></query>
         </action>
 
@@ -50,7 +50,7 @@ CREATE TABLE `#__engage_comments` (
         <action table="`#__engage_emailtemplates`" canfail="0">
             <condition type="missing" value="" />
             <query><![CDATA[
-CREATE TABLE ``#__engage_emailtemplates`` (
+CREATE TABLE `#__engage_emailtemplates` (
   `engage_emailtemplate_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(255) NOT NULL DEFAULT 'moderate',
   `language` varchar(10) NOT NULL DEFAULT '*',
@@ -63,7 +63,19 @@ CREATE TABLE ``#__engage_emailtemplates`` (
   `modified_by` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`engage_emailtemplate_id`),
   UNIQUE KEY `#__engage_emailtemplate_keylang` (`key`(100),`language`)
-) DEFAULT COLLATE utf8_general_ci;
+) DEFAULT COLLATE utf8_general_ci COMMENT='Email templates for comments';
+            ]]></query>
+        </action>
+
+        <!-- Unsubscribed emails -->
+        <action table="`#__engage_unsubscribe`" canfail="0">
+            <condition type="missing" value="" />
+            <query><![CDATA[
+CREATE TABLE `#__engage_unsubscribe` (
+  `asset_id` bigint(20) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  UNIQUE KEY `#__engage_unsubscribe_unique` (`asset_id`,`email`)
+) DEFAULT CHARSET=utf8_general_ci COMMENT='Unsubscribed emails';
             ]]></query>
         </action>
 

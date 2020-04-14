@@ -112,6 +112,31 @@ default="hide"
             first="0" last="3650" step="1"
             default="0"
         />
+
+        <field
+                name="comments_notify_author"
+                type="radio"
+                label="COM_ENGAGE_COMMENTS_NOTIFY_AUTHOR_LABEL"
+                description="COM_ENGAGE_COMMENTS_NOTIFY_AUTHOR_DESC"
+                class="btn-group btn-group-yesno"
+                default="1"
+        >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field
+                name="comments_notify_users"
+                type="radio"
+                label="COM_ENGAGE_COMMENTS_NOTIFY_USERS_LABEL"
+                description="COM_ENGAGE_COMMENTS_NOTIFY_USERS_DESC"
+                class="btn-group btn-group-yesno"
+                default="1"
+        >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
     </fieldset>
 
     <fieldset
