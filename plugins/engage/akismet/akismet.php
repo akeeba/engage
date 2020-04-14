@@ -62,7 +62,7 @@ class plgEngageAkismet extends CMSPlugin
 		$this->loadLanguage();
 	}
 
-	public function onEngageCheckSpam(?Comments $comment, bool $isNew = true): ?bool
+	public function onAkeebaEngageCheckSpam(?Comments $comment, bool $isNew = true): ?bool
 	{
 		if (is_null($comment))
 		{

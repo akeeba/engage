@@ -46,7 +46,28 @@ CREATE TABLE `#__engage_comments` (
             ]]></query>
         </action>
 
-        <!-- Comment: root node -->
+        <!-- Email templates table -->
+        <action table="#__engage_emailtemplates" canfail="0">
+            <condition type="missing" value="" />
+            <query><![CDATA[
+CREATE TABLE `#__engage_emailtemplates` (
+  `engage_emailtemplate_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) NOT NULL DEFAULT 'moderate',
+  `language` varchar(10) NOT NULL DEFAULT '*',
+  `subject` varchar(255) NOT NULL,
+  `template` text NOT NULL,
+  `enabled` TINYINT(3) NOT NULL DEFAULT 1,
+  `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` bigint(20) NOT NULL DEFAULT '0',
+  `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by` bigint(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`engage_emailtemplate_id`),
+  UNIQUE KEY `#__engage_emailtemplate_keylang` (`key`(100),`language`)
+) DEFAULT COLLATE utf8_general_ci;
+            ]]></query>
+        </action>
+
+        <!-- Comments: root node -->
         <action table="#__engage_comments" canfail="1">
             <condition type="equals" operator="not" value="1"><![CDATA[
 SELECT COUNT(*) FROM `#__engage_comments` WHERE `lft` = 1;

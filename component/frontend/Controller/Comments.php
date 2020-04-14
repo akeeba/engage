@@ -148,7 +148,7 @@ class Comments extends DataController
 
 		// Spam check
 		$platform->importPlugin('engage');
-		$spamResults = $platform->runPlugins('onEngageCheckSpam', [$model]);
+		$spamResults = $platform->runPlugins('onAkeebaEngageCheckSpam', [$model]);
 
 		if (in_array(true, $spamResults, true))
 		{
@@ -486,7 +486,7 @@ class Comments extends DataController
 		{
 			foreach ($ids as $id)
 			{
-				$event = $asSpam ? 'onEngageReportSpam' : 'onEngageReportHam';
+				$event = $asSpam ? 'onAkeebaEngageReportSpam' : 'onAkeebaEngageReportHam';
 
 				$model->find($id);
 

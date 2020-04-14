@@ -15,7 +15,16 @@ use Joomla\CMS\Language\Text;
 
 final class Select
 {
-	public static function published(array $params = [])
+	/**
+	 * Return the options for creating a dropdown for the Enabled field
+	 *
+	 * @param   array  $params  Parameters to pass to SelectOptions::getOptions
+	 *
+	 * @return  array
+	 *
+	 * @see     SelectOptions::getOptions
+	 */
+	public static function published(array $params = []): array
 	{
 		$options   = SelectOptions::getOptions('published', $params);
 		$options[] = HTMLHelper::_('select.option', '-3', Text::_('COM_ENGAGE_COMMENT_ENABLED_OPT_SPAM'));
@@ -24,4 +33,24 @@ final class Select
 
 		return $options;
 	}
+
+	/**
+	 * Return the options to select the email template type (`key` field)
+	 *
+	 * @param   bool  $short  Should I use short names instead?
+	 *
+	 * @return  array
+	 */
+	public static function emailTemplateKey($short = false): array
+	{
+		$suffix = $short ? '_SHORT' : '';
+
+		return [
+			HTMLHelper::_('select.option', 'manage', Text::_('COM_ENGAGE_EMAILTEMPLATES_KEY_MANAGE' . $suffix)),
+			HTMLHelper::_('select.option', 'spam', Text::_('COM_ENGAGE_EMAILTEMPLATES_KEY_SPAM' . $suffix)),
+			HTMLHelper::_('select.option', 'notify', Text::_('COM_ENGAGE_EMAILTEMPLATES_KEY_NOTIFY' . $suffix)),
+		];
+	}
+
+
 }

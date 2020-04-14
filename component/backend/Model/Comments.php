@@ -223,7 +223,7 @@ class Comments extends TreeModel
 
 		$platform->importPlugin('engage');
 
-		$results = $platform->runPlugins('onEngageUserAvatarURL', [$this->getUser(), $size]);
+		$results = $platform->runPlugins('onAkeebaEngageUserAvatarURL', [$this->getUser(), $size]);
 		$results = array_filter($results, function ($x) {
 			return is_string($x) && !empty($x);
 		});
@@ -247,7 +247,7 @@ class Comments extends TreeModel
 
 		$platform->importPlugin('engage');
 
-		$results = $platform->runPlugins('onEngageUserProfileURL', [$this->getUser()]);
+		$results = $platform->runPlugins('onAkeebaEngageUserProfileURL', [$this->getUser()]);
 		$results = array_filter($results, function ($x) {
 			return is_string($x) && !empty($x);
 		});
@@ -348,7 +348,7 @@ class Comments extends TreeModel
 		}
 
 		// Filter by these IDs **OR** a matching email field
-		$userIDs = array_map([$db, 'q'], $userIDs);
+		$userIDs      = array_map([$db, 'q'], $userIDs);
 		$conditions[] = $db->qn('created_by') . ' IN(' . implode(',', $userIDs) . ')';
 
 		$conditions = array_map(function ($condition) {

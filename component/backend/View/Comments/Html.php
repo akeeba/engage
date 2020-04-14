@@ -7,6 +7,7 @@
 
 namespace Akeeba\Engage\Admin\View\Comments;
 
+defined('_JEXEC') or die;
 
 use Akeeba\Engage\Admin\Model\Comments;
 use FOF30\View\DataView\Html as HtmlView;

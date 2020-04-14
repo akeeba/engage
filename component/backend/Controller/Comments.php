@@ -139,7 +139,7 @@ class Comments extends DataController
 		{
 			foreach ($ids as $id)
 			{
-				$event = $asSpam ? 'onEngageReportSpam' : 'onEngageReportHam';
+				$event = $asSpam ? 'onAkeebaEngageReportSpam' : 'onAkeebaEngageReportHam';
 
 				$model->find($id);
 

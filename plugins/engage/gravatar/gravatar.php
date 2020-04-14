@@ -20,7 +20,7 @@ class plgEngageGravatar extends CMSPlugin
 	 *
 	 * @return  string|null  The URL to the avatar image. NULL if none can be determined / is applicable.
 	 */
-	public function onEngageUserAvatarURL(User $user, int $size = 32): ?string
+	public function onAkeebaEngageUserAvatarURL(User $user, int $size = 32): ?string
 	{
 		$hash   = md5($user->email);
 		$rating = $this->params->get('rating', 'g');
@@ -63,7 +63,7 @@ class plgEngageGravatar extends CMSPlugin
 	 *
 	 * @return  string|null  The URL to the user's profile. NULL if none can be determined / is applicable.
 	 */
-	public function onEngageUserProfileURL(User $user): ?string
+	public function onAkeebaEngageUserProfileURL(User $user): ?string
 	{
 		$useProfile = $this->params->get('profile_link', 1);
 
