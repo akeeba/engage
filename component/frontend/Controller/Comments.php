@@ -36,13 +36,14 @@ class Comments extends DataController
 			'reportspam'   => '@remove',
 			'reportham'    => '@publish',
 			'possiblespam' => '@publish',
+			'unsubscribe'  => true,
 		];
 
 		parent::__construct($container, $config);
 
 		$this->setPredefinedTaskList([
 			'browse', 'submit', 'edit', 'save', 'publish', 'unpublish', 'remove', 'reportspam', 'reportham',
-			'possiblespam',
+			'possiblespam', 'unsubscribe',
 		]);
 	}
 
@@ -261,6 +262,85 @@ class Comments extends DataController
 		}
 
 		$this->addCommentFragmentToReturnURL();
+	}
+
+	/**
+	 * Unsubscribes a user from notifications regarding a specific content item's comments.
+	 *
+	 * @return  void
+	 */
+	public function unsubscribe()
+	{
+		$id = $this->input->getInt('id', 0);
+
+		if ($id <= 0)
+		{
+			throw new AccessForbidden();
+		}
+
+		// Try to load the comment
+		/** @var CommentsModel $comment */
+		$comment = $this->getModel()->tmpInstance();
+
+		try
+		{
+			$comment->findOrFail($id);
+		}
+		catch (Exception $e)
+		{
+			throw new AccessForbidden();
+		}
+
+		// If I am logged in but not the same user: fail
+		$user        = $this->container->platform->getUser();
+		$commentUser = $comment->getUser();
+
+		if (!$user->guest && ($user->id != $commentUser->id))
+		{
+			throw new AccessForbidden();
+		}
+
+		// If I am a guest I need to pass the validation check
+		if ($user->guest)
+		{
+			$token      = $this->input->getString('token');
+			$validToken = md5($commentUser->name . $commentUser->email . $comment->getId() . $this->container->platform->getConfig()->get('secret'));
+
+			if ($token != $validToken)
+			{
+				throw new AccessForbidden();
+			}
+		}
+
+		// Try to unsubscribe -- if already unsubscribed redirect back with an error
+		$o  = (object) [
+			'asset_id' => $comment->asset_id,
+			'email'    => $commentUser->email,
+		];
+		$db = $this->container->db;
+
+		try
+		{
+			$db->insertObject($db->qn('#__engage_unsubscribe'), $o);
+
+			$message = Text::_('COM_ENGAGE_COMMENTS_LBL_UNSUBSCRIBED');
+			$msgType = 'info';
+		}
+		catch (Exception $e)
+		{
+			$message = Text::_('COM_ENGAGE_COMMENTS_ERR_ALREADY_UNSUBSCRIBED');
+			$msgType = 'error';
+		}
+
+		// Redirect
+		if ($customURL = $this->input->getBase64('returnurl', ''))
+		{
+			$customURL = base64_decode($customURL);
+		}
+
+		$url = !empty($customURL) ? $customURL : 'index.php';
+
+		$this->setRedirect($url, $message, $msgType);
 	}
 
 	/**
