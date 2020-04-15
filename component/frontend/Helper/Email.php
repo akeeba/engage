@@ -19,7 +19,6 @@ use HTMLPurifier;
 use HTMLPurifier_Config;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Mail\Mail;
-use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 
@@ -187,7 +186,7 @@ HTML;
 
 		$returnUrl        = base64_encode($meta['public_url']);
 		$returnUrlComment = base64_encode($publicUri->toString());
-		$token            = md5($recipient->email . '-' . $comment->asset_id . '-' . $container->platform->getConfig()->get('secret'));
+		$protoUrl         = 'index.php?option=com_engage&view=Comments&task=%s&returnurl=%s';
 
 		$replacements = [
 			'[SITENAME]'          => $container->platform->getConfig()->get('sitename'),
@@ -206,13 +205,13 @@ HTML;
 			'[CONTENT_TITLE]'     => htmlentities($meta['title']),
 			'[CONTENT_LINK]'      => $meta['public_url'],
 			'[COMMENT_LINK]'      => $publicUri->toString(),
-			'[PUBLISH_URL]'       => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=publish&id=%d&returnurl=%s', $comment->getId(), $returnUrlComment), true, Route::TLS_IGNORE, true),
-			'[UNPUBLISH_URL]'     => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=unpublish&id=%d&returnurl=%s', $comment->getId(), $returnUrl), true, Route::TLS_IGNORE, true),
-			'[DELETE_URL]'        => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=remove&id=%d&returnurl=%s', $comment->getId(), $returnUrl), true, Route::TLS_IGNORE, true),
-			'[POSSIBLESPAM_URL]'  => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=possiblespam&id=%d&returnurl=%s', $comment->getId(), $returnUrl), true, Route::TLS_IGNORE, true),
-			'[SPAM_URL]'          => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=reportspam&id=%d&returnurl=%s', $comment->getId(), $returnUrl), true, Route::TLS_IGNORE, true),
-			'[UNSPAM_URL]'        => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=reportham&id=%d&returnurl=%s', $comment->getId(), $returnUrl), true, Route::TLS_IGNORE, true),
-			'[UNSUBSCRIBE_URL]'    => Route::_(sprintf('index.php?option=com_engage&view=Comments&task=unsubscribe&id=%d&returnurl=%s&token=%s&email=%s', $comment->getId(), $returnUrl, $token, $recipient->email), true, Route::TLS_IGNORE, true),
+			'[PUBLISH_URL]'       => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'publish', $returnUrlComment), $comment, $recipient->email),
+			'[UNPUBLISH_URL]'     => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'unpublish', $returnUrl), $comment, $recipient->email),
+			'[DELETE_URL]'        => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'remove', $returnUrl), $comment, $recipient->email),
+			'[POSSIBLESPAM_URL]'  => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'possiblespam', $returnUrlComment), $comment, $recipient->email),
+			'[SPAM_URL]'          => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'reportspam', $returnUrl), $comment, $recipient->email),
+			'[UNSPAM_URL]'        => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'reportham', $returnUrlComment), $comment, $recipient->email),
+			'[UNSUBSCRIBE_URL]'   => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'unsubscribe', $returnUrl), $comment, $recipient->email),
 			'[AVATAR_URL]'        => $comment->getAvatarURL(48),
 		];
 

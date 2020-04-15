@@ -48,6 +48,7 @@ class plgEngageEmail extends CMSPlugin
 				$recipients        = $this->getCommentManagerRecipients();
 				$type              = ($comment->enabled == 0) ? 'manage' : 'spam';
 				$honorUnsubscribed = false;
+
 				break;
 
 			// Published: notify users taking part in the conversation
@@ -124,7 +125,10 @@ class plgEngageEmail extends CMSPlugin
 		$adminGroups = $db->setQuery($query)->loadColumn(0) ?? [];
 
 		return array_filter($adminGroups, function ($group) {
-			return Access::checkGroup($group, 'core.edit.state', 'com_engage');
+			return
+				Access::checkGroup($group, 'core.edit.state', 'com_engage') ||
+				Access::checkGroup($group, 'core.edit.state') ||
+				Access::checkGroup($group, 'core.admin');
 		});
 	}
 
@@ -148,11 +152,11 @@ class plgEngageEmail extends CMSPlugin
 		$innerQuery = $db->getQuery(true)
 			->select([$db->qn('user_id')])
 			->from($db->qn('#__user_usergroup_map'))
-			->where($db->q('group_id') . ' IN (' . implode(',', $managerGroups) . ')');
+			->where($db->qn('group_id') . ' IN (' . implode(',', $managerGroups) . ')');
 		$query      = $db->getQuery(true)
 			->select([
-				$db->qn['email'],
-				$db->qn['name'],
+				$db->qn('email'),
+				$db->qn('name'),
 			])
 			->from($db->qn('#__users'))
 			->where($db->qn('id') . ' IN (' . $innerQuery . ')')

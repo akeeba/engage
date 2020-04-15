@@ -12,12 +12,14 @@ defined('_JEXEC') or die();
 use Akeeba\Engage\Admin\Model\Exception\BlatantSpam;
 use Akeeba\Engage\Site\Helper\Filter;
 use Akeeba\Engage\Site\Helper\Meta;
+use Akeeba\Engage\Site\Helper\SignedURL;
 use Akeeba\Engage\Site\Model\Comments as CommentsModel;
 use Akeeba\Engage\Site\View\Comments\Html;
 use Exception;
 use FOF30\Container\Container;
 use FOF30\Controller\DataController;
 use FOF30\Controller\Mixin\PredefinedTaskList;
+use FOF30\Model\DataModel\Exception\RecordNotLoaded;
 use FOF30\View\Exception\AccessForbidden;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Asset;
@@ -44,10 +46,16 @@ class Comments extends DataController
 
 		$this->setPredefinedTaskList([
 			'browse', 'submit', 'edit', 'save', 'publish', 'unpublish', 'remove', 'reportspam', 'reportham',
-			'possiblespam', 'unsubscribe', 'debug',
+			'possiblespam', 'unsubscribe',
 		]);
 	}
 
+	/**
+	 * DEBUG: Trigger email sending
+	 *
+	 * Don't worry, this will NOT work on your sites. This code is only accesible when I add 'debug' to the
+	 * setPredefinedTaskList array in the __construct method.
+	 */
 	public function debug()
 	{
 		$comment = $this->getModel();
@@ -323,13 +331,8 @@ class Comments extends DataController
 		}
 
 		// Validate the token
-		$token      = $this->input->getString('token');
-		$validToken = md5($unsubscribeEmail . '-' . $comment->asset_id . '-' . $this->container->platform->getConfig()->get('secret'));
-
-		if ($token != $validToken)
-		{
-			throw new AccessForbidden();
-		}
+		$this->input->set('asset_id', $comment->asset_id);
+		$this->csrfProtection();
 
 		// Try to unsubscribe -- if already unsubscribed redirect back with an error
 		$o  = (object) [
@@ -463,6 +466,67 @@ class Comments extends DataController
 		}
 
 		$view->returnURL = $redirectURL;
+	}
+
+	/** @inheritDoc */
+	protected function csrfProtection()
+	{
+		// First, let's try token validation
+		try
+		{
+			// If I don't have a token fall through to FOF's anti-CSRF protection
+			$token = $this->input->getString('token');
+
+			if (empty($token))
+			{
+				throw new RuntimeException('', 0xDEADBEEF);
+			}
+
+			// Do I have a comment ID? Otherwise fall through to FOF's anti-CSRF protection.
+			/** @var CommentsModel $model */
+			$model = $this->getModel()->tmpInstance();
+			$ids   = $this->getIDsFromRequest($model);
+
+			if (empty($ids))
+			{
+				throw new RuntimeException('', 0xDEADBEEF);
+			}
+
+			$id = array_shift($ids);
+
+			if (empty($id))
+			{
+				throw new RuntimeException('', 0xDEADBEEF);
+			}
+
+			// Load the comment or fall through to FOF's anti-CSRF protection.
+			$model->findOrFail($id);
+
+			// If the token is valid we can return true
+			$task     = $this->input->getCmd('task');
+			$email    = $this->input->getString('email');
+			$asset_id = $model->asset_id;
+			$expires  = $this->input->getInt('expires');
+
+			if (SignedURL::verifyToken($token, $task, $email, $asset_id, $expires))
+			{
+				return true;
+			}
+		}
+		catch (RecordNotLoaded $e)
+		{
+			// This is raised if the comment ID is invalid. Ignore and fall through to the regular CSRF protection.
+		}
+		catch (RuntimeException $e)
+		{
+			// If it's not a "fall-through" exception we need to throw it back.
+			if ($e->getCode() != 0xDEADBEEF)
+			{
+				throw $e;
+			}
+		}
+
+		return parent::csrfProtection();
 	}
 
 	/**
