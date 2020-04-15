@@ -488,6 +488,12 @@ class Html extends DataHtml
 	 */
 	private function injectAMPStyling(): void
 	{
+		// If I'm told to not inject CSS in AMP pages I will bail out early.
+		if ($this->container->params->get('amp_css', 1) == 0)
+		{
+			return;
+		}
+
 		if (!class_exists('\WbampHelper_Runtime'))
 		{
 			return;
