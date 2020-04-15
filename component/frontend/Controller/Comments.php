@@ -23,6 +23,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Asset;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
+use RuntimeException;
 
 class Comments extends DataController
 {
@@ -339,7 +340,10 @@ class Comments extends DataController
 
 		try
 		{
-			$db->insertObject($db->qn('#__engage_unsubscribe'), $o);
+			if (!$db->insertObject('#__engage_unsubscribe', $o))
+			{
+				throw new RuntimeException('Already unsubscribed');
+			}
 
 			$message = Text::sprintf('COM_ENGAGE_COMMENTS_LBL_UNSUBSCRIBED', $unsubscribeEmail);
 			$msgType = 'info';
