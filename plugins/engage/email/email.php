@@ -35,17 +35,19 @@ class plgEngageEmail extends CMSPlugin
 			return;
 		}
 
-		$meta         = Meta::getAssetAccessMeta($comment->asset_id, true);
-		$notifyAuthor = $meta['parameters']->get('comments_notify_author', 1);
-		$notifyUsers  = $meta['parameters']->get('comments_notify_users', 1);
+		$meta              = Meta::getAssetAccessMeta($comment->asset_id, true);
+		$notifyAuthor      = $meta['parameters']->get('comments_notify_author', 1);
+		$notifyUsers       = $meta['parameters']->get('comments_notify_users', 1);
+		$honorUnsubscribed = true;
 
 		switch ($comment->enabled)
 		{
 			// Unpublished or Spam: send an email to Comment Managers
 			case 0:
 			case -3:
-				$recipients = $this->getCommentManagerRecipients();
-				$type       = ($comment->enabled == 0) ? 'manage' : 'spam';
+				$recipients        = $this->getCommentManagerRecipients();
+				$type              = ($comment->enabled == 0) ? 'manage' : 'spam';
+				$honorUnsubscribed = false;
 				break;
 
 			// Published: notify users taking part in the conversation
@@ -84,7 +86,7 @@ class plgEngageEmail extends CMSPlugin
 				break;
 		}
 
-		$this->sendEmailMessages($type, $comment, $recipients);
+		$this->sendEmailMessages($type, $comment, $recipients, $honorUnsubscribed);
 	}
 
 	/**
@@ -223,13 +225,14 @@ class plgEngageEmail extends CMSPlugin
 	/**
 	 * Sends emails to a list of users about the given comment
 	 *
-	 * @param   string    $type        Email type. Must match the `key` column of the email templates table
-	 * @param   Comments  $comment     The comment we are sending emails about
-	 * @param   array     $recipients  A dictionary of email => name with the recipients
+	 * @param   string    $type               Email type. Must match the `key` column of the email templates table
+	 * @param   Comments  $comment            The comment we are sending emails about
+	 * @param   array     $recipients         A dictionary of email => name with the recipients
+	 * @param   bool      $honorUnsubscribed  Should I honor unsubscribed emails? Default true.
 	 *
 	 * @return  void
 	 */
-	protected function sendEmailMessages(string $type, Comments $comment, array $recipients): void
+	protected function sendEmailMessages(string $type, Comments $comment, array $recipients, bool $honorUnsubscribed = true): void
 	{
 		// Do I have anything to do?
 		if (empty($recipients))
@@ -238,10 +241,13 @@ class plgEngageEmail extends CMSPlugin
 		}
 
 		// Remove users who have already unsubscribed from this content
-		$unsubscribedEmails = $this->getUnsubscribedEmails($comment->asset_id);
-		$recipients         = array_filter($recipients, function ($v, $k) use ($unsubscribedEmails) {
-			return !in_array($k, $unsubscribedEmails);
-		}, ARRAY_FILTER_USE_BOTH);
+		if ($honorUnsubscribed)
+		{
+			$unsubscribedEmails = $this->getUnsubscribedEmails($comment->asset_id);
+			$recipients         = array_filter($recipients, function ($v, $k) use ($unsubscribedEmails) {
+				return !in_array($k, $unsubscribedEmails);
+			}, ARRAY_FILTER_USE_BOTH);
+		}
 
 		if (empty($recipients))
 		{
@@ -309,9 +315,9 @@ class plgEngageEmail extends CMSPlugin
 	 */
 	protected function getUserIDsByEmail(array $emails): array
 	{
-		$db    = $this->db ?? Factory::getDbo();
+		$db     = $this->db ?? Factory::getDbo();
 		$emails = array_map([$db, 'q'], $emails);
-		$query = $db->getQuery(true)
+		$query  = $db->getQuery(true)
 			->select([
 				$db->qn('email'),
 				$db->qn('id'),
