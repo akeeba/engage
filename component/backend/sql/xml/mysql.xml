@@ -75,7 +75,7 @@ CREATE TABLE `#__engage_unsubscribe` (
   `asset_id` bigint(20) NOT NULL,
   `email` varchar(255) NOT NULL,
   UNIQUE KEY `#__engage_unsubscribe_unique` (`asset_id`,`email`)
-) DEFAULT CHARSET=utf8_general_ci COMMENT='Unsubscribed emails';
+) DEFAULT COLLATE utf8_general_ci COMMENT='Unsubscribed emails';
             ]]></query>
         </action>
 
