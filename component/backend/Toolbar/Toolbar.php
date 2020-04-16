@@ -44,6 +44,9 @@ class Toolbar extends BaseToolbar
 			$bar->appendButton('Confirm', 'COM_ENGAGE_COMMENTS_CONFIRM_REPORTSPAM', 'engage-reportspam', 'COM_ENGAGE_COMMENTS_TOOLBAR_REPORTSPAM', 'reportspam', true);
 			ToolbarHelper::deleteList('COM_ENGAGE_COMMENTS_CONFIRM_DELETE');
 		}
+
+		ToolbarHelper::preferences('com_engage');
+		ToolbarHelper::help('foobar', false, 'https://github.com/akeeba/engage/wiki');
 	}
 
 	public function onCommentsEdit()
