@@ -21,6 +21,7 @@ defined('_JEXEC') or die();
 use Joomla\CMS\Editor\Editor;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
 
 /**
  * @var \Akeeba\Engage\Site\View\Comments\Html $this
@@ -39,13 +40,11 @@ HTMLHelper::_('behavior.formvalidator');
 	</h3>
 
 	<form class="form-horizontal form-validate"
-		  action="index.php"
+		  action="<?= Route::_('index.php?option=com_engage&view=Comments', true, Route::TLS_IGNORE, true) ?>"
 		  method="post"
 		  name="akengageCommentEditForm"
 		  id="akengageCommentEditForm">
 
-		<input type="hidden" name="option" value="com_engage">
-		<input type="hidden" name="view" value="Comments">
 		<input type="hidden" name="task" value="save">
 		<input type="hidden" name="<?= $this->container->platform->getToken(true); ?>" value="1">
 		<input type="hidden" name="id" value="<?= (int) $item->getId(); ?>">

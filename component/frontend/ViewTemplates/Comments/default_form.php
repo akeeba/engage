@@ -33,11 +33,9 @@ HTMLHelper::_('behavior.formvalidator');
 	<?= $this->container->template->loadPosition('engage-before-reply'); ?>
 
 	<form class="form-horizontal form-validate"
-		  action="<?= Route::_('index.php', true, Route::TLS_IGNORE, true) ?>"
+		  action="<?= Route::_('index.php?option=com_engage&view=Comments', true, Route::TLS_IGNORE, true) ?>"
 		  method="post" name="akengageCommentForm"
 		  id="akengageCommentForm">
-		<input type="hidden" name="option" value="com_engage">
-		<input type="hidden" name="view" value="Comments">
 		<input type="hidden" name="task" value="submit">
 		<input type="hidden" name="<?= $this->container->platform->getToken(true); ?>" value="1">
 		<input type="hidden" name="asset_id" value="<?= (int) $this->assetId; ?>">
