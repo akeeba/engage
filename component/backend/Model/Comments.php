@@ -11,8 +11,8 @@ use DateInterval;
 use Exception;
 use FOF30\Container\Container;
 use FOF30\Date\Date;
+use FOF30\Model\DataModel;
 use FOF30\Model\DataModel\Collection as DataCollection;
-use FOF30\Model\TreeModel;
 use FOF30\Timer\Timer;
 use JDatabaseQuery;
 use Joomla\CMS\Language\Text;
@@ -23,24 +23,29 @@ use RuntimeException;
  * Comments model
  * @package Akeeba\Engage\Admin\Model
  *
- * @property int         $engage_comment_id Primary key
- * @property int         $asset_id          Asset ID the comment belongs to
- * @property string      $body              Comment body
- * @property string|null $name              Commenter's name
- * @property string|null $email             Commenter's email address
- * @property string      $ip                IP address used to file the comment
- * @property string      $user_agent        The User Agent string used to file the comment
- * @property int         $enabled           Is this comment published?
+ * @property int           $engage_comment_id Primary key
+ * @property int           $parent_id         Parent comment ID
+ * @property int           $asset_id          Asset ID the comment belongs to
+ * @property string        $body              Comment body
+ * @property string|null   $name              Commenter's name
+ * @property string|null   $email             Commenter's email address
+ * @property string        $ip                IP address used to file the comment
+ * @property string        $user_agent        The User Agent string used to file the comment
+ * @property int           $enabled           Is this comment published?
  *
  * Filters:
  *
+ * @method $this parent_id(int $parent_id) Filter by parent ID
  * @method $this asset_id(int $asset_id) Filter by asset
- * @method $this nested(bool $nested) Should I return nested results by default?
  * @method $this commenter(string $partial) Partial email or name to search a commenter for
  * @method $this ip(string $ip) Search by IP address
  * @method $this enabled(int $enabled) Search by published / unpublished comment
+ *
+ * Relations:
+ *
+ * @property-read Comments $parent Parent comment, if applicable
  */
-class Comments extends TreeModel
+class Comments extends DataModel
 {
 	/** @inheritDoc */
 	public function __construct(Container $container = null, array $config = [])
@@ -52,19 +57,14 @@ class Comments extends TreeModel
 			$config['behaviours'][] = 'filters';
 		}
 
-		$config['fieldsSkipChecks'] = [
-			'lft', 'rgt',
-		];
-
 		parent::__construct($container, $config);
 
-		$this->addKnownField('depth', 0);
+		$this->hasOne('parent', 'Comments', 'parent_id', 'engage_comment_id');
 	}
 
 	/** @inheritDoc */
 	public function check()
 	{
-
 		parent::check();
 
 		// Make sure we have EITHER a user OR both an email and full name
@@ -91,102 +91,6 @@ class Comments extends TreeModel
 		{
 			throw new RuntimeException(Text::sprintf('COM_ENGAGE_COMMENTS_ERR_EMAIL_IN_USE', $this->email));
 		}
-	}
-
-	/**
-	 * Overrides the buildQuery to return depth information when we're scoping a specific asset.
-	 *
-	 * @param   bool  $overrideLimits  True when we're overriding the query limits
-	 *
-	 * @return  JDatabaseQuery
-	 */
-	public function buildQuery($overrideLimits = false)
-	{
-		if ($this->treeNestedGet)
-		{
-			$this->setBehaviorParam('tableAlias', 'node');
-		}
-
-		$query = parent::buildQuery($overrideLimits);
-
-		if ($this->treeNestedGet)
-		{
-			// This trick allows us to not list each field manually
-			$allFields = array_keys($this->knownFields);
-			$allFields = array_filter($allFields, function ($x) {
-				return !in_array($x, ['lft', 'depth']);
-			});
-
-			$dir = strtoupper($this->getState('filter_order_Dir', null, 'cmd'));
-
-			if (!in_array($dir, ['ASC', 'DESC']))
-			{
-				$dir = 'ASC';
-				$this->setState('filter_order_Dir', $dir);
-			}
-
-			$query
-				->clear('select')
-				->select(array_merge(array_map([$query, 'qn'], array_map(function ($x) {
-					return "node.$x";
-				}, $allFields)), [
-					$query->qn('node.lft'),
-					sprintf('COUNT(%s) - 1', $query->qn('parent.engage_comment_id')) . ' AS ' . $query->qn('depth'),
-				]))
-				->clear('group')
-				->group(array_merge([
-					$query->qn('node.lft'),
-				], array_map([$query, 'qn'], array_map(function ($x) {
-					return "node.$x";
-				}, $allFields))))
-				->clear('order')
-				->order(
-					$query->qn('node.lft') . ' ' . $dir
-				);
-
-		}
-
-		return $query;
-	}
-
-	/** @inheritDoc */
-	public function count()
-	{
-		if (!$this->treeNestedGet)
-		{
-			return parent::count();
-		}
-
-		// Get a "count all" query
-		$db = $this->getDbo();
-
-		$innerQuery = $this->buildQuery(true);
-		$innerQuery->clear('select')->clear('order')->select($db->qn('node.lft'));
-
-		// Run the "before build query" hook and behaviours
-		$this->triggerEvent('onBuildCountQuery', [&$innerQuery]);
-
-		$outerQuery = $db->getQuery(true)
-			->select('COUNT(*)')
-			->from('(' . $innerQuery . ') AS ' . $db->qn('a'));
-
-		$total = $db->setQuery($outerQuery)->loadResult();
-
-		return $total;
-
-	}
-
-	/**
-	 * get() will return the comment tree of the specified asset, in infinite depth.
-	 *
-	 * @param   int  $asset_id  The asset ID to scope the tree for
-	 *
-	 * @return  void
-	 */
-	public function scopeAssetCommentTree(int $asset_id): void
-	{
-		$this->scopeNonRootNodes();
-		$this->where('asset_id', '=', $asset_id);
 	}
 
 	/**
@@ -258,25 +162,6 @@ class Comments extends TreeModel
 		}
 
 		return array_shift($results);
-	}
-
-	/**
-	 * Pre-process the record data before saving them to the database.
-	 *
-	 * Used to remove virtual fields which do not exist in the table.
-	 *
-	 * @return  array  The pre-processed data
-	 */
-	public function recordDataToDatabaseData()
-	{
-		$ret = parent::recordDataToDatabaseData();
-
-		if (array_key_exists('depth', $ret))
-		{
-			unset($ret['depth']);
-		}
-
-		return $ret;
 	}
 
 	/**
@@ -356,23 +241,6 @@ class Comments extends TreeModel
 		}, $conditions);
 
 		$query->where('(' . implode(' OR ', $conditions) . ')');
-	}
-
-	/**
-	 * Binds the 'depth' parameter in a meaningful way for the TreeModel
-	 *
-	 * @param   array  $data  The data array being bound to the object
-	 *
-	 * @return  void
-	 */
-	protected function onBeforeBind(array &$data)
-	{
-		if (!isset($data['depth']))
-		{
-			return;
-		}
-
-		$this->treeDepth = $data['depth'];
 	}
 
 	/**
@@ -480,23 +348,5 @@ class Comments extends TreeModel
 		{
 			return null;
 		}
-	}
-
-	/**
-	 * get() will return all descendants of the root node (even subtrees of subtrees!) but not the root.
-	 *
-	 * @return  void
-	 */
-	private function scopeNonRootNodes(): void
-	{
-		$this->treeNestedGet = true;
-
-		$db = $this->getDbo();
-
-		$fldLft = $db->qn($this->getFieldAlias('lft'));
-		$fldRgt = $db->qn($this->getFieldAlias('rgt'));
-
-		$this->whereRaw($db->qn('node') . '.' . $fldLft . ' >= ' . $db->qn('parent') . '.' . $fldLft);
-		$this->whereRaw($db->qn('node') . '.' . $fldLft . ' <= ' . $db->qn('parent') . '.' . $fldRgt);
 	}
 }
