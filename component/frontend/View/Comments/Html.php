@@ -29,13 +29,6 @@ use WbampHelper_Runtime;
 class Html extends DataHtml
 {
 	/**
-	 * Root node for all comments.
-	 *
-	 * @var Comments
-	 */
-	public $rootNode;
-
-	/**
 	 * The asset ID to display comments for.
 	 *
 	 * @var int
@@ -283,13 +276,6 @@ class Html extends DataHtml
 		$model->limitstart = $this->lists->limitStart;
 		$model->limit      = $this->lists->limit;
 
-		// Get the tree root node
-		$model          = $model->getRoot();
-		$this->rootNode = $model->getClone()->bind(['depth' => 0]);
-
-		// Filter by comments belonging to the specific asset
-		$model->scopeAssetCommentTree($this->assetId);
-
 		// Only show unpublished comments to users who can publish and unpublish comments (and never in AMP views)
 		if (!$this->perms['state'] || $isAMP)
 		{
@@ -297,8 +283,8 @@ class Html extends DataHtml
 		}
 
 		// Populate display items and total item count
-		$this->items     = $model->get(false);
-		$this->itemCount = $model->count();
+		$this->items     = $model->commentTreeSlice($this->lists->limitStart, $this->lists->limit);
+		$this->itemCount = $model->getTreeAwareCount();
 
 		// Populate the pagination object
 		$this->pagination = new Pagination($this->itemCount, $this->lists->limitStart, $this->lists->limit, 'akengage_');

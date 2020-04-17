@@ -43,10 +43,18 @@ use RuntimeException;
  *
  * Relations:
  *
- * @property-read Comments $parent Parent comment, if applicable
+ * @property-read Comments $parent            Parent comment, if applicable
  */
 class Comments extends DataModel
 {
+	/**
+	 * The number of tree-aware comments fetched by commentIDTreeSliceWithDepth
+	 *
+	 * @var   int
+	 * @see   self::commentIDTreeSliceWithDepth
+	 */
+	private $treeAwareCount = null;
+
 	/** @inheritDoc */
 	public function __construct(Container $container = null, array $config = [])
 	{
@@ -60,6 +68,72 @@ class Comments extends DataModel
 		parent::__construct($container, $config);
 
 		$this->hasOne('parent', 'Comments', 'parent_id', 'engage_comment_id');
+
+		$this->addKnownField('depth', 0);
+	}
+
+	public function getTreeAwareCount(): int
+	{
+		if (is_null($this->treeAwareCount))
+		{
+			$this->commentIDTreeSliceWithDepth(0);
+		}
+
+		return $this->treeAwareCount ?? 0;
+	}
+
+	/**
+	 * Tree-aware version of get(), returning a slice of the tree.
+	 *
+	 * @param   int  $start  Starting offset
+	 * @param   int  $limit  Max number of items to retrieve
+	 *
+	 * @return  DataCollection
+	 * @see     self::get
+	 */
+	public function commentTreeSlice(int $start, int $limit): DataCollection
+	{
+		// Get a slice of comment IDs and their depth in tree listing order
+		$idsAndDepth = $this->commentIDTreeSliceWithDepth($start, $limit);
+
+		// No IDs? No items!
+		if (empty($idsAndDepth))
+		{
+			return new DataCollection();
+		}
+
+		// Get the comments in the order specified
+		$items = $this->tmpInstance()
+			->where($this->getIdFieldName(), 'in', array_map('trim', array_keys($idsAndDepth)))
+			->with(['parent'])
+			->orderBy(null)
+			->get(true);
+
+		// Add the level information
+		$items->map(function ($comment) use ($idsAndDepth) {
+			$comment->depth = $idsAndDepth[" " . $comment->getId()] ?? 0;
+		});
+
+		return $items;
+	}
+
+	/**
+	 * Pre-process the record data before saving them to the database.
+	 *
+	 * Used to remove virtual fields which do not exist in the table.
+	 *
+	 * @return  array  The pre-processed data
+	 */
+	public function recordDataToDatabaseData()
+	{
+		$ret = parent::recordDataToDatabaseData();
+
+		if (array_key_exists('depth', $ret))
+		{
+			unset($ret['depth']);
+		}
+
+		return $ret;
 	}
 
 	/** @inheritDoc */
@@ -197,6 +271,117 @@ class Comments extends DataModel
 		} while ($timer->getTimeLeft() > 0.01);
 
 		return $deleted;
+	}
+
+	/**
+	 * Get a slice of comment IDs with depth (level) information.
+	 *
+	 * The comment ID slice is aware of the tree nature of the comments.
+	 *
+	 * Use $start=0 and $limit=null to retrieve the entire tree
+	 *
+	 * @param   int       $start  Starting offset of the slice
+	 * @param   int|null  $limit  Maximum number of elements to retrieve
+	 *
+	 * @return array An array of id => depth
+	 */
+	protected function commentIDTreeSliceWithDepth(int $start, ?int $limit = null): array
+	{
+		// Get all the IDs filtered by the model
+		$db     = $this->getDbo();
+		$query  = $this->buildQuery(true)
+			->clear('select')
+			->select([
+				$db->qn('engage_comment_id'),
+				$db->qn('parent_id'),
+			]);
+		$allIDs = $db->setQuery($query)->loadAssocList('engage_comment_id') ?? [];
+
+		$this->treeAwareCount = 0;
+
+		// No IDs? Empty list!
+		if (empty($allIDs))
+		{
+			return [];
+		}
+
+		// Convert into an ID => parent array
+		$allIDs = array_map(function ($x) {
+			return $x['parent_id'];
+		}, $allIDs);
+
+		$this->treeAwareCount = count($allIDs);
+
+		// Filter out orphan nodes (children of deleted or unpublished comments)
+		$allIDs = array_filter($allIDs, function ($parent_id) use ($allIDs) {
+			return is_null($parent_id) || array_key_exists($parent_id, $allIDs);
+		});
+
+		/**
+		 * Create a tree version of the comments and flatten it out
+		 *
+		 * Starting at parent id NULL forces makeIDTree to start from the first level nodes that have no parents.
+		 */
+		$flattened = $this->flattenIDTree($this->makeIDTree($allIDs, null));
+
+		unset($allIDs);
+
+		return array_slice($flattened, $start, $limit, true);
+	}
+
+	/**
+	 * Utility function that converts an array of id => parent_id into a tree representation of IDs.
+	 *
+	 * @param   array     $allIDs    The source array of id => parent_id entries
+	 * @param   int|null  $parentId  The parent ID to retrieve
+	 *
+	 * @return array
+	 * @see    self::commentIDTreeSliceWithDepth
+	 */
+	protected function makeIDTree(array &$allIDs, ?int $parentId): array
+	{
+		$childIDs = array_keys($allIDs, $parentId);
+
+		if (empty($childIDs))
+		{
+			return [];
+		}
+
+		$ret = [];
+
+		foreach ($childIDs as $thisParentId)
+		{
+			$ret[$thisParentId] = $this->makeIDTree($allIDs, $thisParentId);
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Converts a tree of IDs into a flat array of ID => depth preserving ID order as seen in the tree.
+	 *
+	 * @param   array  $tree         The tree array
+	 * @param   int    $parentLevel  Which level am I currently in
+	 *
+	 * @return array
+	 * @see    self::commentIDTreeSliceWithDepth
+	 * @see    self::makeIDTree
+	 */
+	protected function flattenIDTree(array $tree, $parentLevel = 0): array
+	{
+		$ret = [];
+
+		foreach ($tree as $k => $v)
+		{
+			$ret[" " . $k] = $parentLevel + 1;
+
+			if (!empty($v) && is_array($v))
+			{
+				$ret = array_merge($ret, $this->flattenIDTree($v, $parentLevel + 1));
+			}
+		}
+
+		return $ret;
 	}
 
 	protected function onBeforeBuildQuery(JDatabaseQuery &$query)
