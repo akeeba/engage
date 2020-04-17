@@ -547,17 +547,7 @@ class Comments extends DataController
 			throw new AccessForbidden();
 		}
 
-		// Make sure the asset ID really exists
-		/** @var Asset $assetTable */
-		$assetTable = Table::getInstance('Asset', 'Joomla\\CMS\\Table\\');
-		$loaded     = $assetTable->load($assetId);
-
-		if (!$loaded)
-		{
-			throw new AccessForbidden();
-		}
-
-		// Make sure the asset is published and we have view access to it
+		// Make sure the asset exists, is published and we have view access to it
 		$this->assertAssetAccess($assetId);
 
 		// Return the asset ID
