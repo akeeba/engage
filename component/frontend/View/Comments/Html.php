@@ -393,7 +393,7 @@ class Html extends DataHtml
 			return '';
 		}
 
-		$captcha = $this->rootNode->getCaptcha();
+		$captcha = $this->getModel()->getCaptcha();
 
 		if (is_null($captcha))
 		{
