@@ -258,9 +258,7 @@ final class Meta
 	{
 		if (is_null(self::$container))
 		{
-			self::$container = Container::getInstance('com_engage', [
-				'tempInstance' => true,
-			]);
+			self::$container = Container::getInstance('com_engage');
 		}
 
 		return self::$container;

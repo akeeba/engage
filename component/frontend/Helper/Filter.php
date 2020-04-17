@@ -38,6 +38,11 @@ final class Filter
 	 */
 	private static $filterMode = null;
 
+	/**
+	 * Static cache of Joomla's filter settings
+	 *
+	 * @var array|null
+	 */
 	private static $joomlaFilterSettings = null;
 
 	/**
@@ -149,9 +154,7 @@ final class Filter
 	{
 		if (is_null(self::$container))
 		{
-			self::$container = Container::getInstance('com_engage', [
-				'tempInstance' => true,
-			]);
+			self::$container = Container::getInstance('com_engage');
 		}
 
 		return self::$container;
