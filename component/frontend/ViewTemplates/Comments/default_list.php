@@ -28,20 +28,20 @@ $parentIds     = [0 => 0];
 $parentNames   = [0 => ''];
 
 foreach ($this->getItems() as $comment):
-$parentIds[$comment->getLevel()] = $comment->getId();
-$parentNames[$comment->getLevel()] = $comment->getUser()->name;
+$parentIds[$comment->depth] = $comment->getId();
+$parentNames[$comment->depth] = $comment->getUser()->name;
 // Deeper level comment. Indent with <ol> tags
-if ($comment->getLevel() > $previousLevel):
+if ($comment->depth > $previousLevel):
 	?>
-	<?php for ($level = $previousLevel + 1; $level <= $comment->getLevel(); $level++): ?>
+	<?php for ($level = $previousLevel + 1; $level <= $comment->depth; $level++): ?>
 	<ol class="akengage-comment-list akengage-comment-list--level<?= $level ?>">
 <?php endfor; ?>
 <?php // Shallower level comment. Outdent with </ol> tags
-elseif ($comment->getLevel() < $previousLevel): ?>
+elseif ($comment->depth < $previousLevel): ?>
 	<?php if ($openListItem): $openListItem--; ?>
 		</li>
 	<?php endif; ?>
-	<?php for ($level = $previousLevel - 1; $level >= $comment->getLevel(); $level--): ?>
+	<?php for ($level = $previousLevel - 1; $level >= $comment->depth; $level--): ?>
 		</ol>
 		<?php if ($openListItem): $openListItem--; ?>
 			</li>
@@ -54,7 +54,7 @@ else: ?>
 <?php endif; ?>
 
 <?php
-$previousLevel = $comment->getLevel();
+$previousLevel = $comment->depth;
 $user          = $comment->getUser();
 $avatar        = $comment->getAvatarURL();
 $profile       = $comment->getProfileURL();
@@ -178,8 +178,8 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 			<div class="akengage-comment-reply">
 				<?php // You can reply to $this->maxLevel - 1 level comments only. Replies to deeper nested comments are to the $this->maxLevel - 1 level parent. ?>
 				<button class="akengage-comment-reply-btn"
-						data-akengageid="<?= ($comment->getLevel() < $this->maxLevel) ? $comment->getId() : $parentIds[$this->maxLevel - 1] ?>"
-						data-akengagereplyto="<?= $this->escape(($comment->getLevel() < $this->maxLevel) ? $user->name : $parentNames[$this->maxLevel - 1]) ?>"
+						data-akengageid="<?= ($comment->depth < $this->maxLevel) ? $comment->getId() : $parentIds[$this->maxLevel - 1] ?>"
+						data-akengagereplyto="<?= $this->escape(($comment->depth < $this->maxLevel) ? $user->name : $parentNames[$this->maxLevel - 1]) ?>"
 				>
 					<?= Text::_('COM_ENGAGE_COMMENTS_BTN_REPLY') ?>
 				</button>

@@ -28,20 +28,20 @@ $parentIds     = [0 => 0];
 $parentNames   = [0 => ''];
 
 foreach ($this->getItems() as $comment):
-$parentIds[$comment->getLevel()] = $comment->getId();
-$parentNames[$comment->getLevel()] = $comment->getUser()->name;
+$parentIds[$comment->depth] = $comment->getId();
+$parentNames[$comment->depth] = $comment->getUser()->name;
 // Deeper level comment. Indent with <ul> tags
-if ($comment->getLevel() > $previousLevel):
+if ($comment->depth > $previousLevel):
 	?>
-	<?php for ($level = $previousLevel + 1; $level <= $comment->getLevel(); $level++): ?>
+	<?php for ($level = $previousLevel + 1; $level <= $comment->depth; $level++): ?>
 	<ul class="akengage-comment-list akengage-comment-list--level<?= $level ?>">
 <?php endfor; ?>
 <?php // Shallower level comment. Outdent with </ul> tags
-elseif ($comment->getLevel() < $previousLevel): ?>
+elseif ($comment->depth < $previousLevel): ?>
 	<?php if ($openListItem): $openListItem--; ?>
 		</li>
 	<?php endif; ?>
-	<?php for ($level = $previousLevel - 1; $level >= $comment->getLevel(); $level--): ?>
+	<?php for ($level = $previousLevel - 1; $level >= $comment->depth; $level--): ?>
 		</ul>
 		<?php if ($openListItem): $openListItem--; ?>
 			</li>
@@ -54,7 +54,7 @@ else: ?>
 <?php endif; ?>
 
 <?php
-$previousLevel = $comment->getLevel();
+$previousLevel = $comment->depth;
 $user          = $comment->getUser();
 $avatar        = $comment->getAvatarURL(32);
 $profile       = $comment->getProfileURL();

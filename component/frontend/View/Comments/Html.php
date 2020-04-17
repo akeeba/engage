@@ -207,7 +207,7 @@ class Html extends DataHtml
 	 */
 	public function rebasePageLink(string $link): string
 	{
-		$uri = Uri::getInstance($link);
+		$uri   = Uri::getInstance($link);
 		$start = $uri->getVar('akengage_limitstart', null);
 		$limit = $uri->getVar('akengage_limit', null);
 
@@ -350,23 +350,26 @@ class Html extends DataHtml
 	 */
 	protected function ensureHasParentInfo(Comments $comment, array &$parentIds, array &$parentNames): void
 	{
-		$parentLevel = $comment->getLevel() - 1;
+		$parentLevel = $comment->depth - 1;
 
 		if (isset($parentIds[$parentLevel]) && isset($parentNames[$parentLevel]))
 		{
 			return;
 		}
 
-		$myComment = $comment->getClone();
+		$myComment = $comment;
 		$maxLevel  = (int) $this->container->params->get('max_level', 3);
 		$maxLevel  = max($maxLevel, 1);
 
 		do
 		{
-			$myComment                           = $myComment->getParent();
-			$parentNames[$myComment->getLevel()] = $myComment->getUser()->name;
-			$parentIds[$myComment->getLevel()]   = $myComment->getId();
-		} while ($myComment->getLevel() > ($maxLevel - 1));
+			$newDepth  = $myComment->depth - 1;
+			$myComment = $myComment->getClone()->find($myComment->parent_id);
+			$myComment->depth = $newDepth;
+
+			$parentNames[$myComment->depth] = $myComment->getUser()->name;
+			$parentIds[$myComment->depth]   = $myComment->getId();
+		} while ($myComment->depth > ($maxLevel - 1));
 	}
 
 	/**

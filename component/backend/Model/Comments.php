@@ -44,6 +44,10 @@ use RuntimeException;
  * Relations:
  *
  * @property-read Comments $parent            Parent comment, if applicable
+ *
+ * Calculated columns:
+ *
+ * @property int           $depth             Comment level
  */
 class Comments extends DataModel
 {
