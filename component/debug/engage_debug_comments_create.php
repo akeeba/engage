@@ -242,6 +242,8 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 			if ($meta['parameters']->get('comments_enabled', '1') == 0)
 			{
 				$this->out('  I will create no comments for this article.');
+
+				continue;
 			}
 
 			$numComments = $this->createTempInfo($assetID, $meta);
@@ -415,14 +417,10 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 					$info['parent_id'] = $db->setQuery($infoQ)->loadResult();
 				}
 
-				$paragraphs = array_map(function ($p) {
-					return "<p>$p</p>";
-				}, $faker->paragraphs($faker->numberBetween(1, $this->maxParagraphs)));
-
 				$cModel->reset()->bind([
 					'asset_id'   => $info['asset_id'],
 					'enabled'    => 1,
-					'body'       => implode("\n", $paragraphs),
+					'body'       => $this->getCommentText($faker),
 					'name'       => $faker->name,
 					'email'      => $faker->email,
 					'ip'         => $faker->ipv4,
@@ -633,6 +631,25 @@ MySQL;
 		$db = $this->container->db;
 		$db->dropTable('#__engage_temp_info', true);
 	}
+
+	/**
+	 * @param   FakerGenerator  $faker
+	 *
+	 * @return  string[]
+	 */
+	private function getCommentText(FakerGenerator $faker): string
+	{
+		$numParagraphs = $faker->biasedNumberBetween(0, $this->maxParagraphs, [Biased::class, 'linearLow']);
+
+		if ($numParagraphs = 0)
+		{
+			return "<p>" . $faker->sentences($this->faker->numberBetween(1, 3), true) . "</p>";
+		}
+
+		return implode("\n", array_map(function ($p) {
+			return "<p>$p</p>";
+		}, $faker->paragraphs($numParagraphs)));
+}
 }
 
 try
