@@ -641,9 +641,11 @@ MySQL;
 	{
 		$numParagraphs = $faker->biasedNumberBetween(0, $this->maxParagraphs, [Biased::class, 'linearLow']);
 
-		if ($numParagraphs = 0)
+		if ($numParagraphs == 0)
 		{
-			return "<p>" . $faker->sentences($this->faker->numberBetween(1, 3), true) . "</p>";
+			$numSentences = $this->faker->numberBetween(1, 3);
+
+			return "<p>" . implode(". ", $faker->sentences($numSentences, false)) . ".</p>";
 		}
 
 		return implode("\n", array_map(function ($p) {
