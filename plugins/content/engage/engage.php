@@ -659,7 +659,6 @@ class plgContentEngage extends CMSPlugin
 			$params             = new Registry($cat->params);
 			$hasInheritedParams = false;
 
-			// If I still have inherited parameters go through the component parameters
 			foreach ($ret as $k => $v)
 			{
 				if (!$this->isUseGlobal($v))
@@ -676,7 +675,7 @@ class plgContentEngage extends CMSPlugin
 				return new Registry($ret);
 			}
 
-			if ($hasInheritedParams || empty($cat->parent_id))
+			if (empty($cat->parent_id))
 			{
 				break;
 			}
