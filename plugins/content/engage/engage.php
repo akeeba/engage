@@ -369,20 +369,34 @@ class plgContentEngage extends CMSPlugin
 	{
 		if (empty($this->container))
 		{
-			$this->container = Container::getInstance('com_engage', [
-				'tempInstance' => true,
-				'input'        => [
-					'view'                => 'Comments',
-					'task'                => 'browse',
-					'asset_id'            => 0,
-					'access'              => 0,
-					'akengage_limitstart' => (new Input())->getInt('akengage_limitstart', 0),
-					'layout'              => null,
-					'tpl'                 => null,
-					'tmpl'                => null,
-					'format'              => 'html',
-				],
-			], 'site');
+			// Get the container singleton instance
+			$this->container = Container::getInstance('com_engage');
+
+			/**
+			 * Preload the parameters, if they are not already loaded.
+			 *
+			 * This saves a query to the database when the component tries to access its parameters. If I were to get
+			 * the parameters on the clone (or a temporary instance, which *is* a clone) the component would craete a
+			 * new instance of the Params object which makes it run yet another query against the #__extensions table
+			 * to fetch the parameters.
+			 */
+			$this->container->params->getParams();
+
+			// Create a clone of the container I can modify freely
+			$this->container = clone $this->container;
+
+			// Manipulate its input data
+			$this->container->input->setData([
+				'view'                => 'Comments',
+				'task'                => 'browse',
+				'asset_id'            => 0,
+				'access'              => 0,
+				'akengage_limitstart' => (new Input())->getInt('akengage_limitstart', 0),
+				'layout'              => null,
+				'tpl'                 => null,
+				'tmpl'                => null,
+				'format'              => 'html',
+			]);
 		}
 
 		return $this->container;
@@ -771,6 +785,15 @@ class plgContentEngage extends CMSPlugin
 		// I need to run. Save the current timestamp in the component parameters.
 		$cParams->set('spam_lastRun', time());
 		$cParams->save();
+
+		/**
+		 * I have just modified the component's parameters but I only did so in a temporary clone instance of the
+		 * container. The singleton container already has a Params object which is unaware of my changes. Therefore I
+		 * need to tell it to reload the parameters. If I don't do that the 'spam_lastRun' key will be overwritten
+		 * should the singleton instance save the parameters and I'd end up running this expensive operation all over
+		 * again before it's time to do it.
+		 */
+		Container::getInstance('com_engage')->params->reload();
 
 		// Get the model and delete comments. No problem if we fail for any reason.
 
