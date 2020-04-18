@@ -822,7 +822,7 @@ class plgContentEngage extends CMSPlugin
 		$authorUser                     = self::getContainer()->platform->getUser($row->created_by);
 		$metaKey                        = md5($row->asset_id . '_' . ($loadParameters ? 'with' : 'without') . '_parameters');
 
-		if (array_key_exists($metaKey, $this->cachedArticles) && !$force)
+		if (array_key_exists($metaKey, $this->cachedArticles) && !empty($this->cachedArticles[$metaKey]) && !$force)
 		{
 			return;
 		}
