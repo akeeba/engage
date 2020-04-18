@@ -67,6 +67,13 @@ class plgContentEngage extends CMSPlugin
 	private $parameterDefaults = [];
 
 	/**
+	 * Cache of parameters per article ID
+	 *
+	 * @var  array
+	 */
+	private $parametersCache = [];
+
+	/**
 	 * Constructor
 	 *
 	 * @param   object  &$subject  The object to observe
@@ -131,6 +138,15 @@ class plgContentEngage extends CMSPlugin
 		{
 			return '';
 		}
+
+		/**
+		 * This neat trick allows me to speed up meta queries on the article.
+		 *
+		 * When this plugin event is called Joomla has already loaded the article for us. I can use this object to
+		 * populate the article meta cache so next time I query the article meta I don't have to go through Joomla's
+		 * article model which saves me a very expensive query.
+		 */
+		$this->cacheArticleRow($row, true);
 
 		// Am I supposed to display comments?
 		$commentParams = $this->getParametersForArticle($row);
@@ -353,20 +369,34 @@ class plgContentEngage extends CMSPlugin
 	{
 		if (empty($this->container))
 		{
-			$this->container = Container::getInstance('com_engage', [
-				'tempInstance' => true,
-				'input'        => [
-					'view'                => 'Comments',
-					'task'                => 'browse',
-					'asset_id'            => 0,
-					'access'              => 0,
-					'akengage_limitstart' => (new Input())->getInt('akengage_limitstart', 0),
-					'layout'              => null,
-					'tpl'                 => null,
-					'tmpl'                => null,
-					'format'              => 'html',
-				],
-			], 'site');
+			// Get the container singleton instance
+			$this->container = Container::getInstance('com_engage');
+
+			/**
+			 * Preload the parameters, if they are not already loaded.
+			 *
+			 * This saves a query to the database when the component tries to access its parameters. If I were to get
+			 * the parameters on the clone (or a temporary instance, which *is* a clone) the component would craete a
+			 * new instance of the Params object which makes it run yet another query against the #__extensions table
+			 * to fetch the parameters.
+			 */
+			$this->container->params->getParams();
+
+			// Create a clone of the container I can modify freely
+			$this->container = clone $this->container;
+
+			// Manipulate its input data
+			$this->container->input->setData([
+				'view'                => 'Comments',
+				'task'                => 'browse',
+				'asset_id'            => 0,
+				'access'              => 0,
+				'akengage_limitstart' => (new Input())->getInt('akengage_limitstart', 0),
+				'layout'              => null,
+				'tpl'                 => null,
+				'tmpl'                => null,
+				'format'              => 'html',
+			]);
 		}
 
 		return $this->container;
@@ -502,26 +532,7 @@ class plgContentEngage extends CMSPlugin
 			return null;
 		}
 
-		$authorUser = self::getContainer()->platform->getUser($row->created_by);
-
-		$this->cachedArticles[$metaKey] = (object) [
-			'id'              => $row->id,
-			'asset_id'        => $row->asset_id,
-			'title'           => $row->title,
-			'alias'           => $row->alias,
-			'state'           => $row->state,
-			'catid'           => $row->catid,
-			'attribs'         => $row->attribs,
-			'publish_up'      => $row->publish_up,
-			'publish_down'    => $row->publish_down,
-			'access'          => $row->access,
-			'category_title'  => $row->category_title ?? '',
-			'category_alias'  => $row->category_alias ?? 0,
-			'category_access' => $row->category_access ?? $row->access,
-			'author_name'     => !empty($row->created_by_alias) ? $row->created_by_alias : $authorUser->name,
-			'author_email'    => $authorUser->email,
-			'parameters'      => $loadParameters ? $this->getParametersForArticle($row) : new Registry(),
-		];
+		$this->cacheArticleRow($row, $loadParameters);
 
 		return $this->cachedArticles[$metaKey];
 	}
@@ -603,7 +614,7 @@ class plgContentEngage extends CMSPlugin
 	}
 
 	/**
-	 * Get the comment parameters for an article.
+	 * Get the comment parameters for an article. This method uses caching whereas getParametersForArticle_Real doesn't.
 	 *
 	 * Inherited parameters will be retrieved from the category. If the category has inherited parameters they will
 	 * retrieved from its parent category. If we exhaust parent categories we will retrieve the inherited parameters
@@ -615,6 +626,28 @@ class plgContentEngage extends CMSPlugin
 	 * @return  Registry
 	 */
 	private function getParametersForArticle($row): Registry
+	{
+		if (!array_key_exists($row->id, $this->parametersCache))
+		{
+			$this->parametersCache[$row->id] = $this->getParametersForArticle_Real($row);
+		}
+
+		return $this->parametersCache[$row->id];
+	}
+
+	/**
+	 * Get the comment parameters for an article.
+	 *
+	 * Inherited parameters will be retrieved from the category. If the category has inherited parameters they will
+	 * retrieved from its parent category. If we exhaust parent categories we will retrieve the inherited parameters
+	 * from the component configuration. If the component configuration values are not yet set (e.g. the user has not
+	 * yet saved the component's Options page) we will use the default values defined in config.xml.
+	 *
+	 * @param   object  $row  The article to get the parameters for
+	 *
+	 * @return  Registry
+	 */
+	private function getParametersForArticle_Real($row): Registry
 	{
 		// Create a comment parameters array consisting of null values
 		$parametersKeys = $this->getParametersKeys();
@@ -753,6 +786,15 @@ class plgContentEngage extends CMSPlugin
 		$cParams->set('spam_lastRun', time());
 		$cParams->save();
 
+		/**
+		 * I have just modified the component's parameters but I only did so in a temporary clone instance of the
+		 * container. The singleton container already has a Params object which is unaware of my changes. Therefore I
+		 * need to tell it to reload the parameters. If I don't do that the 'spam_lastRun' key will be overwritten
+		 * should the singleton instance save the parameters and I'd end up running this expensive operation all over
+		 * again before it's time to do it.
+		 */
+		Container::getInstance('com_engage')->params->reload();
+
 		// Get the model and delete comments. No problem if we fail for any reason.
 
 		try
@@ -766,5 +808,42 @@ class plgContentEngage extends CMSPlugin
 		{
 			return;
 		}
+	}
+
+	/**
+	 * @param          $row
+	 * @param   bool   $loadParameters
+	 * @param   bool   $force
+	 *
+	 * @return  void
+	 */
+	private function cacheArticleRow($row, bool $loadParameters, bool $force = false): void
+	{
+		$authorUser                     = self::getContainer()->platform->getUser($row->created_by);
+		$metaKey                        = md5($row->asset_id . '_' . ($loadParameters ? 'with' : 'without') . '_parameters');
+
+		if (array_key_exists($metaKey, $this->cachedArticles) && !empty($this->cachedArticles[$metaKey]) && !$force)
+		{
+			return;
+		}
+
+		$this->cachedArticles[$metaKey] = (object) [
+			'id'              => $row->id,
+			'asset_id'        => $row->asset_id,
+			'title'           => $row->title,
+			'alias'           => $row->alias,
+			'state'           => $row->state,
+			'catid'           => $row->catid,
+			'attribs'         => $row->attribs,
+			'publish_up'      => $row->publish_up,
+			'publish_down'    => $row->publish_down,
+			'access'          => $row->access,
+			'category_title'  => $row->category_title ?? '',
+			'category_alias'  => $row->category_alias ?? 0,
+			'category_access' => $row->category_access ?? $row->access,
+			'author_name'     => !empty($row->created_by_alias) ? $row->created_by_alias : $authorUser->name,
+			'author_email'    => $authorUser->email,
+			'parameters'      => $loadParameters ? $this->getParametersForArticle($row) : new Registry(),
+		];
 	}
 }

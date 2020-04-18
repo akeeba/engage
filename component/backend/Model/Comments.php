@@ -11,8 +11,8 @@ use DateInterval;
 use Exception;
 use FOF30\Container\Container;
 use FOF30\Date\Date;
+use FOF30\Model\DataModel;
 use FOF30\Model\DataModel\Collection as DataCollection;
-use FOF30\Model\TreeModel;
 use FOF30\Timer\Timer;
 use JDatabaseQuery;
 use Joomla\CMS\Language\Text;
@@ -23,25 +23,42 @@ use RuntimeException;
  * Comments model
  * @package Akeeba\Engage\Admin\Model
  *
- * @property int         $engage_comment_id Primary key
- * @property int         $asset_id          Asset ID the comment belongs to
- * @property string      $body              Comment body
- * @property string|null $name              Commenter's name
- * @property string|null $email             Commenter's email address
- * @property string      $ip                IP address used to file the comment
- * @property string      $user_agent        The User Agent string used to file the comment
- * @property int         $enabled           Is this comment published?
+ * @property int           $engage_comment_id Primary key
+ * @property int           $parent_id         Parent comment ID
+ * @property int           $asset_id          Asset ID the comment belongs to
+ * @property string        $body              Comment body
+ * @property string|null   $name              Commenter's name
+ * @property string|null   $email             Commenter's email address
+ * @property string        $ip                IP address used to file the comment
+ * @property string        $user_agent        The User Agent string used to file the comment
+ * @property int           $enabled           Is this comment published?
  *
  * Filters:
  *
+ * @method $this parent_id(int $parent_id) Filter by parent ID
  * @method $this asset_id(int $asset_id) Filter by asset
- * @method $this nested(bool $nested) Should I return nested results by default?
  * @method $this commenter(string $partial) Partial email or name to search a commenter for
  * @method $this ip(string $ip) Search by IP address
  * @method $this enabled(int $enabled) Search by published / unpublished comment
+ *
+ * Relations:
+ *
+ * @property-read Comments $parent            Parent comment, if applicable
+ *
+ * Calculated columns:
+ *
+ * @property int           $depth             Comment level
  */
-class Comments extends TreeModel
+class Comments extends DataModel
 {
+	/**
+	 * The number of tree-aware comments fetched by commentIDTreeSliceWithDepth
+	 *
+	 * @var   int
+	 * @see   self::commentIDTreeSliceWithDepth
+	 */
+	private $treeAwareCount = null;
+
 	/** @inheritDoc */
 	public function __construct(Container $container = null, array $config = [])
 	{
@@ -52,19 +69,102 @@ class Comments extends TreeModel
 			$config['behaviours'][] = 'filters';
 		}
 
-		$config['fieldsSkipChecks'] = [
-			'lft', 'rgt',
-		];
-
 		parent::__construct($container, $config);
 
+		$this->hasOne('parent', 'Comments', 'parent_id', 'engage_comment_id');
+
 		$this->addKnownField('depth', 0);
+	}
+
+	public function getTreeAwareCount(): int
+	{
+		if (is_null($this->treeAwareCount))
+		{
+			$this->commentIDTreeSliceWithDepth(0);
+		}
+
+		return $this->treeAwareCount ?? 0;
+	}
+
+	/**
+	 * Tree-aware version of get(), returning a slice of the tree.
+	 *
+	 * @param   int  $start  Starting offset
+	 * @param   int  $limit  Max number of items to retrieve
+	 *
+	 * @return  DataCollection
+	 * @see     self::get
+	 */
+	public function commentTreeSlice(int $start, int $limit): DataCollection
+	{
+		// Get a slice of comment IDs and their depth in tree listing order
+		$idsAndDepth = $this->commentIDTreeSliceWithDepth($start, $limit);
+
+		// No IDs? No items!
+		if (empty($idsAndDepth))
+		{
+			return new DataCollection();
+		}
+
+		// Get the comments with the IDs specified. They are NOT in order.
+		$items = $this->tmpInstance()
+			->where($this->getIdFieldName(), 'in', array_map('trim', array_keys($idsAndDepth)))
+			->with(['parent'])
+			->orderBy(null)
+			->get(true);
+
+		// Create a new collection
+		$ret = new DataCollection();
+
+		/**
+		 * Distribute the items to the collection in the order they SHOULD appear.
+		 *
+		 * Magic trick: since the collection internally has an array consisting entirely of objects, creating a second
+		 * collection referencing the same objects has minimal overhead. The reason is that objects are stored in arrays
+		 * as references. Adding the same object to two arrays only adds its reference to the array, without copying the
+		 * actual object. This helps keep memory pressure low while we are rearranging our items in an arbitrary order.
+		 * Neat, huh?
+		 */
+		foreach ($idsAndDepth as $id => $depth)
+		{
+			$id = (int) $id;
+
+			if (!$items->has($id))
+			{
+				continue;
+			}
+
+			// When adding the item to the collection we also need to set its level information.
+			$ret->add($items->get($id)->bind([
+				'depth' => $depth
+			]));
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Pre-process the record data before saving them to the database.
+	 *
+	 * Used to remove virtual fields which do not exist in the table.
+	 *
+	 * @return  array  The pre-processed data
+	 */
+	public function recordDataToDatabaseData()
+	{
+		$ret = parent::recordDataToDatabaseData();
+
+		if (array_key_exists('depth', $ret))
+		{
+			unset($ret['depth']);
+		}
+
+		return $ret;
 	}
 
 	/** @inheritDoc */
 	public function check()
 	{
-
 		parent::check();
 
 		// Make sure we have EITHER a user OR both an email and full name
@@ -91,102 +191,6 @@ class Comments extends TreeModel
 		{
 			throw new RuntimeException(Text::sprintf('COM_ENGAGE_COMMENTS_ERR_EMAIL_IN_USE', $this->email));
 		}
-	}
-
-	/**
-	 * Overrides the buildQuery to return depth information when we're scoping a specific asset.
-	 *
-	 * @param   bool  $overrideLimits  True when we're overriding the query limits
-	 *
-	 * @return  JDatabaseQuery
-	 */
-	public function buildQuery($overrideLimits = false)
-	{
-		if ($this->treeNestedGet)
-		{
-			$this->setBehaviorParam('tableAlias', 'node');
-		}
-
-		$query = parent::buildQuery($overrideLimits);
-
-		if ($this->treeNestedGet)
-		{
-			// This trick allows us to not list each field manually
-			$allFields = array_keys($this->knownFields);
-			$allFields = array_filter($allFields, function ($x) {
-				return !in_array($x, ['lft', 'depth']);
-			});
-
-			$dir = strtoupper($this->getState('filter_order_Dir', null, 'cmd'));
-
-			if (!in_array($dir, ['ASC', 'DESC']))
-			{
-				$dir = 'ASC';
-				$this->setState('filter_order_Dir', $dir);
-			}
-
-			$query
-				->clear('select')
-				->select(array_merge(array_map([$query, 'qn'], array_map(function ($x) {
-					return "node.$x";
-				}, $allFields)), [
-					$query->qn('node.lft'),
-					sprintf('COUNT(%s) - 1', $query->qn('parent.engage_comment_id')) . ' AS ' . $query->qn('depth'),
-				]))
-				->clear('group')
-				->group(array_merge([
-					$query->qn('node.lft'),
-				], array_map([$query, 'qn'], array_map(function ($x) {
-					return "node.$x";
-				}, $allFields))))
-				->clear('order')
-				->order(
-					$query->qn('node.lft') . ' ' . $dir
-				);
-
-		}
-
-		return $query;
-	}
-
-	/** @inheritDoc */
-	public function count()
-	{
-		if (!$this->treeNestedGet)
-		{
-			return parent::count();
-		}
-
-		// Get a "count all" query
-		$db = $this->getDbo();
-
-		$innerQuery = $this->buildQuery(true);
-		$innerQuery->clear('select')->clear('order')->select($db->qn('node.lft'));
-
-		// Run the "before build query" hook and behaviours
-		$this->triggerEvent('onBuildCountQuery', [&$innerQuery]);
-
-		$outerQuery = $db->getQuery(true)
-			->select('COUNT(*)')
-			->from('(' . $innerQuery . ') AS ' . $db->qn('a'));
-
-		$total = $db->setQuery($outerQuery)->loadResult();
-
-		return $total;
-
-	}
-
-	/**
-	 * get() will return the comment tree of the specified asset, in infinite depth.
-	 *
-	 * @param   int  $asset_id  The asset ID to scope the tree for
-	 *
-	 * @return  void
-	 */
-	public function scopeAssetCommentTree(int $asset_id): void
-	{
-		$this->scopeNonRootNodes();
-		$this->where('asset_id', '=', $asset_id);
 	}
 
 	/**
@@ -261,25 +265,6 @@ class Comments extends TreeModel
 	}
 
 	/**
-	 * Pre-process the record data before saving them to the database.
-	 *
-	 * Used to remove virtual fields which do not exist in the table.
-	 *
-	 * @return  array  The pre-processed data
-	 */
-	public function recordDataToDatabaseData()
-	{
-		$ret = parent::recordDataToDatabaseData();
-
-		if (array_key_exists('depth', $ret))
-		{
-			unset($ret['depth']);
-		}
-
-		return $ret;
-	}
-
-	/**
 	 * Automatically deletes obsolete spam comments older than this many days, using an upper execution time limit.
 	 *
 	 * If the $maxDays == 0 nothing is deleted; we return without querying the database.
@@ -312,6 +297,117 @@ class Comments extends TreeModel
 		} while ($timer->getTimeLeft() > 0.01);
 
 		return $deleted;
+	}
+
+	/**
+	 * Get a slice of comment IDs with depth (level) information.
+	 *
+	 * The comment ID slice is aware of the tree nature of the comments.
+	 *
+	 * Use $start=0 and $limit=null to retrieve the entire tree
+	 *
+	 * @param   int       $start  Starting offset of the slice
+	 * @param   int|null  $limit  Maximum number of elements to retrieve
+	 *
+	 * @return array An array of id => depth
+	 */
+	public function commentIDTreeSliceWithDepth(int $start, ?int $limit = null): array
+	{
+		// Get all the IDs filtered by the model
+		$db     = $this->getDbo();
+		$query  = $this->buildQuery(true)
+			->clear('select')
+			->select([
+				$db->qn('engage_comment_id'),
+				$db->qn('parent_id'),
+			]);
+		$allIDs = $db->setQuery($query)->loadAssocList('engage_comment_id') ?? [];
+
+		$this->treeAwareCount = 0;
+
+		// No IDs? Empty list!
+		if (empty($allIDs))
+		{
+			return [];
+		}
+
+		// Convert into an ID => parent array
+		$allIDs = array_map(function ($x) {
+			return $x['parent_id'];
+		}, $allIDs);
+
+		$this->treeAwareCount = count($allIDs);
+
+		// Filter out orphan nodes (children of deleted or unpublished comments)
+		$allIDs = array_filter($allIDs, function ($parent_id) use ($allIDs) {
+			return is_null($parent_id) || array_key_exists($parent_id, $allIDs);
+		});
+
+		/**
+		 * Create a tree version of the comments and flatten it out
+		 *
+		 * Starting at parent id NULL forces makeIDTree to start from the first level nodes that have no parents.
+		 */
+		$flattened = $this->flattenIDTree($this->makeIDTree($allIDs, null));
+
+		unset($allIDs);
+
+		return array_slice($flattened, $start, $limit, true);
+	}
+
+	/**
+	 * Utility function that converts an array of id => parent_id into a tree representation of IDs.
+	 *
+	 * @param   array     $allIDs    The source array of id => parent_id entries
+	 * @param   int|null  $parentId  The parent ID to retrieve
+	 *
+	 * @return array
+	 * @see    self::commentIDTreeSliceWithDepth
+	 */
+	protected function makeIDTree(array &$allIDs, ?int $parentId): array
+	{
+		$childIDs = array_keys($allIDs, $parentId);
+
+		if (empty($childIDs))
+		{
+			return [];
+		}
+
+		$ret = [];
+
+		foreach ($childIDs as $thisParentId)
+		{
+			$ret[$thisParentId] = $this->makeIDTree($allIDs, $thisParentId);
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Converts a tree of IDs into a flat array of ID => depth preserving ID order as seen in the tree.
+	 *
+	 * @param   array  $tree         The tree array
+	 * @param   int    $parentLevel  Which level am I currently in
+	 *
+	 * @return array
+	 * @see    self::commentIDTreeSliceWithDepth
+	 * @see    self::makeIDTree
+	 */
+	protected function flattenIDTree(array $tree, $parentLevel = 0): array
+	{
+		$ret = [];
+
+		foreach ($tree as $k => $v)
+		{
+			$ret[" " . $k] = $parentLevel + 1;
+
+			if (!empty($v) && is_array($v))
+			{
+				$ret = array_merge($ret, $this->flattenIDTree($v, $parentLevel + 1));
+			}
+		}
+
+		return $ret;
 	}
 
 	protected function onBeforeBuildQuery(JDatabaseQuery &$query)
@@ -359,20 +455,23 @@ class Comments extends TreeModel
 	}
 
 	/**
-	 * Binds the 'depth' parameter in a meaningful way for the TreeModel
+	 * Deletes all children comment on comment deletion
 	 *
-	 * @param   array  $data  The data array being bound to the object
-	 *
-	 * @return  void
+	 * @param   mixed  $id  Primary key of the comment being deleted.
 	 */
-	protected function onBeforeBind(array &$data)
+	protected function onAfterDelete(&$id)
 	{
-		if (!isset($data['depth']))
+		/** @var self $model */
+		$model = $this->tmpInstance();
+
+		try
+		{
+			$model->parent_id($id)->get(true)->delete();
+		}
+		catch (Exception $e)
 		{
 			return;
 		}
-
-		$this->treeDepth = $data['depth'];
 	}
 
 	/**
@@ -480,23 +579,5 @@ class Comments extends TreeModel
 		{
 			return null;
 		}
-	}
-
-	/**
-	 * get() will return all descendants of the root node (even subtrees of subtrees!) but not the root.
-	 *
-	 * @return  void
-	 */
-	private function scopeNonRootNodes(): void
-	{
-		$this->treeNestedGet = true;
-
-		$db = $this->getDbo();
-
-		$fldLft = $db->qn($this->getFieldAlias('lft'));
-		$fldRgt = $db->qn($this->getFieldAlias('rgt'));
-
-		$this->whereRaw($db->qn('node') . '.' . $fldLft . ' >= ' . $db->qn('parent') . '.' . $fldLft);
-		$this->whereRaw($db->qn('node') . '.' . $fldLft . ' <= ' . $db->qn('parent') . '.' . $fldRgt);
 	}
 }

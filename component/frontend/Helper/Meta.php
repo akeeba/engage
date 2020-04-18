@@ -204,7 +204,6 @@ final class Meta
 
 		/** @var Comments $model */
 		$model = self::getContainer()->factory->model('Comments')->tmpInstance();
-		$model->scopeAssetCommentTree($asset_id);
 		$model->asset_id($asset_id);
 
 		if (!$asManager)
@@ -212,10 +211,7 @@ final class Meta
 			$model->enabled(1);
 		}
 
-		$query = $model->buildQuery(true);
-		$query->clear('select')->select($query->qn('node.engage_comment_id'));
-
-		self::$commentIDsPerAsset[$asset_id] = self::getContainer()->db->setQuery($query)->loadColumn() ?? [];
+		self::$commentIDsPerAsset[$asset_id] = array_keys($model->commentIDTreeSliceWithDepth(0, null));
 
 		return self::$commentIDsPerAsset[$asset_id];
 	}
@@ -258,9 +254,7 @@ final class Meta
 	{
 		if (is_null(self::$container))
 		{
-			self::$container = Container::getInstance('com_engage', [
-				'tempInstance' => true,
-			]);
+			self::$container = Container::getInstance('com_engage');
 		}
 
 		return self::$container;

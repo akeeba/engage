@@ -23,9 +23,8 @@
             <condition type="missing" value="" />
             <query><![CDATA[
 CREATE TABLE `#__engage_comments` (
-  `engage_comment_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `lft` int(10) unsigned NOT NULL,
-  `rgt` int(10) unsigned NOT NULL,
+  `engage_comment_id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` BIGINT(20) unsigned NULL,
   `asset_id` int(10) unsigned NOT NULL,
   `body` longtext NOT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -38,10 +37,8 @@ CREATE TABLE `#__engage_comments` (
   `modified_on` datetime DEFAULT NULL,
   `modified_by` int(11) DEFAULT NULL,
   PRIMARY KEY (`engage_comment_id`),
-  KEY `#__engage_comments_lft` (`lft`),
-  KEY `#__engage_comments_rgt` (`rgt`),
-  KEY `#__engage_comments_nested` (`lft`,`rgt`),
-  KEY `#__engage_comments_asset` (`asset_id`)
+  KEY `#__engage_comments_asset` (`asset_id`),
+  KEY `#__engage_comments_created_on` (`created_on` DESC)
 ) DEFAULT COLLATE utf8_general_ci COMMENT='Content comments';
             ]]></query>
         </action>

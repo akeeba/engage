@@ -29,13 +29,6 @@ use WbampHelper_Runtime;
 class Html extends DataHtml
 {
 	/**
-	 * Root node for all comments.
-	 *
-	 * @var Comments
-	 */
-	public $rootNode;
-
-	/**
 	 * The asset ID to display comments for.
 	 *
 	 * @var int
@@ -214,7 +207,7 @@ class Html extends DataHtml
 	 */
 	public function rebasePageLink(string $link): string
 	{
-		$uri = Uri::getInstance($link);
+		$uri   = Uri::getInstance($link);
 		$start = $uri->getVar('akengage_limitstart', null);
 		$limit = $uri->getVar('akengage_limit', null);
 
@@ -283,13 +276,6 @@ class Html extends DataHtml
 		$model->limitstart = $this->lists->limitStart;
 		$model->limit      = $this->lists->limit;
 
-		// Get the tree root node
-		$model          = $model->getRoot();
-		$this->rootNode = $model->getClone()->bind(['depth' => 0]);
-
-		// Filter by comments belonging to the specific asset
-		$model->scopeAssetCommentTree($this->assetId);
-
 		// Only show unpublished comments to users who can publish and unpublish comments (and never in AMP views)
 		if (!$this->perms['state'] || $isAMP)
 		{
@@ -297,8 +283,8 @@ class Html extends DataHtml
 		}
 
 		// Populate display items and total item count
-		$this->items     = $model->get(false);
-		$this->itemCount = $model->count();
+		$this->items     = $model->commentTreeSlice($this->lists->limitStart, $this->lists->limit);
+		$this->itemCount = $model->getTreeAwareCount();
 
 		// Populate the pagination object
 		$this->pagination = new Pagination($this->itemCount, $this->lists->limitStart, $this->lists->limit, 'akengage_');
@@ -364,23 +350,26 @@ class Html extends DataHtml
 	 */
 	protected function ensureHasParentInfo(Comments $comment, array &$parentIds, array &$parentNames): void
 	{
-		$parentLevel = $comment->getLevel() - 1;
+		$parentLevel = $comment->depth - 1;
 
 		if (isset($parentIds[$parentLevel]) && isset($parentNames[$parentLevel]))
 		{
 			return;
 		}
 
-		$myComment = $comment->getClone();
+		$myComment = $comment;
 		$maxLevel  = (int) $this->container->params->get('max_level', 3);
 		$maxLevel  = max($maxLevel, 1);
 
 		do
 		{
-			$myComment                           = $myComment->getParent();
-			$parentNames[$myComment->getLevel()] = $myComment->getUser()->name;
-			$parentIds[$myComment->getLevel()]   = $myComment->getId();
-		} while ($myComment->getLevel() > ($maxLevel - 1));
+			$newDepth  = $myComment->depth - 1;
+			$myComment = $myComment->getClone()->find($myComment->parent_id);
+			$myComment->depth = $newDepth;
+
+			$parentNames[$myComment->depth] = $myComment->getUser()->name;
+			$parentIds[$myComment->depth]   = $myComment->getId();
+		} while ($myComment->depth > ($maxLevel - 1));
 	}
 
 	/**
@@ -404,7 +393,7 @@ class Html extends DataHtml
 			return '';
 		}
 
-		$captcha = $this->rootNode->getCaptcha();
+		$captcha = $this->getModel()->getCaptcha();
 
 		if (is_null($captcha))
 		{

@@ -182,6 +182,23 @@ section.akengage-outer-container {
     }
   }
 
+  div.akengage-pagination-pages {
+    text-align: center;
+
+    a, span.active {
+      text-decoration: none;
+      color: darken($teal, 20%);
+      padding: .5em .25em;
+      margin: 0.5em;
+    }
+
+    span.active {
+      color: $grey;
+      font-weight: bold;
+      cursor: not-allowed;
+    }
+  }
+
   div#akengage-comment-form {
     border-top: thin solid $grey;
     margin: 1em 0;

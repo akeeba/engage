@@ -9,6 +9,7 @@ namespace Akeeba\Engage\Site\Model;
 
 defined('_JEXEC') or die();
 
+use Akeeba\Engage\Admin\Model\Comments as AdminCommentsModel;
 use Exception;
 use FOF30\Model\Mixin\Assertions;
 use FOF30\Utils\Ip;
@@ -22,7 +23,7 @@ use RuntimeException;
  *
  * @method $this useCaptcha(bool $useCaptcha) Should I use the CAPTCHA when saving a record? DEFAULTS TO FALSE.
  */
-class Comments extends \Akeeba\Engage\Admin\Model\Comments
+class Comments extends AdminCommentsModel
 {
 	use Assertions;
 

@@ -377,7 +377,6 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 	{
 		/** @var Comments $cModel */
 		$cModel     = $this->container->factory->model('Comments')->tmpInstance();
-		$rootNode   = $cModel->getClone()->findOrFail(1);
 		$faker      = FakerFactory::create();
 		$limitStart = 0;
 		$db         = $this->container->db;
@@ -419,6 +418,7 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 
 				$cModel->reset()->bind([
 					'asset_id'   => $info['asset_id'],
+					'parent_id'  => ($info['parent_id'] == 0) ? null : $info['parent_id'],
 					'enabled'    => 1,
 					'body'       => $this->getCommentText($faker),
 					'name'       => $faker->name,
@@ -438,15 +438,7 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 
 				$timerStart = microtime(true);
 
-				if ($info['parent_id'] == 0)
-				{
-					$cModel->insertAsChildOf($rootNode);
-				}
-				else
-				{
-					$parentNode = $cModel->getClone()->findOrFail($info['parent_id']);
-					$cModel->insertAsChildOf($parentNode);
-				}
+				$cModel->save();
 
 				$timerEnd      = microtime(true);
 				$maxInsertTime = max($maxInsertTime, $timerEnd - $timerStart);
@@ -562,6 +554,7 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 			case 3:
 			default:
 				$this->maxPostPerLevel = [30, 10, 3];
+				$this->maxPostPerLevel = [10, 3, 1];
 				break;
 
 			case 4:
@@ -596,13 +589,12 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 				Access::checkGroup($gid, 'core.admin');
 		});
 
-		// Get the user IDs who are allowed to post comments
-		$db->getQuery(true)
-			->select([
-				$db->qn('user_id'),
-			])->where($db->qn('group_id') . ' IN(' . implode(',', $groups) . ')');
+		$this->allowedUsers = [];
 
-		$this->allowedUsers = $db->setQuery($q)->loadColumn();
+		foreach ($groups as $gid)
+		{
+			$this->allowedUsers = array_merge($this->allowedUsers, Access::getUsersByGroup($gid));
+		}
 	}
 
 	private function makeTempTable()
@@ -651,7 +643,7 @@ MySQL;
 		return implode("\n", array_map(function ($p) {
 			return "<p>$p</p>";
 		}, $faker->paragraphs($numParagraphs)));
-}
+	}
 }
 
 try

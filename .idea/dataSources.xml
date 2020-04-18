@@ -8,6 +8,9 @@
       <remarks>$PROJECT_DIR$/configuration.php</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://127.0.0.1:3306/dev3</jdbc-url>
+      <driver-properties>
+        <property name="serverTimezone" value="Europe/Athens" />
+      </driver-properties>
     </data-source>
   </component>
 </project>
