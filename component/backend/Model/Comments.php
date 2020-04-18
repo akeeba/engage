@@ -106,19 +106,41 @@ class Comments extends DataModel
 			return new DataCollection();
 		}
 
-		// Get the comments in the order specified
+		// Get the comments with the IDs specified. They are NOT in order.
 		$items = $this->tmpInstance()
 			->where($this->getIdFieldName(), 'in', array_map('trim', array_keys($idsAndDepth)))
 			->with(['parent'])
 			->orderBy(null)
 			->get(true);
 
-		// Add the level information
-		$items->map(function ($comment) use ($idsAndDepth) {
-			$comment->depth = $idsAndDepth[" " . $comment->getId()] ?? 0;
-		});
+		// Create a new collection
+		$ret = new DataCollection();
 
-		return $items;
+		/**
+		 * Distribute the items to the collection in the order they SHOULD appear.
+		 *
+		 * Magic trick: since the collection internally has an array consisting entirely of objects, creating a second
+		 * collection referencing the same objects has minimal overhead. The reason is that objects are stored in arrays
+		 * as references. Adding the same object to two arrays only adds its reference to the array, without copying the
+		 * actual object. This helps keep memory pressure low while we are rearranging our items in an arbitrary order.
+		 * Neat, huh?
+		 */
+		foreach ($idsAndDepth as $id => $depth)
+		{
+			$id = (int) $id;
+
+			if (!$items->has($id))
+			{
+				continue;
+			}
+
+			// When adding the item to the collection we also need to set its level information.
+			$ret->add($items->get($id)->bind([
+				'depth' => $depth
+			]));
+		}
+
+		return $ret;
 	}
 
 	/**
