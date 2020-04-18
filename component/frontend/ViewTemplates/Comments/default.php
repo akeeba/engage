@@ -24,7 +24,8 @@ use Joomla\CMS\Language\Text;
 
 /** @var \Akeeba\Engage\Site\View\Comments\Html $this */
 
-$darkMode  = $this->container->params->get('dark_mode_backend', -1);
+$darkMode       = $this->container->params->get('dark_mode_backend', -1);
+$paginationData = $this->getPagination()->getData();
 ?>
 <section class="akengage-outer-container<?= ($darkMode == 1) ? '--dark' : '' ?>">
 	<h3 class="akengage-title">
@@ -42,7 +43,40 @@ $darkMode  = $this->container->params->get('dark_mode_backend', -1);
 
 		<div class="akengage-pagination">
 			<div class="akengage-pagination-pages">
-				<?= $this->getPagination()->getListFooter() ?>
+				<?php if (!empty($paginationData->start->link)): ?>
+					<a href="<?= $this->rebasePageLink($paginationData->start->link) ?>">
+						<span title="<?= $paginationData->start->text ?>">⏮️</span>
+					</a>
+				<?php endif; ?>
+				<?php if (!empty($paginationData->previous->link)): ?>
+					<a href="<?= $this->rebasePageLink($paginationData->previous->link) ?>">
+						<span title="<?= $paginationData->previous->text ?>">⏪</span>
+					</a>
+				<?php endif; ?>
+
+				<?php foreach($paginationData->pages as $page => $def): ?>
+					<?php if (!empty($def->link)): ?>
+						<a href="<?= $this->rebasePageLink($def->link) ?>" class="<?= $def->active ? 'active' : '' ?>"
+						   title="<?= Text::sprintf('COM_ENGAGE_COMMENTS_LBL_PAGE', $def->text) ?>">
+							<?= $def->text ?>
+						</a>
+					<?php else: ?>
+						<span class="active">
+							<?= $def->text ?>
+						</span>
+					<?php endif; ?>
+				<?php endforeach; ?>
+
+				<?php if (!empty($paginationData->next->link)): ?>
+					<a href="<?= $this->rebasePageLink($paginationData->next->link) ?>">
+						<span title="<?= $paginationData->next->text ?>">⏩</span>
+					</a>
+				<?php endif; ?>
+				<?php if (!empty($paginationData->end->link)): ?>
+					<a href="<?= $this->rebasePageLink($paginationData->end->link) ?>">
+						<span title="<?= $paginationData->end->text ?>">⏭️</span>
+					</a>
+				<?php endif; ?>
 			</div>
 		</div>
 	<?php endif; ?>

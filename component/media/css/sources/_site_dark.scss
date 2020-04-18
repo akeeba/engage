@@ -83,6 +83,17 @@ div.akengage-list-container {
   }
 }
 
+div.akengage-pagination-pages {
+
+  a, span.active {
+    color: lighten($teal, 20%) !important;
+  }
+
+  span.active {
+    color: $light-grey;
+  }
+}
+
 div#akengage-comment-form {
   border-color: $light-grey;
 
