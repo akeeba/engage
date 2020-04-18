@@ -455,6 +455,26 @@ class Comments extends DataModel
 	}
 
 	/**
+	 * Deletes all children comment on comment deletion
+	 *
+	 * @param   mixed  $id  Primary key of the comment being deleted.
+	 */
+	protected function onAfterDelete(&$id)
+	{
+		/** @var self $model */
+		$model = $this->tmpInstance();
+
+		try
+		{
+			$model->parent_id($id)->get(true)->delete();
+		}
+		catch (Exception $e)
+		{
+			return;
+		}
+	}
+
+	/**
 	 * Apply comments filtering by asset title
 	 *
 	 * @param   JDatabaseQuery  $query  The SELECT query we're modifying
