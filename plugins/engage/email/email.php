@@ -10,6 +10,7 @@ use Akeeba\Engage\Site\Helper\Email;
 use Akeeba\Engage\Site\Helper\Meta;
 use FOF30\Container\Container;
 use FOF30\Model\DataModel\Collection as DataCollection;
+use FOF30\Model\DataModel\Exception\RecordNotLoaded;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
@@ -174,36 +175,29 @@ class plgEngageEmail extends CMSPlugin
 	 */
 	protected function getUserRecipients(Comments $comment): array
 	{
-		$userEmails   = [];
-		$commentLevel = $comment->getLevel();
-
-		// First level comments are not in reply to anything; can't send emails to any users
-		if ($commentLevel == 1)
+		// Top level comments don't have reply-to users
+		if (empty($comment->getFieldValue('parent_id')))
 		{
 			return [];
 		}
 
-		$container = Container::getInstance('com_engage');
-		$maxLevel  = $container->params->get('max_level', 3);
-
-		/**
-		 * Which comments are being replied to depends on the level of the comment being filed.
-		 *
-		 * If it's any level less than max we are ONLY replying to its direct parent.
-		 * If it's max level we are replying to its direct parent AND its siblings.
-		 */
-		$collection = new DataCollection();
-		$collection->add($comment->getParent());
-
-		if ($commentLevel == $maxLevel)
+		// Try to load the parent
+		try
 		{
-			$collection->merge($comment->getSiblings());
+			/** @var Comments $parent */
+			$parent = $comment->tmpInstance();
+
+			$parent->findOrFail($comment->parent_id);
+		}
+		catch (RecordNotLoaded $e)
+		{
+			return [];
 		}
 
-		$collection->each(function (Comments $comment) use (&$userEmails, &$unsubscribedEmails) {
-			$user                     = $comment->getUser();
-			$userEmails[$user->email] = $user->name;
-		});
+		$userEmails   = [];
+
+		$user                     = $parent->getUser();
+		$userEmails[$user->email] = $user->name;
 
 		return $userEmails;
 	}

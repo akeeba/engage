@@ -44,7 +44,7 @@ class Comments extends DataController
 
 		$this->setPredefinedTaskList([
 			'browse', 'submit', 'edit', 'save', 'publish', 'unpublish', 'remove', 'reportspam', 'reportham',
-			'possiblespam', 'unsubscribe',
+			'possiblespam', 'unsubscribe'
 		]);
 	}
 
@@ -57,7 +57,7 @@ class Comments extends DataController
 	public function debug()
 	{
 		$comment = $this->getModel();
-		$comment->load($this->input->getInt('id'));
+		$comment->load($this->input->getInt('comment_id'));
 
 		$this->container->platform->importPlugin('engage');
 		$this->container->platform->runPlugins('onComEngageModelCommentsAfterCreate', [$comment]);
