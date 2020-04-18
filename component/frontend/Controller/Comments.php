@@ -22,8 +22,6 @@ use FOF30\Controller\Mixin\PredefinedTaskList;
 use FOF30\Model\DataModel\Exception\RecordNotLoaded;
 use FOF30\View\Exception\AccessForbidden;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Table\Asset;
-use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
 use RuntimeException;
 
@@ -120,11 +118,10 @@ class Comments extends DataController
 			return;
 		}
 
-		// Get the parent comment (default: common comments root)
 		/** @var CommentsModel $model */
-		$model  = $this->getModel();
-		$parent = $model->tmpInstance()->getClone()->getRoot();
+		$model = $this->getModel();
 
+		// If it's a reply to another comment let's make sure it exists and for the correct asset ID
 		if ($parentId !== 0)
 		{
 			// A non-zero parent ID was provided. Try to load the comment.
@@ -143,13 +140,15 @@ class Comments extends DataController
 		}
 
 		// Set up the new comment
-		$model->reset();
-		$model->asset_id   = $assetId;
-		$model->name       = $name;
-		$model->email      = $email;
-		$model->body       = Filter::filterText($comment);
-		$model->enabled    = 1;
-		$model->created_by = null;
+		$model->reset()->bind([
+			'asset_id'   => $assetId,
+			'name'       => $name,
+			'email'      => $email,
+			'body'       => Filter::filterText($comment),
+			'enabled'    => 1,
+			'created_by' => null,
+			'parent_id'  => ($parentId == 0) ? null : $parentId,
+		]);
 
 		// Non-admin users may have their comments auto-unpublished by default
 		if (!$user->get('core.manage', 'com_engage'))
@@ -183,11 +182,12 @@ class Comments extends DataController
 		{
 			$model->useCaptcha(true);
 			$model->setState('captcha', $this->input->get('captcha', '', 'raw'));
-			$model->insertAsChildOf($parent);
+			$model->save();
 			$model->useCaptcha(false);
 		}
 		catch (Exception $e)
 		{
+			throw $e;
 			$this->setRedirect($returnUrl, $e->getMessage(), 'error');
 			$this->redirect();
 

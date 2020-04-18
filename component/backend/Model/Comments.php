@@ -289,7 +289,7 @@ class Comments extends DataModel
 	 *
 	 * @return array An array of id => depth
 	 */
-	protected function commentIDTreeSliceWithDepth(int $start, ?int $limit = null): array
+	public function commentIDTreeSliceWithDepth(int $start, ?int $limit = null): array
 	{
 		// Get all the IDs filtered by the model
 		$db     = $this->getDbo();
