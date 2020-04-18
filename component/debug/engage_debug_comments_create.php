@@ -589,13 +589,12 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 				Access::checkGroup($gid, 'core.admin');
 		});
 
-		// Get the user IDs who are allowed to post comments
-		$db->getQuery(true)
-			->select([
-				$db->qn('user_id'),
-			])->where($db->qn('group_id') . ' IN(' . implode(',', $groups) . ')');
+		$this->allowedUsers = [];
 
-		$this->allowedUsers = $db->setQuery($q)->loadColumn();
+		foreach ($groups as $gid)
+		{
+			$this->allowedUsers = array_merge($this->allowedUsers, Access::getUsersByGroup($gid));
+		}
 	}
 
 	private function makeTempTable()
