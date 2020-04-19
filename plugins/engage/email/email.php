@@ -149,21 +149,18 @@ class plgEngageEmail extends CMSPlugin
 			return [];
 		}
 
-		$db         = $this->db ?? Factory::getDbo();
-		$innerQuery = $db->getQuery(true)
-			->select([$db->qn('user_id')])
-			->from($db->qn('#__user_usergroup_map'))
-			->where($db->qn('group_id') . ' IN (' . implode(',', $managerGroups) . ')');
-		$query      = $db->getQuery(true)
-			->select([
-				$db->qn('email'),
-				$db->qn('name'),
-			])
-			->from($db->qn('#__users'))
-			->where($db->qn('id') . ' IN (' . $innerQuery . ')')
-			->where($db->qn('sendEmail') . ' = ' . $db->q(1));
+		$ret = [];
 
-		return $db->setQuery($query)->loadAssocList('email', 'name') ?? [];
+		foreach ($managerGroups as $gid)
+		{
+			$uids = Access::getUsersByGroup($gid);
+			array_walk($uids, function ($uid, $k) use (&$ret) {
+				$user = Factory::getUser($uid);
+				$ret[$user->email] = $ret[$user->name];
+			});
+		}
+
+		return $ret;
 	}
 
 	/**
