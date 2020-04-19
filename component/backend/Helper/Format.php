@@ -44,6 +44,37 @@ final class Format
 	}
 
 	/**
+	 * Processes the comment text for display in the front-end
+	 *
+	 * - Removes all rel attributes (in case you use Joomla's text filters which don't do that)
+	 * - Adds rel="nofollow noreferrer" to all links
+	 *
+	 * @param   string|null  $text  The comment text
+	 *
+	 * @return  string  The processed comment text
+	 */
+	public static function processCommentTextForDisplay(?string $text): string
+	{
+		if (empty($text))
+		{
+			return '';
+		}
+
+		// Remove existing rel attributes from everything
+		$text = preg_replace_callback('/(<[a-z_\-\.]*\s*[^>]*\s+)(rel\s*=\s*"[^"]+")/i', function (array $matches): string {
+			return $matches[1];
+		}, $text);
+
+		// Add rel="nofollow noreferrer" to anchor tags
+		$text = preg_replace_callback('/(<a\s*[^>]*\s+)href\s*=/i', function (array $matches): string {
+			return rtrim($matches[1]) . ' rel="nofollow noreferrer" href=';
+			//var_dump($matches);die;
+		}, $text);
+
+		return $text;
+	}
+
+	/**
 	 * Get the component's Container
 	 *
 	 * @return  Container

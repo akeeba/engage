@@ -13,6 +13,7 @@ defined('_JEXEC') or die();
  * Called from default.php
  */
 
+use Akeeba\Engage\Admin\Helper\Format;
 use FOF30\Date\Date;
 use Joomla\CMS\Language\Text;
 
@@ -171,7 +172,7 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 		</footer>
 
 		<div class="akengage-comment-body">
-			<?= $comment->body ?>
+			<?= Format::processCommentTextForDisplay($comment->body) ?>
 		</div>
 
 		<?php if ($this->perms['create']): ?>
