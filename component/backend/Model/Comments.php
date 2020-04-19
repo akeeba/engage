@@ -40,6 +40,7 @@ use RuntimeException;
  * @method $this commenter(string $partial) Partial email or name to search a commenter for
  * @method $this ip(string $ip) Search by IP address
  * @method $this enabled(int $enabled) Search by published / unpublished comment
+ * @method $this created_by(?int $created_by) Search by creted by user ID
  *
  * Relations:
  *

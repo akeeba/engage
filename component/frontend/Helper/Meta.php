@@ -11,6 +11,9 @@ use Akeeba\Engage\Admin\Model\Comments;
 use Exception;
 use FOF30\Container\Container;
 use Joomla\CMS\Date\Date;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die();
@@ -243,6 +246,58 @@ final class Meta
 		}
 
 		return intdiv($index, $commentsPerPage) * $commentsPerPage;
+	}
+
+	/**
+	 * Not-quite-deletes the comments filed by a user, either directly with their user ID or under their email address.
+	 *
+	 * The following actions are taken:
+	 *
+	 * * The comment text is replaced with COM_ENGAGE_COMMENTS_LBL_DELETEDCOMMENT
+	 * * The name (for guest comments filed under the user's email) is replaced with COM_ENGAGE_COMMENTS_LBL_DELETEDUSER
+	 * * The email (for guest comments filed under the user's email) is replaced with deleted.<USER_ID>@<SITE_HOSTNAME>
+	 *
+	 * This is similar to how other sites, e.g. Slashdot, treat user account deletion. If we were to completely delete a
+	 * user's comments we would also be deleting the entire conversation below them since we can't have orphan comments.
+	 * Deleting the comment's contents is less disruptive. Of course it doesn't do you much good if you were directly
+	 * quoted by a different user but that's something you should have thought before saying something regrettable on
+	 * the Internet...
+	 *
+	 * @param   User|null  $user
+	 */
+	public static function nukeUserComments(?User $user): void
+	{
+		if (empty($user))
+		{
+			return;
+		}
+
+		if ($user->guest)
+		{
+			return;
+		}
+
+		$container = self::getContainer();
+		$db        = $container->db;
+
+		// Nuke comments directly attributed to the user ID
+		$q = $db->getQuery(true)
+			->update($db->qn('#__engage_comments'))
+			->set($db->qn('body') . ' = ' . $db->q(Text::_('COM_ENGAGE_COMMENTS_LBL_DELETEDCOMMENT')))
+			->where($db->qn('created_by') . ' = ' . $db->q($user->id));
+		$db->setQuery($q)->execute();
+
+		// Nuke comments attributed to the user's email address
+		$uri = Uri::getInstance();
+		$q   = $db->getQuery(true)
+			->update($db->qn('#__engage_comments'))
+			->set([
+				$db->qn('body') . ' = ' . $db->q(Text::_('COM_ENGAGE_COMMENTS_LBL_DELETEDCOMMENT')),
+				$db->qn('name') . ' = ' . $db->q(Text::sprintf('COM_ENGAGE_COMMENTS_LBL_DELETEDUSER', $user->id)),
+				$db->qn('email') . ' = ' . $db->q(sprintf('deleted.%u@%s', $user->id, $uri->getHost())),
+			])
+			->where($db->qn('email') . ' = ' . $db->q($user->email));
+		$db->setQuery($q)->execute();
 	}
 
 	/**

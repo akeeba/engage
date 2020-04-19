@@ -41,7 +41,7 @@
         <file type="plugin" group="engage" id="gravatar">plg_engage_gravatar.zip</file>
 
         <!-- Plugins: user -->
-        <!--<file type="plugin" group="user" id="engage">plg_user_engage.zip</file>-->
+        <file type="plugin" group="user" id="engage">plg_user_engage.zip</file>
     </files>
 
     <!-- Installation script -
