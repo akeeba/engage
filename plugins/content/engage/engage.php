@@ -362,6 +362,26 @@ class plgContentEngage extends CMSPlugin
 	}
 
 	/**
+	 * Triggered when Akeeba Engage cleans the cache after modifying a comment in a way that affects comments display.
+	 *
+	 * @return  void
+	 */
+	public function onEngageClearCache()
+	{
+		/**
+		 * We need to clear the com_content cache.
+		 *
+		 * Sounds a bit too much? Well, this is how Joomla itself does it. For real.
+		 *
+		 * @see ContentModelArticle::cleanCache()
+		 */
+		CacheCleaner::clearCacheGroups([
+			'com_content',
+		], [0]);
+
+	}
+
+	/**
 	 * Get the Akeeba Engage container, preloaded for comments display
 	 *
 	 * @return  Container
@@ -370,36 +390,30 @@ class plgContentEngage extends CMSPlugin
 	{
 		if (empty($this->container))
 		{
+			$masterContainer = Container::getInstance('com_engage');
+			$appInput        = new Input();
+
 			// Get the container singleton instance
-			$this->container = Container::getInstance('com_engage');
-
-			/**
-			 * Preload the parameters, if they are not already loaded.
-			 *
-			 * This saves a query to the database when the component tries to access its parameters. If I were to get
-			 * the parameters on the clone (or a temporary instance, which *is* a clone) the component would create a
-			 * new instance of the Params object which makes it run yet another query against the #__extensions table
-			 * to fetch the parameters.
-			 */
-			$this->container->params->getParams();
-
-			// Create a clone of the container I can modify freely
-			$this->container = clone $this->container;
-
-			// Manipulate its input data
-			$appInput = new Input();
-			$this->container->input->setData([
-				'option'              => 'com_engage',
-				'view'                => 'Comments',
-				'task'                => 'browse',
-				'asset_id'            => 0,
-				'access'              => 0,
-				'akengage_limitstart' => ($appInput)->getInt('akengage_limitstart', 0),
-				'akengage_limit'      => ($appInput)->getInt('akengage_limit', 20),
-				'layout'              => $this->isAMP() ? 'amp' : 'default',
-				'tpl'                 => null,
-				'tmpl'                => null,
-				'format'              => 'html',
+			$this->container = Container::getInstance('com_engage', [
+				// We create a temporary instance to avoid messing with the master container's input
+				'tempInstance' => true,
+				// Passing these objects from the master container optimizes the number of database queries
+				'params'       => $masterContainer->params,
+				'mediaVersion' => $masterContainer->mediaVersion,
+				// Custom input for the temporary container instance
+				'input'        => [
+					'option'              => 'com_engage',
+					'view'                => 'Comments',
+					'task'                => 'browse',
+					'asset_id'            => 0,
+					'access'              => 0,
+					'akengage_limitstart' => ($appInput)->getInt('akengage_limitstart', 0),
+					'akengage_limit'      => ($appInput)->getInt('akengage_limit', 20),
+					'layout'              => $this->isAMP() ? 'amp' : 'default',
+					'tpl'                 => null,
+					'tmpl'                => null,
+					'format'              => 'html',
+				],
 			]);
 		}
 
@@ -813,17 +827,7 @@ class plgContentEngage extends CMSPlugin
 		$cParams->set('spam_lastRun', time());
 		$cParams->save();
 
-		/**
-		 * I have just modified the component's parameters but I only did so in a temporary clone instance of the
-		 * container. The singleton container already has a Params object which is unaware of my changes. Therefore I
-		 * need to tell it to reload the parameters. If I don't do that the 'spam_lastRun' key will be overwritten
-		 * should the singleton instance save the parameters and I'd end up running this expensive operation all over
-		 * again before it's time to do it.
-		 */
-		Container::getInstance('com_engage')->params->reload();
-
 		// Get the model and delete comments. No problem if we fail for any reason.
-
 		try
 		{
 			$maxDays = $cParams->get('max_spam_age', 15);
@@ -846,8 +850,8 @@ class plgContentEngage extends CMSPlugin
 	 */
 	private function cacheArticleRow($row, bool $loadParameters, bool $force = false): void
 	{
-		$authorUser                     = self::getContainer()->platform->getUser($row->created_by);
-		$metaKey                        = md5($row->asset_id . '_' . ($loadParameters ? 'with' : 'without') . '_parameters');
+		$authorUser = self::getContainer()->platform->getUser($row->created_by);
+		$metaKey    = md5($row->asset_id . '_' . ($loadParameters ? 'with' : 'without') . '_parameters');
 
 		if (array_key_exists($metaKey, $this->cachedArticles) && !empty($this->cachedArticles[$metaKey]) && !$force)
 		{
@@ -872,25 +876,5 @@ class plgContentEngage extends CMSPlugin
 			'author_email'    => $authorUser->email,
 			'parameters'      => $loadParameters ? $this->getParametersForArticle($row) : new Registry(),
 		];
-	}
-
-	/**
-	 * Triggered when Akeeba Engage cleans the cache after modifying a comment in a way that affects comments display.
-	 *
-	 * @return  void
-	 */
-	public function onEngageClearCache()
-	{
-		/**
-		 * We need to clear the com_content cache.
-		 *
-		 * Sounds a bit too much? Well, this is how Joomla itself does it. For real.
-		 *
-		 * @see ContentModelArticle::cleanCache()
-		 */
-		CacheCleaner::clearCacheGroups([
-			'com_content',
-		], [0]);
-
 	}
 }
