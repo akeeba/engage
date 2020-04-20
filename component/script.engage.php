@@ -52,8 +52,12 @@ class Pkg_EngageInstallerScript
 	 * @var array
 	 */
 	protected $extensionsToEnable = [
-		// Content plugins
-		//['plugin', 'engage', 1, 'content'],
+		['plugin', 'engage', 1, 'content'],
+		['plugin', 'engage', 1, 'privacy'],
+		['plugin', 'engage', 1, 'user'],
+		['plugin', 'engagecache', 1, 'system'],
+		['plugin', 'email', 1, 'engage'],
+		['plugin', 'gravatar', 1, 'engage'],
 	];
 
 	/**
