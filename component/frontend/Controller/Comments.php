@@ -774,8 +774,7 @@ class Comments extends DataController
 	private function cleanCache(): void
 	{
 		CacheCleaner::clearCacheGroups([
-			'com_content',
 			'com_engage',
-		], [0]);
+		], [0], 'onEngageClearCache');
 	}
 }

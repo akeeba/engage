@@ -10,6 +10,7 @@ defined('_JEXEC') or die();
 use Akeeba\Engage\Admin\Model\Comments;
 use FOF30\Container\Container;
 use FOF30\Input\Input;
+use FOF30\Utils\CacheCleaner;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
@@ -871,5 +872,25 @@ class plgContentEngage extends CMSPlugin
 			'author_email'    => $authorUser->email,
 			'parameters'      => $loadParameters ? $this->getParametersForArticle($row) : new Registry(),
 		];
+	}
+
+	/**
+	 * Triggered when Akeeba Engage cleans the cache after modifying a comment in a way that affects comments display.
+	 *
+	 * @return  void
+	 */
+	public function onEngageClearCache()
+	{
+		/**
+		 * We need to clear the com_content cache.
+		 *
+		 * Sounds a bit too much? Well, this is how Joomla itself does it. For real.
+		 *
+		 * @see ContentModelArticle::cleanCache()
+		 */
+		CacheCleaner::clearCacheGroups([
+			'com_content',
+		], [0]);
+
 	}
 }
