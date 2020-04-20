@@ -68,33 +68,35 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 
 	<article
 			class="akengage-comment--<?= ($comment->enabled == 1) ? 'published' : (($comment->enabled == -3) ? 'spam' : 'unpublished') ?>"
-			id="akengage-comment-<?= $comment->getId() ?>">
+			id="akengage-comment-<?= $comment->getId() ?>" itemscope itemtype="http://schema.org/Comment">
 		<footer class="akengage-comment-properties">
-			<?php if (!empty($avatar)): ?>
-				<?php if (empty($profile)): ?>
-					<img src="<?= $avatar ?>" alt="<?= Text::sprintf('COM_ENGAGE_COMMENTS_AVATAR_ALT', $user->name) ?>"
-						 class="akengage-commenter-avatar">
-				<?php else: ?>
-					<a href="<?= $profile ?>" class="akengage-commenter-profile">
-						<img src="<?= $avatar ?>"
-							 alt="<?= Text::sprintf('COM_ENGAGE_COMMENTS_AVATAR_ALT', $user->name) ?>"
-							 class="akengage-commenter-avatar">
-					</a>
+			<div itemprop="author" itemscope itemtype="http://schema.org/Person">
+				<?php if (!empty($avatar)): ?>
+					<?php if (empty($profile)): ?>
+						<img src="<?= $avatar ?>" alt="<?= Text::sprintf('COM_ENGAGE_COMMENTS_AVATAR_ALT', $user->name) ?>"
+							 class="akengage-commenter-avatar" itemprop="image">
+					<?php else: ?>
+						<a href="<?= $profile ?>" class="akengage-commenter-profile" itemprop="url">
+							<img src="<?= $avatar ?>"
+								 alt="<?= Text::sprintf('COM_ENGAGE_COMMENTS_AVATAR_ALT', $user->name) ?>"
+								 class="akengage-commenter-avatar" itemprop="image">
+						</a>
+					<?php endif; ?>
 				<?php endif; ?>
-			<?php endif; ?>
-			<div class="akengange-commenter-name">
-				<?= $this->escape($user->name) ?>
-				<?php if ($user->authorise('core.manage', $comment->asset_id)): ?>
-					<span class="akengage-commenter-ismoderator icon icon-star"></span>
-				<?php elseif (!$user->guest): ?>
-					<span class="akengage-commenter-isuser icon icon-user"></span>
-				<?php endif; ?>
-				<?php if (!$user->guest): ?>
-					<span class="akengage-commenter-username"><?= $this->escape($user->username) ?></span>
-				<?php endif; ?>
+				<div class="akengange-commenter-name">
+					<span itemprop="name"><?= $this->escape($user->name) ?></span>
+					<?php if ($user->authorise('core.manage', $comment->asset_id)): ?>
+						<span class="akengage-commenter-ismoderator icon icon-star"></span>
+					<?php elseif (!$user->guest): ?>
+						<span class="akengage-commenter-isuser icon icon-user"></span>
+					<?php endif; ?>
+					<?php if (!$user->guest): ?>
+						<span class="akengage-commenter-username"><?= $this->escape($user->username) ?></span>
+					<?php endif; ?>
+				</div>
 			</div>
 			<div class="akengage-comment-info">
-                <span class="akengage-comment-permalink">
+                <span class="akengage-comment-permalink" itemprop="dateCreated" content="<?= $commentDate->toISO8601(false) ?>">
                     <?= $commentDate->format(Text::_('DATE_FORMAT_LC2'), true) ?>
                 </span>
 				<span class="akengage-comment-actions">
