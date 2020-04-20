@@ -37,6 +37,7 @@ $paginationData = $this->getPagination()->getData();
 			<?php echo $this->loadAnyTemplate('any:com_engage/Comments/amp_list') ?>
 		</div>
 
+		<?php if ($this->pagination->pagesTotal > 1): ?>
 		<div class="akengage-pagination">
 			<div class="akengage-pagination-pages" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
 				<?php if (!empty($paginationData->start->link)): ?>
@@ -75,6 +76,7 @@ $paginationData = $this->getPagination()->getData();
 				<?php endif; ?>
 			</div>
 		</div>
+		<?php endif; ?>
 	<?php endif; ?>
 
 	<p class="akengage-visithtml">

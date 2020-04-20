@@ -393,6 +393,9 @@ class plgContentEngage extends CMSPlugin
 			$masterContainer = Container::getInstance('com_engage');
 			$appInput        = new Input();
 
+			$defaultListLimit = $masterContainer->params->get('default_limit', 20);
+			$defaultListLimit = ($defaultListLimit == -1) ? 20 : $defaultListLimit;
+
 			// Get the container singleton instance
 			$this->container = Container::getInstance('com_engage', [
 				// We create a temporary instance to avoid messing with the master container's input
@@ -408,7 +411,7 @@ class plgContentEngage extends CMSPlugin
 					'asset_id'            => 0,
 					'access'              => 0,
 					'akengage_limitstart' => ($appInput)->getInt('akengage_limitstart', 0),
-					'akengage_limit'      => ($appInput)->getInt('akengage_limit', 20),
+					'akengage_limit'      => ($appInput)->getInt('akengage_limit', $defaultListLimit),
 					'layout'              => $this->isAMP() ? 'amp' : 'default',
 					'tpl'                 => null,
 					'tmpl'                => null,

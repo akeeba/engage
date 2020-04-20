@@ -41,6 +41,7 @@ $paginationData = $this->getPagination()->getData();
 
 		<?= $this->container->template->loadPosition('engage-after-comments') ?>
 
+		<?php if ($this->pagination->pagesTotal > 1): ?>
 		<div class="akengage-pagination">
 			<div class="akengage-pagination-pages" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
 				<?php if (!empty($paginationData->start->link)): ?>
@@ -79,6 +80,7 @@ $paginationData = $this->getPagination()->getData();
 				<?php endif; ?>
 			</div>
 		</div>
+		<?php endif; ?>
 	<?php endif; ?>
 
 	<?php if (!$this->areCommentsClosed && $this->user->guest): ?>

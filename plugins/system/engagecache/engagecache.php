@@ -7,6 +7,7 @@
 
 defined('_JEXEC') or die;
 
+use FOF30\Container\Container;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
 
@@ -47,8 +48,12 @@ class plgSystemEngagecache extends CMSPlugin
 			return;
 		}
 
+		$masterContainer  = Container::getInstance('com_engage');
+		$defaultListLimit = $masterContainer->params->get('default_limit', 20);
+		$defaultListLimit = ($defaultListLimit == -1) ? 20 : $defaultListLimit;
+
 		$limitStart = $app->input->getInt('akengage_limitstart', 0);
-		$limit      = $app->input->getInt('akengage_limit');
+		$limit      = $app->input->getInt('akengage_limit', $defaultListLimit);
 
 		if (!empty($app->registeredurlparams))
 		{
@@ -64,10 +69,7 @@ class plgSystemEngagecache extends CMSPlugin
 			$registeredurlparams->akengage_limitstart = $limitStart;
 		}
 
-		if (!empty($limit))
-		{
-			$registeredurlparams->akengage_limit = $limit;
-		}
+		$registeredurlparams->akengage_limit = $limit;
 
 		$app->registeredurlparams = $registeredurlparams;
 	}

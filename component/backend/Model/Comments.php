@@ -90,13 +90,13 @@ class Comments extends DataModel
 	/**
 	 * Tree-aware version of get(), returning a slice of the tree.
 	 *
-	 * @param   int  $start  Starting offset
-	 * @param   int  $limit  Max number of items to retrieve
+	 * @param   int       $start  Starting offset
+	 * @param   int|null  $limit  Max number of items to retrieve
 	 *
 	 * @return  DataCollection
 	 * @see     self::get
 	 */
-	public function commentTreeSlice(int $start, int $limit): DataCollection
+	public function commentTreeSlice(int $start, ?int $limit): DataCollection
 	{
 		// Get a slice of comment IDs and their depth in tree listing order
 		$idsAndDepth = $this->commentIDTreeSliceWithDepth($start, $limit);
@@ -137,7 +137,7 @@ class Comments extends DataModel
 
 			// When adding the item to the collection we also need to set its level information.
 			$ret->add($items->get($id)->bind([
-				'depth' => $depth
+				'depth' => $depth,
 			]));
 		}
 

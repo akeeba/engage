@@ -271,6 +271,7 @@ class Html extends DataHtml
 		$this->lists             = new \stdClass();
 		$this->lists->limitStart = $this->input->getInt('akengage_limitstart', 0);
 		$this->lists->limit      = $model->getState('akengage_limit', $defaultLimit, 'int');
+		$this->lists->limit = empty($this->lists->limit) ? null : $this->lists->limit;
 
 		// Pass the display limits to the model
 		$model->limitstart = $this->lists->limitStart;
@@ -422,7 +423,8 @@ class Html extends DataHtml
 	 */
 	private function getDefaultListLimit(): int
 	{
-		$defaultLimit = 20;
+		$defaultLimit = $this->container->params->get('default_limit', 20);
+		$defaultLimit = ($defaultLimit == -1) ? 20 : $defaultLimit;
 
 		if ($this->container->platform->isCli() || !class_exists('Joomla\CMS\Factory'))
 		{
