@@ -203,6 +203,8 @@ class Comments extends DataController
 			$model->setState('captcha', $this->input->get('captcha', '', 'raw'));
 			$model->save();
 			$model->useCaptcha(false);
+
+			$result = $this->triggerEvent('onAfterSubmit', [$model]);
 		}
 		catch (Exception $e)
 		{
@@ -374,6 +376,8 @@ class Comments extends DataController
 			{
 				throw new RuntimeException('Already unsubscribed');
 			}
+
+			$this->container->platform->runPlugins('onEngageUnsubscribeEmail', [$comment, $unsubscribeEmail]);
 
 			$message = Text::sprintf('COM_ENGAGE_COMMENTS_LBL_UNSUBSCRIBED', $unsubscribeEmail);
 			$msgType = 'info';
