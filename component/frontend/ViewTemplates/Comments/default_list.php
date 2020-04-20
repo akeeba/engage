@@ -173,7 +173,7 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 			</div>
 		</footer>
 
-		<div class="akengage-comment-body">
+		<div class="akengage-comment-body" itemprop="text">
 			<?= Format::processCommentTextForDisplay($comment->body) ?>
 		</div>
 

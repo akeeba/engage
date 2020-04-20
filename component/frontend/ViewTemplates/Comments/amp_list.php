@@ -67,23 +67,29 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 <li class="akengage-comment-item">
 	<div
 		class="akengage-comment--<?= ($comment->enabled == 1) ? 'published' : (($comment->enabled == -3) ? 'spam' : 'unpublished') ?>"
-		id="akengage-comment-<?= $comment->getId() ?>">
+		id="akengage-comment-<?= $comment->getId() ?>" itemscope itemtype="http://schema.org/Comment">
 
 		<div class="akengage-comment-properties">
-			<h4 class="akengange-commenter-name">
-				<?= $this->escape($user->name) ?>
+			<h4 class="akengange-commenter-name" itemprop="author" itemscope itemtype="http://schema.org/Person">
+				<?php if (!empty($avatar)): ?>
+					<link itemprop="image" href="<?= $avatar ?>">
+					<?php if (!empty($profile)): ?>
+					<link itemprop="url" href="<?= $profile ?>">
+					<?php endif; ?>
+				<?php endif; ?>
+				<span itemprop="name"><?= $this->escape($user->name) ?></span>
 				<?php if ($user->authorise('core.manage', $comment->asset_id)): ?>
 					<span aria-hidden="true">⭐</span>
 				<?php elseif (!$user->guest): ?>
 					<span aria-hidden="true">👤</span>
 				<?php endif; ?>
 			</h4>
-			<p class="akengage-comment-permalink">
+			<p class="akengage-comment-permalink" itemprop="dateCreated" content="<?= $commentDate->toISO8601(false) ?>">
 				<?= $commentDate->format(Text::_('DATE_FORMAT_LC2'), true) ?>
 			</p>
 		</div>
 
-		<div class="akengage-comment-body">
+		<div class="akengage-comment-body" itemprop="text">
 			<?= Format::processCommentTextForDisplay($comment->body) ?>
 		</div>
 	</div>
