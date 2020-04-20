@@ -13,6 +13,7 @@ use Exception;
 use FOF30\Container\Container;
 use FOF30\Controller\DataController;
 use FOF30\Controller\Mixin\PredefinedTaskList;
+use FOF30\Utils\CacheCleaner;
 use Joomla\CMS\Language\Text;
 
 class Comments extends DataController
@@ -98,6 +99,8 @@ class Comments extends DataController
 			$error  = $e->getMessage();
 		}
 
+		$this->cleanCache();
+
 		// Redirect
 		if ($customURL = $this->input->getBase64('returnurl', ''))
 		{
@@ -114,6 +117,33 @@ class Comments extends DataController
 		{
 			$this->setRedirect($url);
 		}
+	}
+
+	/**
+	 * Runs after publishing a comment.
+	 */
+	protected function onAfterPublish(): void
+	{
+		$this->cleanCache();
+	}
+
+	/**
+	 * Runs after unpublishing a comment.
+	 */
+	protected function onAfterUnpublish(): void
+	{
+		$this->cleanCache();
+	}
+
+	/**
+	 * Runs after saving a comment
+	 *
+	 * @param   array  $data  The data that got saved
+	 * @param   int    $id    The ID of the item which was saved (or the ID of the item created)
+	 */
+	protected function onAfterApplySave(&$data, $id): void
+	{
+		$this->cleanCache();
 	}
 
 	/**
@@ -162,6 +192,8 @@ class Comments extends DataController
 			$error = $e->getMessage();
 		}
 
+		$this->cleanCache();
+
 		// Redirect
 		if ($customURL = $this->input->getBase64('returnurl', ''))
 		{
@@ -180,6 +212,18 @@ class Comments extends DataController
 
 			$this->setRedirect($url, Text::_($message));
 		}
+	}
+
+	/**
+	 * Clear the Joomla cache for Akeeba Engage, front- and backend.
+	 *
+	 * @return  void
+	 */
+	private function cleanCache(): void
+	{
+		CacheCleaner::clearCacheGroups([
+			'com_engage',
+		], [0, 1], 'onEngageClearCache');
 	}
 
 }
