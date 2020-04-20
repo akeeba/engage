@@ -20,7 +20,10 @@ use FOF30\Container\Container;
 use FOF30\Controller\DataController;
 use FOF30\Controller\Mixin\PredefinedTaskList;
 use FOF30\Model\DataModel\Exception\RecordNotLoaded;
+use FOF30\Utils\CacheCleaner;
 use FOF30\View\Exception\AccessForbidden;
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use RuntimeException;
@@ -44,8 +47,19 @@ class Comments extends DataController
 
 		$this->setPredefinedTaskList([
 			'browse', 'submit', 'edit', 'save', 'publish', 'unpublish', 'remove', 'reportspam', 'reportham',
-			'possiblespam', 'unsubscribe'
+			'possiblespam', 'unsubscribe',
 		]);
+
+		$this->cacheParams = [
+			'option'              => 'CMD',
+			'view'                => 'CMD',
+			'task'                => 'CMD',
+			'format'              => 'CMD',
+			'layout'              => 'CMD',
+			'asset_id'            => 'INT',
+			'akengage_limitstart' => 'INT',
+			'akengage_start'      => 'INT',
+		];
 	}
 
 	/**
@@ -56,10 +70,13 @@ class Comments extends DataController
 	 */
 	public function debug()
 	{
+		$this->disableJoomlaCache();
+
 		$comment = $this->getModel();
 		$comment->load($this->input->getInt('comment_id'));
 
 		$this->container->platform->importPlugin('engage');
+		$this->container->platform->importPlugin('content');
 		$this->container->platform->runPlugins('onComEngageModelCommentsAfterCreate', [$comment]);
 
 		echo "OK";
@@ -75,6 +92,8 @@ class Comments extends DataController
 	 */
 	public function submit(): void
 	{
+		$this->disableJoomlaCache();
+
 		// CSRF prevention
 		$this->csrfProtection();
 
@@ -194,7 +213,9 @@ class Comments extends DataController
 			return;
 		}
 
-		// The save succeeded. Clear the session data and redirect back to the asset being commented on.
+		$this->cleanCache();
+
+		// Clear the session data and redirect back to the asset being commented on.
 		$platform->unsetSessionVar('name', $sessionNamespace);
 		$platform->unsetSessionVar('email', $sessionNamespace);
 		$platform->unsetSessionVar('comment', $sessionNamespace);
@@ -250,6 +271,8 @@ class Comments extends DataController
 	 */
 	public function possiblespam(): void
 	{
+		$this->disableJoomlaCache();
+
 		// CSRF prevention
 		$this->csrfProtection();
 
@@ -281,6 +304,8 @@ class Comments extends DataController
 			$error  = $e->getMessage();
 		}
 
+		$this->cleanCache();
+
 		// Redirect
 		if ($customURL = $this->input->getBase64('returnurl', ''))
 		{
@@ -308,6 +333,8 @@ class Comments extends DataController
 	 */
 	public function unsubscribe()
 	{
+		$this->disableJoomlaCache();
+
 		// I need at least a comment ID and an email to unsubscribe
 		$id               = $this->input->getInt('id', 0);
 		$unsubscribeEmail = $this->input->getString('email', '');
@@ -377,6 +404,16 @@ class Comments extends DataController
 	 */
 	protected function onBeforeBrowse(): void
 	{
+		/**
+		 * If the current user has the core.edit.own privilege we need to cache per user ID instead of per user group.
+		 * The idea is that each user in the group that gives the core.edit.own privilege will see an edit button on
+		 * DIFFERENT comments than the other.
+		 *
+		 * In all other cases we need to cache by user group. All users with the same user group combination will be
+		 * seeing the exact same comments display at all times.
+		 */
+		$this->userCaching = $this->container->platform->getUser()->authorise('core.edit.own', 'com_engage') ? 2 : 1;
+
 		// Make sure we are allowed to show this page (the content plugin explicitly told us to render it).
 		if (!isset($this->container['commentsBrowseEnablingFlag']) || !$this->container['commentsBrowseEnablingFlag'])
 		{
@@ -440,7 +477,10 @@ class Comments extends DataController
 	 */
 	protected function onAfterPublish()
 	{
+		$this->disableJoomlaCache();
 		$this->addCommentFragmentToReturnURL();
+
+		$this->cleanCache();
 	}
 
 	/**
@@ -448,11 +488,16 @@ class Comments extends DataController
 	 */
 	protected function onAfterUnpublish()
 	{
+		$this->disableJoomlaCache();
 		$this->addCommentFragmentToReturnURL();
+
+		$this->cleanCache();
 	}
 
 	protected function onBeforeEdit()
 	{
+		$this->disableJoomlaCache();
+
 		$view = $this->getView();
 
 		$view->returnURL = '';
@@ -466,6 +511,11 @@ class Comments extends DataController
 		}
 
 		$view->returnURL = $redirectURL;
+	}
+
+	protected function onAfterApplySave(&$data, $id)
+	{
+		$this->cleanCache();
 	}
 
 	/** @inheritDoc */
@@ -629,6 +679,8 @@ class Comments extends DataController
 	 */
 	private function reportMessage(bool $asSpam = true): void
 	{
+		$this->disableJoomlaCache();
+
 		$this->csrfProtection();
 
 		$model    = $this->getModel()->savestate(false);
@@ -665,6 +717,9 @@ class Comments extends DataController
 			$error = $e->getMessage();
 		}
 
+		// Clean cached comments display
+		$this->cleanCache();
+
 		// Redirect
 		if ($customURL = $this->input->getBase64('returnurl', ''))
 		{
@@ -683,5 +738,44 @@ class Comments extends DataController
 
 			$this->setRedirect($url, Text::_($message));
 		}
+	}
+
+	/**
+	 * Disables the Joomla cache for this response.
+	 *
+	 * @return  void
+	 * @see     \Joomla\CMS\MVC\Controller\FormController::edit()
+	 */
+	private function disableJoomlaCache(): void
+	{
+		try
+		{
+			/** @var CMSApplication $app */
+			$app = Factory::getApplication();
+		}
+		catch (Exception $e)
+		{
+			return;
+		}
+
+		if (!method_exists($app, 'allowCache'))
+		{
+			return;
+		}
+
+		$app->allowCache(false);
+	}
+
+	/**
+	 * Clear the Joomla cache for Akeeba Engage
+	 *
+	 * @return  void
+	 */
+	private function cleanCache(): void
+	{
+		CacheCleaner::clearCacheGroups([
+			'com_content',
+			'com_engage',
+		], [0]);
 	}
 }

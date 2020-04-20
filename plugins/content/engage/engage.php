@@ -376,7 +376,7 @@ class plgContentEngage extends CMSPlugin
 			 * Preload the parameters, if they are not already loaded.
 			 *
 			 * This saves a query to the database when the component tries to access its parameters. If I were to get
-			 * the parameters on the clone (or a temporary instance, which *is* a clone) the component would craete a
+			 * the parameters on the clone (or a temporary instance, which *is* a clone) the component would create a
 			 * new instance of the Params object which makes it run yet another query against the #__extensions table
 			 * to fetch the parameters.
 			 */
@@ -386,13 +386,16 @@ class plgContentEngage extends CMSPlugin
 			$this->container = clone $this->container;
 
 			// Manipulate its input data
+			$appInput = new Input();
 			$this->container->input->setData([
+				'option'              => 'com_engage',
 				'view'                => 'Comments',
 				'task'                => 'browse',
 				'asset_id'            => 0,
 				'access'              => 0,
-				'akengage_limitstart' => (new Input())->getInt('akengage_limitstart', 0),
-				'layout'              => null,
+				'akengage_limitstart' => ($appInput)->getInt('akengage_limitstart', 0),
+				'akengage_limit'      => ($appInput)->getInt('akengage_limit', 20),
+				'layout'              => $this->isAMP() ? 'amp' : 'default',
 				'tpl'                 => null,
 				'tmpl'                => null,
 				'format'              => 'html',
@@ -400,6 +403,29 @@ class plgContentEngage extends CMSPlugin
 		}
 
 		return $this->container;
+	}
+
+	/**
+	 * WbAMP support. Is this an AMP page?
+	 *
+	 * @return  bool
+	 * @see     https://weeblr.com/documentation/products.wbamp/1/going-further/api/index.html
+	 */
+	private function isAMP(): bool
+	{
+		if (!class_exists('\WbAMP'))
+		{
+			return false;
+		}
+
+		try
+		{
+			return WbAMP::isAMPRequest();
+		}
+		catch (Throwable $e)
+		{
+			return false;
+		}
 	}
 
 	/**
