@@ -249,13 +249,16 @@ final class Meta
 	}
 
 	/**
-	 * Not-quite-deletes the comments filed by a user, either directly with their user ID or under their email address.
+	 * Pseudonymises and removes the content of comments filed by a user.
+	 *
+	 * All comments filed either directly with their user ID or under their email address are affected.
 	 *
 	 * The following actions are taken:
 	 *
 	 * * The comment text is replaced with COM_ENGAGE_COMMENTS_LBL_DELETEDCOMMENT
 	 * * The name (for guest comments filed under the user's email) is replaced with COM_ENGAGE_COMMENTS_LBL_DELETEDUSER
 	 * * The email (for guest comments filed under the user's email) is replaced with deleted.<USER_ID>@<SITE_HOSTNAME>
+	 * * All #__engage_unsubscribe records with that email address are removed
 	 *
 	 * This is similar to how other sites, e.g. Slashdot, treat user account deletion. If we were to completely delete a
 	 * user's comments we would also be deleting the entire conversation below them since we can't have orphan comments.
@@ -263,11 +266,13 @@ final class Meta
 	 * quoted by a different user but that's something you should have thought before saying something regrettable on
 	 * the Internet...
 	 *
-	 * @param   User|null  $user
+	 * @param   User|null  $user            The user object whose comments will be nuked
+	 *
+	 * @param   bool       $convertToGuest  True to convert attributed comments to pseudonymized guest comments
 	 *
 	 * @return  int[]  The comment IDs affected
 	 */
-	public static function nukeUserComments(?User $user): array
+	public static function pseudonymiseUserComments(?User $user, bool $convertToGuest = false): array
 	{
 		if (empty($user))
 		{
@@ -284,7 +289,7 @@ final class Meta
 		$db        = $container->db;
 
 		// Nuke comments directly attributed to the user ID
-		$q = $db->getQuery(true)
+		$q   = $db->getQuery(true)
 			->select($db->qn('engage_comment_id'))
 			->from($db->qn('#__engage_comments'))
 			->where($db->qn('created_by') . ' = ' . $db->q($user->id));
@@ -304,13 +309,41 @@ final class Meta
 			->where($db->qn('email') . ' = ' . $db->q($user->email));
 		$cid = array_merge($cid, $db->setQuery($q)->loadColumn() ?? []);
 
-		$q   = $db->getQuery(true)
+		$q = $db->getQuery(true)
 			->update($db->qn('#__engage_comments'))
 			->set([
 				$db->qn('body') . ' = ' . $db->q(Text::_('COM_ENGAGE_COMMENTS_LBL_DELETEDCOMMENT')),
 				$db->qn('name') . ' = ' . $db->q(Text::sprintf('COM_ENGAGE_COMMENTS_LBL_DELETEDUSER', $user->id)),
 				$db->qn('email') . ' = ' . $db->q(sprintf('deleted.%u@%s', $user->id, $uri->getHost())),
 			])
+			->where($db->qn('email') . ' = ' . $db->q($user->email));
+		$db->setQuery($q)->execute();
+
+		/**
+		 * If converting the comments to guest comments (when the user record itself is deleted) we need to do some more
+		 * post processing for these comments.
+		 */
+		if ($convertToGuest && !empty($cid))
+		{
+			$q = $db->getQuery(true)
+				->update($db->qn('#__engage_comments'))
+				->set([
+					$db->qn('body') . ' = ' . $db->q(Text::_('COM_ENGAGE_COMMENTS_LBL_DELETEDCOMMENT')),
+					$db->qn('name') . ' = ' . $db->q(Text::sprintf('COM_ENGAGE_COMMENTS_LBL_DELETEDUSER', $user->id)),
+					$db->qn('email') . ' = ' . $db->q(sprintf('deleted.%u@%s', $user->id, $uri->getHost())),
+				])
+				->where($db->qn('engage_comment_id') . ' IN(' . implode(
+						',',
+						array_filter(array_unique($cid), function ($id) {
+							return is_numeric($id) && ($id > 0);
+						})
+					) . ')');
+			$db->setQuery($q)->execute();
+		}
+
+		// Remove #__engage_unsubscribe records
+		$q = $db->getQuery(true)
+			->delete($db->qn('#__engage_unsubscribe'))
 			->where($db->qn('email') . ' = ' . $db->q($user->email));
 		$db->setQuery($q)->execute();
 

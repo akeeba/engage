@@ -153,7 +153,9 @@ class plgUserEngage extends CMSPlugin
 		}
 
 		// Remove the comments and uncache the user object.
-		Meta::nukeUserComments($this->usersToRemove[$userId]);
+		$this->getContainer()->platform->loadTranslations('com_engage');
+
+		Meta::pseudonymiseUserComments($this->usersToRemove[$userId], true);
 
 		unset($this->usersToRemove[$userId]);
 

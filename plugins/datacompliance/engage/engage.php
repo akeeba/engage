@@ -89,7 +89,11 @@ class plgDatacomplianceEngage extends CMSPlugin
 
 		$user = Factory::getUser($userID);
 
-		$ret['engage']['engage_comment_id'] = Meta::nukeUserComments($user);
+		$this->container->platform->loadTranslations('com_engage');
+
+		$ret['engage']['engage_comment_id'] = Meta::pseudonymiseUserComments($user);
+
+		return $ret;
 	}
 
 	/**

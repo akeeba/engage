@@ -71,7 +71,9 @@ class plgPrivacyEngage extends PrivacyPlugin
 			return;
 		}
 
-		Meta::nukeUserComments($user);
+		$this->container->platform->loadTranslations('com_engage');
+
+		Meta::pseudonymiseUserComments($user);
 	}
 
 
