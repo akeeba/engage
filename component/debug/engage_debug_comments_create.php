@@ -311,8 +311,15 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 
 			foreach ($toComment as $parent)
 			{
+				// All comments on that level must be published within 2 years after the parent's publish date and definitely not after today.
 				/** @var Date $earliestDate */
 				$earliestDate = $parent['date'];
+
+				if (is_string($earliestDate))
+				{
+					$earliestDate = new FOF30\Date\Date($earliestDate);
+				}
+
 				$latestDate   = (clone $earliestDate)->add(new DateInterval('P2Y'));
 
 				if ($latestDate->getTimestamp() > time())
@@ -331,12 +338,7 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 					$randomTimestamp = $this->faker->biasedNumberBetween($earliestDate->toUnix(), $latestDate->toUnix(), [
 						Biased::class, 'linearLow',
 					]);
-					$earliestDate    = new Date($randomTimestamp);
-
-					if ($earliestDate->toSql() > time())
-					{
-						break;
-					}
+					$jDate = new FOF30\Date\Date($randomTimestamp);
 
 					$commentsInfo[] = [
 						'uuid'      => $this->faker->uuid,
@@ -344,7 +346,7 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 						'level'     => $level,
 						'parent_id' => ($parent['level'] === 0) ? 0 : ('@' . $parent['uuid']),
 						'asset_id'  => $assetID,
-						'date'      => $earliestDate,
+						'date'      => $jDate->toSql(),
 					];
 				}
 			}
@@ -352,13 +354,6 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 
 		// Remove root comment (0)
 		unset($commentsInfo[0]);
-
-		// Map each Date object to its SQL representation
-		$commentsInfo = array_map(function (array $info) {
-			$info['date'] = $info['date']->toSql();
-
-			return $info;
-		}, $commentsInfo);
 
 		// Commit to database
 		$db = $this->container->db;
@@ -554,7 +549,6 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 			case 3:
 			default:
 				$this->maxPostPerLevel = [30, 10, 3];
-				$this->maxPostPerLevel = [10, 3, 1];
 				break;
 
 			case 4:
