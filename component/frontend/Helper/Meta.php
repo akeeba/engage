@@ -264,23 +264,32 @@ final class Meta
 	 * the Internet...
 	 *
 	 * @param   User|null  $user
+	 *
+	 * @return  int[]  The comment IDs affected
 	 */
-	public static function nukeUserComments(?User $user): void
+	public static function nukeUserComments(?User $user): array
 	{
 		if (empty($user))
 		{
-			return;
+			return [];
 		}
 
 		if ($user->guest)
 		{
-			return;
+			return [];
 		}
 
+		$cid       = [];
 		$container = self::getContainer();
 		$db        = $container->db;
 
 		// Nuke comments directly attributed to the user ID
+		$q = $db->getQuery(true)
+			->select($db->qn('engage_comment_id'))
+			->from($db->qn('#__engage_comments'))
+			->where($db->qn('created_by') . ' = ' . $db->q($user->id));
+		$cid = $db->setQuery($q)->loadColumn() ?? [];
+
 		$q = $db->getQuery(true)
 			->update($db->qn('#__engage_comments'))
 			->set($db->qn('body') . ' = ' . $db->q(Text::_('COM_ENGAGE_COMMENTS_LBL_DELETEDCOMMENT')))
@@ -290,6 +299,12 @@ final class Meta
 		// Nuke comments attributed to the user's email address
 		$uri = Uri::getInstance();
 		$q   = $db->getQuery(true)
+			->select($db->qn('engage_comment_id'))
+			->from($db->qn('#__engage_comments'))
+			->where($db->qn('email') . ' = ' . $db->q($user->email));
+		$cid = array_merge($cid, $db->setQuery($q)->loadColumn() ?? []);
+
+		$q   = $db->getQuery(true)
 			->update($db->qn('#__engage_comments'))
 			->set([
 				$db->qn('body') . ' = ' . $db->q(Text::_('COM_ENGAGE_COMMENTS_LBL_DELETEDCOMMENT')),
@@ -298,6 +313,8 @@ final class Meta
 			])
 			->where($db->qn('email') . ' = ' . $db->q($user->email));
 		$db->setQuery($q)->execute();
+
+		return $cid;
 	}
 
 	/**

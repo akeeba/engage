@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   AkeebaEngage
+  ~ @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+<extension version="3.9.0" type="plugin" group="datacompliance" method="upgrade">
+    <name>PLG_DATACOMPLIANCE_ENGAGE</name>
+    <description>PLG_DATACOMPLIANCE_ENGAGE_XML_DESC</description>
+    <version>1.0.0</version>
+    <creationDate>2020-04-01</creationDate>
+    <author>Akeeba Ltd</author>
+    <authorEmail>no-reply@akeebabackup.com</authorEmail>
+    <authorUrl>https://www.akeebabackup.com</authorUrl>
+    <copyright>Copyright (c)2020-2020 Akeeba Ltd</copyright>
+    <license>GNU/GPL v3 or any later version</license>
+
+    <files>
+        <filename plugin="engage">engage.php</filename>
+        <filename>.htaccess</filename>
+        <filename>web.config</filename>
+    </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.plg_datacompliance_engage.ini</language>
+        <language tag="en-GB">en-GB/en-GB.plg_datacompliance_engage.sys.ini</language>
+    </languages>
+
+    <scriptfile>script.php</scriptfile>
+
+</extension>
