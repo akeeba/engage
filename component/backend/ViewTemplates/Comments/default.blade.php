@@ -136,7 +136,7 @@ $purifier = new HTMLPurifier($config);
                 </div>
             </td>
             <td class="engage-comment-preview">
-                @if ($item->getLevel() > 1)
+                @if (!empty($item->getFieldValue('parent_id')))
                 <?php
                     try
                     {
