@@ -5,8 +5,9 @@
  */
 
 @import "sources/variables";
+@import 'sources/joomla';
 
-[class ^= "icon-engage"], [class ^= "icon-engage"]:before {
+[class ^= "icon-akengage"], [class ^= "icon-akengage"]:before {
   color: black !important;
   display: inline-block;
   font-family: "AKIonicons" !important;
@@ -21,10 +22,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-engage-possiblespam:before { content: "\f42d"; }
-.icon-engage-spam:before { content: "\f42d"; }
-.icon-engage-reportspam:before { content: "\f100"; }
-.icon-engage-reportham:before { content: "\f42c"; }
+.icon-akengage-possiblespam:before { content: "\f42d"; }
+.icon-akengage-spam:before { content: "\f42d"; }
+.icon-akengage-reportspam:before { content: "\f100"; }
+.icon-akengage-reportham:before { content: "\f42c"; }
 
 #akeeba-renderer-fef {
   .engage-userfield {
@@ -119,5 +120,23 @@
     position: absolute;
     width: 1px;
     word-wrap: normal !important;
+  }
+}
+
+// Use the "Akeeba Products" font for a vector logo
+.icon-engage,
+.icon-engage-j4 {
+  &:before {
+    font-family: 'Akeeba Products' !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    line-height: 1 !important;
+
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    -moz-osx-font-smoothing: grayscale;
+
+    content: '\0049';
   }
 }

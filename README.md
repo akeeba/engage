@@ -17,6 +17,7 @@ Akeeba Engage is a simple comment solution for Joomla. It is meant to be used wi
 
 ## Features
 
+* Downloads and updates to the component are free of charge. Getting support costs money, though.
 * Comments allow for full HTML, edited using the WYSIWYG editor configured in Joomla. 
 * HTML filtering for comments either by Joomla itself or using the more robust, heavily audited HTML Purifier library.
 * Comments can be filed by logged in users or guests (configurable with Joomla's permissions).
@@ -36,7 +37,7 @@ Akeeba Engage is a simple comment solution for Joomla. It is meant to be used wi
 * Integration with User Actions, logging administrative actions taken on comments.
 * Full support for Joomla caching (Conservative and Progressive).
 * You can customize the comments display with standard Joomla template overrides.
-* You can customize the CSS used for comments display with standard Joomla media overrides.
+* You can customize the CSS used for comments display with standard Joomla media overrides. You get the full SCSS source files.
 
 ## Downloads
 

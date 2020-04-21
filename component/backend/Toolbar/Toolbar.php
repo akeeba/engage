@@ -34,14 +34,14 @@ class Toolbar extends BaseToolbar
 		{
 			ToolbarHelper::publishList();
 			ToolbarHelper::unpublishList();
-			ToolbarHelper::custom('possiblespam', 'engage-possiblespam', '', 'COM_ENGAGE_COMMENTS_TOOLBAR_POSSIBLESPAM');
-			$bar->appendButton('Confirm', 'COM_ENGAGE_COMMENTS_CONFIRM_REPORTHAM', 'engage-reportham', 'COM_ENGAGE_COMMENTS_TOOLBAR_REPORTHAM', 'reportham', true);
+			ToolbarHelper::custom('possiblespam', 'akengage-possiblespam', '', 'COM_ENGAGE_COMMENTS_TOOLBAR_POSSIBLESPAM');
+			$bar->appendButton('Confirm', 'COM_ENGAGE_COMMENTS_CONFIRM_REPORTHAM', 'akengage-reportham', 'COM_ENGAGE_COMMENTS_TOOLBAR_REPORTHAM', 'reportham', true);
 
 		}
 
 		if ($this->perms->delete)
 		{
-			$bar->appendButton('Confirm', 'COM_ENGAGE_COMMENTS_CONFIRM_REPORTSPAM', 'engage-reportspam', 'COM_ENGAGE_COMMENTS_TOOLBAR_REPORTSPAM', 'reportspam', true);
+			$bar->appendButton('Confirm', 'COM_ENGAGE_COMMENTS_CONFIRM_REPORTSPAM', 'akengage-reportspam', 'COM_ENGAGE_COMMENTS_TOOLBAR_REPORTSPAM', 'reportspam', true);
 			ToolbarHelper::deleteList('COM_ENGAGE_COMMENTS_CONFIRM_DELETE');
 		}
 
@@ -66,5 +66,21 @@ class Toolbar extends BaseToolbar
 		ToolbarHelper::save();
 
 		ToolbarHelper::link('index.php?option=com_engage&view=Comments', 'JCANCEL', 'cancel');
+	}
+
+	public function onEmailtemplatesBrowse()
+	{
+		parent::onBrowse();
+
+		// Set toolbar title
+		ToolbarHelper::title(Text::_('COM_ENGAGE') . ' <small>' . Text::_('COM_ENGAGE_TITLE_EMAILTEMPLATES') . '</small>', 'engage');
+	}
+
+	public function onEmailtemplatesEdit()
+	{
+		parent::onEdit();
+
+		// Set toolbar title
+		ToolbarHelper::title(Text::_('COM_ENGAGE') . ' <small>' . Text::_('COM_ENGAGE_TITLE_EMAILTEMPLATES_EDIT') . '</small>', 'engage');
 	}
 }
