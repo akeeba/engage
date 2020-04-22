@@ -40,14 +40,14 @@
 
         <!-- Plugins: engage -->
         <file type="plugin" group="engage" id="akismet">plg_engage_akismet.zip</file>
-        <file type="plugin" group="engage" id="email">plg_email_gravatar.zip</file>
+        <file type="plugin" group="engage" id="email">plg_engage_email.zip</file>
         <file type="plugin" group="engage" id="gravatar">plg_engage_gravatar.zip</file>
 
         <!-- Plugins: privacy -->
         <file type="plugin" group="privacy" id="engage">plg_privacy_engage.zip</file>
 
         <!-- Plugins: system -->
-        <file type="plugin" group="system" id="engagecache">plg_privacy_engagecache.zip</file>
+        <file type="plugin" group="system" id="engagecache">plg_system_engagecache.zip</file>
 
         <!-- Plugins: user -->
         <file type="plugin" group="user" id="engage">plg_user_engage.zip</file>
