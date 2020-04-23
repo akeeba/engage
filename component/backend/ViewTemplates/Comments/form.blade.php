@@ -112,5 +112,5 @@ $editOwn = $user->id == $item->created_by;
         </div>
     @endif
 
-	@editor('body', $item->body, '100%', '400', 50, 10, false, 'akengage-comment-edit-form-editor')
+	@editor('body', \Akeeba\Engage\Admin\Helper\Format::processFlatComment($item->body), '100%', '400', 50, 10, false, 'akengage-comment-edit-form-editor')
 @stop

@@ -124,7 +124,7 @@ final class Format
 	 *
 	 * @return  string  Actual HTML code we can display.
 	 */
-	private static function processFlatComment(string $text): string
+	public static function processFlatComment(string $text): string
 	{
 		$text = trim($text);
 

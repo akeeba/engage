@@ -157,7 +157,7 @@ $purifier = new HTMLPurifier($config);
                     </div>
                     @endunless
                 @endif
-                {{ $purifier->purify($item->body) }}
+                {{ $purifier->purify(\Akeeba\Engage\Admin\Helper\Format::processCommentTextForDisplay($item->body)) }}
                 <div class="engage-edit-link">
                     <a href="@route('index.php?option=com_engage&view=Comments&task=edit&id=' . $item->getId())">
                         @lang('JGLOBAL_EDIT')
