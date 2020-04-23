@@ -26,11 +26,11 @@ class Dispatcher extends FOFDispatcher
 		$this->onBeforeDispatchLoadComponentVersion();
 
 		$darkMode  = $this->container->params->get('dark_mode_backend', -1);
-		$customCss = 'media://com_engage/css/comments.min.css';
+		$customCss = 'media://com_engage/css/comments.css';
 
 		if ($darkMode != 0)
 		{
-			$customCss .= ', media://com_engage/css/comments_dark.min.css';
+			$customCss .= ', media://com_engage/css/comments_dark.css';
 		}
 
 		$this->container->renderer->setOptions([
