@@ -60,16 +60,9 @@ final class Format
 			return '';
 		}
 
-		// Remove existing rel attributes from everything
-		$text = preg_replace_callback('/(<[a-z_\-\.]*\s*[^>]*\s+)(rel\s*=\s*"[^"]+")/i', function (array $matches): string {
-			return $matches[1];
-		}, $text);
-
-		// Add rel="nofollow noreferrer" to anchor tags
-		$text = preg_replace_callback('/(<a\s*[^>]*\s+)href\s*=/i', function (array $matches): string {
-			return rtrim($matches[1]) . ' rel="nofollow noreferrer" href=';
-			//var_dump($matches);die;
-		}, $text);
+		$text = self::processFlatComment($text);
+		$text = self::processRemoveRelAttributes($text);
+		$text = self::processAnchorTagsNoFollow($text);
 
 		return $text;
 	}
@@ -89,5 +82,80 @@ final class Format
 		self::$container = Container::getInstance('com_engage');
 
 		return self::$container;
+	}
+
+	/**
+	 * Remove existing rel attributes from all tags
+	 *
+	 * @param   string  $text  The comment text to process
+	 *
+	 * @return  string
+	 */
+	private static function processRemoveRelAttributes(string $text): string
+	{
+		$text = preg_replace_callback('/(<[a-z_\-\.]*\s*[^>]*\s+)(rel\s*=\s*"[^"]+")/i', function (array $matches): string {
+			return $matches[1];
+		}, $text);
+
+		return $text;
+	}
+
+	/**
+	 * Add rel="nofollow noreferrer" to anchor tags
+	 *
+	 * @param   string  $text  The comment text to process
+	 *
+	 * @return  string
+	 */
+	private static function processAnchorTagsNoFollow(string $text): string
+	{
+		$text = preg_replace_callback('/(<a\s*[^>]*\s+)href\s*=/i', function (array $matches): string {
+			return rtrim($matches[1]) . ' rel="nofollow noreferrer" href=';
+			//var_dump($matches);die;
+		}, $text);
+
+		return $text;
+	}
+
+	/**
+	 * This can turn WordPress-style comments (partially HTML) into a passable HTML document.
+	 *
+	 * @param   string  $text  What we expect is a borked WordPress comment ;)
+	 *
+	 * @return  string  Actual HTML code we can display.
+	 */
+	private static function processFlatComment(string $text): string
+	{
+		$text = trim($text);
+
+		// Do I have a paragraph tag in the beginning of the comment?
+		if (in_array(strtolower(substr($text, 0, 3)), ['<p>', '<p ']))
+		{
+			return $text;
+		}
+
+		// Do I have a DIV tag in the beginning of the comment?
+		if (in_array(strtolower(substr($text, 0, 5)), ['<div>', '<div ']))
+		{
+			return $text;
+		}
+
+		$paragraphs = explode("\n\n", $text);
+
+		return implode("\n", array_map(function (string $text) {
+			// Do I have a p tag?
+			if (in_array(strtolower(substr($text, 0, 3)), ['<p>', '<p ']))
+			{
+				return $text;
+			}
+
+			// Do I have a div tag?
+			if (in_array(strtolower(substr($text, 0, 5)), ['<div>', '<div ']))
+			{
+				return $text;
+			}
+
+			return "<p>" . $text . "</p>";
+		}, $paragraphs));
 	}
 }
