@@ -65,11 +65,11 @@ $openListItem++;
 $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 ?>
 <li class="akengage-comment-item">
-	<div
+	<article
 		class="akengage-comment--<?= ($comment->enabled == 1) ? 'published' : (($comment->enabled == -3) ? 'spam' : 'unpublished') ?>"
 		id="akengage-comment-<?= $comment->getId() ?>" itemscope itemtype="http://schema.org/Comment">
 
-		<div class="akengage-comment-properties">
+		<footer class="akengage-comment-properties">
 			<h4 class="akengange-commenter-name" itemprop="author" itemscope itemtype="http://schema.org/Person">
 				<?php if (!empty($avatar)): ?>
 					<link itemprop="image" href="<?= $avatar ?>">
@@ -87,12 +87,12 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 			<p class="akengage-comment-permalink" itemprop="dateCreated" content="<?= $commentDate->toISO8601(false) ?>">
 				<?= $commentDate->format(Text::_('DATE_FORMAT_LC2'), true) ?>
 			</p>
-		</div>
+		</footer>
 
 		<div class="akengage-comment-body" itemprop="text">
 			<?= Format::processCommentTextForDisplay($comment->body) ?>
 		</div>
-	</div>
+	</article>
 
 
 	<?php endforeach; ?>

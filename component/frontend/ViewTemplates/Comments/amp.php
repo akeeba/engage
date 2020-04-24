@@ -27,7 +27,7 @@ use Joomla\CMS\Uri\Uri;
 $darkMode       = $this->container->params->get('dark_mode_backend', -1);
 $paginationData = $this->getPagination()->getData();
 ?>
-<div class="akengage-outer-container">
+<section class="akengage-outer-container" aria-label="<?= Text::_('COM_ENGAGE_COMMENTS_SECTION_HEADER') ?>">
 	<h3 class="akengage-title">
 		<?= Text::plural($this->headerKey, $this->getItemCount(), $this->title) ?>
 	</h3>
@@ -84,4 +84,4 @@ $paginationData = $this->getPagination()->getData();
 			<?= Text::_('COM_ENGAGE_COMMENTS_LBL_VISIT_HTML_TO_COMMENT') ?>
 		</a>
 	</p>
-</div>
+</section>

@@ -27,7 +27,7 @@ use Joomla\CMS\Language\Text;
 $darkMode       = $this->container->params->get('dark_mode_backend', -1);
 $paginationData = $this->getPagination()->getData();
 ?>
-<section class="akengage-outer-container<?= ($darkMode == 1) ? '--dark' : '' ?>">
+<section class="akengage-outer-container<?= ($darkMode == 1) ? '--dark' : '' ?>" aria-label="<?= Text::_('COM_ENGAGE_COMMENTS_SECTION_HEADER') ?>">
 	<h3 class="akengage-title">
 		<?= Text::plural($this->headerKey, $this->getItemCount(), $this->title) ?>
 	</h3>
