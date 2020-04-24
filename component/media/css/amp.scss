@@ -37,23 +37,6 @@ ul.akengage-comment-list {
   }
 }
 
-div.akengage-pagination-pages {
-  text-align: center;
-
-  a, span.active {
-    text-decoration: none;
-    color: darken($teal, 20%);
-    padding: .5em .25em;
-    margin: 0.5em;
-  }
-
-  span.active {
-    color: $grey;
-    font-weight: bold;
-    cursor: not-allowed;
-  }
-}
-
 p.akengage-visithtml {
   text-align: center;
 
