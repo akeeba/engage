@@ -41,14 +41,14 @@ div.akengage-pagination-pages {
   text-align: center;
 
   a, span.active {
-    text-decoration: none !important;
-    color: darken($teal, 20%) !important;
+    text-decoration: none;
+    color: darken($teal, 20%);
     padding: .5em .25em;
     margin: 0.5em;
   }
 
   span.active {
-    color: $grey !important;
+    color: $grey;
     font-weight: bold;
     cursor: not-allowed;
   }
@@ -58,14 +58,14 @@ p.akengage-visithtml {
   text-align: center;
 
   a {
-    color: darken($teal, 20%) !important;
+    color: darken($teal, 20%);
 
     &:visited {
-      color: darken($teal, 25%) !important;
+      color: darken($teal, 25%);
     }
 
     &:hover {
-      color: darken($teal, 15%) !important;
+      color: darken($teal, 15%);
     }
   }
 }
