@@ -152,7 +152,7 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 						</button>
 					</span>
 					<?php endif; ?>
-					<?php if ($this->perms['edit'] || $user->authorise('core.manage', $comment->asset_id)): ?>
+					<?php if ($this->perms['edit'] || $this->user->authorise('core.manage', $comment->asset_id)): ?>
 						<br/>
 						<?php if (!empty($ipLookupURL)): ?>
 							<span class="akengage-comment-ip">
