@@ -27,6 +27,9 @@
         <include name="media/**"/>
         <include name="*"/>
 
+        <!-- Debug scripts -->
+        <exclude name="debug/**"/>
+
         <!-- License file. Included in the package extensions's root -->
         <exclude name="LICENSE.txt"/>
 
