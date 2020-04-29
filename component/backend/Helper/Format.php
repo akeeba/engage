@@ -7,7 +7,9 @@
 
 namespace Akeeba\Engage\Admin\Helper;
 
+defined('_JEXEC') or die;
 
+use Akeeba\Engage\Site\Helper\Filter;
 use FOF30\Container\Container;
 
 final class Format
@@ -68,6 +70,56 @@ final class Format
 	}
 
 	/**
+	 * This can turn WordPress-style comments (partially HTML) into a passable HTML document.
+	 *
+	 * Here's the thing. WordPress' comment system is a site compromise waiting to happen. WordPress does NOT filter
+	 * HTML properly. I've had people who submitted comments containing XML tags – thankfully benign ones. WordPress
+	 * kept them as-is without converting the tag boundaries to &lt; and &gt;. The only easy way to fix that is to
+	 * convert WordPress' comment FrankenHTML into bbCode and parse the comment as bbCode (which escapes everything that
+	 * is not an explicit tag). This works great for my imported comments. Your mileage may vary :p
+	 *
+	 * @param   string  $text  What we expect is a borked WordPress comment ;)
+	 *
+	 * @return  string  Actual HTML code we can display.
+	 */
+	public static function processFlatComment(string $text): string
+	{
+		$text = trim($text);
+
+		// Do I have a paragraph tag in the beginning of the comment?
+		if (in_array(strtolower(substr($text, 0, 3)), ['<p>', '<p ']))
+		{
+			return $text;
+		}
+
+		// Do I have a DIV tag in the beginning of the comment?
+		if (in_array(strtolower(substr($text, 0, 5)), ['<div>', '<div ']))
+		{
+			return $text;
+		}
+
+		$text = preg_replace('#<a href="(.*)">(.*)</a>#i', '[url=$1]$2[/url]', $text);
+		$text = preg_replace('#<strong>(.*)</strong>#i', '[b]$1[/b]', $text);
+		$text = preg_replace('#<b>(.*)</b>#i', '[b]$1[/b]', $text);
+		$text = preg_replace('#<em>(.*)</em>#i', '[i]$1[/i]', $text);
+		$text = preg_replace('#<i>(.*)</i>#i', '[i]$1[/i]', $text);
+		$text = preg_replace('#<u>(.*)</u>#i', '[u]$1[/u]', $text);
+		$text = preg_replace('#<s>(.*)</s>#i', '[s]$1[/s]', $text);
+		$text = preg_replace('#<ul>(.*)</ul>#i', '[list]$1[/list]', $text);
+		$text = preg_replace('#<ol>(.*)</ol>#i', '[list=1]$1[/list]', $text);
+		$text = preg_replace('#<li>(.*)</li>#i', '[*] $1', $text);
+		$text = preg_replace('#<pre>(.*)</pre>#i', '[code]$1[/code]', $text);
+		$text = preg_replace('#<code>(.*)</code>#i', '[code]$1[/code]', $text);
+		$text = preg_replace('#<tt>(.*)</tt>#i', '[code]$1[/code]', $text);
+		$text = preg_replace('#<blockquote>(.*)</blockquote>#i', '[quote]$1[/quote]', $text);
+		$text = preg_replace('#<img(.*)src="(.*)"(.*)/?>#i', '[img=$2]', $text);
+
+		$text = htmlentities($text);
+
+		return Filter::filterText(BBCode::parseBBCode($text));
+	}
+
+	/**
 	 * Get the component's Container
 	 *
 	 * @return  Container
@@ -115,47 +167,5 @@ final class Format
 		}, $text);
 
 		return $text;
-	}
-
-	/**
-	 * This can turn WordPress-style comments (partially HTML) into a passable HTML document.
-	 *
-	 * @param   string  $text  What we expect is a borked WordPress comment ;)
-	 *
-	 * @return  string  Actual HTML code we can display.
-	 */
-	public static function processFlatComment(string $text): string
-	{
-		$text = trim($text);
-
-		// Do I have a paragraph tag in the beginning of the comment?
-		if (in_array(strtolower(substr($text, 0, 3)), ['<p>', '<p ']))
-		{
-			return $text;
-		}
-
-		// Do I have a DIV tag in the beginning of the comment?
-		if (in_array(strtolower(substr($text, 0, 5)), ['<div>', '<div ']))
-		{
-			return $text;
-		}
-
-		$paragraphs = explode("\n\n", $text);
-
-		return implode("\n", array_map(function (string $text) {
-			// Do I have a p tag?
-			if (in_array(strtolower(substr($text, 0, 3)), ['<p>', '<p ']))
-			{
-				return $text;
-			}
-
-			// Do I have a div tag?
-			if (in_array(strtolower(substr($text, 0, 5)), ['<div>', '<div ']))
-			{
-				return $text;
-			}
-
-			return "<p>" . $text . "</p>";
-		}, $paragraphs));
 	}
 }
