@@ -553,12 +553,23 @@ class plgContentEngage extends CMSPlugin
 		/** @var ContentModelArticle $model */
 		try
 		{
-			if (!class_exists('ContentModelArticle'))
+			if (version_compare(JVERSION, '3.999.999', 'le'))
 			{
-				JModelLegacy::addIncludePath(JPATH_BASE . '/components/com_content/models');
+				if (!class_exists('ContentModelArticle'))
+				{
+					JModelLegacy::addIncludePath(JPATH_BASE . '/components/com_content/models');
+				}
+
+				$model = JModelLegacy::getInstance('Article', 'ContentModel');
+			}
+			else
+			{
+				/** @var \Joomla\CMS\MVC\Factory\MVCFactoryInterface $factory */
+				$factory = Factory::getApplication()->bootComponent('com_content')->getMVCFactory();
+				/** @var \Joomla\Component\Content\Administrator\Model\ArticleModel $model */
+				$model = $factory->createModel('Article', 'Administrator');
 			}
 
-			$model = JModelLegacy::getInstance('Article', 'ContentModel');
 			$row   = $model->getItem($articleId);
 		}
 		catch (Exception $e)
@@ -716,19 +727,32 @@ class plgContentEngage extends CMSPlugin
 		}
 
 		// Go through the categories hierarchy, replacing inherited parameters
-		if (!class_exists('CategoriesModelCategory'))
+		if (version_compare(JVERSION, '3.999.999', 'le'))
 		{
-			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/models');
-		}
+			if (!class_exists('CategoriesModelCategory'))
+			{
+				JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/models');
+			}
 
-		if (!class_exists('CategoriesTableCategory'))
-		{
-			Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/tables');
+			if (!class_exists('CategoriesTableCategory'))
+			{
+				Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/tables');
+			}
 		}
 
 		$catId = $row->catid;
-		/** @var CategoriesModelCategory $model */
-		$model = JModelLegacy::getInstance('Category', 'CategoriesModel');
+		if (version_compare(JVERSION, '3.999.999', 'le'))
+		{
+			/** @var CategoriesModelCategory $model */
+			$model = JModelLegacy::getInstance('Category', 'CategoriesModel');
+		}
+		else
+		{
+			/** @var \Joomla\CMS\MVC\Factory\MVCFactoryInterface $factory */
+			$factory = Factory::getApplication()->bootComponent('com_categories')->getMVCFactory();
+			/** @var \Joomla\Component\Categories\Administrator\Model\CategoryModel $model */
+			$model = $factory->createModel('Category', 'Administrator');
+		}
 
 		while (true)
 		{
