@@ -54,7 +54,9 @@ use FOF30\Utils\FEFHelper\Html as FEFHtml;
 ?>
 
 {{-- Allow tooltips, used in grid headers --}}
+@if (version_compare(JVERSION, '4.0.0.a1', 'lt'))
 @jhtml('behavior.tooltip')
+@endif
 {{-- Allow SHIFT+click to select multiple rows --}}
 @jhtml('behavior.multiselect')
 
