@@ -13,6 +13,14 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
 
+/**
+ * User Action Log integration with Joomla.
+ *
+ * WARNING! Joomla 4 is broken by design. It will use Reflection to scan the method definitions and try to load all
+ * typehinted classes using the autoloader. Of course this is idiotic because a. the autoloader will do it anyway and
+ * b. it IMMEDIATELY breaks your site if the component defining the classes is disabled or not loaded already. Therefore
+ * we have to REMOVE the typehints from the methods and move them to the docblocks as if we're back writing PHP 5 code.
+ */
 class plgActionlogEngage extends CMSPlugin
 {
 	/**
@@ -66,7 +74,7 @@ class plgActionlogEngage extends CMSPlugin
 	 *
 	 * @return  void
 	 */
-	public function onComEngageModelCommentsAfterUpdate(CommentsModel $comment)
+	public function onComEngageModelCommentsAfterUpdate($comment)
 	{
 		if ($this->user->guest)
 		{
@@ -87,7 +95,7 @@ class plgActionlogEngage extends CMSPlugin
 	 *
 	 * @return  void
 	 */
-	public function onComEngageModelCommentsAfterCreate(CommentsModel $comment)
+	public function onComEngageModelCommentsAfterCreate($comment)
 	{
 		// Should I log comment creation?
 		if ($this->params->get('log_comments', 0) != 1)
@@ -125,7 +133,7 @@ class plgActionlogEngage extends CMSPlugin
 	 *
 	 * @return  void
 	 */
-	public function onComEngageModelCommentsAfterUnpublish(CommentsModel $comment)
+	public function onComEngageModelCommentsAfterUnpublish($comment)
 	{
 		if ($this->user->guest)
 		{
@@ -148,7 +156,7 @@ class plgActionlogEngage extends CMSPlugin
 	 *
 	 * @return void
 	 */
-	public function onComEngageModelCommentsAfterPublish(CommentsModel $comment)
+	public function onComEngageModelCommentsAfterPublish($comment)
 	{
 		if ($this->user->guest)
 		{
@@ -185,7 +193,7 @@ class plgActionlogEngage extends CMSPlugin
 	 *
 	 * @return  void
 	 */
-	public function onComEngageModelCommentsAfterDelete(CommentsModel $comment, ?int $id)
+	public function onComEngageModelCommentsAfterDelete($comment, ?int $id)
 	{
 		if ($this->user->guest)
 		{
@@ -210,7 +218,7 @@ class plgActionlogEngage extends CMSPlugin
 	 *
 	 * @return  void
 	 */
-	public function onAkeebaEngageReportSpam(CommentsModel $comment)
+	public function onAkeebaEngageReportSpam($comment)
 	{
 		if ($this->user->guest)
 		{
@@ -235,7 +243,7 @@ class plgActionlogEngage extends CMSPlugin
 	 *
 	 * @return  void
 	 */
-	public function onAkeebaEngageReportHam(CommentsModel $comment)
+	public function onAkeebaEngageReportHam($comment)
 	{
 		if ($this->user->guest)
 		{
@@ -254,7 +262,7 @@ class plgActionlogEngage extends CMSPlugin
 	 * @param   CommentsModel  $comment  The comment which was used as a reference for the conversation
 	 * @param   string|null    $email    The email address being unsubscribed
 	 */
-	public function onEngageUnsubscribeEmail(CommentsModel $comment, ?string $email)
+	public function onEngageUnsubscribeEmail($comment, ?string $email)
 	{
 		// Should I log guest unsubscribes?
 		if ($this->user->guest && ($this->params->get('log_guest_unsubscribe', 0) != 1))
@@ -286,7 +294,7 @@ class plgActionlogEngage extends CMSPlugin
 	 *
 	 * @return  array  Information to be sent to Joomla's User Actions Log model.
 	 */
-	private function getCommentInfo(CommentsModel $comment): array
+	private function getCommentInfo($comment): array
 	{
 		$meta = Meta::getAssetAccessMeta($comment->asset_id);
 		$id   = $comment->getId();
