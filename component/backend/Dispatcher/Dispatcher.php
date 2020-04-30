@@ -84,7 +84,7 @@ class Dispatcher extends FOFDispatcher
 	 */
 	protected function setupRenderOptions(): void
 	{
-		$darkMode  = $this->container->params->get('dark_mode', -1);
+		$darkMode  = $this->container->params->get('dark_mode_backend', -1);
 		$customCss = ['media://com_engage/css/backend.css'];
 
 		if ($darkMode != 0)

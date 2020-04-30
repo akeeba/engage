@@ -25,7 +25,7 @@ class Dispatcher extends FOFDispatcher
 		// Load the version.php file and set up the mediaVersion container key
 		$this->onBeforeDispatchLoadComponentVersion();
 
-		$darkMode  = $this->container->params->get('dark_mode_backend', -1);
+		$darkMode  = $this->container->params->get('dark_mode_frontend', -1);
 		$customCss = 'media://com_engage/css/comments.css';
 
 		if ($darkMode != 0)
