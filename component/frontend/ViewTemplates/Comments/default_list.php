@@ -73,12 +73,12 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 			<div itemprop="author" itemscope itemtype="http://schema.org/Person">
 				<?php if (!empty($avatar)): ?>
 					<?php if (empty($profile)): ?>
-						<img src="<?= $avatar ?>" alt="<?= Text::sprintf('COM_ENGAGE_COMMENTS_AVATAR_ALT', $user->name) ?>"
+						<img src="<?= $avatar ?>" alt=""
 							 class="akengage-commenter-avatar" itemprop="image">
 					<?php else: ?>
 						<a href="<?= $profile ?>" class="akengage-commenter-profile" itemprop="url">
 							<img src="<?= $avatar ?>"
-								 alt="<?= Text::sprintf('COM_ENGAGE_COMMENTS_AVATAR_ALT', $user->name) ?>"
+								 alt=""
 								 class="akengage-commenter-avatar" itemprop="image">
 						</a>
 					<?php endif; ?>
