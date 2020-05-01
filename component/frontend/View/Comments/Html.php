@@ -327,13 +327,13 @@ class Html extends DataHtml
 		// Script options and langauge keys
 		$protoURL = 'index.php?option=com_engage&view=Comments&task=%s&id=';
 		$platform->addScriptOptions('akeeba.Engage.Comments.returnURL', base64_encode(Uri::getInstance()->toString()));
-		$platform->addScriptOptions('akeeba.Engage.Comments.editURL', Route::_(sprintf($protoURL, 'edit'), true, Route::TLS_IGNORE, true));
-		$platform->addScriptOptions('akeeba.Engage.Comments.deleteURL', Route::_(sprintf($protoURL, 'remove'), true, Route::TLS_IGNORE, true));
-		$platform->addScriptOptions('akeeba.Engage.Comments.publishURL', Route::_(sprintf($protoURL, 'publish'), true, Route::TLS_IGNORE, true));
-		$platform->addScriptOptions('akeeba.Engage.Comments.unpublishURL', Route::_(sprintf($protoURL, 'unpublish'), true, Route::TLS_IGNORE, true));
-		$platform->addScriptOptions('akeeba.Engage.Comments.markhamURL', Route::_(sprintf($protoURL, 'reportham'), true, Route::TLS_IGNORE, true));
-		$platform->addScriptOptions('akeeba.Engage.Comments.markspamURL', Route::_(sprintf($protoURL, 'reportspam'), true, Route::TLS_IGNORE, true));
-		$platform->addScriptOptions('akeeba.Engage.Comments.possiblespamURL', Route::_(sprintf($protoURL, 'possiblespam'), true, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.editURL', Route::_(sprintf($protoURL, 'edit'), false, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.deleteURL', Route::_(sprintf($protoURL, 'remove'), false, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.publishURL', Route::_(sprintf($protoURL, 'publish'), false, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.unpublishURL', Route::_(sprintf($protoURL, 'unpublish'), false, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.markhamURL', Route::_(sprintf($protoURL, 'reportham'), false, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.markspamURL', Route::_(sprintf($protoURL, 'reportspam'), false, Route::TLS_IGNORE, true));
+		$platform->addScriptOptions('akeeba.Engage.Comments.possiblespamURL', Route::_(sprintf($protoURL, 'possiblespam'), false, Route::TLS_IGNORE, true));
 
 		Text::script('COM_ENGAGE_COMMENTS_DELETE_PROMPT');
 	}
