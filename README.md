@@ -12,7 +12,7 @@ Akeeba Engage is a simple comment solution for Joomla. It is meant to be used wi
 
 ## Requirements
 
-* Joomla 3.9.
+* Joomla 3.9 of 4.0.
 * PHP 7.1 or later (7.3 recommended).
 
 ## Features

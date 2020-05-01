@@ -46,6 +46,13 @@ class Com_EngageInstallerScript extends \FOF30\Utils\InstallScript\Component
 	protected $minimumJoomlaVersion = '3.9.0';
 
 	/**
+	 * The maximum Joomla! version this extension can be installed on
+	 *
+	 * @var   string
+	 */
+	protected $maximumJoomlaVersion = '4.0.99';
+
+	/**
 	 * Obsolete files and folders to remove from both paid and free releases. This is used when you refactor code and
 	 * some files inevitably become obsolete and need to be removed.
 	 *

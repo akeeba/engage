@@ -43,7 +43,7 @@ class Pkg_EngageInstallerScript
 	 *
 	 * @var   string
 	 */
-	protected $maximumJoomlaVersion = '3.999.999';
+	protected $maximumJoomlaVersion = '4.0.99';
 
 	/**
 	 * A list of extensions (modules, plugins) to enable after installation. Each item has four values, in this order:

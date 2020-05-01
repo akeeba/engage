@@ -1,7 +1,0 @@
-Some ideas for the future (not necessarily to be implemented, these are wild ideas)...
-
-Per-category or per-article comment settings
-    Comment privilege injected in com_content / com_categories?
-    How does that interact with the com_engage privilege?
-    Do I need my own permissions checker instead of going through Joomla?
-    Maybe leave it for version 2?

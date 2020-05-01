@@ -43,7 +43,7 @@ $uri->setVar('required', (isset($required) ? ($required ? 1 : 0) : 0));
 $uri->setVar('field', $field);
 $url = 'index.php' . $uri->toString(['query']);
 ?>
-@if (version_compare(JVERSION, '3.999999.999999', 'le'))
+@if (version_compare(JVERSION, '3.999.999', 'le'))
 
 	@unless($readonly)
 		@jhtml('behavior.modal', 'a.userSelectModal_' . $this->escape($field))

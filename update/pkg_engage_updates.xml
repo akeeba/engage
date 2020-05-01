@@ -18,6 +18,7 @@
         <infourl title="Akeeba Engage Release Notes">https://github.com/akeeba/engage/releases/1.0.0.b1</infourl>
 
         <targetplatform name="joomla" version="3.9"/>
+        <targetplatform name="joomla" version="4.0"/>
 
         <php_minimum>7.1.0</php_minimum>
 
@@ -27,7 +28,7 @@
         <ars-phpcompat version="7.4"/>
 
         <name>Akeeba Engage package</name>
-        <description>Akeeba Engage - Comments for Joomla! articles made easy</description>
+        <description>Akeeba Engage - Comments for Joomla!™ articles made easy</description>
         <element>pkg_engage</element>
         <type>package</type>
         <maintainer>Akeeba Ltd</maintainer>
