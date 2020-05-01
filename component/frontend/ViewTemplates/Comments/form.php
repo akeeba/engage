@@ -8,7 +8,7 @@
 defined('_JEXEC') or die();
 
 /**
- * View Template for the editing comments.
+ * View Template for the editing comments. This is used ONLY on Joomla 3.
  *
  * This View Template allows a user to edit a comment. This happens in two cases:
  * - A user with the Edit Own privilege edits their own comment
