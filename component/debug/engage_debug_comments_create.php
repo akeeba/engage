@@ -282,7 +282,10 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 		$refBase->setValue($base);
 
 		// Set up the SEF mode in the router
-		$this->getRouter()->setMode($this->get('sef', 0));
+		if (version_compare(JVERSION, '3.999.999', 'le'))
+		{
+			$this->getRouter()->setMode($this->get('sef', 0));
+		}
 	}
 
 	private function createTempInfo(int $assetID, array $meta): int
@@ -457,7 +460,15 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 	private function disableDatabaseLogging(): void
 	{
 		$db = Factory::getDbo();
-		$db->setDebug(false);
+
+		if (version_compare(JVERSION, '3.999.999', 'le'))
+		{
+			$db->setDebug(false);
+		}
+		else
+		{
+			$db->setMonitor(null);
+		}
 	}
 
 	/**

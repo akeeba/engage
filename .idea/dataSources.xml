@@ -18,5 +18,11 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/dionysopoulos</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="dev4" uuid="dc63912f-1333-41da-afd2-4c5f5bec08fa">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/dev4</jdbc-url>
+    </data-source>
   </component>
 </project>
