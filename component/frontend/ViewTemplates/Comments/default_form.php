@@ -112,12 +112,12 @@ HTMLHelper::_('behavior.formvalidator');
 			<div class="akengage-comment-captcha-clear"></div>
 		<?php endif; ?>
 
-		<div class="btn-toolbar">
-			<div class="btn-group">
-				<button type="submit" class="btn btn-primary">
-					<?= Text::_('COM_ENGAGE_COMMENTS_FORM_BTN_SUBMIT'); ?>
-				</button>
-			</div>
+		<div class="clearfix"></div>
+
+		<div class="btn-group">
+			<button type="submit" class="btn btn-primary">
+				<?= Text::_('COM_ENGAGE_COMMENTS_FORM_BTN_SUBMIT'); ?>
+			</button>
 		</div>
 	</form>
 
