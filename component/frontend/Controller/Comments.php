@@ -101,7 +101,7 @@ class Comments extends DataController
 		$parentId  = $this->input->post->getInt('parent_id', 0);
 		$name      = $this->input->post->getString('name', null);
 		$email     = $this->input->post->getString('email', null);
-		$comment   = $this->input->post->getHtml('comment', null);
+		$comment   = $this->input->post->getRaw('comment', null);
 		$returnUrl = $this->getReturnUrl();
 		$platform  = $this->container->platform;
 		$user      = $platform->getUser();
