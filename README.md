@@ -4,11 +4,13 @@ Comments for Joomla!™ articles made easy
 
 [Downloads](https://github.com/akeeba/engage/releases) • [Documentation](https://github.com/akeeba/engage/wiki) • [Code](https://github.com/akeeba/engage)
 
-> **WORK IN PROGRESS!** Akeeba Engage is currently in pre-alpha and its documentation is incomplete, in the process of being written. Furthermore, the support service for Akeeba Engage is not live yet. This is a preview, not the final product. You're welcome to take a peek but be advised that there may be dragons or other unsightly creatures.
+> **WORK IN PROGRESS!** Akeeba Engage is currently in beta. Limited support through GitHub issues will be provided through the beta period but support will be paid after that..
 
 ## Executive summary
 
-Akeeba Engage is a simple comment solution for Joomla. It is meant to be used with core content (articles) only. There is no intention of supporting non-core content.
+Akeeba Engage is a simple comment solution for Joomla. It is meant to be used with core content (articles) only. 
+
+There is no intention of supporting non-core content.
 
 ## Requirements
 
@@ -41,24 +43,20 @@ Akeeba Engage is a simple comment solution for Joomla. It is meant to be used wi
 
 ## Downloads
 
-Akeeba Engage is currently in pre-alpha stage. There are no public downloads made available yet.
-
-Our plan is to make downloads to the software free of charge through the Releases page of our GitHub repository.
+You can download Akeeba Engage free of charge from its GitHub repository's [Releases page](https://github.com/akeeba/engage/releases).
 
 ## Documentation
 
-Akeeba Engage is currently in pre-alpha stage. There is no public documentation yet.
-
-Our plan is to offer documentation to Akeeba Engage through the GitHub repository's Wiki system. 
+You can access Akeeba Engage's documentation free of charge on its GitHub repository's [documentation wiki](https://github.com/akeeba/engage/wiki).
 
 ## Support
 
-Akeeba Engage is currently in pre-alpha stage. No support can be provided yet.
+Akeeba Engage is currently in beta stage. Limited support will be provided through GitHub issues. However, this is not a permanent solution.
 
 Our plan is to provide _paid support_ for issues regarding installing, configuring and using Akeeba Engage once the software reaches a stable version (1.0.0).
 
-Please note that support is meant to be provided in a way to help you overcome issues with the installation, configuration and use of our software. We cannot do the installation and integration work ourselves, nor can we provide support for customising the frontend of the software including but not limited to template and media overrides. 
+Please note that support is meant to be provided in a way to help you overcome issues with the installation, configuration and use of our software. We cannot do the installation and integration work ourselves, nor can we provide support for customising the frontend of the software including but not limited to template and media overrides. We give you the tools to do that but we don't do custom integration and customization work on your behalf. 
 
-Furthermore, kindly note that we cannot advise you on configuring your third party WYSIWYG editor; that's something that is best left to the developer of your WYSIWYG editor for objective reasons. We _can_ help to a certain extent with Joomla's built-in WYSIWYG editor (TinyMCE) only.
+Furthermore, kindly note that we cannot advise you on configuring your third party WYSIWYG editor beyond what we have already documented in the Wiki; that's something that is best left to the developer of your WYSIWYG editor for objective reasons.
 
 Finally, please note that we can only provide limited and generic support for core Joomla features such as text filtering and access control (permissions). We can explain how these feature interact with our software and point you to further information – including our public documentation – but we cannot reconfigure or otherwise do extensive work on your site on your behalf.
