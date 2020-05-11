@@ -81,20 +81,7 @@
     ====================================================================================================
     -->
 
-    <target name="documentation" description="The documentation"
-            depends="doc-j-pdf">
-    </target>
-
-    <target name="doc-j-pdf" description="Documentation for Joomla! in PDF format">
-        <phingcall target="docbook-pdf">
-            <property name="docs.input" value="engage-guide.xml"/>
-        </phingcall>
-    </target>
-
-    <target name="doc-j-epub" description="Documentation for Joomla! in ePub format">
-        <phingcall target="docbook-epub">
-            <property name="docs.input" value="akeeba-ticket-system.xml"/>
-        </phingcall>
+    <target name="documentation" description="The documentation">
     </target>
 
     <!--
@@ -141,7 +128,7 @@
 
         <!-- Upload the release files -->
         <GitHubAsset token="${github.token}" organization="${github.organization}" repository="${github.repository}"
-                     file="${dirs.release}/pkg_ars-${version}.zip"
+                     file="${dirs.release}/pkg_engage-${version}.zip"
                      releaseId="${github.release.id}" />
 
         <!-- Publish the release -->
