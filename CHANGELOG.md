@@ -1,3 +1,9 @@
+# 1.0.0.b2
+
+**Bug fixes**
+
+* Immediate site crash because of a missing check in the cache handler plugin if no other system plugin has already loaded the FOF 3 library.
+
 # 1.0.0.b1
 
 _Initial public release._
