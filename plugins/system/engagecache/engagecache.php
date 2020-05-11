@@ -18,6 +18,11 @@ class plgSystemEngagecache extends CMSPlugin
 {
 	public function __construct(&$subject, $config = [])
 	{
+		if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
+		{
+			$this->enabled = false;
+		}
+		
 		parent::__construct($subject, $config);
 	}
 
