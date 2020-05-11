@@ -8,7 +8,7 @@
 <extension type="component" version="3.9.0" method="upgrade">
 	<name>ENGAGE</name>
 	<version>1.0.0.b1</version>
-	<creationDate>2020-05-07</creationDate>
+	<creationDate>2020-05-11</creationDate>
 
 	<author>Akeeba Ltd</author>
 	<authorEmail>no-reply@akeebabackup.com</authorEmail>
