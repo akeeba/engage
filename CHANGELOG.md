@@ -1,3 +1,9 @@
+# 1.0.0.b3
+
+**Miscellaneous changes**
+
+* Ability to display no login module if you select the option "( Do not show )" and publish no other module in the `engage-login` position
+
 # 1.0.0.b2
 
 **Bug fixes**

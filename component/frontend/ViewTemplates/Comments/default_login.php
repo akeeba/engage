@@ -17,8 +17,8 @@ use Joomla\CMS\Language\Text;
 
 /** @var \Akeeba\Engage\Site\View\Comments\Html $this */
 
-$loginModule     = $this->container->params->get('login_module', '');
-$moduleContent   = empty($loginModule) ? '' : trim($this->container->template->loadModule($loginModule));
+$loginModule     = $this->container->params->get('login_module', '-1');
+$moduleContent   = (empty($loginModule) || ($loginModule === '-1')) ? '' : trim($this->container->template->loadModule($loginModule));
 $positionContent = trim($this->container->template->loadPosition('engage-login'));
 
 /**
