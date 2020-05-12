@@ -49,6 +49,26 @@ You can download Akeeba Engage free of charge from its GitHub repository's [Rele
 
 You can access Akeeba Engage's documentation free of charge on its GitHub repository's [documentation wiki](https://github.com/akeeba/engage/wiki).
 
+## Languages
+
+We are only interested in including the following languages in Akeeba Engage's download package:
+
+* `en-GB`  English (Great Britain). Joomla's default language. This language is maintained by Akeeba Ltd.
+* `el-GR`  Greek (Greece). This language is maintained by Akeeba Ltd.
+* `de-DE`  German (Germany).
+* `fr-FR`  French (France).
+* `es-ES`  Spanish (Spain).
+* `nl-NL`  Dutch (Netherlands).
+* `it-IT`  Italian (Italy).
+
+If you are willing to translate to a specific language please file a GitHub issue. Your language must be contributed as a Pull Request to this GitHub repository.
+
+Other languages, including regional variations of the aforementioned languages (e.g. Austrian German), are not a good fit for inclusion in this repository and Akeeba Engage's download package. 
+
+You are free to create your own installable language packages as long as you follow the terms of the GNU General Public License version 3, or any later version published by the Free Software Foundation. Our language files are covered by the same license as our software, therefore your derivative works need to be covered by this license as well. 
+
+We do not plan on listing third party language files anywhere on our site or this repository. We recommend that you ask your local Joomla! User Group on the best way to disseminate them to people speaking your language.
+
 ## Support
 
 Akeeba Engage is currently in beta stage. Limited support will be provided through GitHub issues. However, this is not a permanent solution.

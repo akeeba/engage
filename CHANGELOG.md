@@ -3,6 +3,7 @@
 **New features**
 
 * Partial Spanish translation
+* Partial Greek translation
 
 **Miscellaneous changes**
 
