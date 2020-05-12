@@ -4,6 +4,10 @@
 
 * Ability to display no login module if you select the option "( Do not show )" and publish no other module in the `engage-login` position
 
+**Bug fixes**
+
+* Login module displayed even when guest comments are enabled
+
 # 1.0.0.b2
 
 **Bug fixes**

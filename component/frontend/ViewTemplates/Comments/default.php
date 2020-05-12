@@ -50,7 +50,7 @@ $paginationData = $this->getPagination()->getData();
 		<?php endif; ?>
 	<?php endif; ?>
 
-	<?php if (!$this->areCommentsClosed && $this->user->guest): ?>
+	<?php if (!$this->areCommentsClosed && $this->user->guest && !$this->perms['create']): ?>
 		<?php echo $this->loadAnyTemplate('any:com_engage/Comments/default_login') ?>
 	<?php endif; ?>
 
