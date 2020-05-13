@@ -40,7 +40,7 @@
                     name="key"
                     default=""
                     label="PLG_ENGAGE_AKISMET_CONFIG_KEY_LABEL"
-                    desc="PLG_ENGAGE_AKISMET_CONFIG_KEY_DESC"
+                    description="PLG_ENGAGE_AKISMET_CONFIG_KEY_DESC"
                 />
 
                 <field
@@ -48,7 +48,7 @@
                     name="check"
                     default="nonmanager"
                     label="PLG_ENGAGE_AKISMET_CONFIG_CHECK_LABEL"
-                    desc="PLG_ENGAGE_AKISMET_CONFIG_CHECK_DESC"
+                    description="PLG_ENGAGE_AKISMET_CONFIG_CHECK_DESC"
                 >
                     <option value="all">PLG_ENGAGE_AKISMET_CONFIG_CHECK_ALL</option>
                     <option value="nonmanager">PLG_ENGAGE_AKISMET_CONFIG_CHECK_NONMANAGER</option>
