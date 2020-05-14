@@ -12,6 +12,12 @@ use FOF30\Container\Container;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\User\User;
 
+// Joomla 3 requires a braindead way to include the PrivacyPlugin class
+if (version_compare(JVERSION, '3.9999.9999', 'le'))
+{
+	JLoader::register('PrivacyPlugin', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/plugin.php');
+}
+
 /**
  * com_privacy plugin for Akeeba Engage
  */

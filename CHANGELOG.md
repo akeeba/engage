@@ -14,6 +14,7 @@
 **Bug fixes**
 
 * Login module displayed even when guest comments are enabled
+* Privacy component crash if Privacy – Akeeba Engage plugin is published first in its group
 
 # 1.0.0.b2
 
