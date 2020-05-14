@@ -18,6 +18,9 @@ class Html extends HtmlView
 
 	public function onBeforeBrowse()
 	{
+		$this->addJavascriptFile('media://com_engage/js/system.js');
+		$this->addJavascriptFile('media://com_engage/js/backend.js');
+
 		/** @var Comments $model */
 		$model = $this->getModel();
 

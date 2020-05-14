@@ -57,6 +57,13 @@ $purifier = new HTMLPurifier($config);
     </div>
 
     <div class="akeeba-filter-element akeeba-form-group">
+        <button type="button" class="akeeba-btn--dark--small" id="comEngageResetFilters">
+            <span class="akion-android-refresh"></span>
+            @lang('JSEARCH_RESET')
+        </button>
+    </div>
+
+    <div class="akeeba-filter-element akeeba-form-group">
         @selectfilter('enabled', \Akeeba\Engage\Admin\Helper\Select::published(), 'JENABLED')
     </div>
 @stop

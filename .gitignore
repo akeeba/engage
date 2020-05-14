@@ -27,6 +27,9 @@
 /build/release.json
 /release.json
 
+### Akeeba FEF
+fef.min.css
+
 ### Joomla Configuration (symlink used for phpStorm integration)
 /configuration.php
 
