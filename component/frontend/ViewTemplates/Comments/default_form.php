@@ -80,7 +80,7 @@ HTMLHelper::_('behavior.formvalidator');
 					</label>
 				</div>
 				<div class="controls">
-					<input type="text" name="email" id="akengage-comment-form-email"
+					<input type="email" name="email" id="akengage-comment-form-email"
 						   value="<?= $this->escape($this->storedEmail); ?>"
 						   class="inputbox required"
 						   required="required"
