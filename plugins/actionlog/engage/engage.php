@@ -101,14 +101,13 @@ class plgActionlogEngage extends CMSPlugin
 	 */
 	public function onComEngageModelCommentsAfterCreate($comment)
 	{
-		// Should I log comment creation?
-		if ($this->params->get('log_comments', 0) != 1)
+		if ($this->user->guest)
 		{
 			return;
 		}
 
-		// Should I log guest comments?
-		if ($this->user->guest && ($this->params->get('log_guest_comments', 0) != 1))
+		// Should I log comment creation?
+		if ($this->params->get('log_comments', 0) != 1)
 		{
 			return;
 		}
@@ -116,19 +115,6 @@ class plgActionlogEngage extends CMSPlugin
 		$info = $this->getCommentInfo($comment);
 
 		$container = $comment->getContainer();
-
-		if ($this->user->guest)
-		{
-			$commentUser   = $comment->getUser();
-			$info['name']  = $commentUser->name;
-			$info['email'] = $commentUser->email;
-			$langKey       = 'COM_ENGAGE_USERLOG_COMMENT_CREATE_GUEST';
-			$langKey       = $this->prepareLanguageKey($langKey, $info);
-
-			$container->platform->logUserAction($info, $langKey, 'com_engage');
-
-			return;
-		}
 
 		$langKey = 'COM_ENGAGE_USERLOG_COMMENT_CREATE';
 		$langKey = $this->prepareLanguageKey($langKey, $info);
@@ -287,8 +273,7 @@ class plgActionlogEngage extends CMSPlugin
 	 */
 	public function onEngageUnsubscribeEmail($comment, ?string $email)
 	{
-		// Should I log guest unsubscribes?
-		if ($this->user->guest && ($this->params->get('log_guest_unsubscribe', 0) != 1))
+		if ($this->user->guest)
 		{
 			return;
 		}
@@ -298,17 +283,6 @@ class plgActionlogEngage extends CMSPlugin
 
 		unset($info['comment_edit_link']);
 		unset($info['comment_id']);
-
-		if ($this->user->guest)
-		{
-			$info['email'] = $email;
-			$langKey       = 'COM_ENGAGE_USERLOG_COMMENT_UNSUBSCRIBE_GUEST';
-			$langKey       = $this->prepareLanguageKey($langKey, $info);
-
-			$container->platform->logUserAction($info, $langKey, 'com_engage');
-
-			return;
-		}
 
 		$langKey = 'COM_ENGAGE_USERLOG_COMMENT_UNSUBSCRIBE';
 		$langKey = $this->prepareLanguageKey($langKey, $info);

@@ -15,6 +15,7 @@
 
 * Login module displayed even when guest comments are enabled
 * Privacy component crash if Privacy – Akeeba Engage plugin is published first in its group
+* The User Action Log plugin shouldn't have options for Guest users
 
 # 1.0.0.b2
 

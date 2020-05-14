@@ -43,30 +43,6 @@
                     <option value="0">JNO</option>
                 </field>
 
-                <field
-                        name="log_guest_comments"
-                        type="radio"
-                        label="PLG_ACTIONLOG_ENGAGE_LOG_GUEST_COMMENTS_LABEL"
-                        description="PLG_ACTIONLOG_ENGAGE_LOG_GUEST_COMMENTS_DESC"
-                        class="btn-group btn-group-yesno"
-                        default="0"
-                >
-                    <option value="1">JYES</option>
-                    <option value="0">JNO</option>
-                </field>
-
-                <field
-                        name="log_guest_unsubscribe"
-                        type="radio"
-                        label="PLG_ACTIONLOG_ENGAGE_LOG_GUEST_UNSUBSCRIBE_LABEL"
-                        description="PLG_ACTIONLOG_ENGAGE_LOG_GUEST_UNSUBSCRIBE_DESC"
-                        class="btn-group btn-group-yesno"
-                        default="0"
-                >
-                    <option value="1">JYES</option>
-                    <option value="0">JNO</option>
-                </field>
-
             </fieldset>
         </fields>
     </config>
