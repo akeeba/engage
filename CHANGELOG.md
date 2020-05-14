@@ -8,6 +8,7 @@
 **Miscellaneous changes**
 
 * Ability to display no login module if you select the option "( Do not show )" and publish no other module in the `engage-login` position
+* User Action Log entries translate the content type, useful for languages other than English
 
 **Bug fixes**
 
