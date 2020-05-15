@@ -4,6 +4,7 @@
 
 * Partial Spanish translation
 * Partial Greek translation
+* Improve the backend UI for comments on deleted / invalid content 
 
 **Miscellaneous changes**
 

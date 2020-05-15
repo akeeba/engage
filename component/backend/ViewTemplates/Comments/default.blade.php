@@ -3,7 +3,7 @@
  * @package   AkeebaEngage
  * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
- */
+ */use Joomla\CMS\Language\Text;
 
 /** @var \Akeeba\Engage\Admin\View\Comments\Html $this */
 
@@ -15,6 +15,16 @@ $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
 $config->set('Cache.SerializerPath', \Akeeba\Engage\Site\Helper\Filter::getCachePath());
 $config->set('HTML.Allowed', 'p,b,a[href],i,u,strong,em,small,big,ul,ol,li,br,img[src],img[width],img[height],code,pre,blockquote');
 $purifier = new HTMLPurifier($config);
+
+/**
+ * Get the asset ID filter value.
+ *
+ * It can either be an integer (when filtering by asset ID) or an array (when we are telling the model to filter by
+ * non-zero entries). In the latter case I need to use an empty string to prevent PHP notices which can break the
+ * page display and cause weird issues with no comments being listed.
+ */
+$filterAssetId = $this->getModel()->getState('asset_id', null) ?? '';
+$filterAssetId = is_array($filterAssetId) ? '' : $filterAssetId;
 
 ?>
 @extends('admin:com_engage/Common/browse')
@@ -57,15 +67,17 @@ $purifier = new HTMLPurifier($config);
     </div>
 
     <div class="akeeba-filter-element akeeba-form-group">
+        @selectfilter('enabled', \Akeeba\Engage\Admin\Helper\Select::published(), 'JENABLED', ['id' => 'filter_published', 'class' => 'akeebaGridViewAutoSubmitOnChange'])
+    </div>
+
+    <div class="akeeba-filter-element akeeba-form-group">
         <button type="button" class="akeeba-btn--dark--small" id="comEngageResetFilters">
-            <span class="akion-android-refresh"></span>
+            <span class="akion-android-refresh" aria-hidden="true"></span>
             @lang('JSEARCH_RESET')
         </button>
     </div>
 
-    <div class="akeeba-filter-element akeeba-form-group">
-        @selectfilter('enabled', \Akeeba\Engage\Admin\Helper\Select::published(), 'JENABLED')
-    </div>
+    <input type="hidden" name="asset_id" id="filter_asset_id" value="<?= $filterAssetId ?>">
 @stop
 
 @section('browse-table-header')
@@ -116,7 +128,7 @@ $purifier = new HTMLPurifier($config);
                     <span class="engage_user_agent--{{ $jBrowser->isMobile() ? 'mobile' : 'desktop' }}">
                         <span class="hasTooltip"
                               title="@lang('COM_ENGAGE_COMMENTS_LBL_BROWSERTYPE_' . ($jBrowser->isMobile() ? 'mobile' : 'desktop'))">
-                            <span class="akion-{{ $jBrowser->isMobile() ? 'iphone' : 'android-desktop' }}"></span>
+                            <span class="akion-{{ $jBrowser->isMobile() ? 'iphone' : 'android-desktop' }}" aria-hidden="true"></span>
                         </span>
                     </span>
                     <span class="engage_ip">
@@ -172,6 +184,7 @@ $purifier = new HTMLPurifier($config);
                 </div>
             </td>
             <td>
+                @unless ($meta['type'] === 'unknown')
                 <div class="engage-content-title">
                     <a href="{{ $meta['url'] }}">
                         {{{ $meta['title'] }}}
@@ -194,6 +207,20 @@ $purifier = new HTMLPurifier($config);
                         </span>
                     </a>
                 </div>
+                @else
+                <span class="akeeba-label--red"><?= Text::_('COM_ENGAGE_COMMENTS_LBL_INVALIDORDELETED') ?></span>
+                <div class="engage-content-comments-filter">
+                    <a href="@route('index.php?option=com_engage&view=Comments&asset_id=' . $item->asset_id)&limitstart=0"
+                       class="engage-filter-by-content">
+                    <span aria-hidden="true">
+                        {{ $numComments }}
+                    </span>
+                        <span class="engage-sr-only">
+                        @plural('COM_ENGAGE_COMMENTS_LBL_NUMCOMMENTS', $numComments)
+                    </span>
+                    </a>
+                </div>
+                @endunless
             </td>
             <td>
                 {{ (new FOF30\Date\Date($item->created_on))->format(\Joomla\CMS\Language\Text::_('DATE_FORMAT_LC2'), true, true) }}

@@ -24,8 +24,13 @@ class Html extends HtmlView
 		/** @var Comments $model */
 		$model = $this->getModel();
 
-		$model->savestate(1);
-		$model->where('asset_id', 'ne', '0');
+		$model->savestate(true);
+
+		if (!$model->getState('asset_id', null))
+		{
+			$model->where('asset_id', 'ne', '0');
+		}
+
 		$model->orderBy('created_on', 'DESC');
 
 		parent::onBeforeBrowse();
