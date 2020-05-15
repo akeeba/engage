@@ -86,9 +86,9 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 				<div class="akengange-commenter-name">
 					<span itemprop="name"><?= $this->escape($user->name) ?></span>
 					<?php if ($user->authorise('core.manage', $comment->asset_id)): ?>
-						<span class="akengage-commenter-ismoderator icon icon-star"></span>
+						<span class="akengage-commenter-ismoderator akion-star" aria-hidden="true"></span>
 					<?php elseif (!$user->guest): ?>
-						<span class="akengage-commenter-isuser icon icon-user"></span>
+						<span class="akengage-commenter-isuser akion-person" aria-hidden="true"></span>
 					<?php endif; ?>
 					<?php if (!$user->guest): ?>
 						<span class="akengage-commenter-username"><?= $this->escape($user->username) ?></span>
