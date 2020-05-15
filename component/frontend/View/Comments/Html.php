@@ -261,9 +261,8 @@ class Html extends DataHtml
 
 		// Load the model and persist its state in the session
 		/** @var Comments $model */
-		$model = $this->getModel();
-
-		$model->savestate(1);
+		$model = $this->getModel()->tmpInstance();
+		$model->asset_id($this->assetId);
 
 		// Display limits
 		$defaultLimit = $this->getDefaultListLimit();
