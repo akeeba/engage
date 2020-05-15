@@ -27,6 +27,8 @@ akeeba.Engage.AdminComments.onReset = function (event)
     document.getElementById("filter_asset_title").value  = "";
     document.getElementById("filter_filter_email").value = "";
     document.getElementById("filter_ip").value           = "";
+    document.getElementById("filter_asset_id").value     = "";
+    document.getElementById("filter_published").value    = "";
 
     akeeba.System.submitForm("browse", document.getElementById("adminForm"));
 
@@ -36,4 +38,5 @@ akeeba.Engage.AdminComments.onReset = function (event)
 akeeba.System.documentReady(function ()
 {
     akeeba.System.addEventListener("comEngageResetFilters", "click", akeeba.Engage.AdminComments.onReset);
+
 })
