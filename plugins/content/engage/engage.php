@@ -11,12 +11,13 @@ use Akeeba\Engage\Admin\Model\Comments;
 use FOF30\Container\Container;
 use FOF30\Input\Input;
 use FOF30\Utils\CacheCleaner;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModelLegacy;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Table\Content as JTableContent;
 use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 
@@ -30,6 +31,18 @@ use Joomla\Registry\Registry;
 class plgContentEngage extends CMSPlugin
 {
 	/**
+	 * Database driver
+	 *
+	 * @var   JDatabaseDriver|null
+	 */
+	protected $db;
+	/**
+	 * Application objecy
+	 *
+	 * @var   CMSApplication
+	 */
+	protected $app;
+	/**
 	 * Should this plugin be allowed to run?
 	 *
 	 * If the runtime dependencies are not met the plugin effectively self-disables even if it's published. This
@@ -38,35 +51,30 @@ class plgContentEngage extends CMSPlugin
 	 * @var  bool
 	 */
 	private $enabled = true;
-
 	/**
 	 * The Akeeba Engage component container
 	 *
 	 * @var  Container|null
 	 */
 	private $container;
-
 	/**
 	 * A cache of basic article information keyed to the asset ID
 	 *
 	 * @var  object[]
 	 */
 	private $cachedArticles = [];
-
 	/**
 	 * The keys to the settings known to Akeeba Engage (see forms/engage.xml)
 	 *
 	 * @var  string[]
 	 */
 	private $parametersKeys = [];
-
 	/**
 	 * Default values of the component's parameters
 	 *
 	 * @var  array
 	 */
 	private $parameterDefaults = [];
-
 	/**
 	 * Cache of parameters per article ID
 	 *
@@ -247,6 +255,49 @@ class plgContentEngage extends CMSPlugin
 	}
 
 	/**
+	 * Executes after Joomla deleted a content item. Used to delete attached comments.
+	 *
+	 * @param   string|null                 $context
+	 * @param   JTableContent|object|mixed  $data
+	 *
+	 * @return  void
+	 *
+	 * @see     https://docs.joomla.org/Plugin/Events/Content#onContentAfterDelete
+	 */
+	public function onContentAfterDelete(?string $context, $data)
+	{
+		if ($context != 'com_content.article')
+		{
+			return;
+		}
+
+		if (!is_object($data))
+		{
+			return;
+		}
+
+		if (!property_exists($data, 'asset_id'))
+		{
+			return;
+		}
+
+		$assetId = $data->asset_id;
+		$db      = $this->db;
+		$query   = $db->getQuery(true)
+			->delete($db->qn('#__engage_comments'))
+			->where($db->qn('asset_id') . ' = ' . $db->q($assetId));
+
+		try
+		{
+			$db->setQuery($query)->execute();
+		}
+		catch (Exception $e)
+		{
+			// It's not the end of the world if this fails
+		}
+	}
+
+	/**
 	 * Triggered when Joomla is loading content. Used to load the Engage configuration.
 	 *
 	 * This is used for both articles and article categories.
@@ -308,7 +359,7 @@ class plgContentEngage extends CMSPlugin
 
 
 		$publishUp = new Joomla\CMS\Date\Date();
-		$db        = Factory::getDbo();
+		$db        = $this->db;
 
 		if ($db->getNullDate() != $row->publish_up)
 		{
@@ -347,7 +398,7 @@ class plgContentEngage extends CMSPlugin
 
 		try
 		{
-			$db    = Factory::getDbo();
+			$db    = $this->db;
 			$query = $db->getQuery(true)
 				->select([$db->qn('asset_id')])
 				->from($db->qn('#__content'))
@@ -463,7 +514,7 @@ class plgContentEngage extends CMSPlugin
 			return false;
 		}
 
-		$db = Factory::getDbo();
+		$db = $this->db;
 
 		// Do we have a publish up date?
 		if (!empty($row->publish_up) && ($row->publish_up != $db->getNullDate()))
@@ -529,7 +580,7 @@ class plgContentEngage extends CMSPlugin
 
 		$this->cachedArticles[$metaKey] = null;
 
-		$db    = Factory::getDbo();
+		$db    = $this->db;
 		$query = $db->getQuery(true)
 			->select([
 				$db->qn('id'),
@@ -565,12 +616,12 @@ class plgContentEngage extends CMSPlugin
 			else
 			{
 				/** @var \Joomla\CMS\MVC\Factory\MVCFactoryInterface $factory */
-				$factory = Factory::getApplication()->bootComponent('com_content')->getMVCFactory();
+				$factory = $this->app->bootComponent('com_content')->getMVCFactory();
 				/** @var \Joomla\Component\Content\Administrator\Model\ArticleModel $model */
 				$model = $factory->createModel('Article', 'Administrator');
 			}
 
-			$row   = $model->getItem($articleId);
+			$row = $model->getItem($articleId);
 		}
 		catch (Exception $e)
 		{
@@ -749,7 +800,7 @@ class plgContentEngage extends CMSPlugin
 		else
 		{
 			/** @var \Joomla\CMS\MVC\Factory\MVCFactoryInterface $factory */
-			$factory = Factory::getApplication()->bootComponent('com_categories')->getMVCFactory();
+			$factory = $this->app->bootComponent('com_categories')->getMVCFactory();
 			/** @var \Joomla\Component\Categories\Administrator\Model\CategoryModel $model */
 			$model = $factory->createModel('Category', 'Administrator');
 		}

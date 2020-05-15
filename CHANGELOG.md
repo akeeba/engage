@@ -4,7 +4,8 @@
 
 * Partial Spanish translation
 * Partial Greek translation
-* Improve the backend UI for comments on deleted / invalid content 
+* Improve the backend UI for comments on deleted / invalid content
+* Delete comments on article deletion
 
 **Miscellaneous changes**
 
