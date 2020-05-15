@@ -17,6 +17,7 @@
 
     <files>
         <folder>forms</folder>
+        <folder>layouts</folder>
 
         <filename plugin="engage">engage.php</filename>
         <filename>.htaccess</filename>

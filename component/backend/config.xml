@@ -12,33 +12,33 @@
             description="COM_ENGAGE_CONFIG_BASIC_FIELDSET_DESC"
     >
         <field
-            name="max_level"
-            type="integer"
-            label="COM_ENGAGE_CONFIG_MAX_LEVEL_LABEL"
-            description="COM_ENGAGE_CONFIG_MAX_LEVEL_DESC"
-            default="3"
-            first="1" last="6" step="1"
+                name="max_level"
+                type="integer"
+                label="COM_ENGAGE_CONFIG_MAX_LEVEL_LABEL"
+                description="COM_ENGAGE_CONFIG_MAX_LEVEL_DESC"
+                default="3"
+                first="1" last="6" step="1"
         />
 
         <field
-            name="default_publish"
-            type="radio"
-            label="COM_ENGAGE_DEFAULT_PUBLISH_LABEL"
-            description="COM_ENGAGE_DEFAULT_PUBLISH_DESC"
-            class="btn-group btn-group-yesno"
-            default="1"
+                name="default_publish"
+                type="radio"
+                label="COM_ENGAGE_DEFAULT_PUBLISH_LABEL"
+                description="COM_ENGAGE_DEFAULT_PUBLISH_DESC"
+                class="btn-group btn-group-yesno"
+                default="1"
         >
             <option value="1">JPUBLISHED</option>
             <option value="0">JUNPUBLISHED</option>
         </field>
 
         <field
-            name="default_limit"
-            type="list"
-            label="COM_ENGAGE_DEFAULT_LIMIT_LABEL"
-            description="COM_ENGAGE_DEFAULT_LIMIT_DESC"
-            default="20"
-            useglobal="1"
+                name="default_limit"
+                type="list"
+                label="COM_ENGAGE_DEFAULT_LIMIT_LABEL"
+                description="COM_ENGAGE_DEFAULT_LIMIT_DESC"
+                default="20"
+                useglobal="1"
         >
             <option value="5">J5</option>
             <option value="10">J10</option>
@@ -54,23 +54,24 @@
         </field>
 
         <field
-            name="captcha"
-            type="plugins"
-            label="COM_ENGAGE_CONFIG_CAPTCHA_LABEL"
-            description="COM_ENGAGE_CONFIG_CAPTCHA_DESC"
-            folder="captcha"
-            filter="cmd"
-            useglobal="true"
+                name="captcha"
+                type="plugins"
+                label="COM_ENGAGE_CONFIG_CAPTCHA_LABEL"
+                description="COM_ENGAGE_CONFIG_CAPTCHA_DESC"
+                folder="captcha"
+                filter="cmd"
+                useglobal="true"
         >
             <option value="0">JOPTION_DO_NOT_USE</option>
         </field>
 
         <field
-            name="captcha_for"
-            type="list"
-            label="COM_ENGAGE_CONFIG_CAPTCHA_FOR_LABEL"
-            description="COM_ENGAGE_CONFIG_CAPTCHA_FOR_DESC"
-default="hide"
+                name="captcha_for"
+                type="list"
+                label="COM_ENGAGE_CONFIG_CAPTCHA_FOR_LABEL"
+                description="COM_ENGAGE_CONFIG_CAPTCHA_FOR_DESC"
+                default="hide"
+                showon="captcha!:0"
         >
             <option value="guests">COM_ENGAGE_CONFIG_CAPTCHA_FOR_GUESTS</option>
             <option value="nonmanager">COM_ENGAGE_CONFIG_CAPTCHA_FOR_NONMANAGER</option>
@@ -78,60 +79,89 @@ default="hide"
         </field>
 
         <field
-            name="header_overridable"
-            type="note"
-            label="COM_ENGAGE_CONFIG_HEADER_OVERRIDABLE_HEADER"
+                name="header_overridable"
+                type="note"
+                label="COM_ENGAGE_CONFIG_HEADER_OVERRIDABLE_HEADER"
         />
 
         <field
-            type="note"
-            class="alert alert-info"
-            description="COM_ENGAGE_CONFIG_HEADER_OVERRIDABLE_DESC"
+                type="note"
+                class="alert alert-info"
+                description="COM_ENGAGE_CONFIG_HEADER_OVERRIDABLE_DESC"
         />
 
         <field
-            name="comments_show"
-            type="radio"
-            label="COM_ENGAGE_COMMENTS_SHOW_LABEL"
-            description="COM_ENGAGE_COMMENTS_SHOW_DESC"
-            class="btn-group btn-group-yesno"
-            default="1"
+                name="comments_show"
+                type="radio"
+                label="COM_ENGAGE_COMMENTS_SHOW_LABEL"
+                description="COM_ENGAGE_COMMENTS_SHOW_DESC"
+                class="btn-group btn-group-yesno"
+                default="1"
         >
             <option value="1">JSHOW</option>
             <option value="0">JHIDE</option>
         </field>
 
         <field
-            name="comments_ordering"
-            type="list"
-            label="COM_ENGAGE_COMMENTS_ORDERING_LABEL"
-            description="COM_ENGAGE_COMMENTS_ORDERING_DESC"
-            class="chzn-color"
-            default="asc"
+                name="comments_show_featured"
+                type="radio"
+                label="COM_ENGAGE_COMMENTS_SHOW_FEATURE_LABEL"
+                description="COM_ENGAGE_COMMENTS_SHOW_FEATURE_DESC"
+                class="btn-group btn-group-yesno"
+                default="1"
+                showon="comments_show:1"
+        >
+            <option value="1">JSHOW</option>
+            <option value="0">JHIDE</option>
+        </field>
+
+        <field
+                name="comments_show_category"
+                type="radio"
+                label="COM_ENGAGE_COMMENTS_SHOW_CATEGORY_LABEL"
+                description="COM_ENGAGE_COMMENTS_SHOW_CATEGORY_DESC"
+                class="btn-group btn-group-yesno"
+                default="1"
+                showon="comments_show:1"
+        >
+            <option value="1">JSHOW</option>
+            <option value="0">JHIDE</option>
+        </field>
+
+        <field
+                name="comments_ordering"
+                type="list"
+                label="COM_ENGAGE_COMMENTS_ORDERING_LABEL"
+                description="COM_ENGAGE_COMMENTS_ORDERING_DESC"
+                class="chzn-color"
+                default="asc"
+                showon="comments_show:1"
         >
             <option value="asc">JGLOBAL_ORDER_ASCENDING</option>
             <option value="desc">JGLOBAL_ORDER_DESCENDING</option>
         </field>
 
         <field
-            name="comments_enabled"
-            type="radio"
-            label="COM_ENGAGE_COMMENTS_ENABLED_LABEL"
-            description="COM_ENGAGE_COMMENTS_ENABLED_DESC"
-            class="btn-group btn-group-yesno"
-            default="1"
+                name="comments_enabled"
+                type="radio"
+                label="COM_ENGAGE_COMMENTS_ENABLED_LABEL"
+                description="COM_ENGAGE_COMMENTS_ENABLED_DESC"
+                class="btn-group btn-group-yesno"
+                default="1"
+                showon="comments_show:1"
         >
             <option value="1">JYES</option>
             <option value="0">JNO</option>
         </field>
 
         <field
-            name="comments_close_after"
-            type="integer"
-            label="COM_ENGAGE_COMMENTS_CLOSE_AFTER_LABEL"
-            description="COM_ENGAGE_COMMENTS_CLOSE_AFTER_DESC"
-            first="0" last="3650" step="1"
-            default="0"
+                name="comments_close_after"
+                type="integer"
+                label="COM_ENGAGE_COMMENTS_CLOSE_AFTER_LABEL"
+                description="COM_ENGAGE_COMMENTS_CLOSE_AFTER_DESC"
+                first="0" last="3650" step="1"
+                default="0"
+                showon="comments_show:1[AND]comments_enabled:1"
         />
 
         <field
@@ -141,6 +171,7 @@ default="hide"
                 description="COM_ENGAGE_COMMENTS_NOTIFY_AUTHOR_DESC"
                 class="btn-group btn-group-yesno"
                 default="1"
+                showon="comments_enabled:1"
         >
             <option value="1">JYES</option>
             <option value="0">JNO</option>
@@ -153,6 +184,7 @@ default="hide"
                 description="COM_ENGAGE_COMMENTS_NOTIFY_USERS_DESC"
                 class="btn-group btn-group-yesno"
                 default="1"
+                showon="comments_enabled:1"
         >
             <option value="1">JYES</option>
             <option value="0">JNO</option>
@@ -161,9 +193,9 @@ default="hide"
     </fieldset>
 
     <fieldset
-        name="filtering"
-        label="COM_ENGAGE_CONFIG_FILTERING_FIELDSET_LABEL"
-        description="COM_ENGAGE_CONFIG_FILTERING_FIELDSET_DESC">
+            name="filtering"
+            label="COM_ENGAGE_CONFIG_FILTERING_FIELDSET_LABEL"
+            description="COM_ENGAGE_CONFIG_FILTERING_FIELDSET_DESC">
 
         <field
                 type="list"
@@ -183,6 +215,7 @@ default="hide"
                 description="COM_ENGAGE_CONFIG_HTMLPURIFIER_CONFIG_JOOMLA_DESC"
                 class="btn-group btn-group-yesno"
                 default="0"
+                showon="filter_mode:htmlpurifier[OR]filter_mode:strict"
         >
             <option value="1">JYES</option>
             <option value="0">JNO</option>
@@ -197,6 +230,7 @@ default="hide"
                 rows="10"
                 label="COM_ENGAGE_CONFIG_HTMLPURIFIER_CONFIGSTRING_LABEL"
                 description="COM_ENGAGE_CONFIG_HTMLPURIFIER_CONFIGSTRING_DESC"
+                showon="filter_mode:htmlpurifier[AND]htmlpurifier_config_joomla:0[OR]filter_mode:strict"
         />
     </fieldset>
 
@@ -207,28 +241,28 @@ default="hide"
             addfieldpath="/administrator/components/com_engage/fields"
     >
         <field
-            name="login_module"
-            type="modulemodules"
-            default="mod_login"
-            label="COM_ENGAGE_CONFIG_LOGIN_LABEL"
-            description="COM_ENGAGE_CONFIG_LOGIN_DESC" />
+                name="login_module"
+                type="modulemodules"
+                default="mod_login"
+                label="COM_ENGAGE_CONFIG_LOGIN_LABEL"
+                description="COM_ENGAGE_CONFIG_LOGIN_DESC"/>
 
         <field
-            name="iplookup"
-            type="text"
-            default="https://whatismyipaddress.com/ip/%s"
-            label="COM_ENGAGE_CONFIG_IPLOOKUP_LABEL"
-            description="COM_ENGAGE_CONFIG_IPLOOKUP_DESC" />
+                name="iplookup"
+                type="text"
+                default="https://whatismyipaddress.com/ip/%s"
+                label="COM_ENGAGE_CONFIG_IPLOOKUP_LABEL"
+                description="COM_ENGAGE_CONFIG_IPLOOKUP_DESC"/>
 
         <field
-            name="max_spam_age"
-            type="integer"
-            first="0"
-            last="365"
-            step="1"
-            default="15"
-            label="COM_ENGAGE_CONFIG_MAX_SPAM_AGE_LABEL"
-            description="COM_ENGAGE_CONFIG_MAX_SPAM_AGE_DESC" />
+                name="max_spam_age"
+                type="integer"
+                first="0"
+                last="365"
+                step="1"
+                default="15"
+                label="COM_ENGAGE_CONFIG_MAX_SPAM_AGE_LABEL"
+                description="COM_ENGAGE_CONFIG_MAX_SPAM_AGE_DESC"/>
 
         <field
                 name="amp_css"
@@ -243,23 +277,25 @@ default="hide"
         </field>
 
         <field
-            name="htmlpurifier_include"
-            type="list"
-            default="composer"
-            label="COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_LABEL"
-            description="COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_DESC">
+                name="htmlpurifier_include"
+                type="list"
+                default="composer"
+                label="COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_LABEL"
+                description="COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_DESC"
+                showon="filter_mode:htmlpurifier[OR]filter_mode:strict"
+        >
             <option value="composer">COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_COMPOSER</option>
             <option value="auto">COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_AUTO</option>
             <option value="all">COM_ENGAGE_CONFIG_HTMLPURIFIER_INCLUDE_ALL</option>
         </field>
 
         <field
-            name="dark_mode_backend"
-            type="radio"
-            default="-1"
-               label="COM_ENGAGE_CONFIG_DARKMODE_BACKEND_LABEL"
-               description="COM_ENGAGE_CONFIG_DARKMODE_BACKEND_DESC"
-               class="switcher btn-group">
+                name="dark_mode_backend"
+                type="radio"
+                default="-1"
+                label="COM_ENGAGE_CONFIG_DARKMODE_BACKEND_LABEL"
+                description="COM_ENGAGE_CONFIG_DARKMODE_BACKEND_DESC"
+                class="switcher btn-group">
             <option value="-1">COM_ENGAGE_CONFIG_DARKMODE_AUTO</option>
             <option value="0">COM_ENGAGE_CONFIG_DARKMODE_NEVER</option>
             <option value="1">COM_ENGAGE_CONFIG_DARKMODE_ALWAYS</option>

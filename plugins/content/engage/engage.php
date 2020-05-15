@@ -8,8 +8,10 @@
 defined('_JEXEC') or die();
 
 use Akeeba\Engage\Admin\Model\Comments;
+use Akeeba\Engage\Site\Helper\Meta;
 use FOF30\Container\Container;
 use FOF30\Input\Input;
+use FOF30\Layout\LayoutHelper;
 use FOF30\Utils\CacheCleaner;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
@@ -107,6 +109,87 @@ class plgContentEngage extends CMSPlugin
 		$this->loadLanguage();
 
 		$this->autoCleanSpam();
+	}
+
+	public function onContentBeforeDisplay(?string $context, &$row, &$params, ?int $page = 0): string
+	{
+		// We need to be enabled
+		if (!$this->enabled)
+		{
+			return '';
+		}
+
+		// We need to be given the right kind of data
+		if (!is_object($params) || !($params instanceof Registry) || !is_object($row))
+		{
+			return '';
+		}
+
+		// We need to be in the frontend of the site
+		$container = $this->getContainer();
+
+		if (!$container->platform->isFrontend())
+		{
+			return '';
+		}
+
+		// We need to have a supported context
+		if (!in_array($context, ['com_content.category', 'com_content.featured']))
+		{
+			return '';
+		}
+
+		// Make sure this is really an article
+		if (!property_exists($row, 'introtext'))
+		{
+			return '';
+		}
+
+		/**
+		 * Joomla does not make the asset_id available when displaying articles in the featured or blog view display
+		 * modes. Unfortunately, we need to do one extra DB query for each article in this case.
+		 */
+		if (!property_exists($row, 'asset_id'))
+		{
+			$row->asset_id = $this->getAssetIdByArticleId($row->id);
+		}
+
+		/**
+		 * This neat trick allows me to speed up meta queries on the article.
+		 *
+		 * When this plugin event is called Joomla has already loaded the article for us. I can use this object to
+		 * populate the article meta cache so next time I query the article meta I don't have to go through Joomla's
+		 * article model which saves me a very expensive query.
+		 */
+		$this->cacheArticleRow($row, true);
+
+		// Am I supposed to display comments at all?
+		$commentParams = $this->getParametersForArticle($row);
+
+		if ($commentParams->get('comments_show', 1) != 1)
+		{
+			return '';
+		}
+
+		// Am I supposed to display the comments count? Uses the keys comments_show_feature, comments_show_category
+		$area      = substr($context, 12);
+		$optionKey = sprintf("comments_show_%s", $area);
+
+		if ($commentParams->get($optionKey, 0) != 1)
+		{
+			return '';
+		}
+
+		// Use a Layout file to display the appropriate summary
+		$basePath    = __DIR__ . '/layouts';
+		$layoutFile  = sprintf("akeeba.engage.content.%s", $area);
+		$displayData = [
+			'container' => $container,
+			'row'       => $row,
+			'meta'      => Meta::getAssetAccessMeta($row->asset_id),
+		];
+
+		return LayoutHelper::render($container, $layoutFile, $displayData, $basePath);
 	}
 
 	/**
@@ -954,5 +1037,27 @@ class plgContentEngage extends CMSPlugin
 			'author_email'    => $authorUser->email,
 			'parameters'      => $loadParameters ? $this->getParametersForArticle($row) : new Registry(),
 		];
+	}
+
+	/**
+	 * Get the asset ID given an article ID
+	 *
+	 * @param   int|null  $id
+	 *
+	 * @return  int|null
+	 *
+	 * @since   1.0.0.b3
+	 */
+	private function getAssetIdByArticleId(?int $id): ?int
+	{
+		$db    = $this->db;
+		$query = $db->getQuery(true)
+			->select($db->qn('asset_id'))
+			->from($db->qn('#__content'))
+			->where($db->qn('id') . ' = ' . $db->q($id));
+
+		$assetId = $db->setQuery($query)->loadResult();
+
+		return $assetId ? ((int) $assetId) : null;
 	}
 }
