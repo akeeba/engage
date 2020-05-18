@@ -73,13 +73,24 @@ section.akengage-outer-container {
                 font-family: Hack, "Fira Code Retina", Consolas, "SF Mono", "Courier New", Courier, monospace;
               }
 
+              span.akengage-commenter-email {
+                font-weight: normal;
+                font-family: Hack, "Fira Code Retina", Consolas, "SF Mono", "Courier New", Courier, monospace;
+                font-size: 93%;
+              }
+
               span.akengage-commenter-ismoderator,
-              span.akengage-commenter-isuser {
+              span.akengage-commenter-isuser,
+              span.akengage-commenter-isguest {
                 padding-left: 1em;
               }
 
               span.akengage-commenter-ismoderator {
                 color: $orange;
+              }
+
+              span.akengage-commenter-isguest {
+                color: $red;
               }
             }
 

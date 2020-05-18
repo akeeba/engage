@@ -92,6 +92,9 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 					<?php endif; ?>
 					<?php if (!$user->guest): ?>
 						<span class="akengage-commenter-username"><?= $this->escape($user->username) ?></span>
+					<?php elseif ($this->perms['state']): ?>
+						<span class="akengage-commenter-isguest akion-person-stalker" aria-hidden="true"></span>
+						<span class="akengage-commenter-email"><?= $this->escape($user->email) ?></span>
 					<?php endif; ?>
 				</div>
 			</div>
