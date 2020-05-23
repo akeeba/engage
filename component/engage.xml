@@ -80,10 +80,10 @@
 
 		<!-- Back-end translation files -->
 		<languages folder="language/backend">
-			<language tag="el-GR">el-GR/el-GR.com_engage.ini</language>
-			<language tag="el-GR">el-GR/el-GR.com_engage.sys.ini</language>
 			<language tag="en-GB">en-GB/en-GB.com_engage.ini</language>
 			<language tag="en-GB">en-GB/en-GB.com_engage.sys.ini</language>
+			<language tag="el-GR">el-GR/el-GR.com_engage.ini</language>
+			<language tag="el-GR">el-GR/el-GR.com_engage.sys.ini</language>
 			<language tag="es-ES">es-ES/es-ES.com_engage.ini</language>
 			<language tag="es-ES">es-ES/es-ES.com_engage.sys.ini</language>
 		</languages>

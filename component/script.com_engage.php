@@ -60,7 +60,9 @@ class Com_EngageInstallerScript extends \FOF30\Utils\InstallScript\Component
 	 */
 	protected $removeFilesAllVersions = [
 		'files'   => [
-
+			'administrator/components/com_engage/ViewTemplates/Common/browse.blade.php',
+			'administrator/components/com_engage/ViewTemplates/Common/edit.blade.php',
+			'administrator/components/com_engage/ViewTemplates/Common/EntryUser.blade.php',
 		],
 		'folders' => [
 

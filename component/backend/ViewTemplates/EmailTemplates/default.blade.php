@@ -9,7 +9,7 @@
 
 $keyOptions = \Akeeba\Engage\Admin\Helper\Select::emailTemplateKey(true);
 ?>
-@extends('admin:com_engage/Common/browse')
+@extends('any:lib_fof30/Common/browse')
 
 @section('browse-filters')
     <div class="akeeba-filter-element akeeba-form-group">

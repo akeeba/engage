@@ -11,7 +11,7 @@
 $item = $this->item;
 $user = $this->container->platform->getUser();
 ?>
-@extends('admin:com_engage/Common/edit')
+@extends('any:lib_fof30/Common/edit')
 
 @section('edit-form-body')
     <div class="akeeba-form-group">

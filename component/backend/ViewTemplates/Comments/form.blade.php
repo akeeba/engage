@@ -11,7 +11,7 @@ $item = $this->item;
 $user = $this->container->platform->getUser();
 $editOwn = $user->id == $item->created_by;
 ?>
-@extends('admin:com_engage/Common/edit')
+@extends('any:lib_fof30/Common/edit')
 
 @section('edit-form-body')
     @if (!$item->getUser()->guest && $user->authorise('core.manage', 'com_engage'))

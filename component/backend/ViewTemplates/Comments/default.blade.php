@@ -27,7 +27,7 @@ $filterAssetId = $this->getModel()->getState('asset_id', null) ?? '';
 $filterAssetId = is_array($filterAssetId) ? '' : $filterAssetId;
 
 ?>
-@extends('admin:com_engage/Common/browse')
+@extends('any:lib_fof30/Common/browse')
 
 @section('browse-page-top')
     {{-- Old PHP version reminder --}}
