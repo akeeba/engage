@@ -9,11 +9,11 @@ use Akeeba\Engage\Admin\Model\Comments;
 use Akeeba\Engage\Site\Helper\Email;
 use Akeeba\Engage\Site\Helper\Meta;
 use FOF30\Container\Container;
-use FOF30\Model\DataModel\Collection as DataCollection;
 use FOF30\Model\DataModel\Exception\RecordNotLoaded;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\User\User;
 
 defined('_JEXEC') or die;
 
@@ -155,7 +155,7 @@ class plgEngageEmail extends CMSPlugin
 		{
 			$uids = Access::getUsersByGroup($gid);
 			array_walk($uids, function ($uid, $k) use (&$ret) {
-				$user = Factory::getUser($uid);
+				$user              = Factory::getUser($uid);
 				$ret[$user->email] = $ret[$user->name];
 			});
 		}
@@ -191,7 +191,7 @@ class plgEngageEmail extends CMSPlugin
 			return [];
 		}
 
-		$userEmails   = [];
+		$userEmails = [];
 
 		$user                     = $parent->getUser();
 		$userEmails[$user->email] = $user->name;
@@ -271,7 +271,7 @@ class plgEngageEmail extends CMSPlugin
 			}
 			else
 			{
-				$thisUser        = new Joomla\CMS\User\User();
+				$thisUser        = new User();
 				$thisUser->name  = $name;
 				$thisUser->email = $email;
 			}

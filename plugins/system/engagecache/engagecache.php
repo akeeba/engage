@@ -22,7 +22,7 @@ class plgSystemEngagecache extends CMSPlugin
 		{
 			$this->enabled = false;
 		}
-		
+
 		parent::__construct($subject, $config);
 	}
 
@@ -66,7 +66,7 @@ class plgSystemEngagecache extends CMSPlugin
 		}
 		else
 		{
-			$registeredurlparams = new \stdClass;
+			$registeredurlparams = new stdClass;
 		}
 
 		if (!empty($limitStart))

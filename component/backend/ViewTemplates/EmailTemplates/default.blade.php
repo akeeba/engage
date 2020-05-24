@@ -7,7 +7,9 @@
 
 /** @var \Akeeba\Engage\Admin\View\EmailTemplates\Html $this */
 
-$keyOptions = \Akeeba\Engage\Admin\Helper\Select::emailTemplateKey(true);
+use Akeeba\Engage\Admin\Helper\Select;
+
+$keyOptions = Select::emailTemplateKey(true);
 ?>
 @extends('any:lib_fof30/Common/browse')
 
@@ -76,4 +78,3 @@ $keyOptions = \Akeeba\Engage\Admin\Helper\Select::emailTemplateKey(true);
         </tr>
     @endforeach
 @stop
-

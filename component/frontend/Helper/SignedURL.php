@@ -33,7 +33,7 @@ final class SignedURL
 		 * evaluation, would cause the token check to be variable time which could cause subtle security issues. We
 		 * really need to go through "stupid" code to achieve a constant time token verification.
 		 */
-		$validToken = self::getToken($task ?? '', $email ?? '', $asset_id ?? '', $expires ?? '');
+		$validToken   = self::getToken($task ?? '', $email ?? '', $asset_id ?? '', $expires ?? '');
 		$confirmToken = Crypt::timingSafeCompare($validToken, $token ?? '');
 
 		if (is_null($task))

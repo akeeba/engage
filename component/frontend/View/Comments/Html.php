@@ -14,6 +14,7 @@ use Akeeba\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Site\Model\Comments;
 use Exception;
 use FOF30\View\DataView\Html as DataHtml;
+use Joomla\CMS\Application\SiteApplication as JApplicationSite;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
@@ -22,6 +23,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
+use stdClass;
 use Throwable;
 use WbAMP;
 use WbampHelper_Runtime;
@@ -267,10 +269,10 @@ class Html extends DataHtml
 		// Display limits
 		$defaultLimit = $this->getDefaultListLimit();
 
-		$this->lists             = new \stdClass();
+		$this->lists             = new stdClass();
 		$this->lists->limitStart = $this->input->getInt('akengage_limitstart', 0);
 		$this->lists->limit      = $model->getState('akengage_limit', $defaultLimit, 'int');
-		$this->lists->limit = empty($this->lists->limit) ? null : $this->lists->limit;
+		$this->lists->limit      = empty($this->lists->limit) ? null : $this->lists->limit;
 
 		// Pass the display limits to the model
 		$model->limitstart = $this->lists->limitStart;
@@ -305,7 +307,7 @@ class Html extends DataHtml
 		$this->maxLevel = $params->get('max_level', 3);
 
 		// Page parameters
-		/** @var \JApplicationSite $app */
+		/** @var JApplicationSite $app */
 		try
 		{
 			$app        = Factory::getApplication();
@@ -363,8 +365,8 @@ class Html extends DataHtml
 
 		do
 		{
-			$newDepth  = $myComment->depth - 1;
-			$myComment = $myComment->getClone()->find($myComment->parent_id);
+			$newDepth         = $myComment->depth - 1;
+			$myComment        = $myComment->getClone()->find($myComment->parent_id);
 			$myComment->depth = $newDepth;
 
 			$parentNames[$myComment->depth] = $myComment->getUser()->name;

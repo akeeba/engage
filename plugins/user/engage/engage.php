@@ -73,7 +73,7 @@ class plgUserEngage extends CMSPlugin
 	 * Method is called before user data is deleted from the database. We use it to cache the user object so we can use
 	 * it onUserAfterDelete when the user object is no longer available through the Joomla API.
 	 *
-	 * @param   array   $user     Holds the user data
+	 * @param   array  $user  Holds the user data
 	 *
 	 * @return  bool
 	 *
@@ -114,8 +114,8 @@ class plgUserEngage extends CMSPlugin
 	 *
 	 * Method is called after user data is deleted from the database
 	 *
-	 * @param   array   $user     Holds the user data
-	 * @param   bool    $success  True if user was successfully stored in the database
+	 * @param   array        $user     Holds the user data
+	 * @param   bool         $success  True if user was successfully stored in the database
 	 * @param   string|null  $msg      Message
 	 *
 	 * @return  bool

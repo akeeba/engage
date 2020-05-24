@@ -15,12 +15,16 @@ use FOF30\Layout\LayoutHelper;
 use FOF30\Utils\CacheCleaner;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Date\Date;
 use Joomla\CMS\Form\Form;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModelLegacy;
+use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Router\Route;
-use Joomla\CMS\Table\Content as JTableContent;
+use Joomla\CMS\Table\Content;
 use Joomla\CMS\Table\Table;
+use Joomla\Component\Categories\Administrator\Model\CategoryModel;
+use Joomla\Component\Content\Administrator\Model\ArticleModel;
 use Joomla\Registry\Registry;
 
 /**
@@ -301,7 +305,7 @@ class plgContentEngage extends CMSPlugin
 		}
 
 		// Add the registration fields to the form.
-		JForm::addFormPath(__DIR__ . '/forms');
+		Form::addFormPath(__DIR__ . '/forms');
 		$form->loadFile('engage', false);
 
 		return true;
@@ -340,8 +344,8 @@ class plgContentEngage extends CMSPlugin
 	/**
 	 * Executes after Joomla deleted a content item. Used to delete attached comments.
 	 *
-	 * @param   string|null                 $context
-	 * @param   JTableContent|object|mixed  $data
+	 * @param   string|null                             $context
+	 * @param   Content|object|mixed  $data
 	 *
 	 * @return  void
 	 *
@@ -441,12 +445,12 @@ class plgContentEngage extends CMSPlugin
 		}
 
 
-		$publishUp = new Joomla\CMS\Date\Date();
+		$publishUp = new Date();
 		$db        = $this->db;
 
 		if ($db->getNullDate() != $row->publish_up)
 		{
-			$publishUp = new Joomla\CMS\Date\Date($row->publish_up);
+			$publishUp = new Date($row->publish_up);
 		}
 
 		return [
@@ -604,7 +608,7 @@ class plgContentEngage extends CMSPlugin
 		{
 			try
 			{
-				$publishUp = new Joomla\CMS\Date\Date($row->publish_up);
+				$publishUp = new Date($row->publish_up);
 
 				if ($publishUp->toUnix() > time())
 				{
@@ -621,7 +625,7 @@ class plgContentEngage extends CMSPlugin
 		{
 			try
 			{
-				$publishDown = new Joomla\CMS\Date\Date($row->publish_down);
+				$publishDown = new Date($row->publish_down);
 
 				if ($publishDown->toUnix() < time())
 				{
@@ -691,16 +695,16 @@ class plgContentEngage extends CMSPlugin
 			{
 				if (!class_exists('ContentModelArticle'))
 				{
-					JModelLegacy::addIncludePath(JPATH_BASE . '/components/com_content/models');
+					BaseDatabaseModel::addIncludePath(JPATH_BASE . '/components/com_content/models');
 				}
 
-				$model = JModelLegacy::getInstance('Article', 'ContentModel');
+				$model = BaseDatabaseModel::getInstance('Article', 'ContentModel');
 			}
 			else
 			{
-				/** @var \Joomla\CMS\MVC\Factory\MVCFactoryInterface $factory */
+				/** @var MVCFactoryInterface $factory */
 				$factory = $this->app->bootComponent('com_content')->getMVCFactory();
-				/** @var \Joomla\Component\Content\Administrator\Model\ArticleModel $model */
+				/** @var ArticleModel $model */
 				$model = $factory->createModel('Article', 'Administrator');
 			}
 
@@ -865,7 +869,7 @@ class plgContentEngage extends CMSPlugin
 		{
 			if (!class_exists('CategoriesModelCategory'))
 			{
-				JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/models');
+				BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/models');
 			}
 
 			if (!class_exists('CategoriesTableCategory'))
@@ -878,13 +882,13 @@ class plgContentEngage extends CMSPlugin
 		if (version_compare(JVERSION, '3.999.999', 'le'))
 		{
 			/** @var CategoriesModelCategory $model */
-			$model = JModelLegacy::getInstance('Category', 'CategoriesModel');
+			$model = BaseDatabaseModel::getInstance('Category', 'CategoriesModel');
 		}
 		else
 		{
-			/** @var \Joomla\CMS\MVC\Factory\MVCFactoryInterface $factory */
+			/** @var MVCFactoryInterface $factory */
 			$factory = $this->app->bootComponent('com_categories')->getMVCFactory();
-			/** @var \Joomla\Component\Categories\Administrator\Model\CategoryModel $model */
+			/** @var CategoryModel $model */
 			$model = $factory->createModel('Category', 'Administrator');
 		}
 

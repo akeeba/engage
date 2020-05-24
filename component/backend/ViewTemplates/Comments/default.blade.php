@@ -3,16 +3,18 @@
  * @package   AkeebaEngage
  * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
- */use Joomla\CMS\Language\Text;
+ */
+
+use Akeeba\Engage\Admin\Helper\Format;use Akeeba\Engage\Site\Helper\Filter;use Akeeba\Engage\Site\Helper\Meta;use Joomla\CMS\Environment\Browser;use Joomla\CMS\Language\Text;use Joomla\CMS\Uri\Uri;
 
 /** @var \Akeeba\Engage\Admin\View\Comments\Html $this */
 
-\Akeeba\Engage\Site\Helper\Filter::includeHTMLPurifier();
+Filter::includeHTMLPurifier();
 
 $config = HTMLPurifier_Config::createDefault();
 $config->set('Core.Encoding', 'UTF-8');
 $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
-$config->set('Cache.SerializerPath', \Akeeba\Engage\Site\Helper\Filter::getCachePath());
+$config->set('Cache.SerializerPath', Filter::getCachePath());
 $config->set('HTML.Allowed', 'p,b,a[href],i,u,strong,em,small,big,ul,ol,li,br,img[src],img[width],img[height],code,pre,blockquote');
 $purifier = new HTMLPurifier($config);
 
@@ -112,10 +114,10 @@ $filterAssetId = is_array($filterAssetId) ? '' : $filterAssetId;
 	?>
     @foreach ($this->items as $item)
 		<?php
-		$meta = \Akeeba\Engage\Site\Helper\Meta::getAssetAccessMeta($item->asset_id, false);
-		$numComments = \Akeeba\Engage\Site\Helper\Meta::getNumCommentsForAsset($item->asset_id);
-		$ipLookupUrl = \Akeeba\Engage\Admin\Helper\Format::getIPLookupURL($item->ip);
-		$jBrowser = \Joomla\CMS\Environment\Browser::getInstance($item->user_agent);
+		$meta = Meta::getAssetAccessMeta($item->asset_id, false);
+		$numComments = Meta::getNumCommentsForAsset($item->asset_id);
+		$ipLookupUrl = Format::getIPLookupURL($item->ip);
+		$jBrowser = Browser::getInstance($item->user_agent);
 		?>
         <tr>
             <td>
@@ -160,8 +162,8 @@ $filterAssetId = is_array($filterAssetId) ? '' : $filterAssetId;
                     try
                     {
                         $parent     = $item->getParent();
-                        $limitStart = \Akeeba\Engage\Site\Helper\Meta::getLimitStartForComment($parent, null, $user->authorise('core.edit.state', 'com_engage'));
-                        $public_uri = new \Joomla\CMS\Uri\Uri($meta['public_url']);
+                        $limitStart = Meta::getLimitStartForComment($parent, null, $user->authorise('core.edit.state', 'com_engage'));
+                        $public_uri = new Uri($meta['public_url']);
                         $public_uri->setFragment('akengage-comment-' . $parent->getId());
                         $public_uri->setVar('akengage_limitstart', $limitStart);
                     }

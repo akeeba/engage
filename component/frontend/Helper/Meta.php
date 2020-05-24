@@ -8,6 +8,7 @@
 namespace Akeeba\Engage\Site\Helper;
 
 use Akeeba\Engage\Admin\Model\Comments;
+use DateInterval;
 use Exception;
 use FOF30\Container\Container;
 use Joomla\CMS\Date\Date;
@@ -161,7 +162,7 @@ final class Meta
 
 		try
 		{
-			return ($date->add(new \DateInterval(sprintf('P%dD', $closeAfter)))->toUnix() <= time());
+			return ($date->add(new DateInterval(sprintf('P%dD', $closeAfter)))->toUnix() <= time());
 		}
 		catch (Exception $e)
 		{

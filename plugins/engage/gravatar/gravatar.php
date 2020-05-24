@@ -8,6 +8,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 
 class plgEngageGravatar extends CMSPlugin
@@ -40,7 +41,7 @@ class plgEngageGravatar extends CMSPlugin
 		switch ($defaultImage)
 		{
 			case 'custom':
-				$url .= '&d=' . urlencode(\Joomla\CMS\Uri\Uri::base(false) . $customImage);
+				$url .= '&d=' . urlencode(Uri::base(false) . $customImage);
 				break;
 
 			default:

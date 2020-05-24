@@ -10,6 +10,7 @@ defined('_JEXEC') or die;
 use Akeeba\Engage\Site\Helper\Meta;
 use FOF30\Container\Container;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Table\User as UserTable;
 use Joomla\CMS\User\User;
 
 // Joomla 3 requires a braindead way to include the PrivacyPlugin class
@@ -102,7 +103,7 @@ class plgPrivacyEngage extends PrivacyPlugin
 			return [];
 		}
 
-		/** @var JTableUser $userTable */
+		/** @var UserTable $userTable */
 		$userTable = User::getTable();
 		$userTable->load($user->id);
 
