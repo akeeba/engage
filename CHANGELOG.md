@@ -6,6 +6,7 @@
 * Partial Greek translation
 * Improve the backend UI for comments on deleted / invalid content
 * Delete comments on article deletion
+* Option to “own” comments on login (gh-37) 
 
 **Miscellaneous changes**
 

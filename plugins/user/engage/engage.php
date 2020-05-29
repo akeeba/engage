@@ -14,9 +14,18 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\User\User;
+use Joomla\CMS\User\UserHelper;
 
 class plgUserEngage extends CMSPlugin
 {
+	/**
+	 * Joomla's database driver (auto-assigned on class instantiation)
+	 *
+	 * @var   JDatabaseDriver
+	 * @since 1.0.0.b3
+	 */
+	protected $db;
+
 	/**
 	 * Should this plugin be allowed to run?
 	 *
@@ -163,6 +172,79 @@ class plgUserEngage extends CMSPlugin
 	}
 
 	/**
+	 * This method should handle any login logic and report back to the subject
+	 *
+	 * @param   array  $user     Holds the user data
+	 * @param   array  $options  Array holding options (remember, autoregister, group)
+	 *
+	 * @return  boolean  True on success
+	 *
+	 * @since   1.0.0.b3
+	 */
+	public function onUserLogin(array $user, array $options = []): bool
+	{
+		// Is the “Own guest comments on login“ option enabled?
+		if ($this->params->get('own_comments', 1) != 1)
+		{
+			return true;
+		}
+
+		// Can we find a user ID?
+		$id = (int) UserHelper::getUserId($user['username']);
+
+		if ($id <= 0)
+		{
+			return true;
+		}
+
+		// Load the user object and own the comments
+		$userObject = User::getInstance();
+
+		$userObject->load($id);
+		$this->ownComments($userObject);
+
+		return true;
+	}
+
+	/**
+	 * Allow the specified user to own the comments they filed as a guest under the same email address
+	 *
+	 * @param   User  $user
+	 *
+	 * @return  void
+	 */
+	private function ownComments(User $user): void
+	{
+		// Sanity check
+		if ($user->guest || ($user->id <= 0) || empty($user->email))
+		{
+			return;
+		}
+
+		// Run a simple update query to let the user own the comments
+		$db = $this->db;
+
+		$query = $db->getQuery(true)
+			->update($db->qn('#__engage_comments'))
+			->set([
+				$db->qn('name') . ' = NULL',
+				$db->qn('email') . ' = NULL',
+				$db->qn('created_by') . ' = ' . $user->id,
+			])
+			->where($db->qn('email') . ' = ' . $db->q($user->email))
+			->where($db->qn('created_by') . ' = 0');
+
+		try
+		{
+			$db->setQuery($query)->execute();
+		}
+		catch (Exception $e)
+		{
+			// No problem if this fails.
+		}
+	}
+
+	/**
 	 * Get the Akeeba Engage container, preloaded for comments display
 	 *
 	 * @return  Container
@@ -177,6 +259,4 @@ class plgUserEngage extends CMSPlugin
 
 		return $this->container;
 	}
-
-
 }
