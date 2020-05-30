@@ -23,6 +23,8 @@
     <languages folder="language">
         <language tag="en-GB">en-GB/en-GB.plg_actionlog_engage.ini</language>
         <language tag="en-GB">en-GB/en-GB.plg_actionlog_engage.sys.ini</language>
+        <language tag="el-GR">el-GR/el-GR.plg_actionlog_engage.ini</language>
+        <language tag="el-GR">el-GR/el-GR.plg_actionlog_engage.sys.ini</language>
     </languages>
 
     <scriptfile>script.php</scriptfile>
