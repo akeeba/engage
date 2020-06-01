@@ -76,16 +76,6 @@ CREATE TABLE `#__engage_unsubscribe` (
             ]]></query>
         </action>
 
-        <!-- Comments: root node -->
-        <action table="#__engage_comments" canfail="1">
-            <condition type="equals" operator="not" value="1"><![CDATA[
-SELECT COUNT(*) FROM `#__engage_comments` WHERE `lft` = 1;
-            ]]></condition>
-            <query><![CDATA[
-INSERT INTO `#__engage_comments` (lft, rgt, asset_id, body, name, email, ip, enabled, created_on, created_by, modified_on, modified_by) VALUES (1, 2, 0, 'ROOT NODE -- DO NOT DELETE', 'Root Node', 'root@localhost', null, 1, '2020-04-01 13:26:45', 0, null, null);
-            ]]></query>
-        </action>
-
         <action table="#__engage_emailtemplates" canfail="0">
             <condition type="equals" value="0"><![CDATA[
 SELECT COUNT(*) FROM `#__engage_emailtemplates` WHERE `engage_emailtemplate_id` = 1;
