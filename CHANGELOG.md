@@ -20,7 +20,8 @@
 * Privacy component crash if Privacy – Akeeba Engage plugin is published first in its group
 * The User Action Log plugin shouldn't have options for Guest users
 * Shared Sessions can lead to comments not being displayed if the manager applies filters in the backend Comments page
-* User / manager icon overlap with the username in Joomla 4 frontend 
+* User / manager icon overlap with the username in Joomla 4 frontend
+* Filing comments as a user could fail due to misidentified asset tracking in the model 
 
 # 1.0.0.b2
 

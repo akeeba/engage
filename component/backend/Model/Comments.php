@@ -72,6 +72,8 @@ class Comments extends DataModel
 
 		parent::__construct($container, $config);
 
+		$this->_trackAssets = false;
+
 		$this->hasOne('parent', 'Comments', 'parent_id', 'engage_comment_id');
 
 		$this->addKnownField('depth', 0);
