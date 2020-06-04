@@ -170,9 +170,9 @@ class Comments extends DataController
 		]);
 
 		// Non-admin users may have their comments auto-unpublished by default
-		if (!$user->get('core.manage', 'com_engage'))
+		if (!$user->authorise('core.manage', 'com_engage'))
 		{
-			$model->created_by = $this->container->params->get('default_publish', 1);
+			$model->enabled = $this->container->params->get('default_publish', 1);
 		}
 
 		// If it's a guest user we need to unset the name and email
