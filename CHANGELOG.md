@@ -23,6 +23,7 @@
 * User / manager icon overlap with the username in Joomla 4 frontend
 * Filing comments as a user could fail due to misidentified asset tracking in the model
 * Comments always published, despite setting New Comments to Unpublished (gh-44) 
+* Unhandled exception page was incompatible with Joomla 4
 
 # 1.0.0.b2
 
