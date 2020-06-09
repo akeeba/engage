@@ -84,16 +84,8 @@ final class Format
 	 */
 	public static function processFlatComment(string $text): string
 	{
-		$text = trim($text);
-
-		// Do I have a paragraph tag in the beginning of the comment?
-		if (in_array(strtolower(substr($text, 0, 3)), ['<p>', '<p ']))
-		{
-			return $text;
-		}
-
-		// Do I have a DIV tag in the beginning of the comment?
-		if (in_array(strtolower(substr($text, 0, 5)), ['<div>', '<div ']))
+		// If the text looks like valid HTML then return it as-is
+		if (self::isLikelyHtml($text))
 		{
 			return $text;
 		}
@@ -167,5 +159,53 @@ final class Format
 		}, $text);
 
 		return $text;
+	}
+
+	/**
+	 * Does this piece of text looks like possibly valid HTML body text?
+	 *
+	 * @param   string  $text  The text to examine
+	 *
+	 * @return  bool  True if it looks like HTML
+	 */
+	private static function isLikelyHtml(string $text): bool
+	{
+		// Remove any whitespace and newlines
+		$text = trim($text);
+
+		// The text must start with opening a tag
+		if (substr($text, 0, 1) != '<')
+		{
+			return false;
+		}
+
+		/**
+		 * Valid HTML must start with a block level HTML element.
+		 *
+		 * We use a length-sorted collection of block level tags to improve the performance below.
+		 *
+		 * HTML elements reference: https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements
+		 */
+		$sortedElements = [
+			1  => ['p'],
+			2  => ['dd', 'dl', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'li', 'ol', 'ul'],
+			3  => ['div', 'nav', 'pre'],
+			4  => ['form', 'main'],
+			5  => ['aside', 'table'],
+			6  => ['dialog', 'figure', 'footer', 'header', 'hgroup'],
+			7  => ['address', 'details', 'section'],
+			8  => ['articles', 'fieldset'],
+			10 => ['blockquote', 'figcaption'],
+		];
+
+		foreach ($sortedElements as $len => $elements)
+		{
+			if (in_array(substr($text, 1, $len), $elements))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

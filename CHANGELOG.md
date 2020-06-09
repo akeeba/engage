@@ -24,6 +24,7 @@
 * Filing comments as a user could fail due to misidentified asset tracking in the model
 * Comments always published, despite setting New Comments to Unpublished (gh-44) 
 * Unhandled exception page was incompatible with Joomla 4
+* Comments starting with a tag other than p or div would appear as raw HTML instead of being formatted
 
 # 1.0.0.b2
 
