@@ -58,6 +58,6 @@
 
     <!-- Update servers -->
     <updateservers>
-        <server type="extension" priority="1" name="Akeeba Engage Updates">https://raw.githubusercontent.com/akeeba/engage/master/update/pkg_engage_updates.xml</server>
+        <server type="extension" priority="1" name="Akeeba Engage Updates">https://raw.githubusercontent.com/akeeba/engage/main/update/pkg_engage_updates.xml</server>
     </updateservers>
 </extension>
