@@ -30,7 +30,7 @@
         <file type="component" id="com_engage">com_engage.zip</file>
 
         <!-- Plugins: actionlog -->
-        <!--<file type="plugin" group="actionlog" id="engage">plg_actionlog_engage.zip</file>-->
+        <file type="plugin" group="actionlog" id="engage">plg_actionlog_engage.zip</file>
 
         <!-- Plugins: content -->
         <file type="plugin" group="content" id="engage">plg_content_engage.zip</file>
