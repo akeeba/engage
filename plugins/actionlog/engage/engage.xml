@@ -7,8 +7,8 @@
 <extension version="3.9.0" type="plugin" group="actionlog" method="upgrade">
     <name>PLG_ACTIONLOG_ENGAGE</name>
     <description>PLG_ACTIONLOG_ENGAGE_XML_DESC</description>
-    <version>1.0.0.b2</version>
-    <creationDate>2020-05-11</creationDate>
+    <version>1.0.0</version>
+    <creationDate>2020-06-22</creationDate>
     <author>Akeeba Ltd</author>
     <authorEmail>no-reply@akeebabackup.com</authorEmail>
     <authorUrl>https://www.akeebabackup.com</authorUrl>
