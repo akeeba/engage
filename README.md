@@ -2,9 +2,7 @@
 
 Comments for Joomla!™ articles made easy
 
-[Downloads](https://github.com/akeeba/engage/releases) • [Documentation](https://github.com/akeeba/engage/wiki) • [Code](https://github.com/akeeba/engage)
-
-> **WORK IN PROGRESS!** Akeeba Engage is currently in beta. Limited support through GitHub issues will be provided through the beta period but support will be paid after that..
+[Downloads](https://www.akeebabackup.com/download/official/engage.html) • [Documentation](https://github.com/akeeba/engage/wiki) • [Code](https://github.com/akeeba/engage)
 
 ## Executive summary
 
@@ -43,7 +41,7 @@ There is no intention of supporting non-core content.
 
 ## Downloads
 
-You can download Akeeba Engage free of charge from its GitHub repository's [Releases page](https://github.com/akeeba/engage/releases).
+You can download Akeeba Engage free of charge from its [Downloads page](https://www.akeebabackup.com/download/official/engage.html).
 
 ## Documentation
 
