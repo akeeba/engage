@@ -79,6 +79,29 @@
         </field>
 
         <field
+                name="tos_accept"
+                type="list"
+                label="COM_ENGAGE_CONFIG_TOS_ACCEPT_LABEL"
+                description="COM_ENGAGE_CONFIG_TOS_ACCEPT_DESC"
+                class="btn-group btn-group-yesno"
+                default="0"
+        >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field
+                name="tos_prompt"
+                type="text"
+                label="COM_ENGAGE_CONFIG_TOS_PROMPT_LABEL"
+                description="COM_ENGAGE_CONFIG_TOS_PROMPT_DESC"
+                default=""
+                filter="safehtml"
+                class="input-xxlarge"
+                showon="tos_accept!:0"
+        />
+
+        <field
                 name="header_overridable"
                 type="note"
                 label="COM_ENGAGE_CONFIG_HEADER_OVERRIDABLE_HEADER"

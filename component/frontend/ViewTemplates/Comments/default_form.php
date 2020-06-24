@@ -100,6 +100,18 @@ HTMLHelper::_('behavior.formvalidator');
 				</div>
 			</div>
 
+			<?php if ($this->container->params->get('tos_accept', 0)): ?>
+			<div class="control-group">
+				<div class="controls">
+					<label for="akengage-comment-form-accept-tos" class="checkbox">
+						<input type="checkbox" id="akengage-comment-form-accept-tos"
+							   name="accept_tos">
+						<?= $this->getCheckboxText() ?>
+					</label>
+				</div>
+			</div>
+			<?php endif; ?>
+
 		<?php endif; ?>
 
 		<?= Editor::getInstance($this->container->platform->getConfig()->get('editor', 'tinymce'))

@@ -97,14 +97,16 @@ class Comments extends DataController
 		// CSRF prevention
 		$this->csrfProtection();
 
-		$assetId   = $this->getAssetId();
-		$parentId  = $this->input->post->getInt('parent_id', 0);
-		$name      = $this->input->post->getString('name', null);
-		$email     = $this->input->post->getString('email', null);
-		$comment   = $this->input->post->getRaw('comment', null);
-		$returnUrl = $this->getReturnUrl();
-		$platform  = $this->container->platform;
-		$user      = $platform->getUser();
+		$assetId     = $this->getAssetId();
+		$postInput   = $this->input->post;
+		$parentId    = $postInput->getInt('parent_id', 0);
+		$name        = $postInput->getString('name', null);
+		$email       = $postInput->getString('email', null);
+		$comment     = $postInput->get('comment', null, 'raw');
+		$acceptedTos = $postInput->getBool('accept_tos', false);
+		$returnUrl   = $this->getReturnUrl();
+		$platform    = $this->container->platform;
+		$user        = $platform->getUser();
 
 		// If the comments are disabled for this asset we will return a Not Authorized error
 		if (Meta::areCommentsClosed($assetId))
@@ -156,6 +158,15 @@ class Comments extends DataController
 			{
 				throw new AccessForbidden();
 			}
+		}
+
+		// Check if the user had to give explicit consent but didn't provide it
+		if ($user->guest && $this->container->params->get('tos_accept') && !$acceptedTos)
+		{
+			$this->setRedirect($returnUrl, Text::_('COM_ENGAGE_COMMENTS_ERR_TOSACCEPT'), 'error');
+			$this->redirect();
+
+			return;
 		}
 
 		// Set up the new comment

@@ -16,6 +16,7 @@ use Exception;
 use FOF30\View\DataView\Html as DataHtml;
 use Joomla\CMS\Application\SiteApplication as JApplicationSite;
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Pagination\Pagination;
@@ -226,6 +227,25 @@ class Html extends DataHtml
 		}
 
 		return $linkUri->toString();
+	}
+
+	/**
+	 * Returns the consent checkbox' text.
+	 *
+	 * This supports full HTML and plugin codes.
+	 *
+	 * @return  string
+	 */
+	public function getCheckboxText(): string
+	{
+		$text = trim($this->container->params->get('tos_prompt', '') ?? '');
+
+		if (empty($text))
+		{
+			$text = Text::_('COM_ENGAGE_COMMENTS_FORM_LBL_ACCEPT');
+		}
+
+		return HTMLHelper::_('content.prepare', $text);
 	}
 
 	/**

@@ -1,3 +1,9 @@
+# 1.0.1
+
+**New features**
+
+* Checkbox to accept ToS / give consent (gh-46)
+
 # 1.0.0
 
 **New features**
