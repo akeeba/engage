@@ -2,7 +2,7 @@
 
 Comments for Joomla!™ articles made easy
 
-[Downloads](https://www.akeebabackup.com/download/official/engage.html) • [Documentation](https://github.com/akeeba/engage/wiki) • [Code](https://github.com/akeeba/engage)
+[Downloads](https://www.akeeba.com/download/official/engage.html) • [Documentation](https://github.com/akeeba/engage/wiki) • [Code](https://github.com/akeeba/engage)
 
 ## Executive summary
 
@@ -41,7 +41,7 @@ There is no intention of supporting non-core content.
 
 ## Downloads
 
-You can download Akeeba Engage free of charge from its [Downloads page](https://www.akeebabackup.com/download/official/engage.html).
+You can download Akeeba Engage free of charge from its [Downloads page](https://www.akeeba.com/download/official/engage.html).
 
 ## Documentation
 

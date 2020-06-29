@@ -12,7 +12,7 @@ We only support the latest published, stable Joomla version in the 3.x and 4.x b
 
 Please **DO NOT** file a GitHub issue about security issues. GitHub issues are public. Filing an issue about a security issue puts all users, you included, in immediate danger.
 
-Please use our [contact page](https://www.akeebabackup.com/contact-us.html) to send us a private notification about the security issue. We strongly recommend using GPG to encrypt your email. You can find the lead developer's public GPG key at https://keybase.io/nikosdion
+Please use our [contact page](https://www.akeeba.com/contact-us.html) to send us a private notification about the security issue. We strongly recommend using GPG to encrypt your email. You can find the lead developer's public GPG key at https://keybase.io/nikosdion
 
 Please include instructions to reproduce the security issue. Better yet, please include Proof Of Concept code if applicable.
 
