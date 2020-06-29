@@ -58,6 +58,6 @@
 
     <!-- Update servers -->
     <updateservers>
-        <server type="extension" priority="1" name="Akeeba Engage Updates">https://cdn.akeebabackup.com/updates/pkgengage.xml</server>
+        <server type="extension" priority="1" name="Akeeba Engage Updates">https://cdn.akeeba.com/updates/pkgengage.xml</server>
     </updateservers>
 </extension>
