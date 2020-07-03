@@ -4,6 +4,10 @@
 
 * Checkbox to accept ToS / give consent (gh-46)
 
+**Bug fixes**
+
+* The backend comments view showed too many sorting options (gh-48)
+
 # 1.0.0
 
 **New features**

@@ -11,6 +11,7 @@ defined('_JEXEC') or die;
 
 use Akeeba\Engage\Admin\Model\Comments;
 use FOF30\View\DataView\Html as HtmlView;
+use Joomla\CMS\Language\Text;
 
 class Html extends HtmlView
 {
@@ -34,5 +35,14 @@ class Html extends HtmlView
 		$model->orderBy('created_on', 'DESC');
 
 		parent::onBeforeBrowse();
+
+		$this->lists->sortFields = [
+			'engage_comment_id' => Text::_('JGLOBAL_FIELD_ID_LABEL'),
+			'asset_id'          => Text::_('COM_ENGAGE_COMMENT_FIELD_ASSET_ID'),
+			'body'              => Text::_('COM_ENGAGE_COMMENT_FIELD_BODY'),
+			'created_on'        => Text::_('JGLOBAL_FIELD_CREATED_LABEL'),
+			'modified_on'       => Text::_('JGLOBAL_FIELD_MODIFIED_LABEL'),
+		];
+
 	}
 }
