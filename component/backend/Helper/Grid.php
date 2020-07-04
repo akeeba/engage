@@ -8,6 +8,7 @@
 namespace Akeeba\Engage\Admin\Helper;
 
 
+use FEFHelperBrowse;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -40,14 +41,19 @@ final class Grid
 			$prefix   = array_key_exists('prefix', $options) ? $options['prefix'] : '';
 		}
 
+		/**
+		 * Format:
+		 *
+		 * (task, text, active title, inactive title, tip (boolean), active icon class (without akion-), inactive icon class (without akion-))
+		 */
 		$states = [
-			1  => ['unpublish', 'JPUBLISHED', 'JLIB_HTML_UNPUBLISH_ITEM', 'JPUBLISHED', true, 'publish', 'publish'],
-			0  => ['publish', 'JUNPUBLISHED', 'JLIB_HTML_PUBLISH_ITEM', 'JUNPUBLISHED', true, 'unpublish', 'unpublish'],
-			2  => ['unpublish', 'JARCHIVED', 'JLIB_HTML_UNPUBLISH_ITEM', 'JARCHIVED', true, 'archive', 'archive'],
-			-2 => ['publish', 'JTRASHED', 'JLIB_HTML_PUBLISH_ITEM', 'JTRASHED', true, 'trash', 'trash'],
+			1  => ['unpublish', 'JPUBLISHED', 'JLIB_HTML_UNPUBLISH_ITEM', 'JPUBLISHED', true, '--green checkmark', '--green checkmark'],
+			0  => ['publish', 'JUNPUBLISHED', 'JLIB_HTML_PUBLISH_ITEM', 'JUNPUBLISHED', true, '--red close', '--red close'],
+			2  => ['unpublish', 'JARCHIVED', 'JLIB_HTML_UNPUBLISH_ITEM', 'JARCHIVED', true, '--orange ion-ios-box', '--orange ion-ios-box'],
+			-2 => ['publish', 'JTRASHED', 'JLIB_HTML_PUBLISH_ITEM', 'JTRASHED', true, '--dark trash-a', '--dark trash-a'],
 			-3 => [
 				'publish', 'COM_ENGAGE_COMMENTS_STATE_SPAM', 'JLIB_HTML_PUBLISH_ITEM', 'COM_ENGAGE_COMMENTS_STATE_SPAM',
-				true, 'engage-spam', 'engage-spam',
+				true, 'ios-flag', 'ios-flag',
 			],
 		];
 
@@ -88,13 +94,13 @@ final class Grid
 					if ($publish_up > $nullDate && $nowDate < $publish_up->toUnix())
 					{
 						$states[$key][2] = $states[$key][3] = 'JLIB_HTML_PUBLISHED_PENDING_ITEM';
-						$states[$key][5] = $states[$key][6] = 'pending';
+						$states[$key][5] = $states[$key][6] = 'android-time';
 					}
 
 					if ($publish_down > $nullDate && $nowDate > $publish_down->toUnix())
 					{
 						$states[$key][2] = $states[$key][3] = 'JLIB_HTML_PUBLISHED_EXPIRED_ITEM';
-						$states[$key][5] = $states[$key][6] = 'expired';
+						$states[$key][5] = $states[$key][6] = 'alert';
 					}
 				}
 
@@ -108,12 +114,12 @@ final class Grid
 				}
 			}
 
-			return HTMLHelper::_('jgrid.state', $states, $value, $i, [
+			return FEFHelperBrowse::state($states, $value, $i, [
 				'prefix' => $prefix, 'translate' => !$tip,
 			], $enabled, true, $checkbox);
 		}
 
-		return HTMLHelper::_('jgrid.state', $states, $value, $i, $prefix, $enabled, true, $checkbox);
+		return FEFHelperBrowse::state($states, $value, $i, $prefix, $enabled, true, $checkbox);
 	}
 
 }

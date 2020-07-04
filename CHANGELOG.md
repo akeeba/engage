@@ -4,6 +4,10 @@
 
 * Checkbox to accept ToS / give consent (gh-46)
 
+**Miscellaneous changes**
+
+* Improve display of comment status in the backend (gh-49)
+
 **Bug fixes**
 
 * The backend comments view showed too many sorting options (gh-48)
