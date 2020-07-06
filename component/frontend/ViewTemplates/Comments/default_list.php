@@ -76,7 +76,7 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 						<img src="<?= $avatar ?>" alt=""
 							 class="akengage-commenter-avatar" itemprop="image">
 					<?php else: ?>
-						<a href="<?= $profile ?>" class="akengage-commenter-profile" itemprop="url">
+						<a href="<?= $profile ?>" class="akengage-commenter-profile" itemprop="url" rel="noopener">
 							<img src="<?= $avatar ?>"
 								 alt=""
 								 class="akengage-commenter-avatar" itemprop="image">

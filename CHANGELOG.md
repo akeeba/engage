@@ -7,6 +7,7 @@
 **Miscellaneous changes**
 
 * Improve display of comment status in the backend (gh-49)
+* Add rel=noopener to profile links 
 
 **Bug fixes**
 
