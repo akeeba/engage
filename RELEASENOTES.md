@@ -13,26 +13,13 @@ Akeeba Engage should be compatible with:
 
 **New features**
 
-* Partial Spanish translation
-* Partial Greek translation
-* Improve the backend UI for comments on deleted / invalid content
-* Delete comments on article deletion
-* Option to “own” comments on login (gh-37) 
+* Checkbox to accept ToS / give consent (gh-46)
 
 **Miscellaneous changes**
 
-* Ability to display no login module if you select the option "( Do not show )" and publish no other module in the `engage-login` position
-* User Action Log entries translate the content type, useful for languages other than English
-* There's now a Clear button for the Comments filters in the backend
+* Improve display of comment status in the backend (gh-49)
+* Add rel=noopener to profile links 
 
 **Bug fixes**
 
-* Login module displayed even when guest comments are enabled
-* Privacy component crash if Privacy – Akeeba Engage plugin is published first in its group
-* The User Action Log plugin shouldn't have options for Guest users
-* Shared Sessions can lead to comments not being displayed if the manager applies filters in the backend Comments page
-* User / manager icon overlap with the username in Joomla 4 frontend
-* Filing comments as a user could fail due to misidentified asset tracking in the model
-* Comments always published, despite setting New Comments to Unpublished (gh-44) 
-* Unhandled exception page was incompatible with Joomla 4
-* Comments starting with a tag other than p or div would appear as raw HTML instead of being formatted
+* The backend comments view showed too many sorting options (gh-48)
