@@ -35,8 +35,9 @@
                     default=""
                     showon="comments_show!:0"
             >
-                <option value="1">JSHOW</option>
                 <option value="0">JHIDE</option>
+                <option value="1">PLG_CONTENT_ENGAGE_OPT_COMMENTS_SHOW_BEFORE</option>
+                <option value="2">PLG_CONTENT_ENGAGE_OPT_COMMENTS_SHOW_AFTER</option>
             </field>
 
             <field
@@ -49,8 +50,9 @@
                     default=""
                     showon="comments_show!:0"
             >
-                <option value="1">JSHOW</option>
                 <option value="0">JHIDE</option>
+                <option value="1">PLG_CONTENT_ENGAGE_OPT_COMMENTS_SHOW_BEFORE</option>
+                <option value="2">PLG_CONTENT_ENGAGE_OPT_COMMENTS_SHOW_AFTER</option>
             </field>
 
             <field

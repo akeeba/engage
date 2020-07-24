@@ -134,8 +134,9 @@
                 default="1"
                 showon="comments_show:1"
         >
-            <option value="1">JSHOW</option>
             <option value="0">JHIDE</option>
+            <option value="1">COM_ENGAGE_OPT_COMMENTS_SHOW_BEFORE</option>
+            <option value="2">COM_ENGAGE_OPT_COMMENTS_SHOW_AFTER</option>
         </field>
 
         <field
@@ -147,8 +148,9 @@
                 default="1"
                 showon="comments_show:1"
         >
-            <option value="1">JSHOW</option>
             <option value="0">JHIDE</option>
+            <option value="1">COM_ENGAGE_OPT_COMMENTS_SHOW_BEFORE</option>
+            <option value="2">COM_ENGAGE_OPT_COMMENTS_SHOW_AFTER</option>
         </field>
 
         <field

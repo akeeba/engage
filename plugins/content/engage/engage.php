@@ -42,12 +42,14 @@ class plgContentEngage extends CMSPlugin
 	 * @var   JDatabaseDriver|null
 	 */
 	protected $db;
+
 	/**
 	 * Application objecy
 	 *
 	 * @var   CMSApplication
 	 */
 	protected $app;
+
 	/**
 	 * Should this plugin be allowed to run?
 	 *
@@ -57,30 +59,35 @@ class plgContentEngage extends CMSPlugin
 	 * @var  bool
 	 */
 	private $enabled = true;
+
 	/**
 	 * The Akeeba Engage component container
 	 *
 	 * @var  Container|null
 	 */
 	private $container;
+
 	/**
 	 * A cache of basic article information keyed to the asset ID
 	 *
 	 * @var  object[]
 	 */
 	private $cachedArticles = [];
+
 	/**
 	 * The keys to the settings known to Akeeba Engage (see forms/engage.xml)
 	 *
 	 * @var  string[]
 	 */
 	private $parametersKeys = [];
+
 	/**
 	 * Default values of the component's parameters
 	 *
 	 * @var  array
 	 */
 	private $parameterDefaults = [];
+
 	/**
 	 * Cache of parameters per article ID
 	 *
@@ -117,83 +124,7 @@ class plgContentEngage extends CMSPlugin
 
 	public function onContentBeforeDisplay(?string $context, &$row, &$params, ?int $page = 0): string
 	{
-		// We need to be enabled
-		if (!$this->enabled)
-		{
-			return '';
-		}
-
-		// We need to be given the right kind of data
-		if (!is_object($params) || !($params instanceof Registry) || !is_object($row))
-		{
-			return '';
-		}
-
-		// We need to be in the frontend of the site
-		$container = $this->getContainer();
-
-		if (!$container->platform->isFrontend())
-		{
-			return '';
-		}
-
-		// We need to have a supported context
-		if (!in_array($context, ['com_content.category', 'com_content.featured']))
-		{
-			return '';
-		}
-
-		// Make sure this is really an article
-		if (!property_exists($row, 'introtext'))
-		{
-			return '';
-		}
-
-		/**
-		 * Joomla does not make the asset_id available when displaying articles in the featured or blog view display
-		 * modes. Unfortunately, we need to do one extra DB query for each article in this case.
-		 */
-		if (!property_exists($row, 'asset_id'))
-		{
-			$row->asset_id = $this->getAssetIdByArticleId($row->id);
-		}
-
-		/**
-		 * This neat trick allows me to speed up meta queries on the article.
-		 *
-		 * When this plugin event is called Joomla has already loaded the article for us. I can use this object to
-		 * populate the article meta cache so next time I query the article meta I don't have to go through Joomla's
-		 * article model which saves me a very expensive query.
-		 */
-		$this->cacheArticleRow($row, true);
-
-		// Am I supposed to display comments at all?
-		$commentParams = $this->getParametersForArticle($row);
-
-		if ($commentParams->get('comments_show', 1) != 1)
-		{
-			return '';
-		}
-
-		// Am I supposed to display the comments count? Uses the keys comments_show_feature, comments_show_category
-		$area      = substr($context, 12);
-		$optionKey = sprintf("comments_show_%s", $area);
-
-		if ($commentParams->get($optionKey, 0) != 1)
-		{
-			return '';
-		}
-
-		// Use a Layout file to display the appropriate summary
-		$basePath    = __DIR__ . '/layouts';
-		$layoutFile  = sprintf("akeeba.engage.content.%s", $area);
-		$displayData = [
-			'container' => $container,
-			'row'       => $row,
-			'meta'      => Meta::getAssetAccessMeta($row->asset_id),
-		];
-
-		return LayoutHelper::render($container, $layoutFile, $displayData, $basePath);
+		return $this->renderCommentCount($params, $row, $context, true);
 	}
 
 	/**
@@ -209,82 +140,9 @@ class plgContentEngage extends CMSPlugin
 	 */
 	public function onContentAfterDisplay(?string $context, &$row, &$params, ?int $page = 0): string
 	{
-		// We need to be enabled
-		if (!$this->enabled)
-		{
-			return '';
-		}
-
-		// We need to be given the right kind of data
-		if (!is_object($params) || !($params instanceof Registry) || !is_object($row))
-		{
-			return '';
-		}
-
-		// We need to be in the frontend of the site
-		$container = $this->getContainer();
-
-		if (!$container->platform->isFrontend())
-		{
-			return '';
-		}
-
-		// We need to have a supported context
-		if ($context !== 'com_content.article')
-		{
-			return '';
-		}
-
-		/**
-		 * This neat trick allows me to speed up meta queries on the article.
-		 *
-		 * When this plugin event is called Joomla has already loaded the article for us. I can use this object to
-		 * populate the article meta cache so next time I query the article meta I don't have to go through Joomla's
-		 * article model which saves me a very expensive query.
-		 */
-		$this->cacheArticleRow($row, true);
-
-		// Am I supposed to display comments?
-		$commentParams = $this->getParametersForArticle($row);
-
-		if ($commentParams->get('comments_show', 1) != 1)
-		{
-			return '';
-		}
-
-		/**
-		 * Set a flag that we're allowed to show the comments browse page.
-		 *
-		 * Since this is a container flag it can only be set by backend code, not any request parameter. Since this is
-		 * not set by default it means that the only way to access the comments is going through this plugin. In other
-		 * words, someone trying to bypass the plugin and display all comments regardless would be really disappointed
-		 * at the results of their plan to surreptitiously pull comments.
-		 */
-		$container['commentsBrowseEnablingFlag'] = true;
-
-		$input   = $container->input;
-		$assetId = $row->asset_id;
-
-		$input->set('asset_id', $assetId);
-		$input->set('filter_order_Dir', $commentParams->get('comments_ordering'));
-
-		// Capture the output instead of pushing it to the browser
-		try
-		{
-			@ob_start();
-
-			$container->dispatcher->dispatch();
-
-			$comments = @ob_get_contents();
-
-			@ob_end_clean();
-		}
-		catch (Exception $e)
-		{
-			$comments = '';
-		}
-
-		return $comments;
+		return
+			$this->renderCommentCount($params, $row, $context, false) .
+			$this->renderComments($params, $row, $context);
 	}
 
 	/**
@@ -344,7 +202,7 @@ class plgContentEngage extends CMSPlugin
 	/**
 	 * Executes after Joomla deleted a content item. Used to delete attached comments.
 	 *
-	 * @param   string|null                             $context
+	 * @param   string|null           $context
 	 * @param   Content|object|mixed  $data
 	 *
 	 * @return  void
@@ -1063,5 +921,195 @@ class plgContentEngage extends CMSPlugin
 		$assetId = $db->setQuery($query)->loadResult();
 
 		return $assetId ? ((int) $assetId) : null;
+	}
+
+	/**
+	 * @param                $params
+	 * @param                $row
+	 * @param   string|null  $context
+	 *
+	 * @return false|string
+	 */
+	private function renderComments($params, $row, ?string $context)
+	{
+		// We need to be enabled
+		if (!$this->enabled)
+		{
+			return '';
+		}
+
+		// We need to be given the right kind of data
+		if (!is_object($params) || !($params instanceof Registry) || !is_object($row))
+		{
+			return '';
+		}
+
+		// We need to be in the frontend of the site
+		$container = $this->getContainer();
+
+		if (!$container->platform->isFrontend())
+		{
+			return '';
+		}
+
+		// We need to have a supported context
+		if ($context !== 'com_content.article')
+		{
+			return '';
+		}
+
+		/**
+		 * This neat trick allows me to speed up meta queries on the article.
+		 *
+		 * When this plugin event is called Joomla has already loaded the article for us. I can use this object to
+		 * populate the article meta cache so next time I query the article meta I don't have to go through Joomla's
+		 * article model which saves me a very expensive query.
+		 */
+		$this->cacheArticleRow($row, true);
+
+		// Am I supposed to display comments?
+		$commentParams = $this->getParametersForArticle($row);
+
+		if ($commentParams->get('comments_show', 1) != 1)
+		{
+			return '';
+		}
+
+		/**
+		 * Set a flag that we're allowed to show the comments browse page.
+		 *
+		 * Since this is a container flag it can only be set by backend code, not any request parameter. Since this is
+		 * not set by default it means that the only way to access the comments is going through this plugin. In other
+		 * words, someone trying to bypass the plugin and display all comments regardless would be really disappointed
+		 * at the results of their plan to surreptitiously pull comments.
+		 */
+		$container['commentsBrowseEnablingFlag'] = true;
+
+		$input   = $container->input;
+		$assetId = $row->asset_id;
+
+		$input->set('asset_id', $assetId);
+		$input->set('filter_order_Dir', $commentParams->get('comments_ordering'));
+
+		// Capture the output instead of pushing it to the browser
+		try
+		{
+			@ob_start();
+
+			$container->dispatcher->dispatch();
+
+			$comments = @ob_get_contents();
+
+			@ob_end_clean();
+		}
+		catch (Exception $e)
+		{
+			$comments = '';
+		}
+
+		return $comments;
+	}
+
+	/**
+	 * Render the comments count
+	 *
+	 * @param   Registry|mixed  $params
+	 * @param   object|mixed    $row
+	 * @param   string|null     $context
+	 * @param   bool            $before  Am I asked to render this before the content?
+	 *
+	 * @return  string
+	 */
+	private function renderCommentCount($params, $row, ?string $context, bool $before = true): string
+	{
+		// We need to be enabled
+		if (!$this->enabled)
+		{
+			return '';
+		}
+
+		// We need to be given the right kind of data
+		if (!is_object($params) || !($params instanceof Registry) || !is_object($row))
+		{
+			return '';
+		}
+
+		// We need to be in the frontend of the site
+		$container = $this->getContainer();
+
+		if (!$container->platform->isFrontend())
+		{
+			return '';
+		}
+
+		// We need to have a supported context
+		if (!in_array($context, ['com_content.category', 'com_content.featured']))
+		{
+			return '';
+		}
+
+		// Make sure this is really an article
+		if (!property_exists($row, 'introtext'))
+		{
+			return '';
+		}
+
+		/**
+		 * Joomla does not make the asset_id available when displaying articles in the featured or blog view display
+		 * modes. Unfortunately, we need to do one extra DB query for each article in this case.
+		 */
+		if (!property_exists($row, 'asset_id'))
+		{
+			$row->asset_id = $this->getAssetIdByArticleId($row->id);
+		}
+
+		/**
+		 * This neat trick allows me to speed up meta queries on the article.
+		 *
+		 * When this plugin event is called Joomla has already loaded the article for us. I can use this object to
+		 * populate the article meta cache so next time I query the article meta I don't have to go through Joomla's
+		 * article model which saves me a very expensive query.
+		 */
+		$this->cacheArticleRow($row, true);
+
+		// Am I supposed to display comments at all?
+		$commentParams = $this->getParametersForArticle($row);
+		$showComments  = $commentParams->get('comments_show', 1);
+
+		if ($showComments != 1)
+		{
+			return '';
+		}
+
+		// Am I supposed to display the comments count? Uses the keys comments_show_feature, comments_show_category
+		$area              = substr($context, 12);
+		$optionKey         = sprintf("comments_show_%s", $area);
+		$showCommentsCount = $commentParams->get($optionKey, 0);
+
+		if ($showCommentsCount == 0)
+		{
+			return '';
+		}
+
+		if ($before && ($showCommentsCount != 1))
+		{
+			return '';
+		}
+
+		if (!$before && ($showCommentsCount != 2))
+		{
+			return '';
+		}
+
+		// Use a Layout file to display the appropriate summary
+		$basePath    = __DIR__ . '/layouts';
+		$layoutFile  = sprintf("akeeba.engage.content.%s", $area);
+		$displayData = [
+			'container' => $container,
+			'row'       => $row,
+			'meta'      => Meta::getAssetAccessMeta($row->asset_id),
+		];
+
+		return LayoutHelper::render($container, $layoutFile, $displayData, $basePath);
 	}
 }
