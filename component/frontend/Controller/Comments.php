@@ -65,7 +65,7 @@ class Comments extends DataController
 	/**
 	 * DEBUG: Trigger email sending
 	 *
-	 * Don't worry, this will NOT work on your sites. This code is only accesible when I add 'debug' to the
+	 * Don't worry, this will NOT work on your sites. This code is only accessible when I add 'debug' to the
 	 * setPredefinedTaskList array in the __construct method.
 	 */
 	public function debug()
@@ -791,5 +791,37 @@ class Comments extends DataController
 		CacheCleaner::clearCacheGroups([
 			'com_engage',
 		], [0], 'onEngageClearCache');
+	}
+
+	protected function getACLForApplySave()
+	{
+		$model = $this->getModel();
+
+		if (!$model->getId())
+		{
+			$this->getIDsFromRequest($model, true);
+		}
+
+		$id = $model->getId();
+
+		if (!$id)
+		{
+			return '@add';
+		}
+
+		if ($this->checkACL('@edit'))
+		{
+			return true;
+		}
+
+		$user = $this->container->platform->getUser();
+		$uid  = $model->getFieldValue('created_by', 0);
+
+		if (!empty($uid) && !$user->guest && ($user->id == $uid))
+		{
+			return '@editown';
+		}
+
+		return false;
 	}
 }
