@@ -410,7 +410,7 @@ class Html extends DataHtml
 			return '';
 		}
 
-		if (($useCaptchaFor === 'nonmanager') && !$user->authorise('core.manage', 'com_engage'))
+		if (($useCaptchaFor === 'nonmanager') && $user->authorise('core.manage', 'com_engage'))
 		{
 			return '';
 		}
