@@ -12,7 +12,7 @@ There is no intention of supporting non-core content.
 
 ## Requirements
 
-* Joomla 3.9 of 4.0.
+* Joomla 3.9 or 4.0.
 * PHP 7.1 or later (7.3 recommended).
 
 ## Features
