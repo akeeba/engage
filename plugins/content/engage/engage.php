@@ -306,7 +306,7 @@ class plgContentEngage extends CMSPlugin
 		$publishUp = new Date();
 		$db        = $this->db;
 
-		if ($db->getNullDate() != $row->publish_up)
+		if (!empty($row->publish_up) && ($row->publish_up != $db->getNullDate()))
 		{
 			$publishUp = new Date($row->publish_up);
 		}

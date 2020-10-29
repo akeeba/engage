@@ -54,9 +54,9 @@ CREATE TABLE `#__engage_emailtemplates` (
   `subject` varchar(255) NOT NULL,
   `template` text NOT NULL,
   `enabled` TINYINT(3) NOT NULL DEFAULT 1,
-  `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_on` datetime NULL DEFAULT NULL,
   `created_by` bigint(20) NOT NULL DEFAULT '0',
-  `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_on` datetime NULL DEFAULT NULL,
   `modified_by` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`engage_emailtemplate_id`),
   UNIQUE KEY `#__engage_emailtemplate_keylang` (`key`(100),`language`)
@@ -1485,6 +1485,27 @@ INSERT INTO `#__engage_emailtemplates` (`engage_emailtemplate_id`, `key`, `langu
 </body>
 </html>', 1, '2020-04-01 00:00:00', 0, '2020-04-01 00:00:00', 0);
              ]]></query>
+        </action>
+
+        <!-- Replace zero datetime with nullable datetime -->
+        <action table="#__engage_emailtemplates" canfail="1">
+            <condition type="nullable" value="created_on" operator="not"/>
+            <query><![CDATA[
+ALTER TABLE `#__engage_emailtemplates` MODIFY `created_on` DATETIME NULL DEFAULT NULL;
+      ]]></query>
+            <query><![CDATA[
+UPDATE `#__engage_emailtemplates` SET `created_on` = NULL WHERE `created_on` = '0000-00-00 00:00:00';
+      ]]></query>
+        </action>
+
+        <action table="#__engage_emailtemplates" canfail="1">
+            <condition type="nullable" value="modified_on" operator="not"/>
+            <query><![CDATA[
+ALTER TABLE `#__engage_emailtemplates` MODIFY `modified_on` DATETIME NULL DEFAULT NULL;
+      ]]></query>
+            <query><![CDATA[
+UPDATE `#__engage_emailtemplates` SET `modified_on` = NULL WHERE `modified_on` = '0000-00-00 00:00:00';
+      ]]></query>
         </action>
     </sql>
 </schema>

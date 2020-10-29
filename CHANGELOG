@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 1.0.3
+================================================================================
+~ Replace zero datetime with nullable datetime
+
 Akeeba Engage 1.0.2
 ================================================================================
 + Comments count summary can now be displayed before or after content (gh-51)
