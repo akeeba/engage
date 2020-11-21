@@ -59,7 +59,7 @@ $previousLevel = $comment->depth;
 $user          = $comment->getUser();
 $avatar        = $comment->getAvatarURL(32);
 $profile       = $comment->getProfileURL();
-$commentDate   = new Date($comment->created_on);
+$commentDate   = (new Date($comment->created_on))->setTimezone($this->userTimezone);
 $ipLookupURL  = $this->getIPLookupURL($comment->ip);
 $openListItem++;
 $this->ensureHasParentInfo($comment, $parentIds, $parentNames);

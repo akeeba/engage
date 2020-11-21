@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 1.0.4
+================================================================================
+# [LOW] Comments display uses UTC, not the site's or the user's timezone (gh-58)
+
 Akeeba Engage 1.0.3
 ================================================================================
 ~ Replace zero datetime with nullable datetime

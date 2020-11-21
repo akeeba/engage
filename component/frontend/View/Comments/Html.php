@@ -12,6 +12,7 @@ defined('_JEXEC') or die();
 use Akeeba\Engage\Admin\Helper\Format;
 use Akeeba\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Site\Model\Comments;
+use DateTimeZone;
 use Exception;
 use FOF30\View\DataView\Html as DataHtml;
 use Joomla\CMS\Application\SiteApplication as JApplicationSite;
@@ -127,6 +128,13 @@ class Html extends DataHtml
 	 * @var bool
 	 */
 	public $areCommentsClosed = false;
+
+	/**
+	 * The current user's preferred timezone
+	 *
+	 * @var DateTimeZone
+	 */
+	public $userTimezone = null;
 
 	/**
 	 * WbAMP support. Is this an AMP page?
@@ -255,6 +263,8 @@ class Html extends DataHtml
 	 */
 	protected function onBeforeBrowse()
 	{
+		$this->userTimezone = $this->getUserTimezone();
+
 		$isAMP = $this->isAMP();
 
 		$this->setLayout('default');
@@ -530,6 +540,23 @@ class Html extends DataHtml
 			Log::add(sprintf("Error injecting AMP styling: %s", $e->getMessage()), Log::CRITICAL, 'com_engage');
 
 			return;
+		}
+	}
+
+	private function getUserTimezone(): DateTimeZone
+	{
+		$platform     = $this->container->platform;
+		$user         = $platform->getUser();
+		$siteTimezone = $platform->getConfig()->get('offset', 'UTC');
+		$zone         = $user->guest ? $siteTimezone : $user->getParam('timezone', $siteTimezone);
+
+		try
+		{
+			return new DateTimeZone($zone);
+		}
+		catch (Exception $e)
+		{
+			return new DateTimeZone('UTC');
 		}
 	}
 }
