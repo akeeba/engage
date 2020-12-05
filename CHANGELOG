@@ -2,6 +2,7 @@
 Akeeba Engage 1.0.4
 ================================================================================
 # [LOW] Comments display uses UTC, not the site's or the user's timezone (gh-58)
+# [HIGH] Joomla 4 beta 6 changed how sessions work, breaking everything
 
 Akeeba Engage 1.0.3
 ================================================================================
