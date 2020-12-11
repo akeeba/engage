@@ -42,7 +42,7 @@ $originalDirectory = getcwd();
 chdir($joomlaPath . '/cli');
 
 // Setup and import the base CLI script
-$minphp = '7.1.0';
+$minphp = '7.2.0';
 
 // Boilerplate -- START
 define('_JEXEC', 1);

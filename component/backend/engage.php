@@ -11,8 +11,8 @@ defined('_JEXEC') or die();
 use FOF30\Container\Container;
 
 define('AKEEBA_COMMON_WRONGPHP', 1);
-$minPHPVersion         = '7.1.0';
-$recommendedPHPVersion = '7.3';
+$minPHPVersion         = '7.2.0';
+$recommendedPHPVersion = '7.4';
 $softwareName          = 'Akeeba Engage';
 
 if (!require_once(__DIR__ . '/View/wrongphp.php'))

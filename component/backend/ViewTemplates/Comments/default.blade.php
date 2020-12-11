@@ -35,7 +35,7 @@ $filterAssetId = is_array($filterAssetId) ? '' : $filterAssetId;
     {{-- Old PHP version reminder --}}
     @include('admin:com_engage/Common/phpversion_warning', [
         'softwareName'  => 'Akeeba Engage',
-        'minPHPVersion' => '7.1.0',
+        'minPHPVersion' => '7.2.0',
     ])
 @stop
 
