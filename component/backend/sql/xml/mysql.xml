@@ -71,7 +71,7 @@ CREATE TABLE `#__engage_emailtemplates` (
 CREATE TABLE `#__engage_unsubscribe` (
   `asset_id` bigint(20) NOT NULL,
   `email` varchar(255) NOT NULL,
-  UNIQUE KEY `#__engage_unsubscribe_unique` (`asset_id`,`email`)
+  PRIMARY KEY (`asset_id`,`email`)
 ) DEFAULT COLLATE utf8_general_ci COMMENT='Unsubscribed emails';
             ]]></query>
         </action>
@@ -1507,5 +1507,22 @@ ALTER TABLE `#__engage_emailtemplates` MODIFY `modified_on` DATETIME NULL DEFAUL
 UPDATE `#__engage_emailtemplates` SET `modified_on` = NULL WHERE `modified_on` = '0000-00-00 00:00:00';
       ]]></query>
         </action>
+
+        <!-- Convert sole UNIQUE constraints to PRIMARY KEYs -->
+        <action table="#__engage_unsubscribe" canfail="1">
+            <condition type="equals" value="0"><![CDATA[
+SELECT COUNT(*) FROM `INFORMATION_SCHEMA`.`table_constraints`
+WHERE TABLE_SCHEMA=(SELECT DATABASE())
+AND table_name='#__engage_unsubscribe'
+AND CONSTRAINT_TYPE='PRIMARY KEY'
+			]]></condition>
+            <query><![CDATA[
+ALTER TABLE `#__engage_unsubscribe` DROP KEY `#__engage_unsubscribe_unique`;
+			]]></query>
+            <query><![CDATA[
+ALTER TABLE `#__engage_unsubscribe` ADD PRIMARY KEY (`asset_id`,`email`);
+            ]]></query>
+        </action>
+
     </sql>
 </schema>
