@@ -5,8 +5,6 @@
       <path value="../fof3/fof" />
       <path value="../../master/joomla-cms" />
       <path value="../../dionysopoulos/joomlatypehints/generated_hints" />
-      <path value="$PROJECT_DIR$/component/backend/vendor/composer" />
-      <path value="$PROJECT_DIR$/component/backend/vendor/ezyang/htmlpurifier" />
       <path value="../com_datacompliance/component" />
       <path value="../../master/joomla4" />
     </include_path>
