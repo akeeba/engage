@@ -1,14 +1,8 @@
 <?php
 /**
- * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
- * @license   GNU General Public License version 3, or later
- */
-
-/**
  * Old PHP version notification
  *
- * @copyright Copyright (c) 2018-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c) 2018-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -68,12 +62,13 @@ if (!function_exists('akeeba_common_phpversion_warning'))
 			'7.2' => array('2019-11-30 00:00:00', '2020-11-30 00:00:00'),
 			'7.3' => array('2020-12-06 00:00:00', '2021-12-06 00:00:00'),
 			'7.4' => array('2021-11-28 00:00:00', '2022-11-28 00:00:00'),
+			'8.0' => array('2022-11-26 00:00:00', '2023-11-26 00:00:00'),
 		);
 
 		// Make sure I have all necessary configuration variables
 		$config = array_merge(array(
 			'minPHPVersion'          => '7.2.0',
-			'recommendedPHPVersion'  => '7.3',
+			'recommendedPHPVersion'  => '7.4',
 			'softwareName'           => 'This software',
 			'class_priority_low'     => 'akeeba-block--info',
 			'class_priority_medium'  => 'akeeba-block--warning',
@@ -235,7 +230,7 @@ if (!defined('KICKSTART'))
 		akeeba_common_phpversion_warning(array(
 			// Configuration -- Override before calling this script
 			'minPHPVersion'          => isset($minPHPVersion) ? $minPHPVersion : '7.2.0',
-			'recommendedPHPVersion'  => isset($recommendedPHPVersion) ? $recommendedPHPVersion : '7.3',
+			'recommendedPHPVersion'  => isset($recommendedPHPVersion) ? $recommendedPHPVersion : '7.4',
 			'softwareName'           => isset($softwareName) ? $softwareName : 'This software',
 			'class_priority_low'     => isset($class_priority_low) ? $class_priority_low : 'akeeba-block--info',
 			'class_priority_medium'  => isset($class_priority_medium) ? $class_priority_medium : 'akeeba-block--warning',
