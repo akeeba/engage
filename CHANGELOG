@@ -2,7 +2,7 @@
 Akeeba Engage 1.0.5
 ================================================================================
 ~ All tables now have a PRIMARY KEY
-# [LOW] Comments now follow the order saved inside component params
+# [LOW] PHP Notices in rare occasions where Joomla calls onContentPrepare without an article
 
 Akeeba Engage 1.0.4
 ================================================================================

@@ -280,6 +280,11 @@ class plgContentEngage extends CMSPlugin
 	 */
 	public function onAkeebaEngageGetAssetMeta(int $assetId = 0, bool $loadParameters = false): ?array
 	{
+		if (empty($assetId))
+		{
+			return null;
+		}
+
 		$row = $this->getArticleByAssetId($assetId, $loadParameters);
 
 		if (is_null($row))
@@ -384,37 +389,39 @@ class plgContentEngage extends CMSPlugin
 	 */
 	private function getContainer(): Container
 	{
-		if (empty($this->container))
+		if (!empty($this->container))
 		{
-			$masterContainer = Container::getInstance('com_engage');
-			$appInput        = new Input();
-
-			$defaultListLimit = $masterContainer->params->get('default_limit', 20);
-			$defaultListLimit = ($defaultListLimit == -1) ? 20 : $defaultListLimit;
-
-			// Get the container singleton instance
-			$this->container = Container::getInstance('com_engage', [
-				// We create a temporary instance to avoid messing with the master container's input
-				'tempInstance' => true,
-				// Passing these objects from the master container optimizes the number of database queries
-				'params'       => $masterContainer->params,
-				'mediaVersion' => $masterContainer->mediaVersion,
-				// Custom input for the temporary container instance
-				'input'        => [
-					'option'              => 'com_engage',
-					'view'                => 'Comments',
-					'task'                => 'browse',
-					'asset_id'            => 0,
-					'access'              => 0,
-					'akengage_limitstart' => ($appInput)->getInt('akengage_limitstart', 0),
-					'akengage_limit'      => ($appInput)->getInt('akengage_limit', $defaultListLimit),
-					'layout'              => $this->isAMP() ? 'amp' : 'default',
-					'tpl'                 => null,
-					'tmpl'                => null,
-					'format'              => 'html',
-				],
-			]);
+			return $this->container;
 		}
+
+		$masterContainer = Container::getInstance('com_engage');
+		$appInput        = new Input();
+
+		$defaultListLimit = $masterContainer->params->get('default_limit', 20);
+		$defaultListLimit = ($defaultListLimit == -1) ? 20 : $defaultListLimit;
+
+		// Get the container singleton instance
+		$this->container = Container::getInstance('com_engage', [
+			// We create a temporary instance to avoid messing with the master container's input
+			'tempInstance' => true,
+			// Passing these objects from the master container optimizes the number of database queries
+			'params'       => $masterContainer->params,
+			'mediaVersion' => $masterContainer->mediaVersion,
+			// Custom input for the temporary container instance
+			'input'        => [
+				'option'              => 'com_engage',
+				'view'                => 'Comments',
+				'task'                => 'browse',
+				'asset_id'            => 0,
+				'access'              => 0,
+				'akengage_limitstart' => ($appInput)->getInt('akengage_limitstart', 0),
+				'akengage_limit'      => ($appInput)->getInt('akengage_limit', $defaultListLimit),
+				'layout'              => $this->isAMP() ? 'amp' : 'default',
+				'tpl'                 => null,
+				'tmpl'                => null,
+				'format'              => 'html',
+			],
+		]);
 
 		return $this->container;
 	}
@@ -454,7 +461,7 @@ class plgContentEngage extends CMSPlugin
 	private function isRowPublished($row)
 	{
 		// The article is unpublished, the point is moot
-		if ($row->state <= 0)
+		if (($row->state ?? 0) <= 0)
 		{
 			return false;
 		}
@@ -510,6 +517,11 @@ class plgContentEngage extends CMSPlugin
 	 */
 	private function getArticleByAssetId(int $assetId, bool $loadParameters = false)
 	{
+		if (empty($assetId))
+		{
+			return null;
+		}
+
 		$metaKey    = md5($assetId . '_' . ($loadParameters ? 'with' : 'without') . '_parameters');
 		$altMetaKey = md5($assetId . '_with_parameters');
 
@@ -912,6 +924,11 @@ class plgContentEngage extends CMSPlugin
 	 */
 	private function getAssetIdByArticleId(?int $id): ?int
 	{
+		if (empty($id))
+		{
+			return null;
+		}
+
 		$db    = $this->db;
 		$query = $db->getQuery(true)
 			->select($db->qn('asset_id'))
@@ -954,6 +971,21 @@ class plgContentEngage extends CMSPlugin
 
 		// We need to have a supported context
 		if ($context !== 'com_content.article')
+		{
+			return '';
+		}
+
+		if (empty($row->id ?? 0))
+		{
+			return '';
+		}
+
+		if (!property_exists($row, 'asset_id'))
+		{
+			$row->asset_id = $this->getAssetIdByArticleId($row->id);
+		}
+
+		if (empty($row->asset_id ?? 0))
 		{
 			return '';
 		}
@@ -1054,6 +1086,11 @@ class plgContentEngage extends CMSPlugin
 			return '';
 		}
 
+		if (empty($row->id ?? 0))
+		{
+			return '';
+		}
+
 		/**
 		 * Joomla does not make the asset_id available when displaying articles in the featured or blog view display
 		 * modes. Unfortunately, we need to do one extra DB query for each article in this case.
@@ -1061,6 +1098,11 @@ class plgContentEngage extends CMSPlugin
 		if (!property_exists($row, 'asset_id'))
 		{
 			$row->asset_id = $this->getAssetIdByArticleId($row->id);
+		}
+
+		if (empty($row->asset_id ?? 0))
+		{
+			return '';
 		}
 
 		/**
