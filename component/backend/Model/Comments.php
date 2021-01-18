@@ -376,6 +376,11 @@ class Comments extends DataModel
 			return [];
 		}
 
+		if (is_null($parentId) && strtoupper($this->input->get('filter_order_Dir', 'asc')) === 'DESC')
+		{
+			$childIDs = array_reverse($childIDs);
+		}
+
 		$ret = [];
 
 		foreach ($childIDs as $thisParentId)
