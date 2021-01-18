@@ -295,7 +295,6 @@ class Html extends DataHtml
 		/** @var Comments $model */
 		$model = $this->getModel()->tmpInstance();
 		$model->asset_id($this->assetId);
-		$model->filter_order_Dir($this->input->get('filter_order_Dir', null, 'cmd'));
 
 		// Display limits
 		$defaultLimit = $this->getDefaultListLimit();
