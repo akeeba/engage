@@ -724,8 +724,8 @@ class plgContentEngage extends CMSPlugin
 
 		foreach ($parametersKeys as $key)
 		{
-			$v                  = $articleParams->get('engage.' . $key, $ret[$key]);
-			$hasInheritedParams = $hasInheritedParams || $this->isUseGlobal($v);
+			$ret[$key]          = $articleParams->get('engage.' . $key, $ret[$key]);
+			$hasInheritedParams = $hasInheritedParams || $this->isUseGlobal($ret[$key]);
 		}
 
 		// If there are no "Use Global" parameters return what we've got so far.
@@ -749,6 +749,7 @@ class plgContentEngage extends CMSPlugin
 		}
 
 		$catId = $row->catid;
+
 		if (version_compare(JVERSION, '3.999.999', 'le'))
 		{
 			/** @var CategoriesModelCategory $model */
@@ -831,7 +832,7 @@ class plgContentEngage extends CMSPlugin
 
 		if (is_numeric($value))
 		{
-			if ((int) $value === -1)
+			if (((int) $value) === -1)
 			{
 				return true;
 			}
