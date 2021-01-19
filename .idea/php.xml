@@ -3,7 +3,6 @@
   <component name="PhpIncludePathManager">
     <include_path>
       <path value="../fof3/fof" />
-      <path value="../../master/joomla-cms" />
       <path value="../../dionysopoulos/joomlatypehints/generated_hints" />
       <path value="../com_datacompliance/component" />
       <path value="../../master/joomla4" />

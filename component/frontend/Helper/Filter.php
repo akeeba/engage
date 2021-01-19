@@ -304,8 +304,8 @@ final class Filter
 
 		self::$joomlaFilterSettings = [
 			'filterType'          => 'noHTML',
-			'blacklistTags'       => $filter->tagBlacklist,
-			'blacklistAttributes' => $filter->attrBlacklist,
+			'blacklistTags'       => $filter->tagBlacklist ?? $filter->blockedTags,
+			'blacklistAttributes' => $filter->attrBlacklist ?? $filter->blockedAttributes,
 			'whitelistTags'       => [],
 			'whitelistAttributes' => [],
 		];
