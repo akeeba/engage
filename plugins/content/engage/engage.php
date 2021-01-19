@@ -268,6 +268,8 @@ class plgContentEngage extends CMSPlugin
 
 		$data->engage = $data->{$key}['engage'];
 		unset ($data->{$key}['engage']);
+
+		return true;
 	}
 
 	/**

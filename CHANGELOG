@@ -2,6 +2,7 @@
 Akeeba Engage 1.0.5
 ================================================================================
 ~ All tables now have a PRIMARY KEY
++ Add [CONTENT_CATEGORY] to email variables (gh-64)
 # [MEDIUM] Sorting by comment date descending was ignored
 # [MEDIUM] Article comment options were ignored. Category and global options were the only ones applied.
 # [LOW] PHP Notices in rare occasions where Joomla calls onContentPrepare without an article

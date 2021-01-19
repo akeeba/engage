@@ -203,6 +203,7 @@ HTML;
 			'[DATE_UTC]'          => $jCreatedOn->format($dateFormat, false),
 			'[DATE_LOCAL]'        => $jCreatedOn->format($dateFormat, true),
 			'[CONTENT_TITLE]'     => htmlentities($meta['title']),
+			'[CONTENT_CATEGORY]'  => htmlentities($meta['category']),
 			'[CONTENT_LINK]'      => $meta['public_url'],
 			'[COMMENT_LINK]'      => $publicUri->toString(),
 			'[PUBLISH_URL]'       => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'publish', $returnUrlComment), $comment, $recipient->email),
