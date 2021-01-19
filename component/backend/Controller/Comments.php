@@ -136,6 +136,14 @@ class Comments extends DataController
 	}
 
 	/**
+	 * Runs after deleting a comment.
+	 */
+	protected function onAfterRemote(): void
+	{
+		$this->cleanCache();
+	}
+
+	/**
 	 * Runs after saving a comment
 	 *
 	 * @param   array  $data  The data that got saved

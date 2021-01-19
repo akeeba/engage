@@ -4,6 +4,7 @@ Akeeba Engage 1.0.5
 ! Security b/c break in Joomla 4.0.0 Beta 6: Joomla input filter properties tagBlacklist and attrBlacklist have been renamed, crippling post filtering under some circumstances.
 ~ All tables now have a PRIMARY KEY
 + Add [CONTENT_CATEGORY] to email variables (gh-64)
+# [MEDIUM] Joomla 4: cache not reset after posting or deleting a comment (gh-62)
 # [MEDIUM] Sorting by comment date descending was ignored
 # [MEDIUM] Article comment options were ignored. Category and global options were the only ones applied.
 # [LOW] PHP Notices in rare occasions where Joomla calls onContentPrepare without an article

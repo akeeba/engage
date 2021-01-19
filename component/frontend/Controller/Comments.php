@@ -509,6 +509,17 @@ class Comments extends DataController
 		$this->cleanCache();
 	}
 
+	/**
+	 * Runs after deleting a comment.
+	 */
+	protected function onAfterRemove()
+	{
+		$this->disableJoomlaCache();
+
+		$this->cleanCache();
+
+	}
+
 	protected function onBeforeEdit()
 	{
 		$this->disableJoomlaCache();
