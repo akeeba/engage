@@ -48,7 +48,7 @@ connections:
 # Release source files configuration.
 files:
   -
-    title: 'Contact Us'
+    title: 'Akeeba Engage'
     connection: s3
     source: '%%RELEASEDIR%%/pkg_engage-*.zip'
     access: 1
@@ -56,7 +56,7 @@ files:
 # Update sources
 updates:
   -
-    title: 'Admin Tools Core updates'
+    title: 'Akeeba Engage updates'
     connection: s3
     directory: '/updates'
     stream: 39
