@@ -1,0 +1,65 @@
+# Basic release information
+release:
+  version: '%%VERSION%%'
+  date: '%%DATE%%'
+  category: 52
+  access: 1
+  release_notes: '%%DEFAULT_RELEASE_NOTES%%'
+  changelog: '%%DEFAULT_CHANGELOG%%'
+
+# Akeeba Release System API connection
+api:
+  endpoint: '%%API.ENDPOINT%%'
+  connector: '%%API.CONNECTOR%%'
+  username: '%%API.USERNAME%%'
+  password: '%%API.PASSWORD%%'
+  token: '%%API.TOKEN%%'
+  cacert: '%%CUSTOMCACERT%%'
+
+steps: [%%RELEASESTEPS%%]
+
+# File upload connections
+connections:
+  s3:
+    type: 's3'
+    access: '%%S3.ACCESS%%'
+    secret: '%%S3.SECRET%%'
+    bucket: '%%S3.BUCKET%%'
+    tls: true
+    signature: '%%S3.SIGNATURE%%'
+    region: '%%S3.REGION%%'
+    directory: 'downloads/engage'
+    cdnhostname: '%%S3.CDNHOSTNAME%%'
+    acl: 'public-read'
+    storage_class: 'STANDARD'
+    maximum_age: 600
+  sftp:
+    type: '%%PRO.METHOD%%'
+    directory: '%%SFTP.DIR%%'
+    hostname: '%%SFTP.HOST%%'
+    port: '%%SFTP.PORT%%'
+    username: '%%SFTP.USERNAME%%'
+    password: '%%SFTP.PASSWORD%%'
+    public_key: '%%SFTP.PUBKEYFILE%%'
+    private_key: '%%SFTP.PRIVKEYFILE%%'
+    private_key_password: '%%SFTP.PRIVKEYFILE.PASS%%'
+    timeout: 900
+
+# Release source files configuration.
+files:
+  -
+    title: 'Contact Us'
+    connection: s3
+    source: '%%RELEASEDIR%%/pkg_engage-*.zip'
+    access: 1
+
+# Update sources
+updates:
+  -
+    title: 'Admin Tools Core updates'
+    connection: s3
+    directory: '/updates'
+    stream: 39
+    base_name: 'pkgengage'
+    formats:
+      - 'xml'
