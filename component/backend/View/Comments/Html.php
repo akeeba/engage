@@ -10,7 +10,7 @@ namespace Akeeba\Engage\Admin\View\Comments;
 defined('_JEXEC') or die;
 
 use Akeeba\Engage\Admin\Model\Comments;
-use FOF30\View\DataView\Html as HtmlView;
+use FOF40\View\DataView\Html as HtmlView;
 use Joomla\CMS\Language\Text;
 
 class Html extends HtmlView

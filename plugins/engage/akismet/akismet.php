@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 
 use Akeeba\Engage\Admin\Model\Comments;
 use Akeeba\Engage\Admin\Model\Exception\BlatantSpam;
-use FOF30\Date\Date;
+use FOF40\Date\Date;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\HttpFactory;
@@ -47,7 +47,7 @@ class plgEngageAkismet extends CMSPlugin
 	 */
 	public function __construct(&$subject, $config = [])
 	{
-		if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
+		if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
 		{
 			$this->enabled = false;
 		}

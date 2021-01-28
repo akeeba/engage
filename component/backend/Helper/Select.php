@@ -9,7 +9,7 @@ namespace Akeeba\Engage\Admin\Helper;
 
 defined('_JEXEC') or die;
 
-use FOF30\Utils\SelectOptions;
+use FOF40\Html\SelectOptions;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 

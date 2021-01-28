@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die;
 
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
 
@@ -18,7 +18,7 @@ class plgSystemEngagecache extends CMSPlugin
 {
 	public function __construct(&$subject, $config = [])
 	{
-		if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
+		if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
 		{
 			$this->enabled = false;
 		}

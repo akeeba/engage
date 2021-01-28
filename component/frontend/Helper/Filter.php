@@ -9,7 +9,7 @@ namespace Akeeba\Engage\Site\Helper;
 
 defined('_JEXEC') or die();
 
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 use Joomla\CMS\Access\Access;

@@ -25,11 +25,11 @@
  *
  * Variables made automatically available to us by FOF:
  *
- * @var \FOF30\View\DataView\Raw $this
+ * @var \FOF40\View\DataView\Raw $this
  */
 
 use Akeeba\Engage\Admin\Model\Comments;
-use FOF30\Utils\FEFHelper\BrowseView;
+use FOF40\Html\FEFHelper\BrowseView;
 
 defined('_JEXEC') or die;
 

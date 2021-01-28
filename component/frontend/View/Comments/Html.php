@@ -14,7 +14,7 @@ use Akeeba\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Site\Model\Comments;
 use DateTimeZone;
 use Exception;
-use FOF30\View\DataView\Html as DataHtml;
+use FOF40\View\DataView\Html as DataHtml;
 use Joomla\CMS\Application\SiteApplication as JApplicationSite;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;

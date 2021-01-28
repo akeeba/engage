@@ -8,8 +8,8 @@
 use Akeeba\Engage\Admin\Model\Comments;
 use Akeeba\Engage\Site\Helper\Email;
 use Akeeba\Engage\Site\Helper\Meta;
-use FOF30\Container\Container;
-use FOF30\Model\DataModel\Exception\RecordNotLoaded;
+use FOF40\Container\Container;
+use FOF40\Model\DataModel\Exception\RecordNotLoaded;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;

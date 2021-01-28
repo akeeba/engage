@@ -10,19 +10,19 @@
 defined('_JEXEC') or die();
 
 // Load FOF if not already loaded
-if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
+if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
 {
 	throw new RuntimeException('This component requires FOF 3.0.');
 }
 
-class Com_EngageInstallerScript extends \FOF30\Utils\InstallScript\Component
+class Com_EngageInstallerScript extends \FOF40\InstallScript\Component
 {
 	/**
 	 * The component's name
 	 *
 	 * @var   string
 	 */
-	protected $componentName = 'com_engage';
+	public $componentName = 'com_engage';
 
 	/**
 	 * The title of the component (printed on installation and uninstallation messages)

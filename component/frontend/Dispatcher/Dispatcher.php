@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 
 use Akeeba\Engage\Admin\Dispatcher\ComponentVersionAware;
 use Akeeba\Engage\Admin\Dispatcher\FOFLanguageAware;
-use FOF30\Dispatcher\Dispatcher as FOFDispatcher;
+use FOF40\Dispatcher\Dispatcher as FOFDispatcher;
 
 class Dispatcher extends FOFDispatcher
 {

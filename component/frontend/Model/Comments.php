@@ -11,8 +11,8 @@ defined('_JEXEC') or die();
 
 use Akeeba\Engage\Admin\Model\Comments as AdminCommentsModel;
 use Exception;
-use FOF30\Model\Mixin\Assertions;
-use FOF30\Utils\Ip;
+use FOF40\Model\Mixin\Assertions;
+use FOF40\IP\IPHelper as Ip;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Captcha\Captcha;
 use Joomla\CMS\Factory;

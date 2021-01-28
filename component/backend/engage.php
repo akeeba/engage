@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 
 define('AKEEBA_COMMON_WRONGPHP', 1);
 $minPHPVersion         = '7.2.0';
@@ -43,7 +43,7 @@ if (!@file_exists(JPATH_SITE . '/media/fef/fef.php'))
  */
 try
 {
-	if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
+	if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
 	{
 		(include_once __DIR__ . '/View/fof.php') or die('You need to have the Akeeba Framework-on-Framework (FOF) 3 package installed on your site to use this component. Please visit https://www.akeeba.com/download/fof3.html to download it and install it on your site.');
 

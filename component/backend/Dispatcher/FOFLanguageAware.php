@@ -14,7 +14,7 @@ trait FOFLanguageAware
 	{
 		// Load the FOF language
 		$lang = $this->container->platform->getLanguage();
-		$lang->load('lib_fof30', JPATH_ADMINISTRATOR, 'en-GB', true, true);
-		$lang->load('lib_fof30', JPATH_ADMINISTRATOR, null, true, false);
+		$lang->load('lib_fof40', JPATH_ADMINISTRATOR, 'en-GB', true, true);
+		$lang->load('lib_fof40', JPATH_ADMINISTRATOR, null, true, false);
 	}
 }

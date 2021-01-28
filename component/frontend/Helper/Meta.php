@@ -10,7 +10,7 @@ namespace Akeeba\Engage\Site\Helper;
 use Akeeba\Engage\Admin\Model\Comments;
 use DateInterval;
 use Exception;
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;

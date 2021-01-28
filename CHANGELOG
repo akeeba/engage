@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 2.0.0
+================================================================================
++ Rewritten with FOF 4
+
 Akeeba Engage 1.0.5
 ================================================================================
 ! Security b/c break in Joomla 4.0.0 Beta 6: Joomla input filter properties tagBlacklist and attrBlacklist have been renamed, crippling post filtering under some circumstances.

@@ -8,14 +8,14 @@
     <common>
         <container>
             <option name="componentNamespace">Akeeba\Engage</option>
-            <option name="factoryClass">FOF30\Factory\BasicFactory</option>
-            <option name="rendererClass">FOF30\Render\FEF</option>
+            <option name="factoryClass">FOF40\Factory\BasicFactory</option>
+            <option name="rendererClass">FOF40\Render\FEF</option>
         </container>
     </common>
 
     <frontend>
         <container>
-            <option name="rendererClass">FOF30\Render\Joomla</option>
+            <option name="rendererClass">FOF40\Render\Joomla</option>
         </container>
 
         <dispatcher>

@@ -9,10 +9,10 @@ defined('_JEXEC') or die();
 
 use Akeeba\Engage\Admin\Model\Comments;
 use Akeeba\Engage\Site\Helper\Meta;
-use FOF30\Container\Container;
-use FOF30\Input\Input;
-use FOF30\Layout\LayoutHelper;
-use FOF30\Utils\CacheCleaner;
+use FOF40\Container\Container;
+use FOF40\Input\Input;
+use FOF40\Layout\LayoutHelper;
+use FOF40\JoomlaAbstraction\CacheCleaner;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Date\Date;
@@ -105,7 +105,7 @@ class plgContentEngage extends CMSPlugin
 	 */
 	public function __construct(&$subject, $config = [])
 	{
-		if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
+		if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
 		{
 			$this->enabled = false;
 		}

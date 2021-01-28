@@ -24,7 +24,7 @@ use Akeeba\Engage\Site\Helper\Meta;
 use Faker\Factory as FakerFactory;
 use Faker\Generator as FakerGenerator;
 use Faker\Provider\Biased;
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Date\Date;
@@ -58,7 +58,7 @@ foreach ([__DIR__, getcwd()] as $currentDirectory)
 
 defined('JPATH_LIBRARIES') || die ('This script must be placed in or run from the cli folder of your site.');
 
-require_once JPATH_LIBRARIES . '/fof30/Cli/Application.php';
+require_once JPATH_LIBRARIES . '/fof40/Cli/Application.php';
 // endregion
 
 // Composer dependency
@@ -320,7 +320,7 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 
 				if (is_string($earliestDate))
 				{
-					$earliestDate = new FOF30\Date\Date($earliestDate);
+					$earliestDate = new FOF40\Date\Date($earliestDate);
 				}
 
 				$latestDate   = (clone $earliestDate)->add(new DateInterval('P2Y'));
@@ -341,7 +341,7 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 					$randomTimestamp = $this->faker->biasedNumberBetween($earliestDate->toUnix(), $latestDate->toUnix(), [
 						Biased::class, 'linearLow',
 					]);
-					$jDate = new FOF30\Date\Date($randomTimestamp);
+					$jDate = new FOF40\Date\Date($randomTimestamp);
 
 					$commentsInfo[] = [
 						'uuid'      => $this->faker->uuid,
@@ -482,7 +482,7 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 	private function reinstallSchema(): void
 	{
 		$container = $this->container;
-		$installer = new \FOF30\Database\Installer($container->db, $container->backEndPath . '/sql/xml');
+		$installer = new \FOF40\Database\Installer($container->db, $container->backEndPath . '/sql/xml');
 		$installer->removeSchema();
 		$installer->updateSchema();
 	}
@@ -529,11 +529,11 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 
 		try
 		{
-			$jDate = new FOF30\Date\Date($created);
+			$jDate = new FOF40\Date\Date($created);
 		}
 		catch (Exception $e)
 		{
-			$jDate = new \FOF30\Date\Date();
+			$jDate = new \FOF40\Date\Date();
 			$jDate = $jDate->sub(new DatePeriod('P1Y'));
 		}
 

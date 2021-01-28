@@ -9,7 +9,7 @@ namespace Akeeba\Engage\Admin\View\EmailTemplates;
 
 defined('_JEXEC') or die;
 
-use FOF30\View\DataView\Html as HtmlView;
+use FOF40\View\DataView\Html as HtmlView;
 
 class Html extends HtmlView
 {

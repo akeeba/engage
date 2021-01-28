@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 

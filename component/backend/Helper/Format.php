@@ -10,7 +10,7 @@ namespace Akeeba\Engage\Admin\Helper;
 defined('_JEXEC') or die;
 
 use Akeeba\Engage\Site\Helper\Filter;
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 
 final class Format
 {

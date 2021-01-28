@@ -10,10 +10,10 @@ namespace Akeeba\Engage\Admin\Controller;
 defined('_JEXEC') or die;
 
 use Exception;
-use FOF30\Container\Container;
-use FOF30\Controller\DataController;
-use FOF30\Controller\Mixin\PredefinedTaskList;
-use FOF30\Utils\CacheCleaner;
+use FOF40\Container\Container;
+use FOF40\Controller\DataController;
+use FOF40\Controller\Mixin\PredefinedTaskList;
+use FOF40\JoomlaAbstraction\CacheCleaner;
 use Joomla\CMS\Language\Text;
 
 class Comments extends DataController

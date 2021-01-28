@@ -9,7 +9,7 @@ namespace Akeeba\Engage\Admin\Toolbar;
 
 defined('_JEXEC') or die;
 
-use FOF30\Toolbar\Toolbar as BaseToolbar;
+use FOF40\Toolbar\Toolbar as BaseToolbar;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Toolbar\Toolbar as JToolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;

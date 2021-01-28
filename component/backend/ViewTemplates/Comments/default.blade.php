@@ -29,7 +29,7 @@ $filterAssetId = $this->getModel()->getState('asset_id', null) ?? '';
 $filterAssetId = is_array($filterAssetId) ? '' : $filterAssetId;
 
 ?>
-@extends('any:lib_fof30/Common/browse')
+@extends('any:lib_fof40/Common/browse')
 
 @section('browse-page-top')
     {{-- Old PHP version reminder --}}
@@ -41,7 +41,7 @@ $filterAssetId = is_array($filterAssetId) ? '' : $filterAssetId;
 
 @section('browse-ordering')
     {{-- Table ordering --}}
-    @jhtml('FEFHelper.browse.orderjs', $this->lists->order)
+    @jhtml('FEFHelp.browse.orderjs', $this->lists->order)
 
     <div class="akeeba-filter-element akeeba-form-group">
         <label for="limit" class="element-invisible">
@@ -85,7 +85,7 @@ $filterAssetId = is_array($filterAssetId) ? '' : $filterAssetId;
 @section('browse-table-header')
     <tr>
         <th width="20px">
-            @jhtml('FEFHelper.browse.checkall')
+            @jhtml('FEFHelp.browse.checkall')
         </th>
         <th width="20%">
             @fieldtitle('created_by')
@@ -121,7 +121,7 @@ $filterAssetId = is_array($filterAssetId) ? '' : $filterAssetId;
 		?>
         <tr>
             <td>
-                @jhtml('FEFHelper.browse.id', ++$i, $item->getId())
+                @jhtml('FEFHelp.browse.id', ++$i, $item->getId())
             </td>
             <td>
                 @include('admin:com_engage/Common/ShowUser', ['item' => $item, 'showLink' => false, 'avatarSize' => '32'])
@@ -225,7 +225,7 @@ $filterAssetId = is_array($filterAssetId) ? '' : $filterAssetId;
                 @endunless
             </td>
             <td>
-                {{ (new FOF30\Date\Date($item->created_on))->format(\Joomla\CMS\Language\Text::_('DATE_FORMAT_LC2'), true, true) }}
+                {{ (new FOF40\Date\Date($item->created_on))->format(\Joomla\CMS\Language\Text::_('DATE_FORMAT_LC2'), true, true) }}
             </td>
             <td>
                 {{ \Akeeba\Engage\Admin\Helper\Grid::published($item->enabled, $i, '', $canChange) }}

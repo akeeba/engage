@@ -14,12 +14,12 @@ defined('_JEXEC') or die();
  */
 
 use Akeeba\Engage\Admin\Helper\Format;
-use FOF30\Date\Date;
+use FOF40\Date\Date;
 use Joomla\CMS\Language\Text;
 
 /**
  * @var \Akeeba\Engage\Site\View\Comments\Html $this
- * @var \FOF30\Model\DataModel\Collection      $items
+ * @var \FOF40\Model\DataModel\Collection      $items
  * @var \Akeeba\Engage\Site\Model\Comments     $comment
  */
 

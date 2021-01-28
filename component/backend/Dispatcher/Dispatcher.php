@@ -10,8 +10,8 @@ namespace Akeeba\Engage\Admin\Dispatcher;
 defined('_JEXEC') or die;
 
 use Exception;
-use FOF30\Database\Installer;
-use FOF30\Dispatcher\Dispatcher as FOFDispatcher;
+use FOF40\Database\Installer;
+use FOF40\Dispatcher\Dispatcher as FOFDispatcher;
 use Joomla\CMS\Language\Text;
 use RuntimeException;
 
