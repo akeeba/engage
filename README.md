@@ -17,7 +17,7 @@ There is no intention of supporting non-core content.
 
 ## Features
 
-* Downloads and updates to the component are free of charge. Getting support costs money, though.
+* Downloads and updates to the component are free of charge.
 * Comments allow for full HTML, edited using the WYSIWYG editor configured in Joomla. 
 * HTML filtering for comments either by Joomla itself or using the more robust, heavily audited HTML Purifier library.
 * Comments can be filed by logged in users or guests (configurable with Joomla's permissions).
@@ -69,12 +69,4 @@ We do not plan on listing third party language files anywhere on our site or thi
 
 ## Support
 
-Akeeba Engage is currently in beta stage. Limited support will be provided through GitHub issues. However, this is not a permanent solution.
-
-Our plan is to provide _paid support_ for issues regarding installing, configuring and using Akeeba Engage once the software reaches a stable version (1.0.0).
-
-Please note that support is meant to be provided in a way to help you overcome issues with the installation, configuration and use of our software. We cannot do the installation and integration work ourselves, nor can we provide support for customising the frontend of the software including but not limited to template and media overrides. We give you the tools to do that but we don't do custom integration and customization work on your behalf. 
-
-Furthermore, kindly note that we cannot advise you on configuring your third party WYSIWYG editor beyond what we have already documented in the Wiki; that's something that is best left to the developer of your WYSIWYG editor for objective reasons.
-
-Finally, please note that we can only provide limited and generic support for core Joomla features such as text filtering and access control (permissions). We can explain how these feature interact with our software and point you to further information – including our public documentation – but we cannot reconfigure or otherwise do extensive work on your site on your behalf.
+You can receive community support through the [Discussions tab](https://github.com/akeeba/engage/discussions) of Akeeba Engage's GitHub repository. Kindly note that this is meant to server as a place where users of Akeeba Engage help each other, in a way similar to how Stack Overflow works. We may pop in from time to time to give an answer — especially at the beginning when the volume of discussions is pretty low — but our involvement in these discussions is not guaranteed. Thank you for your understanding!
