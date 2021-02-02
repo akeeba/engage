@@ -16,7 +16,7 @@ section.akengage-outer-container--dark {
     color-scheme: dark;
   }
 
-  background-color: $grey;
+  background-color: ($grey, 15%);
   color: $light-grey;
 
   @import 'sources/site_dark';
@@ -25,9 +25,10 @@ section.akengage-outer-container--dark {
 
 @media (prefers-color-scheme: dark) {
   section.akengage-outer-container {
-    background-color: $grey;
+    background-color: darken($grey, 15%);
     color: $light-grey;
 
     @import 'sources/site_dark';
   }
 }
+
