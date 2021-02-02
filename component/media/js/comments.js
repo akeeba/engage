@@ -283,7 +283,7 @@ akeeba.Engage.Comments.loadCommenterInfo = function ()
     }
 };
 
-akeeba.System.documentReady(function ()
+akeeba.Loader.add(['akeeba.System'], function ()
 {
     akeeba.System.iterateNodes("button.akengage-comment-edit-btn", function (elButton)
     {

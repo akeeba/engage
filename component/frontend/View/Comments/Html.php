@@ -276,7 +276,6 @@ class Html extends DataHtml
 		}
 
 		// Load the CSS and JavaScript
-		$this->addJavascriptFile('media://com_engage/js/system.min.js', $this->container->mediaVersion, 'text/javascript', true);
 		$this->addJavascriptFile('media://com_engage/js/comments.min.js', $this->container->mediaVersion, 'text/javascript', true);
 
 		// User and permissions

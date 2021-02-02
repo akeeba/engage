@@ -15,7 +15,7 @@
 
     <frontend>
         <container>
-            <option name="rendererClass">FOF40\Render\Joomla</option>
+            <option name="rendererClass">FOF40\Render\FEF</option>
         </container>
 
         <dispatcher>

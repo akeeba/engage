@@ -545,7 +545,7 @@ class Comments extends DataController
 	}
 
 	/** @inheritDoc */
-	protected function csrfProtection()
+	protected function csrfProtection(): bool
 	{
 		// First, let's try token validation
 		try

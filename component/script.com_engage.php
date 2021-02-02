@@ -63,6 +63,10 @@ class Com_EngageInstallerScript extends \FOF40\InstallScript\Component
 			'administrator/components/com_engage/ViewTemplates/Common/browse.blade.php',
 			'administrator/components/com_engage/ViewTemplates/Common/edit.blade.php',
 			'administrator/components/com_engage/ViewTemplates/Common/EntryUser.blade.php',
+
+			// Moving to FEF 2
+			'media/com_engage/js/system.js',
+			'media/com_engage/js/system.min.js',
 		],
 		'folders' => [
 
