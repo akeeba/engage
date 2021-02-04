@@ -6,42 +6,40 @@
 
 <h3>What's new?</h3>
 <p>
-	<strong>Dropped PHP 7.1 support</strong>. PHP 7.1 became End of Life on December 1st, 2019. Over the last year we saw its relative use among our clients drop from 11% of all sites in January 2020 to just under 3.8% in November 2020. According to our experience this is a good point in time to remove support for it. This allows us to introduce PHP 7.2 features in our code which will improve the type consistency of internal data. This will let us catch type consistency bugs in development, a class of bugs that has caused weird issues that were very hard to debug in the past.
+    <strong>Joomla input filter properties tagBlacklist and attrBlacklist have been renamed, possibly leading to incorrect post filtering.</strong>
+    When you are using the HTML Purifier filtering method we are automatically reading
+    the Joomla filtering configuration for the current user and applying it as the HTML Purifier
+    configuration. Joomla renamed the properties of the core object providing this configuration in
+    an attempt to remove offensive wording, without deprecating them first (as is necessary for
+    software following the Semantic Versioning standard which Joomla claims to do) and without
+    providing a legacy fallback (a trivial thing to do using PHP's magic __get method). As a result
+    all user groups ended up falling back to the default HTML filtering of HTML Purifier. This is
+    typically more restrictive than what you'd have configured in Joomla itself.
 </p>
 <p>
-	<strong>PHP 8.0 support</strong>. PHP 8 was released just two weeks ago but we had already started working on supporting it months ago, since it was still in development. Now that Joomla itself supports PHP 8 we can finally validate our work, fix the remaining issues and confirm that PHP 8 can be officially supported. Please bear in mind that PHP 8 brings major changes to the PHP language and not all third party extensions support it yet. Before venturing into it please do make sure that <strong>all</strong> of your third party extensions, <em>including your templates</em>, are up to the task.
+	<strong>All tables now have a PRIMARY KEY</strong>.
+	This improves the performance of database operations even more.
 </p>
 <p>
-	<strong>Joomla 4 beta 6 (pre-release) changes how the session works, breaking everything.</strong>. This is apparently a bug introduced after the Joomla 4 beta 5, breaking the way the Joomla session works. We had not reported it because it appeared to be an intentional, but undocumented, change. The Joomla 3 release lead noticed our workaround and had the Joomla 4 team address the underlying bug since it breaks the stated backwards compatibility goal with the upcoming Joomla 3.10. However, given the severity of this issue and the fact that it <em>did</em> appear to be an intentional change (the code commit was unambiguous about the underlying change that triggered this issue being intentional) we decided to keep our workaround in case the Joomla project changes its mind or makes another change which accidentally breaks the way sessions work. Better be safe than sorry.
+	<strong>Add [CONTENT_CATEGORY] to email variables (gh-64)</strong>.
+	You can use the variable <code>[CONTENT_CATEGORY]</code>, replaced by the name of the content category of the article being commented on, in email templates. This is useful if you want to have different people manage comments in each comment category. They will still receive email notifications for all email categories but at least they will know what is being commented on.
+</p>
+<p>
+	<strong>Joomla 4: cache not reset after posting or deleting a comment</strong>.
+	Joomla 4 changed the way caching works. The way cache cleaning in Joomla 3 works simply doesn't do anything in Joomla 4. No error, no warning, nothing. As a result posting a comment wouldn't clear the core content cache meaning that the new comment would not appear until the cache expired or an administrator cleaned the cache manually.
+</p>
+<p>
+	<strong>Sorting by comment date descending was ignored</strong>.
+	This option was available in the comments setup (global, category and per article) but neer took effect as it wasn't actually implemented. This has now been addressed. Please note that this sorting only applies to created dates of top level comments for performance and sanity reasons.
+</p>
+<p>
+	<strong>PHP Notices in rare occasions where Joomla calls onContentPrepare without an article</strong>.
+	Third party developers and some areas of core Joomla do abuse Joomla's onContentPrepare event, sending no data to it despite all other descriptions in the core code pointing to the contrary. This caused our plugin to display PHP notices. We now expect that garbage being sent to us is normal (thanks, Joomla) and swiftly ignore it withotu triggering an error.
 </p>
 
-<h3>Joomla! versions supported</h3>
+<h3>CMS and PHP versions supported</h3>
 <p>
-	We only officially support using our software with the latest Joomla! release branch, 3.9. We strongly advise you to run the latest available version of Joomla! for security reasons. Older versions of Joomla! have known major security issues which are being actively exploited to hack sites.
-</p>
-<p>
-	We offer limited support for Joomla 4.0 which is currently in Beta. Akeeba Ticket System will work on it but there may be some minor or bigger issues. We try to discover and address them. The biggest challenge is that Joomla 4 is still undergoing changes, despite being labeled Beta, which may introduce new issues on each release. We do not plan on offering full support for Joomla 4 until it reaches at least the Release Candidate 1 stage.
-</p>
-<p>
-	Support for Joomla 3.10 is currently considered experimental. At the time of this writing Joomla 3.10 is in a pre-production, alpha state. We strongly advise you to NOT use Joomla 3.10. Like all new Joomla 3 version families we plan on supporting it as soon as it reaches stable status.
-</p>
-
-<h3>PHP versions supported</h3>
-<p>
-	We only officially support using our software with PHP 7.2, 7.3, 7.4 or 8.0.
-</p>
-<p>
-	While our software still runs on PHP 7.2, this versions of PHP is declared End of Life by the PHP project and no longer receives any security updates. We are no longer testing our software with these PHP versions and we strongly advise you to not use them on production sites.
-</p>
-<p>
-	We strongly advise you to run either of the two latest available version branches of PHP on a branch currently maintained by the PHP project for security and performance reasons. Older versions of PHP have known major security issues which are being actively exploited to hack sites and they have stopped receiving security updates, leaving you exposed to these issues. Moreover, they are slower, therefore consuming more server resources to perform the same tasks.
-</p>
-<p>
-	Please note that PHP 8.0 is, at the time of this writing, a very new PHP version which brings major changes to the PHP language. We strongly recommend holding off updating into it until April 2021 and only doing so after confirming that all of your extensions have been updated to support it. Do note that by “all extensions” we mean components, plugins, modules and <em>templates</em>.
-</p>
-<p>
-	Finally, please bear in mind that earlier PHP versions including but not limited to all PHP 4.x and 5.x versions, as well as PHP 7.0 are no longer supported. Our software no longer works on these old, unsupported versions of PHP. All of these versions of PHP have been end of life for several years. We <em>VERY STRONGLY</em> recommend upgrading to a version of PHP that's currently supported by the PHP project.
-</p>
-<p>
-	Our policy with regards to PHP version support is to officially support the PHP versions that the PHP project itself considers a <a href="https://www.php.net/supported-versions">Currently Supported version</a>, i.e. all versions of PHP in the Active Support and Security Support phase. We will show you a warning when we detect a PHP version that has entered Security Support so you have the chance to plan and implement a PHP version update. After a PHP versions becomes <a href="https://www.php.net/eol.php">End of Life (EOL)</a> we will only support it for a further 6 to 9 months. If we detect such a version we will show you a message so you can urgently plan and implement a PHP version update. After 6 to 9 months after a PHP version becomes EOL we may stop providing support for it without any prior notice. We also track the development of new versions of PHP. New versions of PHP will be unofficially supported sometime during their Release Candidate phase and fully supported about 4 to 8 weeks after the first stable version of that branch is officially released by the PHP project. Your site's participation in the opt-out usage statistics helps us collect anonymous information about the use of PHP versions on your sites and decide when to withdraw support for EOL versions of PHP.
+    Please consult our <a href="https://www.akeeba.com/compatibility.html">Compatibility page</a> to see which
+    PHP and CMS versions are supported by each version of our software. This page is generated from the metadata
+    attached to each version as it is released on our site.
 </p>
