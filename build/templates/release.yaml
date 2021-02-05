@@ -58,7 +58,7 @@ updates:
   -
     title: 'Akeeba Engage updates'
     connection: s3
-    directory: '/updates'
+    directory: 'updates'
     stream: 39
     base_name: 'pkgengage'
     formats:
