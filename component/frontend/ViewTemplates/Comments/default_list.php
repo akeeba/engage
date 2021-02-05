@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -59,7 +59,7 @@ $previousLevel = $comment->depth;
 $user          = $comment->getUser();
 $avatar        = $comment->getAvatarURL();
 $profile       = $comment->getProfileURL();
-$commentDate   = new Date($comment->created_on);
+$commentDate   = (new Date($comment->created_on))->setTimezone($this->userTimezone);
 $ipLookupURL  = $this->getIPLookupURL($comment->ip);
 $openListItem++;
 $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
@@ -76,7 +76,7 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 						<img src="<?= $avatar ?>" alt=""
 							 class="akengage-commenter-avatar" itemprop="image">
 					<?php else: ?>
-						<a href="<?= $profile ?>" class="akengage-commenter-profile" itemprop="url">
+						<a href="<?= $profile ?>" class="akengage-commenter-profile" itemprop="url" rel="noopener">
 							<img src="<?= $avatar ?>"
 								 alt=""
 								 class="akengage-commenter-avatar" itemprop="image">
@@ -86,12 +86,15 @@ $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 				<div class="akengange-commenter-name">
 					<span itemprop="name"><?= $this->escape($user->name) ?></span>
 					<?php if ($user->authorise('core.manage', $comment->asset_id)): ?>
-						<span class="akengage-commenter-ismoderator icon icon-star"></span>
+						<span class="akengage-commenter-ismoderator akion-star" aria-hidden="true"></span>
 					<?php elseif (!$user->guest): ?>
-						<span class="akengage-commenter-isuser icon icon-user"></span>
+						<span class="akengage-commenter-isuser akion-person" aria-hidden="true"></span>
 					<?php endif; ?>
 					<?php if (!$user->guest): ?>
 						<span class="akengage-commenter-username"><?= $this->escape($user->username) ?></span>
+					<?php elseif ($this->perms['state']): ?>
+						<span class="akengage-commenter-isguest akion-person-stalker" aria-hidden="true"></span>
+						<span class="akengage-commenter-email"><?= $this->escape($user->email) ?></span>
 					<?php endif; ?>
 				</div>
 			</div>

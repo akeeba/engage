@@ -11,7 +11,7 @@
 	"authors": [
 		{
 			"name": "Nicholas K. Dionysopoulos",
-			"email": "nicholas_NO_SPAM_PLEASE@akeebabackup.com",
+			"email": "nicholas_NO_SPAM_PLEASE@akeeba.com",
 			"homepage": "http://www.dionysopoulos.me",
 			"role": "Lead Developer"
 		}
@@ -21,7 +21,7 @@
 	},
 	"minimum-stability": "stable",
 	"require": {
-		"php": ">=7.1.0",
+		"php": ">=7.2.0",
 		"ext-json": "*",
 		"ezyang/htmlpurifier": "^4.12.0",
 		"ext-simplexml": "*"

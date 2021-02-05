@@ -3,14 +3,14 @@
   <component name="PhpIncludePathManager">
     <include_path>
       <path value="../fof3/fof" />
-      <path value="../../master/joomla4" />
       <path value="../../dionysopoulos/joomlatypehints/generated_hints" />
-      <path value="$PROJECT_DIR$/component/backend/vendor/composer" />
-      <path value="$PROJECT_DIR$/component/backend/vendor/ezyang/htmlpurifier" />
       <path value="../com_datacompliance/component" />
+      <path value="../../master/joomla4" />
+      <path value="$PROJECT_DIR$/component/backend/vendor/ezyang/htmlpurifier" />
+      <path value="$PROJECT_DIR$/component/backend/vendor/composer" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />
   <component name="PhpUnit">
     <phpunit_settings>
       <PhpUnitSettings custom_loader_path="$PROJECT_DIR$/vendor/autoload.php" />

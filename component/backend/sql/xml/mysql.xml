@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ @package   AkeebaEngage
-  ~ @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
   ~ @license   GNU General Public License version 3, or later
   -->
 
@@ -54,9 +54,9 @@ CREATE TABLE `#__engage_emailtemplates` (
   `subject` varchar(255) NOT NULL,
   `template` text NOT NULL,
   `enabled` TINYINT(3) NOT NULL DEFAULT 1,
-  `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_on` datetime NULL DEFAULT NULL,
   `created_by` bigint(20) NOT NULL DEFAULT '0',
-  `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_on` datetime NULL DEFAULT NULL,
   `modified_by` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`engage_emailtemplate_id`),
   UNIQUE KEY `#__engage_emailtemplate_keylang` (`key`(100),`language`)
@@ -71,18 +71,8 @@ CREATE TABLE `#__engage_emailtemplates` (
 CREATE TABLE `#__engage_unsubscribe` (
   `asset_id` bigint(20) NOT NULL,
   `email` varchar(255) NOT NULL,
-  UNIQUE KEY `#__engage_unsubscribe_unique` (`asset_id`,`email`)
+  PRIMARY KEY (`asset_id`,`email`)
 ) DEFAULT COLLATE utf8_general_ci COMMENT='Unsubscribed emails';
-            ]]></query>
-        </action>
-
-        <!-- Comments: root node -->
-        <action table="#__engage_comments" canfail="1">
-            <condition type="equals" operator="not" value="1"><![CDATA[
-SELECT COUNT(*) FROM `#__engage_comments` WHERE `lft` = 1;
-            ]]></condition>
-            <query><![CDATA[
-INSERT INTO `#__engage_comments` (lft, rgt, asset_id, body, name, email, ip, enabled, created_on, created_by, modified_on, modified_by) VALUES (1, 2, 0, 'ROOT NODE -- DO NOT DELETE', 'Root Node', 'root@localhost', null, 1, '2020-04-01 13:26:45', 0, null, null);
             ]]></query>
         </action>
 
@@ -1496,5 +1486,43 @@ INSERT INTO `#__engage_emailtemplates` (`engage_emailtemplate_id`, `key`, `langu
 </html>', 1, '2020-04-01 00:00:00', 0, '2020-04-01 00:00:00', 0);
              ]]></query>
         </action>
+
+        <!-- Replace zero datetime with nullable datetime -->
+        <action table="#__engage_emailtemplates" canfail="1">
+            <condition type="nullable" value="created_on" operator="not"/>
+            <query><![CDATA[
+ALTER TABLE `#__engage_emailtemplates` MODIFY `created_on` DATETIME NULL DEFAULT NULL;
+      ]]></query>
+            <query><![CDATA[
+UPDATE `#__engage_emailtemplates` SET `created_on` = NULL WHERE `created_on` = '0000-00-00 00:00:00';
+      ]]></query>
+        </action>
+
+        <action table="#__engage_emailtemplates" canfail="1">
+            <condition type="nullable" value="modified_on" operator="not"/>
+            <query><![CDATA[
+ALTER TABLE `#__engage_emailtemplates` MODIFY `modified_on` DATETIME NULL DEFAULT NULL;
+      ]]></query>
+            <query><![CDATA[
+UPDATE `#__engage_emailtemplates` SET `modified_on` = NULL WHERE `modified_on` = '0000-00-00 00:00:00';
+      ]]></query>
+        </action>
+
+        <!-- Convert sole UNIQUE constraints to PRIMARY KEYs -->
+        <action table="#__engage_unsubscribe" canfail="1">
+            <condition type="equals" value="0"><![CDATA[
+SELECT COUNT(*) FROM `INFORMATION_SCHEMA`.`table_constraints`
+WHERE TABLE_SCHEMA=(SELECT DATABASE())
+AND table_name='#__engage_unsubscribe'
+AND CONSTRAINT_TYPE='PRIMARY KEY'
+			]]></condition>
+            <query><![CDATA[
+ALTER TABLE `#__engage_unsubscribe` DROP KEY `#__engage_unsubscribe_unique`;
+			]]></query>
+            <query><![CDATA[
+ALTER TABLE `#__engage_unsubscribe` ADD PRIMARY KEY (`asset_id`,`email`);
+            ]]></query>
+        </action>
+
     </sql>
 </schema>

@@ -1,16 +1,18 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
+use FOF30\Container\Container;
+
 define('AKEEBA_COMMON_WRONGPHP', 1);
-$minPHPVersion         = '7.1.0';
-$recommendedPHPVersion = '7.3';
+$minPHPVersion         = '7.2.0';
+$recommendedPHPVersion = '7.4';
 $softwareName          = 'Akeeba Engage';
 $silentResults         = true;
 
@@ -31,7 +33,7 @@ try
 		throw new RuntimeException('FOF 3.0 is not installed', 500);
 	}
 
-	FOF30\Container\Container::getInstance('com_engage')->dispatcher->dispatch();
+	Container::getInstance('com_engage')->dispatcher->dispatch();
 }
 catch (Throwable $e)
 {

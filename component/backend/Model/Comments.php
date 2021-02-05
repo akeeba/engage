@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -71,6 +71,8 @@ class Comments extends DataModel
 		}
 
 		parent::__construct($container, $config);
+
+		$this->_trackAssets = false;
 
 		$this->hasOne('parent', 'Comments', 'parent_id', 'engage_comment_id');
 
@@ -372,6 +374,11 @@ class Comments extends DataModel
 		if (empty($childIDs))
 		{
 			return [];
+		}
+
+		if (is_null($parentId) && strtoupper($this->input->get('filter_order_Dir', 'asc')) === 'DESC')
+		{
+			$childIDs = array_reverse($childIDs);
 		}
 
 		$ret = [];

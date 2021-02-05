@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -36,7 +36,7 @@ class Com_EngageInstallerScript extends \FOF30\Utils\InstallScript\Component
 	 *
 	 * @var   string
 	 */
-	protected $minimumPHPVersion = '7.1.0';
+	protected $minimumPHPVersion = '7.2.0';
 
 	/**
 	 * The minimum Joomla! version required to install this extension
@@ -60,7 +60,9 @@ class Com_EngageInstallerScript extends \FOF30\Utils\InstallScript\Component
 	 */
 	protected $removeFilesAllVersions = [
 		'files'   => [
-
+			'administrator/components/com_engage/ViewTemplates/Common/browse.blade.php',
+			'administrator/components/com_engage/ViewTemplates/Common/edit.blade.php',
+			'administrator/components/com_engage/ViewTemplates/Common/EntryUser.blade.php',
 		],
 		'folders' => [
 

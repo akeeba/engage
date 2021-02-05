@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -11,6 +11,7 @@ use Akeeba\Engage\Admin\Model\Comments as CommentsModel;
 use Akeeba\Engage\Site\Helper\Meta;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 
 /**
@@ -85,7 +86,10 @@ class plgActionlogEngage extends CMSPlugin
 
 		$container = $comment->getContainer();
 
-		$container->platform->logUserAction($info, 'COM_ENGAGE_USERLOG_COMMENT_SAVE', 'com_engage');
+		$langKey = 'COM_ENGAGE_USERLOG_COMMENT_SAVE';
+		$langKey = $this->prepareLanguageKey($langKey, $info);
+
+		$container->platform->logUserAction($info, $langKey, 'com_engage');
 	}
 
 	/**
@@ -97,14 +101,13 @@ class plgActionlogEngage extends CMSPlugin
 	 */
 	public function onComEngageModelCommentsAfterCreate($comment)
 	{
-		// Should I log comment creation?
-		if ($this->params->get('log_comments', 0) != 1)
+		if ($this->user->guest)
 		{
 			return;
 		}
 
-		// Should I log guest comments?
-		if ($this->user->guest && ($this->params->get('log_guest_comments', 0) != 1))
+		// Should I log comment creation?
+		if ($this->params->get('log_comments', 0) != 1)
 		{
 			return;
 		}
@@ -113,17 +116,10 @@ class plgActionlogEngage extends CMSPlugin
 
 		$container = $comment->getContainer();
 
-		if ($this->user->guest)
-		{
-			$commentUser   = $comment->getUser();
-			$info['name']  = $commentUser->name;
-			$info['email'] = $commentUser->email;
-			$container->platform->logUserAction($info, 'COM_ENGAGE_USERLOG_COMMENT_CREATE_GUEST', 'com_engage');
+		$langKey = 'COM_ENGAGE_USERLOG_COMMENT_CREATE';
+		$langKey = $this->prepareLanguageKey($langKey, $info);
 
-			return;
-		}
-
-		$container->platform->logUserAction($info, 'COM_ENGAGE_USERLOG_COMMENT_CREATE', 'com_engage');
+		$container->platform->logUserAction($info, $langKey, 'com_engage');
 	}
 
 	/**
@@ -142,8 +138,10 @@ class plgActionlogEngage extends CMSPlugin
 
 		$info      = $this->getCommentInfo($comment);
 		$container = $comment->getContainer();
+		$langKey   = 'COM_ENGAGE_USERLOG_COMMENT_UNPUBLISH';
+		$langKey   = $this->prepareLanguageKey($langKey, $info);
 
-		$container->platform->logUserAction($info, 'COM_ENGAGE_USERLOG_COMMENT_UNPUBLISH', 'com_engage');
+		$container->platform->logUserAction($info, $langKey, 'com_engage');
 	}
 
 	/**
@@ -170,19 +168,21 @@ class plgActionlogEngage extends CMSPlugin
 		{
 			case 0:
 			default:
-				$langString = 'COM_ENGAGE_USERLOG_COMMENT_UNPUBLISH';
+				$langKey = 'COM_ENGAGE_USERLOG_COMMENT_UNPUBLISH';
 				break;
 
 			case 1:
-				$langString = 'COM_ENGAGE_USERLOG_COMMENT_PUBLISH';
+				$langKey = 'COM_ENGAGE_USERLOG_COMMENT_PUBLISH';
 				break;
 
 			case -3:
-				$langString = 'COM_ENGAGE_USERLOG_COMMENT_SPAM';
+				$langKey = 'COM_ENGAGE_USERLOG_COMMENT_SPAM';
 				break;
 		}
 
-		$container->platform->logUserAction($info, $langString, 'com_engage');
+		$langKey = $this->prepareLanguageKey($langKey, $info);
+
+		$container->platform->logUserAction($info, $langKey, 'com_engage');
 	}
 
 	/**
@@ -205,7 +205,10 @@ class plgActionlogEngage extends CMSPlugin
 
 		unset($info['comment_edit_link']);
 
-		$container->platform->logUserAction($info, 'COM_ENGAGE_USERLOG_COMMENT_DELETE', 'com_engage');
+		$langKey = 'COM_ENGAGE_USERLOG_COMMENT_DELETE';
+		$langKey = $this->prepareLanguageKey($langKey, $info);
+
+		$container->platform->logUserAction($info, $langKey, 'com_engage');
 	}
 
 	/**
@@ -230,7 +233,10 @@ class plgActionlogEngage extends CMSPlugin
 
 		unset($info['comment_edit_link']);
 
-		$container->platform->logUserAction($info, 'COM_ENGAGE_USERLOG_COMMENT_REPORTSPAM', 'com_engage');
+		$langKey = 'COM_ENGAGE_USERLOG_COMMENT_REPORTSPAM';
+		$langKey = $this->prepareLanguageKey($langKey, $info);
+
+		$container->platform->logUserAction($info, $langKey, 'com_engage');
 	}
 
 	/**
@@ -253,7 +259,10 @@ class plgActionlogEngage extends CMSPlugin
 		$info      = $this->getCommentInfo($comment);
 		$container = $comment->getContainer();
 
-		$container->platform->logUserAction($info, 'COM_ENGAGE_USERLOG_COMMENT_REPORTHAM', 'com_engage');
+		$langKey = 'COM_ENGAGE_USERLOG_COMMENT_REPORTHAM';
+		$langKey = $this->prepareLanguageKey($langKey, $info);
+
+		$container->platform->logUserAction($info, $langKey, 'com_engage');
 	}
 
 	/**
@@ -264,8 +273,7 @@ class plgActionlogEngage extends CMSPlugin
 	 */
 	public function onEngageUnsubscribeEmail($comment, ?string $email)
 	{
-		// Should I log guest unsubscribes?
-		if ($this->user->guest && ($this->params->get('log_guest_unsubscribe', 0) != 1))
+		if ($this->user->guest)
 		{
 			return;
 		}
@@ -276,15 +284,10 @@ class plgActionlogEngage extends CMSPlugin
 		unset($info['comment_edit_link']);
 		unset($info['comment_id']);
 
-		if ($this->user->guest)
-		{
-			$info['email'] = $email;
-			$container->platform->logUserAction($info, 'COM_ENGAGE_USERLOG_COMMENT_UNSUBSCRIBE_GUEST', 'com_engage');
+		$langKey = 'COM_ENGAGE_USERLOG_COMMENT_UNSUBSCRIBE';
+		$langKey = $this->prepareLanguageKey($langKey, $info);
 
-			return;
-		}
-
-		$container->platform->logUserAction($info, 'COM_ENGAGE_USERLOG_COMMENT_UNSUBSCRIBE', 'com_engage');
+		$container->platform->logUserAction($info, $langKey, 'com_engage');
 	}
 
 	/**
@@ -306,5 +309,32 @@ class plgActionlogEngage extends CMSPlugin
 			'public_url'        => $meta['public_url'],
 			'comment_edit_link' => 'index.php?option=com_engage&view=Comments&task=edit&id=' . $comment->getId(),
 		];
+	}
+
+	/**
+	 * Try to find a language key specific to the content type defined in $info['type']
+	 *
+	 * @param   string  $genericKey  The generic language key
+	 * @param   array   $info        The action log information
+	 *
+	 * @return  string  The specific language key to use
+	 */
+	private function prepareLanguageKey(string $genericKey, array &$info): string
+	{
+		if (!isset($info['type']) || empty($info['type']))
+		{
+			return $genericKey;
+		}
+
+		$specificKey = strtoupper($genericKey . '_' . $info['type']);
+
+		if (Text::_($specificKey) == $specificKey)
+		{
+			return $genericKey;
+		}
+
+		unset($info['type']);
+
+		return $specificKey;
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -80,7 +80,7 @@ HTMLHelper::_('behavior.formvalidator');
 					</label>
 				</div>
 				<div class="controls">
-					<input type="text" name="email" id="akengage-comment-form-email"
+					<input type="email" name="email" id="akengage-comment-form-email"
 						   value="<?= $this->escape($this->storedEmail); ?>"
 						   class="inputbox required"
 						   required="required"
@@ -99,6 +99,18 @@ HTMLHelper::_('behavior.formvalidator');
 					</label>
 				</div>
 			</div>
+
+			<?php if ($this->container->params->get('tos_accept', 0)): ?>
+			<div class="control-group">
+				<div class="controls">
+					<label for="akengage-comment-form-accept-tos" class="checkbox">
+						<input type="checkbox" id="akengage-comment-form-accept-tos"
+							   name="accept_tos">
+						<?= $this->getCheckboxText() ?>
+					</label>
+				</div>
+			</div>
+			<?php endif; ?>
 
 		<?php endif; ?>
 

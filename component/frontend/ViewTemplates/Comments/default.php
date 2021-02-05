@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -27,7 +27,7 @@ use Joomla\CMS\Language\Text;
 $darkMode       = $this->container->params->get('dark_mode_backend', -1);
 $paginationData = $this->getPagination()->getData();
 ?>
-<section class="akengage-outer-container<?= ($darkMode == 1) ? '--dark' : '' ?>" aria-label="<?= Text::_('COM_ENGAGE_COMMENTS_SECTION_HEADER') ?>">
+<section id="akengage-comments-section" class="akengage-outer-container<?= ($darkMode == 1) ? '--dark' : '' ?>" aria-label="<?= Text::_('COM_ENGAGE_COMMENTS_SECTION_HEADER') ?>">
 	<h3 class="akengage-title">
 		<?= Text::plural($this->headerKey, $this->getItemCount(), $this->title) ?>
 	</h3>
@@ -50,7 +50,7 @@ $paginationData = $this->getPagination()->getData();
 		<?php endif; ?>
 	<?php endif; ?>
 
-	<?php if (!$this->areCommentsClosed && $this->user->guest): ?>
+	<?php if (!$this->areCommentsClosed && $this->user->guest && !$this->perms['create']): ?>
 		<?php echo $this->loadAnyTemplate('any:com_engage/Comments/default_login') ?>
 	<?php endif; ?>
 

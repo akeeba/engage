@@ -1,11 +1,13 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
 defined('_JEXEC') or die;
+
+use FOF30\Utils\InstallScript\Plugin;
 
 // Load FOF if not already loaded
 if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
@@ -13,6 +15,6 @@ if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/inclu
 	throw new RuntimeException('This extension requires FOF 3.0.');
 }
 
-class plgEngageGravatarInstallerScript extends FOF30\Utils\InstallScript\Plugin
+class plgEngageGravatarInstallerScript extends Plugin
 {
 }

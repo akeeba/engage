@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ @package   AkeebaEngage
-  ~ @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
   ~ @license   GNU General Public License version 3, or later
   -->
 
@@ -11,15 +11,15 @@
     <creationDate>##DATE##</creationDate>
 
     <author>Akeeba Ltd</author>
-    <authorEmail>no-reply@akeebabackup.com</authorEmail>
-    <authorUrl>https://www.akeebabackup.com</authorUrl>
+    <authorEmail>no-reply@akeeba.com</authorEmail>
+    <authorUrl>https://www.akeeba.com</authorUrl>
 
     <packagename>engage</packagename>
-    <url>https://www.akeebabackup.com</url>
+    <url>https://www.akeeba.com</url>
     <packager>Akeeba Ltd</packager>
-    <packagerurl>https://www.akeebabackup.com</packagerurl>
+    <packagerurl>https://www.akeeba.com</packagerurl>
 
-    <copyright>Copyright (c)2020-2020 Akeeba Ltd</copyright>
+    <copyright>Copyright (c)2020-2021 Akeeba Ltd</copyright>
     <license>GNU GPL v3 or later</license>
 
     <description>Akeeba Engage installation package v.##VERSION##</description>
@@ -30,7 +30,7 @@
         <file type="component" id="com_engage">com_engage.zip</file>
 
         <!-- Plugins: actionlog -->
-        <!--<file type="plugin" group="actionlog" id="engage">plg_actionlog_engage.zip</file>-->
+        <file type="plugin" group="actionlog" id="engage">plg_actionlog_engage.zip</file>
 
         <!-- Plugins: content -->
         <file type="plugin" group="content" id="engage">plg_content_engage.zip</file>
@@ -58,6 +58,6 @@
 
     <!-- Update servers -->
     <updateservers>
-        <server type="extension" priority="1" name="Akeeba Engage Updates">https://raw.githubusercontent.com/akeeba/engage/master/update/pkg_engage_updates.xml</server>
+        <server type="extension" priority="1" name="Akeeba Engage Updates">https://cdn.akeeba.com/updates/pkgengage.xml</server>
     </updateservers>
 </extension>

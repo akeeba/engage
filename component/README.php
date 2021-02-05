@@ -4,7 +4,7 @@ COPYRIGHT AND DISCLAIMER
 ================================================================================
 
 Akeeba Engage - A simple articles comment extension for Joomla!
-Copyright (C) 2020  Nicholas K. Dionysopoulos / AkeebaBackup.com
+Copyright (C) 2020  Nicholas K. Dionysopoulos / Akeeba Ltd
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,0 +1,49 @@
+<h3>What's new?</h3>
+
+<p>
+	<strong>Joomla 4 improvements</strong>.
+	We applied necessary changes in our code to support Joomla 4 beta 7. Along with that came a few unexpected but welcome improvements. Labels in the tabbed interface elements are more legible. Custom selects are now rendered as native selects. Checkboxes are rendered as native chackboxes. Long lists and multiselect lists are back into using Chosen for easier item selection.
+</p>
+
+<p>
+	<strong>Darker Dark Mode</strong>.
+	Our Dark Mode was intentionally designed to be somewhat bright. This had two side-effects. On one hand it was brighter than the dark templates most people would use. Moreover, the contrast between the background and the text was inadequate for people with vision-related disabilities. Considering that Dark Mode is (also) an accessibility feature we addressed this concern.
+</p>
+<p>
+    <strong>Joomla input filter properties tagBlacklist and attrBlacklist have been renamed, possibly leading to incorrect post filtering.</strong>
+    When you are using the HTML Purifier filtering method we are automatically reading
+    the Joomla filtering configuration for the current user and applying it as the HTML Purifier
+    configuration. Joomla renamed the properties of the core object providing this configuration in
+    an attempt to remove offensive wording, without deprecating them first (as is necessary for
+    software following the Semantic Versioning standard which Joomla claims to do) and without
+    providing a legacy fallback (a trivial thing to do using PHP's magic __get method). As a result
+    all user groups ended up falling back to the default HTML filtering of HTML Purifier. This is
+    typically more restrictive than what you'd have configured in Joomla itself.
+</p>
+<p>
+	<strong>All tables now have a PRIMARY KEY</strong>.
+	This improves the performance of database operations even more.
+</p>
+<p>
+	<strong>Add [CONTENT_CATEGORY] to email variables (gh-64)</strong>.
+	You can use the variable <code>[CONTENT_CATEGORY]</code>, replaced by the name of the content category of the article being commented on, in email templates. This is useful if you want to have different people manage comments in each comment category. They will still receive email notifications for all email categories but at least they will know what is being commented on.
+</p>
+<p>
+	<strong>Joomla 4: cache not reset after posting or deleting a comment</strong>.
+	Joomla 4 changed the way caching works. The way cache cleaning in Joomla 3 works simply doesn't do anything in Joomla 4. No error, no warning, nothing. As a result posting a comment wouldn't clear the core content cache meaning that the new comment would not appear until the cache expired or an administrator cleaned the cache manually.
+</p>
+<p>
+	<strong>Sorting by comment date descending was ignored</strong>.
+	This option was available in the comments setup (global, category and per article) but neer took effect as it wasn't actually implemented. This has now been addressed. Please note that this sorting only applies to created dates of top level comments for performance and sanity reasons.
+</p>
+<p>
+	<strong>PHP Notices in rare occasions where Joomla calls onContentPrepare without an article</strong>.
+	Third party developers and some areas of core Joomla do abuse Joomla's onContentPrepare event, sending no data to it despite all other descriptions in the core code pointing to the contrary. This caused our plugin to display PHP notices. We now expect that garbage being sent to us is normal (thanks, Joomla) and swiftly ignore it withotu triggering an error.
+</p>
+
+<h3>CMS and PHP versions supported</h3>
+<p>
+    Please consult our <a href="https://www.akeeba.com/compatibility.html">Compatibility page</a> to see which
+    PHP and CMS versions are supported by each version of our software. This page is generated from the metadata
+    attached to each version as it is released on our site.
+</p>

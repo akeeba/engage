@@ -1,13 +1,14 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 
 class plgEngageGravatar extends CMSPlugin
@@ -40,7 +41,7 @@ class plgEngageGravatar extends CMSPlugin
 		switch ($defaultImage)
 		{
 			case 'custom':
-				$url .= '&d=' . urlencode(\Joomla\CMS\Uri\Uri::base(false) . $customImage);
+				$url .= '&d=' . urlencode(Uri::base(false) . $customImage);
 				break;
 
 			default:

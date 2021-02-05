@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -203,6 +203,7 @@ HTML;
 			'[DATE_UTC]'          => $jCreatedOn->format($dateFormat, false),
 			'[DATE_LOCAL]'        => $jCreatedOn->format($dateFormat, true),
 			'[CONTENT_TITLE]'     => htmlentities($meta['title']),
+			'[CONTENT_CATEGORY]'  => htmlentities($meta['category']),
 			'[CONTENT_LINK]'      => $meta['public_url'],
 			'[COMMENT_LINK]'      => $publicUri->toString(),
 			'[PUBLISH_URL]'       => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'publish', $returnUrlComment), $comment, $recipient->email),
@@ -319,7 +320,7 @@ HTML;
 		$config = HTMLPurifier_Config::createDefault();
 		$config->set('Core.Encoding', 'UTF-8');
 		$config->set('HTML.Doctype', 'HTML 4.01 Transitional');
-		$config->set('Cache.SerializerPath', \Akeeba\Engage\Site\Helper\Filter::getCachePath());
+		$config->set('Cache.SerializerPath', Filter::getCachePath());
 		$config->set('HTML.Allowed', 'p,b,a[href],i,u,strong,em,small,big,ul,ol,li,br,img[src],img[width],img[height],code,pre,blockquote');
 		$purifier = new HTMLPurifier($config);
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -131,6 +131,14 @@ class Comments extends DataController
 	 * Runs after unpublishing a comment.
 	 */
 	protected function onAfterUnpublish(): void
+	{
+		$this->cleanCache();
+	}
+
+	/**
+	 * Runs after deleting a comment.
+	 */
+	protected function onAfterRemote(): void
 	{
 		$this->cleanCache();
 	}

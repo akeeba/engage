@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -304,8 +304,8 @@ final class Filter
 
 		self::$joomlaFilterSettings = [
 			'filterType'          => 'noHTML',
-			'blacklistTags'       => $filter->tagBlacklist,
-			'blacklistAttributes' => $filter->attrBlacklist,
+			'blacklistTags'       => $filter->tagBlacklist ?? $filter->blockedTags,
+			'blacklistAttributes' => $filter->attrBlacklist ?? $filter->blockedAttributes,
 			'whitelistTags'       => [],
 			'whitelistAttributes' => [],
 		];

@@ -1,13 +1,14 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
 namespace Akeeba\Engage\Site\Helper;
 
 use Akeeba\Engage\Admin\Model\Comments;
+use DateInterval;
 use Exception;
 use FOF30\Container\Container;
 use Joomla\CMS\Date\Date;
@@ -161,7 +162,7 @@ final class Meta
 
 		try
 		{
-			return ($date->add(new \DateInterval(sprintf('P%dD', $closeAfter)))->toUnix() <= time());
+			return ($date->add(new DateInterval(sprintf('P%dD', $closeAfter)))->toUnix() <= time());
 		}
 		catch (Exception $e)
 		{

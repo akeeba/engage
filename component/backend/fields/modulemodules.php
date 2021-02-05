@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -46,7 +46,7 @@ class JFormFieldModuleModules extends JFormFieldList
 		$clientId = is_null($this->element->attributes()->client_id) ? 0 : (int) $this->element->attributes()->client_id;
 		$modules  = ModulesHelper::getModules($clientId);
 
-		$none = HTMLHelper::_('select.option', '', Text::_('COM_ENGAGE_CONFIG_LOGIN_NONE'));
+		$none = HTMLHelper::_('select.option', '-1', Text::_('COM_ENGAGE_CONFIG_LOGIN_NONE'));
 		array_unshift($modules, $none);
 
 		return $modules;

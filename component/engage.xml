@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ @package   AkeebaEngage
-  ~ @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
   ~ @license   GNU General Public License version 3, or later
   -->
 
 <extension type="component" version="3.9.0" method="upgrade">
 	<name>ENGAGE</name>
-	<version>1.0.0.b2</version>
-	<creationDate>2020-05-11</creationDate>
+	<version>1.0.5</version>
+	<creationDate>2021-02-05</creationDate>
 
 	<author>Akeeba Ltd</author>
-	<authorEmail>no-reply@akeebabackup.com</authorEmail>
-	<authorUrl>https://www.akeebabackup.com</authorUrl>
+	<authorEmail>no-reply@akeeba.com</authorEmail>
+	<authorUrl>https://www.akeeba.com</authorUrl>
 
-	<copyright>Copyright (c)2020-2020 Akeeba Ltd</copyright>
+	<copyright>Copyright (c)2020-2021 Akeeba Ltd</copyright>
 	<license>GNU/GPL v3 or any later version</license>
 
 	<description>COM_ENGAGE_XML_DESCRIPTION</description>
@@ -37,6 +37,9 @@
 	<!-- Front end translation files -->
 	<languages folder="language/frontend">
 		<language tag="en-GB">en-GB/en-GB.com_engage.ini</language>
+		<language tag="el-GR">el-GR/el-GR.com_engage.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.com_engage.ini</language>
+		<language tag="es-ES">es-ES/es-ES.com_engage.ini</language>
 	</languages>
 
 	<!-- Media files -->
@@ -80,6 +83,12 @@
 		<languages folder="language/backend">
 			<language tag="en-GB">en-GB/en-GB.com_engage.ini</language>
 			<language tag="en-GB">en-GB/en-GB.com_engage.sys.ini</language>
+			<language tag="el-GR">el-GR/el-GR.com_engage.ini</language>
+			<language tag="el-GR">el-GR/el-GR.com_engage.sys.ini</language>
+			<language tag="fr-FR">fr-FR/fr-FR.com_engage.ini</language>
+			<language tag="fr-FR">fr-FR/fr-FR.com_engage.sys.ini</language>
+			<language tag="es-ES">es-ES/es-ES.com_engage.ini</language>
+			<language tag="es-ES">es-ES/es-ES.com_engage.sys.ini</language>
 		</languages>
 	</administration>
 

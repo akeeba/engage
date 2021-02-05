@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -12,9 +12,12 @@ defined('_JEXEC') or die();
 use Akeeba\Engage\Admin\Helper\Format;
 use Akeeba\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Site\Model\Comments;
+use DateTimeZone;
 use Exception;
 use FOF30\View\DataView\Html as DataHtml;
+use Joomla\CMS\Application\SiteApplication as JApplicationSite;
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Pagination\Pagination;
@@ -22,6 +25,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
+use stdClass;
 use Throwable;
 use WbAMP;
 use WbampHelper_Runtime;
@@ -126,6 +130,13 @@ class Html extends DataHtml
 	public $areCommentsClosed = false;
 
 	/**
+	 * The current user's preferred timezone
+	 *
+	 * @var DateTimeZone
+	 */
+	public $userTimezone = null;
+
+	/**
 	 * WbAMP support. Is this an AMP page?
 	 *
 	 * @return  bool
@@ -227,12 +238,33 @@ class Html extends DataHtml
 	}
 
 	/**
+	 * Returns the consent checkbox' text.
+	 *
+	 * This supports full HTML and plugin codes.
+	 *
+	 * @return  string
+	 */
+	public function getCheckboxText(): string
+	{
+		$text = trim($this->container->params->get('tos_prompt', '') ?? '');
+
+		if (empty($text))
+		{
+			$text = Text::_('COM_ENGAGE_COMMENTS_FORM_LBL_ACCEPT');
+		}
+
+		return HTMLHelper::_('content.prepare', $text);
+	}
+
+	/**
 	 * Executes before rendering the page for the Browse task.
 	 *
 	 * @throws  Exception
 	 */
 	protected function onBeforeBrowse()
 	{
+		$this->userTimezone = $this->getUserTimezone();
+
 		$isAMP = $this->isAMP();
 
 		$this->setLayout('default');
@@ -261,17 +293,16 @@ class Html extends DataHtml
 
 		// Load the model and persist its state in the session
 		/** @var Comments $model */
-		$model = $this->getModel();
-
-		$model->savestate(1);
+		$model = $this->getModel()->tmpInstance();
+		$model->asset_id($this->assetId);
 
 		// Display limits
 		$defaultLimit = $this->getDefaultListLimit();
 
-		$this->lists             = new \stdClass();
+		$this->lists             = new stdClass();
 		$this->lists->limitStart = $this->input->getInt('akengage_limitstart', 0);
 		$this->lists->limit      = $model->getState('akengage_limit', $defaultLimit, 'int');
-		$this->lists->limit = empty($this->lists->limit) ? null : $this->lists->limit;
+		$this->lists->limit      = empty($this->lists->limit) ? null : $this->lists->limit;
 
 		// Pass the display limits to the model
 		$model->limitstart = $this->lists->limitStart;
@@ -306,7 +337,7 @@ class Html extends DataHtml
 		$this->maxLevel = $params->get('max_level', 3);
 
 		// Page parameters
-		/** @var \JApplicationSite $app */
+		/** @var JApplicationSite $app */
 		try
 		{
 			$app        = Factory::getApplication();
@@ -364,8 +395,8 @@ class Html extends DataHtml
 
 		do
 		{
-			$newDepth  = $myComment->depth - 1;
-			$myComment = $myComment->getClone()->find($myComment->parent_id);
+			$newDepth         = $myComment->depth - 1;
+			$myComment        = $myComment->getClone()->find($myComment->parent_id);
 			$myComment->depth = $newDepth;
 
 			$parentNames[$myComment->depth] = $myComment->getUser()->name;
@@ -389,7 +420,7 @@ class Html extends DataHtml
 			return '';
 		}
 
-		if (($useCaptchaFor === 'nonmanager') && !$user->authorise('core.manage', 'com_engage'))
+		if (($useCaptchaFor === 'nonmanager') && $user->authorise('core.manage', 'com_engage'))
 		{
 			return '';
 		}
@@ -509,6 +540,23 @@ class Html extends DataHtml
 			Log::add(sprintf("Error injecting AMP styling: %s", $e->getMessage()), Log::CRITICAL, 'com_engage');
 
 			return;
+		}
+	}
+
+	private function getUserTimezone(): DateTimeZone
+	{
+		$platform     = $this->container->platform;
+		$user         = $platform->getUser();
+		$siteTimezone = $platform->getConfig()->get('offset', 'UTC');
+		$zone         = $user->guest ? $siteTimezone : $user->getParam('timezone', $siteTimezone);
+
+		try
+		{
+			return new DateTimeZone($zone);
+		}
+		catch (Exception $e)
+		{
+			return new DateTimeZone('UTC');
 		}
 	}
 }

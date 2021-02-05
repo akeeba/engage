@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -33,7 +33,7 @@ final class SignedURL
 		 * evaluation, would cause the token check to be variable time which could cause subtle security issues. We
 		 * really need to go through "stupid" code to achieve a constant time token verification.
 		 */
-		$validToken = self::getToken($task ?? '', $email ?? '', $asset_id ?? '', $expires ?? '');
+		$validToken   = self::getToken($task ?? '', $email ?? '', $asset_id ?? '', $expires ?? '');
 		$confirmToken = Crypt::timingSafeCompare($validToken, $token ?? '');
 
 		if (is_null($task))

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
 	<div class="alert alert-warning">
 		<h2>
 			This component requires the Akeeba Frontend Framework (FEF) to be installed on your site. Please go to <a
-				href="https://www.akeebabackup.com/download/official/fef.html">our download page</a> to download it, then install it on your site.
+				href="https://www.akeeba.com/download/official/fef.html">our download page</a> to download it, then install it on your site.
 		</h2>
 	</div>
 	<hr/>

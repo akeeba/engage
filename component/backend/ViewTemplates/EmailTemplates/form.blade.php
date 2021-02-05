@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -11,7 +11,7 @@
 $item = $this->item;
 $user = $this->container->platform->getUser();
 ?>
-@extends('admin:com_engage/Common/edit')
+@extends('any:lib_fof30/Common/edit')
 
 @section('edit-form-body')
     <div class="akeeba-form-group">

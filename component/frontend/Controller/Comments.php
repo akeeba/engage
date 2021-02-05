@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -65,7 +65,7 @@ class Comments extends DataController
 	/**
 	 * DEBUG: Trigger email sending
 	 *
-	 * Don't worry, this will NOT work on your sites. This code is only accesible when I add 'debug' to the
+	 * Don't worry, this will NOT work on your sites. This code is only accessible when I add 'debug' to the
 	 * setPredefinedTaskList array in the __construct method.
 	 */
 	public function debug()
@@ -97,14 +97,16 @@ class Comments extends DataController
 		// CSRF prevention
 		$this->csrfProtection();
 
-		$assetId   = $this->getAssetId();
-		$parentId  = $this->input->post->getInt('parent_id', 0);
-		$name      = $this->input->post->getString('name', null);
-		$email     = $this->input->post->getString('email', null);
-		$comment   = $this->input->post->getRaw('comment', null);
-		$returnUrl = $this->getReturnUrl();
-		$platform  = $this->container->platform;
-		$user      = $platform->getUser();
+		$assetId     = $this->getAssetId();
+		$postInput   = $this->input->post;
+		$parentId    = $postInput->getInt('parent_id', 0);
+		$name        = $postInput->getString('name', null);
+		$email       = $postInput->getString('email', null);
+		$comment     = $postInput->get('comment', null, 'raw');
+		$acceptedTos = $postInput->getBool('accept_tos', false);
+		$returnUrl   = $this->getReturnUrl();
+		$platform    = $this->container->platform;
+		$user        = $platform->getUser();
 
 		// If the comments are disabled for this asset we will return a Not Authorized error
 		if (Meta::areCommentsClosed($assetId))
@@ -158,6 +160,15 @@ class Comments extends DataController
 			}
 		}
 
+		// Check if the user had to give explicit consent but didn't provide it
+		if ($user->guest && $this->container->params->get('tos_accept') && !$acceptedTos)
+		{
+			$this->setRedirect($returnUrl, Text::_('COM_ENGAGE_COMMENTS_ERR_TOSACCEPT'), 'error');
+			$this->redirect();
+
+			return;
+		}
+
 		// Set up the new comment
 		$model->reset()->bind([
 			'asset_id'   => $assetId,
@@ -170,9 +181,9 @@ class Comments extends DataController
 		]);
 
 		// Non-admin users may have their comments auto-unpublished by default
-		if (!$user->get('core.manage', 'com_engage'))
+		if (!$user->authorise('core.manage', 'com_engage'))
 		{
-			$model->created_by = $this->container->params->get('default_publish', 1);
+			$model->enabled = $this->container->params->get('default_publish', 1);
 		}
 
 		// If it's a guest user we need to unset the name and email
@@ -498,6 +509,17 @@ class Comments extends DataController
 		$this->cleanCache();
 	}
 
+	/**
+	 * Runs after deleting a comment.
+	 */
+	protected function onAfterRemove()
+	{
+		$this->disableJoomlaCache();
+
+		$this->cleanCache();
+
+	}
+
 	protected function onBeforeEdit()
 	{
 		$this->disableJoomlaCache();
@@ -780,5 +802,37 @@ class Comments extends DataController
 		CacheCleaner::clearCacheGroups([
 			'com_engage',
 		], [0], 'onEngageClearCache');
+	}
+
+	protected function getACLForApplySave()
+	{
+		$model = $this->getModel();
+
+		if (!$model->getId())
+		{
+			$this->getIDsFromRequest($model, true);
+		}
+
+		$id = $model->getId();
+
+		if (!$id)
+		{
+			return '@add';
+		}
+
+		if ($this->checkACL('@edit'))
+		{
+			return true;
+		}
+
+		$user = $this->container->platform->getUser();
+		$uid  = $model->getFieldValue('created_by', 0);
+
+		if (!empty($uid) && !$user->guest && ($user->id == $uid))
+		{
+			return '@editown';
+		}
+
+		return false;
 	}
 }

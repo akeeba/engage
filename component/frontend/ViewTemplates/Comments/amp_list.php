@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -59,7 +59,7 @@ $previousLevel = $comment->depth;
 $user          = $comment->getUser();
 $avatar        = $comment->getAvatarURL(32);
 $profile       = $comment->getProfileURL();
-$commentDate   = new Date($comment->created_on);
+$commentDate   = (new Date($comment->created_on))->setTimezone($this->userTimezone);
 $ipLookupURL  = $this->getIPLookupURL($comment->ip);
 $openListItem++;
 $this->ensureHasParentInfo($comment, $parentIds, $parentNames);

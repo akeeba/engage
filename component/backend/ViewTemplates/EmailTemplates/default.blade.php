@@ -1,15 +1,17 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
 /** @var \Akeeba\Engage\Admin\View\EmailTemplates\Html $this */
 
-$keyOptions = \Akeeba\Engage\Admin\Helper\Select::emailTemplateKey(true);
+use Akeeba\Engage\Admin\Helper\Select;
+
+$keyOptions = Select::emailTemplateKey(true);
 ?>
-@extends('admin:com_engage/Common/browse')
+@extends('any:lib_fof30/Common/browse')
 
 @section('browse-filters')
     <div class="akeeba-filter-element akeeba-form-group">
@@ -76,4 +78,3 @@ $keyOptions = \Akeeba\Engage\Admin\Helper\Select::emailTemplateKey(true);
         </tr>
     @endforeach
 @stop
-

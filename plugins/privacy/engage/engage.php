@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -10,7 +10,14 @@ defined('_JEXEC') or die;
 use Akeeba\Engage\Site\Helper\Meta;
 use FOF30\Container\Container;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Table\User as UserTable;
 use Joomla\CMS\User\User;
+
+// Joomla 3 requires a braindead way to include the PrivacyPlugin class
+if (version_compare(JVERSION, '3.9999.9999', 'le'))
+{
+	JLoader::register('PrivacyPlugin', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/plugin.php');
+}
 
 /**
  * com_privacy plugin for Akeeba Engage
@@ -96,7 +103,7 @@ class plgPrivacyEngage extends PrivacyPlugin
 			return [];
 		}
 
-		/** @var JTableUser $userTable */
+		/** @var UserTable $userTable */
 		$userTable = User::getTable();
 		$userTable->load($user->id);
 

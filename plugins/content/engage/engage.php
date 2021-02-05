@@ -1,34 +1,55 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
 defined('_JEXEC') or die();
 
 use Akeeba\Engage\Admin\Model\Comments;
+use Akeeba\Engage\Site\Helper\Meta;
 use FOF30\Container\Container;
 use FOF30\Input\Input;
+use FOF30\Layout\LayoutHelper;
 use FOF30\Utils\CacheCleaner;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Factory;
+use Joomla\CMS\Date\Date;
 use Joomla\CMS\Form\Form;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModelLegacy;
+use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Table\Content;
 use Joomla\CMS\Table\Table;
+use Joomla\Component\Categories\Administrator\Model\CategoryModel;
+use Joomla\Component\Content\Administrator\Model\ArticleModel;
 use Joomla\Registry\Registry;
 
 /**
  * Akeeba Engage – Configure and show comments in Joomla core content (articles) and categories
  *
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 class plgContentEngage extends CMSPlugin
 {
+	/**
+	 * Database driver
+	 *
+	 * @var   JDatabaseDriver|null
+	 */
+	protected $db;
+
+	/**
+	 * Application objecy
+	 *
+	 * @var   CMSApplication
+	 */
+	protected $app;
+
 	/**
 	 * Should this plugin be allowed to run?
 	 *
@@ -101,6 +122,11 @@ class plgContentEngage extends CMSPlugin
 		$this->autoCleanSpam();
 	}
 
+	public function onContentBeforeDisplay(?string $context, &$row, &$params, ?int $page = 0): string
+	{
+		return $this->renderCommentCount($params, $row, $context, true);
+	}
+
 	/**
 	 * Returns the content to display after an article. Used to render the comments interface.
 	 *
@@ -114,82 +140,9 @@ class plgContentEngage extends CMSPlugin
 	 */
 	public function onContentAfterDisplay(?string $context, &$row, &$params, ?int $page = 0): string
 	{
-		// We need to be enabled
-		if (!$this->enabled)
-		{
-			return '';
-		}
-
-		// We need to be given the right kind of data
-		if (!is_object($params) || !($params instanceof Registry) || !is_object($row))
-		{
-			return '';
-		}
-
-		// We need to be in the frontend of the site
-		$container = $this->getContainer();
-
-		if (!$container->platform->isFrontend())
-		{
-			return '';
-		}
-
-		// We need to have a supported context
-		if ($context !== 'com_content.article')
-		{
-			return '';
-		}
-
-		/**
-		 * This neat trick allows me to speed up meta queries on the article.
-		 *
-		 * When this plugin event is called Joomla has already loaded the article for us. I can use this object to
-		 * populate the article meta cache so next time I query the article meta I don't have to go through Joomla's
-		 * article model which saves me a very expensive query.
-		 */
-		$this->cacheArticleRow($row, true);
-
-		// Am I supposed to display comments?
-		$commentParams = $this->getParametersForArticle($row);
-
-		if ($commentParams->get('comments_show', 1) != 1)
-		{
-			return '';
-		}
-
-		/**
-		 * Set a flag that we're allowed to show the comments browse page.
-		 *
-		 * Since this is a container flag it can only be set by backend code, not any request parameter. Since this is
-		 * not set by default it means that the only way to access the comments is going through this plugin. In other
-		 * words, someone trying to bypass the plugin and display all comments regardless would be really disappointed
-		 * at the results of their plan to surreptitiously pull comments.
-		 */
-		$container['commentsBrowseEnablingFlag'] = true;
-
-		$input   = $container->input;
-		$assetId = $row->asset_id;
-
-		$input->set('asset_id', $assetId);
-		$input->set('filter_order_Dir', $commentParams->get('comments_ordering'));
-
-		// Capture the output instead of pushing it to the browser
-		try
-		{
-			@ob_start();
-
-			$container->dispatcher->dispatch();
-
-			$comments = @ob_get_contents();
-
-			@ob_end_clean();
-		}
-		catch (Exception $e)
-		{
-			$comments = '';
-		}
-
-		return $comments;
+		return
+			$this->renderCommentCount($params, $row, $context, false) .
+			$this->renderComments($params, $row, $context);
 	}
 
 	/**
@@ -210,7 +163,7 @@ class plgContentEngage extends CMSPlugin
 		}
 
 		// Add the registration fields to the form.
-		JForm::addFormPath(__DIR__ . '/forms');
+		Form::addFormPath(__DIR__ . '/forms');
 		$form->loadFile('engage', false);
 
 		return true;
@@ -247,6 +200,49 @@ class plgContentEngage extends CMSPlugin
 	}
 
 	/**
+	 * Executes after Joomla deleted a content item. Used to delete attached comments.
+	 *
+	 * @param   string|null           $context
+	 * @param   Content|object|mixed  $data
+	 *
+	 * @return  void
+	 *
+	 * @see     https://docs.joomla.org/Plugin/Events/Content#onContentAfterDelete
+	 */
+	public function onContentAfterDelete(?string $context, $data)
+	{
+		if ($context != 'com_content.article')
+		{
+			return;
+		}
+
+		if (!is_object($data))
+		{
+			return;
+		}
+
+		if (!property_exists($data, 'asset_id'))
+		{
+			return;
+		}
+
+		$assetId = $data->asset_id;
+		$db      = $this->db;
+		$query   = $db->getQuery(true)
+			->delete($db->qn('#__engage_comments'))
+			->where($db->qn('asset_id') . ' = ' . $db->q($assetId));
+
+		try
+		{
+			$db->setQuery($query)->execute();
+		}
+		catch (Exception $e)
+		{
+			// It's not the end of the world if this fails
+		}
+	}
+
+	/**
 	 * Triggered when Joomla is loading content. Used to load the Engage configuration.
 	 *
 	 * This is used for both articles and article categories.
@@ -272,6 +268,8 @@ class plgContentEngage extends CMSPlugin
 
 		$data->engage = $data->{$key}['engage'];
 		unset ($data->{$key}['engage']);
+
+		return true;
 	}
 
 	/**
@@ -284,6 +282,11 @@ class plgContentEngage extends CMSPlugin
 	 */
 	public function onAkeebaEngageGetAssetMeta(int $assetId = 0, bool $loadParameters = false): ?array
 	{
+		if (empty($assetId))
+		{
+			return null;
+		}
+
 		$row = $this->getArticleByAssetId($assetId, $loadParameters);
 
 		if (is_null($row))
@@ -307,12 +310,12 @@ class plgContentEngage extends CMSPlugin
 		}
 
 
-		$publishUp = new Joomla\CMS\Date\Date();
-		$db        = Factory::getDbo();
+		$publishUp = new Date();
+		$db        = $this->db;
 
-		if ($db->getNullDate() != $row->publish_up)
+		if (!empty($row->publish_up) && ($row->publish_up != $db->getNullDate()))
 		{
-			$publishUp = new Joomla\CMS\Date\Date($row->publish_up);
+			$publishUp = new Date($row->publish_up);
 		}
 
 		return [
@@ -347,7 +350,7 @@ class plgContentEngage extends CMSPlugin
 
 		try
 		{
-			$db    = Factory::getDbo();
+			$db    = $this->db;
 			$query = $db->getQuery(true)
 				->select([$db->qn('asset_id')])
 				->from($db->qn('#__content'))
@@ -388,37 +391,39 @@ class plgContentEngage extends CMSPlugin
 	 */
 	private function getContainer(): Container
 	{
-		if (empty($this->container))
+		if (!empty($this->container))
 		{
-			$masterContainer = Container::getInstance('com_engage');
-			$appInput        = new Input();
-
-			$defaultListLimit = $masterContainer->params->get('default_limit', 20);
-			$defaultListLimit = ($defaultListLimit == -1) ? 20 : $defaultListLimit;
-
-			// Get the container singleton instance
-			$this->container = Container::getInstance('com_engage', [
-				// We create a temporary instance to avoid messing with the master container's input
-				'tempInstance' => true,
-				// Passing these objects from the master container optimizes the number of database queries
-				'params'       => $masterContainer->params,
-				'mediaVersion' => $masterContainer->mediaVersion,
-				// Custom input for the temporary container instance
-				'input'        => [
-					'option'              => 'com_engage',
-					'view'                => 'Comments',
-					'task'                => 'browse',
-					'asset_id'            => 0,
-					'access'              => 0,
-					'akengage_limitstart' => ($appInput)->getInt('akengage_limitstart', 0),
-					'akengage_limit'      => ($appInput)->getInt('akengage_limit', $defaultListLimit),
-					'layout'              => $this->isAMP() ? 'amp' : 'default',
-					'tpl'                 => null,
-					'tmpl'                => null,
-					'format'              => 'html',
-				],
-			]);
+			return $this->container;
 		}
+
+		$masterContainer = Container::getInstance('com_engage');
+		$appInput        = new Input();
+
+		$defaultListLimit = $masterContainer->params->get('default_limit', 20);
+		$defaultListLimit = ($defaultListLimit == -1) ? 20 : $defaultListLimit;
+
+		// Get the container singleton instance
+		$this->container = Container::getInstance('com_engage', [
+			// We create a temporary instance to avoid messing with the master container's input
+			'tempInstance' => true,
+			// Passing these objects from the master container optimizes the number of database queries
+			'params'       => $masterContainer->params,
+			'mediaVersion' => $masterContainer->mediaVersion,
+			// Custom input for the temporary container instance
+			'input'        => [
+				'option'              => 'com_engage',
+				'view'                => 'Comments',
+				'task'                => 'browse',
+				'asset_id'            => 0,
+				'access'              => 0,
+				'akengage_limitstart' => ($appInput)->getInt('akengage_limitstart', 0),
+				'akengage_limit'      => ($appInput)->getInt('akengage_limit', $defaultListLimit),
+				'layout'              => $this->isAMP() ? 'amp' : 'default',
+				'tpl'                 => null,
+				'tmpl'                => null,
+				'format'              => 'html',
+			],
+		]);
 
 		return $this->container;
 	}
@@ -458,19 +463,19 @@ class plgContentEngage extends CMSPlugin
 	private function isRowPublished($row)
 	{
 		// The article is unpublished, the point is moot
-		if ($row->state <= 0)
+		if (($row->state ?? 0) <= 0)
 		{
 			return false;
 		}
 
-		$db = Factory::getDbo();
+		$db = $this->db;
 
 		// Do we have a publish up date?
 		if (!empty($row->publish_up) && ($row->publish_up != $db->getNullDate()))
 		{
 			try
 			{
-				$publishUp = new Joomla\CMS\Date\Date($row->publish_up);
+				$publishUp = new Date($row->publish_up);
 
 				if ($publishUp->toUnix() > time())
 				{
@@ -487,7 +492,7 @@ class plgContentEngage extends CMSPlugin
 		{
 			try
 			{
-				$publishDown = new Joomla\CMS\Date\Date($row->publish_down);
+				$publishDown = new Date($row->publish_down);
 
 				if ($publishDown->toUnix() < time())
 				{
@@ -514,6 +519,11 @@ class plgContentEngage extends CMSPlugin
 	 */
 	private function getArticleByAssetId(int $assetId, bool $loadParameters = false)
 	{
+		if (empty($assetId))
+		{
+			return null;
+		}
+
 		$metaKey    = md5($assetId . '_' . ($loadParameters ? 'with' : 'without') . '_parameters');
 		$altMetaKey = md5($assetId . '_with_parameters');
 
@@ -529,7 +539,7 @@ class plgContentEngage extends CMSPlugin
 
 		$this->cachedArticles[$metaKey] = null;
 
-		$db    = Factory::getDbo();
+		$db    = $this->db;
 		$query = $db->getQuery(true)
 			->select([
 				$db->qn('id'),
@@ -557,20 +567,20 @@ class plgContentEngage extends CMSPlugin
 			{
 				if (!class_exists('ContentModelArticle'))
 				{
-					JModelLegacy::addIncludePath(JPATH_BASE . '/components/com_content/models');
+					BaseDatabaseModel::addIncludePath(JPATH_BASE . '/components/com_content/models');
 				}
 
-				$model = JModelLegacy::getInstance('Article', 'ContentModel');
+				$model = BaseDatabaseModel::getInstance('Article', 'ContentModel');
 			}
 			else
 			{
-				/** @var \Joomla\CMS\MVC\Factory\MVCFactoryInterface $factory */
-				$factory = Factory::getApplication()->bootComponent('com_content')->getMVCFactory();
-				/** @var \Joomla\Component\Content\Administrator\Model\ArticleModel $model */
+				/** @var MVCFactoryInterface $factory */
+				$factory = $this->app->bootComponent('com_content')->getMVCFactory();
+				/** @var ArticleModel $model */
 				$model = $factory->createModel('Article', 'Administrator');
 			}
 
-			$row   = $model->getItem($articleId);
+			$row = $model->getItem($articleId);
 		}
 		catch (Exception $e)
 		{
@@ -716,8 +726,8 @@ class plgContentEngage extends CMSPlugin
 
 		foreach ($parametersKeys as $key)
 		{
-			$v                  = $articleParams->get('engage.' . $key, $ret[$key]);
-			$hasInheritedParams = $hasInheritedParams || $this->isUseGlobal($v);
+			$ret[$key]          = $articleParams->get('engage.' . $key, $ret[$key]);
+			$hasInheritedParams = $hasInheritedParams || $this->isUseGlobal($ret[$key]);
 		}
 
 		// If there are no "Use Global" parameters return what we've got so far.
@@ -731,7 +741,7 @@ class plgContentEngage extends CMSPlugin
 		{
 			if (!class_exists('CategoriesModelCategory'))
 			{
-				JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/models');
+				BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/models');
 			}
 
 			if (!class_exists('CategoriesTableCategory'))
@@ -741,16 +751,17 @@ class plgContentEngage extends CMSPlugin
 		}
 
 		$catId = $row->catid;
+
 		if (version_compare(JVERSION, '3.999.999', 'le'))
 		{
 			/** @var CategoriesModelCategory $model */
-			$model = JModelLegacy::getInstance('Category', 'CategoriesModel');
+			$model = BaseDatabaseModel::getInstance('Category', 'CategoriesModel');
 		}
 		else
 		{
-			/** @var \Joomla\CMS\MVC\Factory\MVCFactoryInterface $factory */
-			$factory = Factory::getApplication()->bootComponent('com_categories')->getMVCFactory();
-			/** @var \Joomla\Component\Categories\Administrator\Model\CategoryModel $model */
+			/** @var MVCFactoryInterface $factory */
+			$factory = $this->app->bootComponent('com_categories')->getMVCFactory();
+			/** @var CategoryModel $model */
 			$model = $factory->createModel('Category', 'Administrator');
 		}
 
@@ -823,7 +834,7 @@ class plgContentEngage extends CMSPlugin
 
 		if (is_numeric($value))
 		{
-			if ((int) $value === -1)
+			if (((int) $value) === -1)
 			{
 				return true;
 			}
@@ -903,5 +914,247 @@ class plgContentEngage extends CMSPlugin
 			'author_email'    => $authorUser->email,
 			'parameters'      => $loadParameters ? $this->getParametersForArticle($row) : new Registry(),
 		];
+	}
+
+	/**
+	 * Get the asset ID given an article ID
+	 *
+	 * @param   int|null  $id
+	 *
+	 * @return  int|null
+	 *
+	 * @since   1.0.0.b3
+	 */
+	private function getAssetIdByArticleId(?int $id): ?int
+	{
+		if (empty($id))
+		{
+			return null;
+		}
+
+		$db    = $this->db;
+		$query = $db->getQuery(true)
+			->select($db->qn('asset_id'))
+			->from($db->qn('#__content'))
+			->where($db->qn('id') . ' = ' . $db->q($id));
+
+		$assetId = $db->setQuery($query)->loadResult();
+
+		return $assetId ? ((int) $assetId) : null;
+	}
+
+	/**
+	 * @param                $params
+	 * @param                $row
+	 * @param   string|null  $context
+	 *
+	 * @return false|string
+	 */
+	private function renderComments($params, $row, ?string $context)
+	{
+		// We need to be enabled
+		if (!$this->enabled)
+		{
+			return '';
+		}
+
+		// We need to be given the right kind of data
+		if (!is_object($params) || !($params instanceof Registry) || !is_object($row))
+		{
+			return '';
+		}
+
+		// We need to be in the frontend of the site
+		$container = $this->getContainer();
+
+		if (!$container->platform->isFrontend())
+		{
+			return '';
+		}
+
+		// We need to have a supported context
+		if ($context !== 'com_content.article')
+		{
+			return '';
+		}
+
+		if (empty($row->id ?? 0))
+		{
+			return '';
+		}
+
+		if (!property_exists($row, 'asset_id'))
+		{
+			$row->asset_id = $this->getAssetIdByArticleId($row->id);
+		}
+
+		if (empty($row->asset_id ?? 0))
+		{
+			return '';
+		}
+
+		/**
+		 * This neat trick allows me to speed up meta queries on the article.
+		 *
+		 * When this plugin event is called Joomla has already loaded the article for us. I can use this object to
+		 * populate the article meta cache so next time I query the article meta I don't have to go through Joomla's
+		 * article model which saves me a very expensive query.
+		 */
+		$this->cacheArticleRow($row, true);
+
+		// Am I supposed to display comments?
+		$commentParams = $this->getParametersForArticle($row);
+
+		if ($commentParams->get('comments_show', 1) != 1)
+		{
+			return '';
+		}
+
+		/**
+		 * Set a flag that we're allowed to show the comments browse page.
+		 *
+		 * Since this is a container flag it can only be set by backend code, not any request parameter. Since this is
+		 * not set by default it means that the only way to access the comments is going through this plugin. In other
+		 * words, someone trying to bypass the plugin and display all comments regardless would be really disappointed
+		 * at the results of their plan to surreptitiously pull comments.
+		 */
+		$container['commentsBrowseEnablingFlag'] = true;
+
+		$input   = $container->input;
+		$assetId = $row->asset_id;
+
+		$input->set('asset_id', $assetId);
+		$input->set('filter_order_Dir', $commentParams->get('comments_ordering'));
+
+		// Capture the output instead of pushing it to the browser
+		try
+		{
+			@ob_start();
+
+			$container->dispatcher->dispatch();
+
+			$comments = @ob_get_contents();
+
+			@ob_end_clean();
+		}
+		catch (Exception $e)
+		{
+			$comments = '';
+		}
+
+		return $comments;
+	}
+
+	/**
+	 * Render the comments count
+	 *
+	 * @param   Registry|mixed  $params
+	 * @param   object|mixed    $row
+	 * @param   string|null     $context
+	 * @param   bool            $before  Am I asked to render this before the content?
+	 *
+	 * @return  string
+	 */
+	private function renderCommentCount($params, $row, ?string $context, bool $before = true): string
+	{
+		// We need to be enabled
+		if (!$this->enabled)
+		{
+			return '';
+		}
+
+		// We need to be given the right kind of data
+		if (!is_object($params) || !($params instanceof Registry) || !is_object($row))
+		{
+			return '';
+		}
+
+		// We need to be in the frontend of the site
+		$container = $this->getContainer();
+
+		if (!$container->platform->isFrontend())
+		{
+			return '';
+		}
+
+		// We need to have a supported context
+		if (!in_array($context, ['com_content.category', 'com_content.featured']))
+		{
+			return '';
+		}
+
+		// Make sure this is really an article
+		if (!property_exists($row, 'introtext'))
+		{
+			return '';
+		}
+
+		if (empty($row->id ?? 0))
+		{
+			return '';
+		}
+
+		/**
+		 * Joomla does not make the asset_id available when displaying articles in the featured or blog view display
+		 * modes. Unfortunately, we need to do one extra DB query for each article in this case.
+		 */
+		if (!property_exists($row, 'asset_id'))
+		{
+			$row->asset_id = $this->getAssetIdByArticleId($row->id);
+		}
+
+		if (empty($row->asset_id ?? 0))
+		{
+			return '';
+		}
+
+		/**
+		 * This neat trick allows me to speed up meta queries on the article.
+		 *
+		 * When this plugin event is called Joomla has already loaded the article for us. I can use this object to
+		 * populate the article meta cache so next time I query the article meta I don't have to go through Joomla's
+		 * article model which saves me a very expensive query.
+		 */
+		$this->cacheArticleRow($row, true);
+
+		// Am I supposed to display comments at all?
+		$commentParams = $this->getParametersForArticle($row);
+		$showComments  = $commentParams->get('comments_show', 1);
+
+		if ($showComments != 1)
+		{
+			return '';
+		}
+
+		// Am I supposed to display the comments count? Uses the keys comments_show_feature, comments_show_category
+		$area              = substr($context, 12);
+		$optionKey         = sprintf("comments_show_%s", $area);
+		$showCommentsCount = $commentParams->get($optionKey, 0);
+
+		if ($showCommentsCount == 0)
+		{
+			return '';
+		}
+
+		if ($before && ($showCommentsCount != 1))
+		{
+			return '';
+		}
+
+		if (!$before && ($showCommentsCount != 2))
+		{
+			return '';
+		}
+
+		// Use a Layout file to display the appropriate summary
+		$basePath    = __DIR__ . '/layouts';
+		$layoutFile  = sprintf("akeeba.engage.content.%s", $area);
+		$displayData = [
+			'container' => $container,
+			'row'       => $row,
+			'meta'      => Meta::getAssetAccessMeta($row->asset_id),
+		];
+
+		return LayoutHelper::render($container, $layoutFile, $displayData, $basePath);
 	}
 }

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ @package   AkeebaEngage
-  ~ @copyright Copyright (c)2020-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
   ~ @license   GNU General Public License version 3, or later
   -->
 <extension version="3.9.0" type="plugin" group="privacy" method="upgrade">
     <name>PLG_PRIVACY_ENGAGE</name>
     <description>PLG_PRIVACY_ENGAGE_XML_DESC</description>
-    <version>1.0.0.b2</version>
-    <creationDate>2020-05-11</creationDate>
+    <version>1.0.5</version>
+    <creationDate>2021-02-05</creationDate>
     <author>Akeeba Ltd</author>
-    <authorEmail>no-reply@akeebabackup.com</authorEmail>
-    <authorUrl>https://www.akeebabackup.com</authorUrl>
-    <copyright>Copyright (c)2020-2020 Akeeba Ltd</copyright>
+    <authorEmail>no-reply@akeeba.com</authorEmail>
+    <authorUrl>https://www.akeeba.com</authorUrl>
+    <copyright>Copyright (c)2020-2021 Akeeba Ltd</copyright>
     <license>GNU/GPL v3 or any later version</license>
 
     <files>
@@ -23,6 +23,11 @@
     <languages folder="language">
         <language tag="en-GB">en-GB/en-GB.plg_privacy_engage.ini</language>
         <language tag="en-GB">en-GB/en-GB.plg_privacy_engage.sys.ini</language>
+        <language tag="el-GR">el-GR/el-GR.plg_privacy_engage.ini</language>
+        <language tag="el-GR">el-GR/el-GR.plg_privacy_engage.sys.ini</language>
+        <language tag="fr-FR">fr-FR/fr-FR.plg_privacy_engage.ini</language>
+        <language tag="fr-FR">fr-FR/fr-FR.plg_privacy_engage.sys.ini</language>
+        <language tag="es-ES">es-ES/es-ES.plg_privacy_engage.sys.ini</language>
     </languages>
 
     <scriptfile>script.php</scriptfile>
