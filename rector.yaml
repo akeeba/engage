@@ -46,12 +46,12 @@ parameters:
     - 'component/backend/vendor'
     # Error view files with die statements and / or files which MUST NOT be upgraded to a new PHP / Joomla version
     # DO NOT REMOVE / CHANGE. READ THE NOTICE ABOVE.
-    - 'component/backend/View/errorhandler.php'
-    - 'component/backend/View/fef.php'
-    - 'component/backend/View/fof.php'
-    - 'component/backend/View/wrongphp.php'
-    - 'component/backend/ViewTemplates/CommonTemplates/phpversion_warning.php'
-    - 'component/backend/ViewTemplates/CommonTemplates/README.php'
+    - 'component/backend/tmpl/ErrorPages/errorhandler.php'
+    - 'component/backend/tmpl/ErrorPages/fef.php'
+    - 'component/backend/tmpl/ErrorPages/fof.php'
+    - 'component/backend/tmpl/ErrorPages/wrongphp.php'
+    - 'component/backend/tmpl/CommonTemplates/phpversion_warning.php'
+    - 'component/backend/tmpl/CommonTemplates/README.php'
     # CLI scripts. They will execute instead of being parsed.
     - 'cli'
     - 'debug'
