@@ -7,8 +7,8 @@
 <extension version="3.9.0" type="plugin" group="engage" method="upgrade">
     <name>PLG_ENGAGE_EMAIL</name>
     <description>PLG_ENGAGE_EMAIL_XML_DESC</description>
-    <version>1.0.4</version>
-    <creationDate>2020-12-14</creationDate>
+    <version>1.0.5</version>
+    <creationDate>2021-02-05</creationDate>
     <author>Akeeba Ltd</author>
     <authorEmail>no-reply@akeeba.com</authorEmail>
     <authorUrl>https://www.akeeba.com</authorUrl>
