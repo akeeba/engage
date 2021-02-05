@@ -37,7 +37,9 @@ fef.min.css
 /component/backend/encrypt_service_key.php
 /component/backend/version.php
 /component/backend/engage.xml
+/component/backend/views
 /component/cli/file_engage.xml
+/component/frontend/views
 
 ### Release files
 /release

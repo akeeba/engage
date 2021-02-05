@@ -16,7 +16,7 @@ $recommendedPHPVersion = '7.4';
 $softwareName          = 'Akeeba Engage';
 $silentResults         = true;
 
-if (!require_once(JPATH_COMPONENT_ADMINISTRATOR . '/View/wrongphp.php'))
+if (!require_once(JPATH_COMPONENT_ADMINISTRATOR . '/tmpl/ErrorPages/wrongphp.php'))
 {
 	return;
 }
@@ -40,7 +40,7 @@ catch (Throwable $e)
 	$title = 'Akeeba Engage';
 	$isPro = defined(AKENGAGE_PRO) ? AKENGAGE_PRO : false;
 
-	if (!(include_once JPATH_COMPONENT_ADMINISTRATOR . '/View/errorhandler.php'))
+	if (!(include_once JPATH_COMPONENT_ADMINISTRATOR . '/tmpl/ErrorPages/errorhandler.php'))
 	{
 		throw $e;
 	}

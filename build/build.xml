@@ -27,6 +27,10 @@
         <include name="media/**"/>
         <include name="*"/>
 
+        <!-- Legacy views -->
+        <exclude name="backend/views/**"/>
+        <exclude name="frontend/views/**"/>
+
         <!-- Debug scripts -->
         <exclude name="debug/**"/>
 

@@ -60,31 +60,14 @@ class Com_EngageInstallerScript extends \FOF40\InstallScript\Component
 	 */
 	protected $removeFilesAllVersions = [
 		'files'   => [
-			'administrator/components/com_engage/ViewTemplates/Common/browse.blade.php',
-			'administrator/components/com_engage/ViewTemplates/Common/edit.blade.php',
-			'administrator/components/com_engage/ViewTemplates/Common/EntryUser.blade.php',
-
 			// Moving to FEF 2
 			'media/com_engage/js/system.js',
 			'media/com_engage/js/system.min.js',
 		],
 		'folders' => [
-
-		],
-	];
-
-	/**
-	 * Obsolete files and folders to remove from the free version only. This is used when you move a feature from the
-	 * free version of your extension to its paid version. If you don't have such a distinction you can ignore this.
-	 *
-	 * @var   array
-	 */
-	protected $removeFilesFree = [
-		'files'   => [
-
-		],
-		'folders' => [
-
+			// Moving to FOF 4
+			'administrator/components/com_engage/ViewTemplates',
+			'components/com_engage/ViewTemplates',
 		],
 	];
 

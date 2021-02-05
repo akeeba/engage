@@ -15,7 +15,7 @@ $minPHPVersion         = '7.2.0';
 $recommendedPHPVersion = '7.4';
 $softwareName          = 'Akeeba Engage';
 
-if (!require_once(__DIR__ . '/View/wrongphp.php'))
+if (!require_once(__DIR__ . '/tmpl/ErrorPages/wrongphp.php'))
 {
 	return;
 }
@@ -23,7 +23,7 @@ if (!require_once(__DIR__ . '/View/wrongphp.php'))
 // HHVM made sense in 2013, now PHP 7 is a way better solution than an hybrid PHP interpreter
 if (defined('HHVM_VERSION'))
 {
-	(include_once __DIR__ . '/View/hhvm.php') or die('We have detected that you are running HHVM instead of PHP. This software WILL NOT WORK properly on HHVM. Please switch to PHP 7 instead.');
+	(include_once __DIR__ . '/tmpl/ErrorPages/hhvm.php') or die('We have detected that you are running HHVM instead of PHP. This software WILL NOT WORK properly on HHVM. Please switch to PHP 7 instead.');
 
 	return;
 }
@@ -31,7 +31,7 @@ if (defined('HHVM_VERSION'))
 // So, FEF is not installed?
 if (!@file_exists(JPATH_SITE . '/media/fef/fef.php'))
 {
-	(include_once __DIR__ . '/View/fef.php') or die('You need to have the Akeeba Frontend Framework (FEF) package installed on your site to display this component. Please visit https://www.akeeba.com/download/official/fef.html to download it and install it on your site.');
+	(include_once __DIR__ . '/tmpl/ErrorPages/fef.php') or die('You need to have the Akeeba Frontend Framework (FEF) package installed on your site to display this component. Please visit https://www.akeeba.com/download/official/fef.html to download it and install it on your site.');
 
 	return;
 }
@@ -45,7 +45,7 @@ try
 {
 	if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
 	{
-		(include_once __DIR__ . '/View/fof.php') or die('You need to have the Akeeba Framework-on-Framework (FOF) 3 package installed on your site to use this component. Please visit https://www.akeeba.com/download/fof3.html to download it and install it on your site.');
+		(include_once __DIR__ . '/tmpl/ErrorPages/fof.php') or die('You need to have the Akeeba Framework-on-Framework (FOF) 3 package installed on your site to use this component. Please visit https://www.akeeba.com/download/fof3.html to download it and install it on your site.');
 
 		return;
 	}
@@ -57,7 +57,7 @@ catch (Throwable $e)
 	$title = 'Akeeba Engage';
 	$isPro = defined(AKENGAGE_PRO) ? AKENGAGE_PRO : false;
 
-	if (!(include_once __DIR__ . '/View/errorhandler.php'))
+	if (!(include_once __DIR__ . '/tmpl/ErrorPages/errorhandler.php'))
 	{
 		throw $e;
 	}

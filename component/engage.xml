@@ -25,8 +25,8 @@
 		<folder>Dispatcher</folder>
 		<folder>Helper</folder>
 		<folder>Model</folder>
+		<folder>tmpl</folder>
 		<folder>View</folder>
-		<folder>ViewTemplates</folder>
 
 		<filename>engage.php</filename>
 
@@ -63,9 +63,9 @@
 			<folder>Helper</folder>
 			<folder>Model</folder>
 			<folder>Toolbar</folder>
+			<folder>tmpl</folder>
 			<folder>vendor</folder>
 			<folder>View</folder>
-			<folder>ViewTemplates</folder>
 
 			<folder>sql</folder>
 

@@ -12,6 +12,7 @@ defined('_JEXEC') or die;
 use Exception;
 use FOF40\Database\Installer;
 use FOF40\Dispatcher\Dispatcher as FOFDispatcher;
+use FOF40\Utils\ViewManifestMigration;
 use Joomla\CMS\Language\Text;
 use RuntimeException;
 
@@ -36,10 +37,14 @@ class Dispatcher extends FOFDispatcher
 		// Load the version.php file and set up the mediaVersion container key
 		$this->onBeforeDispatchLoadComponentVersion();
 
-		// Check the database schema consistency
 		if ($this->view == 'Comments')
 		{
+			// Check the database schema consistency
 			$this->checkAndFixDatabase();
+
+			// Migrate view XML manifests
+			ViewManifestMigration::migrateJoomla4MenuXMLFiles($this->container);
+			ViewManifestMigration::removeJoomla3LegacyViews($this->container);
 		}
 	}
 
