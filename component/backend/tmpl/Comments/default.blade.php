@@ -28,6 +28,8 @@ $purifier = new HTMLPurifier($config);
 $filterAssetId = $this->getModel()->getState('asset_id', null) ?? '';
 $filterAssetId = is_array($filterAssetId) ? '' : $filterAssetId;
 
+$this->showBrowseOrdering = false;
+$this->showBrowseOrderBy  = false;
 ?>
 @extends('any:lib_fof40/Common/browse')
 
