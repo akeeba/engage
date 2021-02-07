@@ -114,12 +114,12 @@ final class Grid
 				}
 			}
 
-			return FEFHelperBrowse::state($states, $value, $i, [
+			return HTMLHelper::_('FEFHelp.browse.state', $states, $value, $i, [
 				'prefix' => $prefix, 'translate' => !$tip,
 			], $enabled, true, $checkbox);
 		}
 
-		return FEFHelperBrowse::state($states, $value, $i, $prefix, $enabled, true, $checkbox);
+		return HTMLHelper::_('FEFHelp.browse.state', $states, $value, $i, $prefix, $enabled, true, $checkbox);
 	}
 
 }
