@@ -39,25 +39,5 @@ class Dispatcher extends FOFDispatcher
 			'load_fef_js'         => 1,
 			'load_fef_js_minimal' => 1,
 		]);
-
-		// Load the Akeeba FEF JavaScript Framework
-		//$this->loadMinimalFEFJavaScriptFramework();
-	}
-
-	private function loadMinimalFEFJavaScriptFramework()
-	{
-		$helperFile = JPATH_SITE . '/media/fef/fef.php';
-
-		if (!class_exists('AkeebaFEFHelper') && is_file($helperFile))
-		{
-			include_once $helperFile;
-		}
-
-		if (!class_exists('AkeebaFEFHelper'))
-		{
-			return;
-		}
-
-		\AkeebaFEFHelper::loadJSFramework(true);
 	}
 }
