@@ -4,6 +4,7 @@ Akeeba Engage 2.0.0
 + Rewritten with FOF 4
 + Now using FEF 2 with a common JavaScript library across all Akeeba extensions
 ~ The Dark Mode has a darker background
+# [LOW] Using a non-default comments limit did not work properly (gh-74)
 
 Akeeba Engage 1.0.5
 ================================================================================

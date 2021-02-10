@@ -58,7 +58,7 @@ class Comments extends DataController
 			'layout'              => 'CMD',
 			'asset_id'            => 'INT',
 			'akengage_limitstart' => 'INT',
-			'akengage_start'      => 'INT',
+			'akengage_limit'      => 'INT',
 		];
 	}
 
