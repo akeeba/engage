@@ -31,7 +31,7 @@
 
     <scriptfile>script.php</scriptfile>
 
-    <config>
+    <config addfieldpath="/administrator/components/com_engage/fields">
         <fields name="params">
             <fieldset
                 name="basic"
@@ -41,7 +41,7 @@
 
                 <field
                     name="profile_link"
-                    type="radio"
+                    type="fancyradio"
                     label="PLG_ENGAGE_GRAVATAR_PROFILE_LINK_LABEL"
                     description="PLG_ENGAGE_GRAVATAR_PROFILE_LINK_DESC"
                     class="btn-group btn-group-yesno"
@@ -91,7 +91,7 @@
 
                 <field
                     name="force_default"
-                    type="radio"
+                    type="fancyradio"
                     label="PLG_ENGAGE_GRAVATAR_FORCE_DEFAULT_LABEL"
                     description="PLG_ENGAGE_GRAVATAR_FORCE_DEFAULT_DESC"
                     class="btn-group btn-group-yesno"

@@ -31,7 +31,7 @@
 
     <scriptfile>script.php</scriptfile>
 
-    <config>
+    <config addfieldpath="/administrator/components/com_engage/fields">
         <fields name="params">
             <fieldset
                     name="basic"
@@ -40,7 +40,7 @@
             >
                 <field
                         name="managers_notify"
-                        type="radio"
+                        type="fancyradio"
                         label="PLG_ENGAGE_EMAIL_MANAGERS_TOPLEVEL_NOTIFY_LABEL"
                         description="PLG_ENGAGE_EMAIL_MANAGERS_TOPLEVEL_NOTIFY_DESC"
                         class="btn-group btn-group-yesno"

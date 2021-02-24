@@ -5,7 +5,7 @@
   ~ @license   GNU General Public License version 3, or later
   -->
 
-<form>
+<form addfieldpath="/administrator/components/com_engage/fields">
     <fields name="engage">
         <fieldset name="engage"
                   label="PLG_CONTENT_ENGAGE_FORM_HEAD"
@@ -17,7 +17,6 @@
                     type="list"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_SHOW_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_SHOW_DESC"
-                    class="chzn-color"
                     useglobal="true"
                     default="-1"
             >
@@ -27,10 +26,9 @@
 
             <field
                     name="comments_show_featured"
-                    type="radio"
+                    type="list"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_SHOW_FEATURE_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_SHOW_FEATURE_DESC"
-                    class="btn-group btn-group-yesno"
                     useglobal="true"
                     default=""
                     showon="comments_show!:0"
@@ -42,10 +40,9 @@
 
             <field
                     name="comments_show_category"
-                    type="radio"
+                    type="list"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_SHOW_CATEGORY_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_SHOW_CATEGORY_DESC"
-                    class="btn-group btn-group-yesno"
                     useglobal="true"
                     default=""
                     showon="comments_show!:0"
@@ -60,7 +57,6 @@
                     type="list"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_ORDERING_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_ORDERING_DESC"
-                    class="chzn-color"
                     default="-1"
                     useglobal="true"
                     showon="comments_show!:0"
@@ -74,7 +70,6 @@
                     type="list"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_ENABLED_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_ENABLED_DESC"
-                    class="chzn-color"
                     useglobal="true"
                     default="-1"
                     showon="comments_show!:0"
@@ -96,7 +91,7 @@
 
             <field
                     name="comments_notify_author"
-                    type="radio"
+                    type="fancyradio"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_AUTHOR_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_AUTHOR_DESC"
                     class="btn-group btn-group-yesno"
@@ -110,7 +105,7 @@
 
             <field
                     name="comments_notify_users"
-                    type="radio"
+                    type="fancyradio"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_USERS_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_USERS_DESC"
                     class="btn-group btn-group-yesno"

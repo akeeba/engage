@@ -4,8 +4,7 @@
   ~ @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
   ~ @license   GNU General Public License version 3, or later
   -->
-<!--<config addfieldpath="/administrator/components/com_engage/Field/Joomla">-->
-<config addfieldpath="/administrator/components/com_engage/Field/Joomla">
+<config addfieldpath="/administrator/components/com_engage/fields">
     <fieldset
             name="basic"
             label="COM_ENGAGE_CONFIG_BASIC_FIELDSET_LABEL"
@@ -22,7 +21,7 @@
 
         <field
                 name="default_publish"
-                type="radio"
+                type="fancyradio"
                 label="COM_ENGAGE_DEFAULT_PUBLISH_LABEL"
                 description="COM_ENGAGE_DEFAULT_PUBLISH_DESC"
                 class="btn-group btn-group-yesno"
@@ -80,7 +79,7 @@
 
         <field
                 name="tos_accept"
-                type="list"
+                type="fancyradio"
                 label="COM_ENGAGE_CONFIG_TOS_ACCEPT_LABEL"
                 description="COM_ENGAGE_CONFIG_TOS_ACCEPT_DESC"
                 class="btn-group btn-group-yesno"
@@ -115,10 +114,9 @@
 
         <field
                 name="comments_show"
-                type="radio"
+                type="list"
                 label="COM_ENGAGE_COMMENTS_SHOW_LABEL"
                 description="COM_ENGAGE_COMMENTS_SHOW_DESC"
-                class="btn-group btn-group-yesno"
                 default="1"
         >
             <option value="1">JSHOW</option>
@@ -127,10 +125,9 @@
 
         <field
                 name="comments_show_featured"
-                type="radio"
+                type="list"
                 label="COM_ENGAGE_COMMENTS_SHOW_FEATURE_LABEL"
                 description="COM_ENGAGE_COMMENTS_SHOW_FEATURE_DESC"
-                class="btn-group btn-group-yesno"
                 default="1"
                 showon="comments_show:1"
         >
@@ -141,10 +138,9 @@
 
         <field
                 name="comments_show_category"
-                type="radio"
+                type="list"
                 label="COM_ENGAGE_COMMENTS_SHOW_CATEGORY_LABEL"
                 description="COM_ENGAGE_COMMENTS_SHOW_CATEGORY_DESC"
-                class="btn-group btn-group-yesno"
                 default="1"
                 showon="comments_show:1"
         >
@@ -158,7 +154,6 @@
                 type="list"
                 label="COM_ENGAGE_COMMENTS_ORDERING_LABEL"
                 description="COM_ENGAGE_COMMENTS_ORDERING_DESC"
-                class="chzn-color"
                 default="asc"
                 showon="comments_show:1"
         >
@@ -168,7 +163,7 @@
 
         <field
                 name="comments_enabled"
-                type="radio"
+                type="fancyradio"
                 label="COM_ENGAGE_COMMENTS_ENABLED_LABEL"
                 description="COM_ENGAGE_COMMENTS_ENABLED_DESC"
                 class="btn-group btn-group-yesno"
@@ -191,7 +186,7 @@
 
         <field
                 name="comments_notify_author"
-                type="radio"
+                type="fancyradio"
                 label="COM_ENGAGE_COMMENTS_NOTIFY_AUTHOR_LABEL"
                 description="COM_ENGAGE_COMMENTS_NOTIFY_AUTHOR_DESC"
                 class="btn-group btn-group-yesno"
@@ -204,7 +199,7 @@
 
         <field
                 name="comments_notify_users"
-                type="radio"
+                type="fancyradio"
                 label="COM_ENGAGE_COMMENTS_NOTIFY_USERS_LABEL"
                 description="COM_ENGAGE_COMMENTS_NOTIFY_USERS_DESC"
                 class="btn-group btn-group-yesno"
@@ -235,7 +230,7 @@
 
         <field
                 name="htmlpurifier_config_joomla"
-                type="radio"
+                type="fancyradio"
                 label="COM_ENGAGE_CONFIG_HTMLPURIFIER_CONFIG_JOOMLA_LABEL"
                 description="COM_ENGAGE_CONFIG_HTMLPURIFIER_CONFIG_JOOMLA_DESC"
                 class="btn-group btn-group-yesno"
@@ -291,7 +286,7 @@
 
         <field
                 name="amp_css"
-                type="radio"
+                type="fancyradio"
                 label="COM_ENGAGE_CONFIG_AMP_CSS_LABEL"
                 description="COM_ENGAGE_CONFIG_AMP_CSS_DESC"
                 class="btn-group btn-group-yesno"
@@ -316,22 +311,22 @@
 
         <field
                 name="dark_mode_backend"
-                type="radio"
+                type="list"
                 default="-1"
                 label="COM_ENGAGE_CONFIG_DARKMODE_BACKEND_LABEL"
                 description="COM_ENGAGE_CONFIG_DARKMODE_BACKEND_DESC"
-                class="switcher btn-group">
+        >
             <option value="-1">COM_ENGAGE_CONFIG_DARKMODE_AUTO</option>
             <option value="0">COM_ENGAGE_CONFIG_DARKMODE_NEVER</option>
             <option value="1">COM_ENGAGE_CONFIG_DARKMODE_ALWAYS</option>
         </field>
 
         <field name="dark_mode_frontend"
-               type="radio"
+               type="list"
                default="-1"
                label="COM_ENGAGE_CONFIG_DARKMODE_FRONTEND_LABEL"
                description="COM_ENGAGE_CONFIG_DARKMODE_FRONTEND_DESC"
-               class="switcher btn-group">
+        >
             <option value="-1">COM_ENGAGE_CONFIG_DARKMODE_AUTO</option>
             <option value="0">COM_ENGAGE_CONFIG_DARKMODE_NEVER</option>
             <option value="1">COM_ENGAGE_CONFIG_DARKMODE_ALWAYS</option>

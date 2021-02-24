@@ -31,13 +31,13 @@
 
     <scriptfile>script.php</scriptfile>
 
-    <config>
+    <config addfieldpath="/administrator/components/com_engage/fields">
         <fields name="params">
             <fieldset name="basic">
 
                 <field
                         name="log_comments"
-                        type="radio"
+                        type="fancyradio"
                         label="PLG_ACTIONLOG_ENGAGE_LOG_COMMENTS_LABEL"
                         description="PLG_ACTIONLOG_ENGAGE_LOG_COMMENTS_DESC"
                         class="btn-group btn-group-yesno"
