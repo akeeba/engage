@@ -30,7 +30,7 @@ try
 {
 	if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
 	{
-		throw new RuntimeException('FOF 3.0 is not installed', 500);
+		throw new RuntimeException('FOF 4.0 is not installed', 500);
 	}
 
 	Container::getInstance('com_engage')->dispatcher->dispatch();

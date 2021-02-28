@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 // Load FOF if not already loaded
 if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
 {
-	throw new RuntimeException('This component requires FOF 3.0.');
+	throw new RuntimeException('FOF 4.0 is not installed');
 }
 
 class Com_EngageInstallerScript extends \FOF40\InstallScript\Component
