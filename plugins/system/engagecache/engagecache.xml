@@ -7,8 +7,8 @@
 <extension version="3.9.0" type="plugin" group="system" method="upgrade">
     <name>PLG_SYSTEM_ENGAGECACHE</name>
     <description>PLG_SYSTEM_ENGAGECACHE_XML_DESC</description>
-    <version>1.0.4</version>
-    <creationDate>2020-12-14</creationDate>
+    <version>2.0.0</version>
+    <creationDate>2021-03-02</creationDate>
     <author>Akeeba Ltd</author>
     <authorEmail>no-reply@akeeba.com</authorEmail>
     <authorUrl>https://www.akeeba.com</authorUrl>
