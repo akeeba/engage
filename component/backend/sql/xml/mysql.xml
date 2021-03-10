@@ -1524,5 +1524,33 @@ ALTER TABLE `#__engage_unsubscribe` ADD PRIMARY KEY (`asset_id`,`email`);
             ]]></query>
         </action>
 
+        <!-- Convert tables to InnoDB -->
+        <action table="#__engage_comments" canfail="1">
+            <condition type="equals" operator="not" value="1"><![CDATA[
+SELECT COUNT(*) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE (`TABLE_NAME` = '#__engage_comments') AND (`TABLE_SCHEMA` = DATABASE()) AND (`ENGINE` = 'InnoDB');
+            ]]></condition>
+            <query><![CDATA[
+ALTER TABLE `#__engage_comments` ENGINE InnoDB;
+            ]]></query>
+        </action>
+
+        <action table="#__engage_emailtemplates" canfail="1">
+            <condition type="equals" operator="not" value="1"><![CDATA[
+SELECT COUNT(*) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE (`TABLE_NAME` = '#__engage_emailtemplates') AND (`TABLE_SCHEMA` = DATABASE()) AND (`ENGINE` = 'InnoDB');
+            ]]></condition>
+            <query><![CDATA[
+ALTER TABLE `#__engage_emailtemplates` ENGINE InnoDB;
+            ]]></query>
+        </action>
+
+        <action table="#__engage_unsubscribe" canfail="1">
+            <condition type="equals" operator="not" value="1"><![CDATA[
+SELECT COUNT(*) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE (`TABLE_NAME` = '#__engage_unsubscribe') AND (`TABLE_SCHEMA` = DATABASE()) AND (`ENGINE` = 'InnoDB');
+            ]]></condition>
+            <query><![CDATA[
+ALTER TABLE `#__engage_unsubscribe` ENGINE InnoDB;
+            ]]></query>
+        </action>
+
     </sql>
 </schema>

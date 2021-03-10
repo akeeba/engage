@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 2.0.1
+================================================================================
+~ Converted all tables to InnoDB for better performance
+
 Akeeba Engage 2.0.0
 ================================================================================
 + Rewritten with FOF 4
