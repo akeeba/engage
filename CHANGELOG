@@ -2,6 +2,7 @@
 Akeeba Engage 2.0.1
 ================================================================================
 ~ Converted all tables to InnoDB for better performance
+# [MEDIUM] Guest users failing to use CAPTCHA or using an email address already in use would get a “The application has stopped responding” message.
 
 Akeeba Engage 2.0.0
 ================================================================================

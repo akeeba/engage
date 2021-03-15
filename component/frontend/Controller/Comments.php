@@ -219,7 +219,6 @@ class Comments extends DataController
 		}
 		catch (Exception $e)
 		{
-			throw $e;
 			$this->setRedirect($returnUrl, $e->getMessage(), 'error');
 			$this->redirect();
 
