@@ -194,22 +194,24 @@ class Comments extends DataController
 			$model->created_by = $user->id;
 		}
 
-		// Populates the IP address and User Agent, required for the spam check
-		$model->useCaptcha(false);
-		$model->check();
-
-		// Spam check
-		$platform->importPlugin('engage');
-		$spamResults = $platform->runPlugins('onAkeebaEngageCheckSpam', [$model]);
-
-		if (in_array(true, $spamResults, true))
-		{
-			$model->enabled = -3;
-		}
-
 		// Try to save the comment, checking for CAPTCHA when necessary
 		try
 		{
+			// Populates the IP address and User Agent, required for the spam check
+			$model->useCaptcha(false);
+
+			// This needs to be in the try-catch block in case a guest is using an existing user's email address.
+			$model->check();
+
+			// Spam check
+			$platform->importPlugin('engage');
+			$spamResults = $platform->runPlugins('onAkeebaEngageCheckSpam', [$model]);
+
+			if (in_array(true, $spamResults, true))
+			{
+				$model->enabled = -3;
+			}
+
 			$model->useCaptcha(true);
 			$model->setState('captcha', $this->input->get('captcha', '', 'raw'));
 			$model->save();
