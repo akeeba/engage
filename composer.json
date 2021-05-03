@@ -17,7 +17,10 @@
 		}
 	],
 	"config": {
-		"vendor-dir": "component/backend/vendor"
+		"vendor-dir": "component/backend/vendor",
+		"platform": {
+			"php": "7.2.0"
+		}
 	},
 	"minimum-stability": "stable",
 	"require": {
