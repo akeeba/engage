@@ -5,11 +5,12 @@
   ~ @license   GNU General Public License version 3, or later
   -->
 
-<form addfieldpath="/administrator/components/com_engage/fields">
+<form>
     <fields name="engage">
         <fieldset name="engage"
                   label="PLG_CONTENT_ENGAGE_FORM_HEAD"
                   description="PLG_CONTENT_ENGAGE_FORM_SUBHEAD"
+                  addfieldpath="/administrator/components/com_engage/fields"
         >
 
             <field

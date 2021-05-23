@@ -4,7 +4,9 @@
   ~ @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
   ~ @license   GNU General Public License version 3, or later
   -->
-<config addfieldpath="/administrator/components/com_engage/fields">
+<config
+        addfieldpath="/administrator/components/com_engage/fields"
+>
     <fieldset
             name="basic"
             label="COM_ENGAGE_CONFIG_BASIC_FIELDSET_LABEL"
@@ -215,7 +217,8 @@
     <fieldset
             name="filtering"
             label="COM_ENGAGE_CONFIG_FILTERING_FIELDSET_LABEL"
-            description="COM_ENGAGE_CONFIG_FILTERING_FIELDSET_DESC">
+            description="COM_ENGAGE_CONFIG_FILTERING_FIELDSET_DESC"
+    >
 
         <field
                 type="list"
@@ -258,7 +261,6 @@
             name="advanced"
             label="COM_ENGAGE_CONFIG_ADVANCED_FIELDSET_LABEL"
             description="COM_ENGAGE_CONFIG_ADVANCED_FIELDSET_DESC"
-            addfieldpath="/administrator/components/com_engage/fields"
     >
         <field
                 name="login_module"

@@ -31,12 +31,13 @@
 
     <scriptfile>script.php</scriptfile>
 
-    <config addfieldpath="/administrator/components/com_engage/fields">
+    <config>
         <fields name="params">
             <fieldset
                 name="basic"
                 label="PLG_ENGAGE_AKISMET_FIELDSET_BASIC_LABEL"
                 description="PLG_ENGAGE_AKISMET_FIELDSET_BASIC_DESC"
+                addfieldpath="/administrator/components/com_engage/fields"
             >
 
                 <field
