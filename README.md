@@ -49,6 +49,8 @@ You can access Akeeba Engage's documentation free of charge on its GitHub reposi
 
 ## Languages
 
+**VERY IMPORTANT: The language files included with Akeeba Engage are third party contributions. They have not and cannot be validated by Akeeba Ltd. Moreover, we cannot offer support for them. Please contact the respective translators for any inquiries, suggestions or language changes. Akeeba Ltd has only written and will only offer support for the English (Great Britain) and Greek (Greece) language files. Thank you for your understanding!**
+
 We are only interested in including the following languages in Akeeba Engage's download package:
 
 * `en-GB`  English (Great Britain). Joomla's default language. This language is maintained by Akeeba Ltd.
