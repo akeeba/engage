@@ -22,10 +22,22 @@ use Joomla\CMS\Uri\Uri;
 /** @var \Akeeba\Engage\Site\View\Comments\Html $this */
 
 $captcha = $this->getCaptchaField();
+$badUx   = $this->container->params->get('comments_reply_bad_ux', 0) == 1;
 
 HTMLHelper::_('behavior.formvalidator');
 ?>
-<div class="akengage-comment-form" id="akengage-comment-form">
+<?php if ($badUx): ?>
+<div class="akengage-comment-hider" id="akengage-comment-hider">
+	<div class="btn-group">
+		<button type="button"
+				id="akengage-comment-hider-button"
+				class="btn btn-primary">
+			<?= Text::_('COM_ENGAGE_COMMENTS_FORM_HEADER'); ?>
+		</button>
+	</div>
+</div>
+<?php endif; ?>
+<div class="akengage-comment-form" id="akengage-comment-form" <?= $badUx ? 'style="display: none"' : ''; ?> >
 	<h4>
 		<?= Text::_('COM_ENGAGE_COMMENTS_FORM_HEADER'); ?>
 	</h4>

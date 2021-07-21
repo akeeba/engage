@@ -68,15 +68,15 @@
 
             <field
                     name="comments_enabled"
-                    type="list"
+                    type="fancyradio"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_ENABLED_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_ENABLED_DESC"
                     useglobal="true"
                     default="-1"
                     showon="comments_show!:0"
             >
-                <option value="1">JYES</option>
                 <option value="0">JNO</option>
+                <option value="1">JYES</option>
             </field>
 
             <field
@@ -100,8 +100,8 @@
                     default=""
                     showon="comments_enabled!:0"
             >
-                <option value="1">JYES</option>
                 <option value="0">JNO</option>
+                <option value="1">JYES</option>
             </field>
 
             <field
@@ -114,8 +114,8 @@
                     default=""
                     showon="comments_enabled!:0"
             >
-                <option value="1">JYES</option>
                 <option value="0">JNO</option>
+                <option value="1">JYES</option>
             </field>
 
         </fieldset>

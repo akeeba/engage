@@ -158,6 +158,8 @@ akeeba.Engage.Comments.onReplyButton = function (e)
         return false;
     }
 
+    akeeba.Engage.Comments.unhideReplyArea();
+
     var parentId      = akeeba.System.data.get(clickedElement, "akengageid", 0) * 1;
     var inReplyToName = akeeba.System.data.get(clickedElement, "akengagereplyto", 0);
     var form          = document.forms["akengageCommentForm"];
@@ -283,6 +285,23 @@ akeeba.Engage.Comments.loadCommenterInfo = function ()
     }
 };
 
+akeeba.Engage.Comments.onHiderButton = function (e)
+{
+    akeeba.Engage.Comments.unhideReplyArea();
+}
+
+akeeba.Engage.Comments.unhideReplyArea = function()
+{
+    var elFormArea = document.getElementById('akengage-comment-form');
+    var elHider = document.getElementById('akengage-comment-hider');
+
+    elFormArea.style.display = '';
+
+    if (elHider) {
+        elHider.style.display = 'none';
+    }
+}
+
 akeeba.Loader.add(['akeeba.System'], function ()
 {
     akeeba.System.iterateNodes("button.akengage-comment-edit-btn", function (elButton)
@@ -330,6 +349,9 @@ akeeba.Loader.add(['akeeba.System'], function ()
 
     akeeba.System.addEventListener(
         "akengageCommentForm", "submit", akeeba.Engage.Comments.saveCommenterInfo);
+
+    akeeba.System.addEventListener(
+        "akengage-comment-hider-button", "click", akeeba.Engage.Comments.onHiderButton);
 
     akeeba.Engage.Comments.loadCommenterInfo();
 });

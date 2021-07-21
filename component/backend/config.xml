@@ -87,8 +87,8 @@
                 class="btn-group btn-group-yesno"
                 default="0"
         >
-            <option value="1">JYES</option>
             <option value="0">JNO</option>
+            <option value="1">JYES</option>
         </field>
 
         <field
@@ -101,6 +101,19 @@
                 class="input-xxlarge"
                 showon="tos_accept!:0"
         />
+
+        <field
+                name="comments_reply_bad_ux"
+                type="fancyradio"
+                label="COM_ENGAGE_COMMENTS_REPLY_BAD_UX_LABEL"
+                description="COM_ENGAGE_COMMENTS_REPLY_BAD_UX_DESC"
+                class="btn-group btn-group-yesno"
+                default="0"
+        >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
 
         <field
                 name="header_overridable"
@@ -172,8 +185,8 @@
                 default="1"
                 showon="comments_show:1"
         >
-            <option value="1">JYES</option>
             <option value="0">JNO</option>
+            <option value="1">JYES</option>
         </field>
 
         <field
@@ -195,8 +208,8 @@
                 default="1"
                 showon="comments_enabled:1"
         >
-            <option value="1">JYES</option>
             <option value="0">JNO</option>
+            <option value="1">JYES</option>
         </field>
 
         <field
@@ -208,8 +221,8 @@
                 default="1"
                 showon="comments_enabled:1"
         >
-            <option value="1">JYES</option>
             <option value="0">JNO</option>
+            <option value="1">JYES</option>
         </field>
 
     </fieldset>
@@ -240,8 +253,8 @@
                 default="0"
                 showon="filter_mode:htmlpurifier[OR]filter_mode:strict"
         >
-            <option value="1">JYES</option>
             <option value="0">JNO</option>
+            <option value="1">JYES</option>
         </field>
 
         <field
@@ -294,8 +307,8 @@
                 class="btn-group btn-group-yesno"
                 default="1"
         >
-            <option value="1">JYES</option>
             <option value="0">JNO</option>
+            <option value="1">JYES</option>
         </field>
 
         <field
