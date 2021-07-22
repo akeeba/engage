@@ -23,6 +23,7 @@ use Joomla\CMS\Uri\Uri;
 
 $captcha = $this->getCaptchaField();
 $badUx   = $this->container->params->get('comments_reply_bad_ux', 0) == 1;
+$badUx   = $badUx && empty(trim(strip_tags($this->storedComment)));
 
 HTMLHelper::_('behavior.formvalidator');
 ?>
