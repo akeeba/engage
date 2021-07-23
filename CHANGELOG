@@ -1,7 +1,7 @@
 <?php die(); ?>
 Akeeba Engage 2.0.3
 ================================================================================
-+ Option to hide the reply are by default (gh-96)
++ Option to hide the reply area by default (gh-96)
 
 Akeeba Engage 2.0.2
 ================================================================================
