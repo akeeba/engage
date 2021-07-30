@@ -92,6 +92,12 @@ class Pkg_EngageInstallerScript
 	 */
 	public function preflight($type, $parent)
 	{
+		// Do not run on uninstall.
+		if ($type === 'uninstall')
+		{
+			return true;
+		}
+
 		// Check the minimum PHP version
 		if (!version_compare(PHP_VERSION, $this->minimumPHPVersion, 'ge'))
 		{
@@ -150,6 +156,12 @@ class Pkg_EngageInstallerScript
 	 */
 	public function postflight($type, $parent)
 	{
+		// Do not run on uninstall.
+		if ($type === 'uninstall')
+		{
+			return;
+		}
+
 		// Always enable these extensions
 		if (isset($this->extensionsToAlwaysEnable) && !empty($this->extensionsToAlwaysEnable))
 		{

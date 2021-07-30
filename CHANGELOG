@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 2.0.4
+================================================================================
+# [HIGH] Uninstallation broken on Joomla 4 due to different installation script event handling.
+
 Akeeba Engage 2.0.3
 ================================================================================
 + Option to hide the reply area by default (gh-96)
