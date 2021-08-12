@@ -7,8 +7,8 @@
 <extension version="3.9.0" type="plugin" group="engage" method="upgrade">
     <name>PLG_ENGAGE_AKISMET</name>
     <description>PLG_ENGAGE_AKISMET_XML_DESC</description>
-    <version>2.0.3</version>
-    <creationDate>2021-07-26</creationDate>
+    <version>2.0.4</version>
+    <creationDate>2021-08-12</creationDate>
     <author>Akeeba Ltd</author>
     <authorEmail>no-reply@akeeba.com</authorEmail>
     <authorUrl>https://www.akeeba.com</authorUrl>
