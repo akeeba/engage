@@ -17,7 +17,7 @@ There is no intention of supporting non-core content.
 
 ## Features
 
-* Downloads and updates to the component are free of charge. Getting support costs money, though.
+* Downloads and updates to the component are free of charge. WE DO NOT PROVIDE ANY END USER SUPPORT.
 * Comments allow for full HTML, edited using the WYSIWYG editor configured in Joomla. 
 * HTML filtering for comments either by Joomla itself or using the more robust, heavily audited HTML Purifier library.
 * Comments can be filed by logged in users or guests (configurable with Joomla's permissions).
@@ -71,12 +71,13 @@ We do not plan on listing third party language files anywhere on our site or thi
 
 ## Support
 
-Akeeba Engage is currently in beta stage. Limited support will be provided through GitHub issues. However, this is not a permanent solution.
+We do not provide any end user support for this software. We do provide free of charge [Documentation](https://github.com/akeeba/engage/wiki).
 
-Our plan is to provide _paid support_ for issues regarding installing, configuring and using Akeeba Engage once the software reaches a stable version (1.0.0).
+We will accept feature requests _within reason_. In an effort to not waste anybody's time, here is a non–exhaustive list of feature requests we will not consider and why:
 
-Please note that support is meant to be provided in a way to help you overcome issues with the installation, configuration and use of our software. We cannot do the installation and integration work ourselves, nor can we provide support for customising the frontend of the software including but not limited to template and media overrides. We give you the tools to do that but we don't do custom integration and customization work on your behalf. 
+* Requests to change fundamental architectural choices about this extension e.g. that all comments are HTML, that we're using Joomla's WYSIWYG HTML editor, that we only support core articles etc. Fundamental architectural choices are not up for debate or change for obvious reasons (i.e. it would be a different extension, not Akeeba Engage!).
+* Requests which boil down to adding options regarding the appearance or messages. We have intentionally made it possible for you to create standard Joomla template and language overrides, respectively, as a more powerful and flexible alternative. If you prefer drop–downs and checkboxes to template overrides Akeeba Engage is not for you.
+* Any kind of email receiving features such as but not limited to administering, submitting or replying to comments by email. We have experience doing that in our ticket system and we know all the reasons why it sounds like a great idea but it's a maintenance nightmare _for the site owner_. If you really want this feature you should pay for Disqus instead. We are dead serious.
+* Mass–notification of users beyond the emails sent within a comment reply thread. There are performance issues which make such a feature impractical when more than 5–10 people are going to be notified by email. Even if _your_ use case is only limited to this small number of people, for most folks using our extension it will be much higher and cause their sites to fail. Sure we could add a warning… that nobody would read.
 
-Furthermore, kindly note that we cannot advise you on configuring your third party WYSIWYG editor beyond what we have already documented in the Wiki; that's something that is best left to the developer of your WYSIWYG editor for objective reasons.
-
-Finally, please note that we can only provide limited and generic support for core Joomla features such as text filtering and access control (permissions). We can explain how these feature interact with our software and point you to further information – including our public documentation – but we cannot reconfigure or otherwise do extensive work on your site on your behalf.
+Kindly note that whether any requested features will be implemented is up to our sole discretion.
