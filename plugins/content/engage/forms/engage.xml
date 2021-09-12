@@ -54,6 +54,20 @@
             </field>
 
             <field
+                    name="comments_show_article"
+                    type="list"
+                    label="PLG_CONTENT_ENGAGE_COMMENTS_SHOW_ARTICLE_LABEL"
+                    description="PLG_CONTENT_ENGAGE_COMMENTS_SHOW_ARTICLE_DESC"
+                    useglobal="true"
+                    default=""
+                    showon="comments_show!:0"
+            >
+                <option value="0">JHIDE</option>
+                <option value="1">PLG_CONTENT_ENGAGE_OPT_COMMENTS_SHOW_BEFORE</option>
+                <option value="2">PLG_CONTENT_ENGAGE_OPT_COMMENTS_SHOW_AFTER</option>
+            </field>
+
+            <field
                     name="comments_ordering"
                     type="list"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_ORDERING_LABEL"

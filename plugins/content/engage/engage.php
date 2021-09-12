@@ -978,6 +978,19 @@ class plgContentEngage extends CMSPlugin
 			return '';
 		}
 
+		/**
+		 * When Joomla is rendering an article in a Newsflash module it uses the same context as rendering an article
+		 * through com_content (com_content.article). However, we do NOT want the newsflash articles to display comments!
+		 *
+		 * This is an ugly hack around this problem. It's based on the observation that the newsflash module is passing
+		 * its own module options in the $params parameter to this event. As a result it has the `moduleclass_sfx` key
+		 * defined, whereas this key does not exist when rendering an article through com_content.
+		 */
+		if (($params instanceof Registry) && $params->exists('moduleclass_sfx'))
+		{
+			return '';
+		}
+
 		if (empty($row->id ?? 0))
 		{
 			return '';
@@ -1077,8 +1090,18 @@ class plgContentEngage extends CMSPlugin
 			return '';
 		}
 
+		/**
+		 * When Joomla is rendering an article in a Newsflash module it uses the same context as rendering an article
+		 * through com_content (com_content.article). However, we do NOT want the newsflash articles to display comments!
+		 *
+		 * This is an ugly hack around this problem. It's based on the observation that the newsflash module is passing
+		 * its own module options in the $params parameter to this event. As a result it has the `moduleclass_sfx` key
+		 * defined, whereas this key does not exist when rendering an article through com_content.
+		 */
+		$isNewsFlash = ($context === 'com_content.article') && ($params instanceof Registry) && $params->exists('moduleclass_sfx');
+
 		// We need to have a supported context
-		if (!in_array($context, ['com_content.category', 'com_content.featured']))
+		if (!$isNewsFlash && !in_array($context, ['com_content.category', 'com_content.featured']))
 		{
 			return '';
 		}
@@ -1126,7 +1149,11 @@ class plgContentEngage extends CMSPlugin
 			return '';
 		}
 
-		// Am I supposed to display the comments count? Uses the keys comments_show_feature, comments_show_category
+		/**
+		 * Am I supposed to display the comments count?
+		 *
+		 * Uses the keys comments_show_feature, comments_show_category, comments_show_article
+		 */
 		$area              = substr($context, 12);
 		$optionKey         = sprintf("comments_show_%s", $area);
 		$showCommentsCount = $commentParams->get($optionKey, 0);

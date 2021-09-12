@@ -165,6 +165,19 @@
         </field>
 
         <field
+                name="comments_show_article"
+                type="list"
+                label="COM_ENGAGE_COMMENTS_SHOW_ARTICLE_LABEL"
+                description="COM_ENGAGE_COMMENTS_SHOW_ARTICLE_DESC"
+                default="1"
+                showon="comments_show:1"
+        >
+            <option value="0">JHIDE</option>
+            <option value="1">COM_ENGAGE_OPT_COMMENTS_SHOW_BEFORE</option>
+            <option value="2">COM_ENGAGE_OPT_COMMENTS_SHOW_AFTER</option>
+        </field>
+
+        <field
                 name="comments_ordering"
                 type="list"
                 label="COM_ENGAGE_COMMENTS_ORDERING_LABEL"
