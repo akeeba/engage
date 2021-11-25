@@ -2,11 +2,12 @@
 <project version="4">
   <component name="PhpIncludePathManager">
     <include_path>
-      <path value="../fof4/fof" />
       <path value="../../dionysopoulos/joomlatypehints/generated_hints" />
       <path value="../com_datacompliance/component" />
       <path value="../../master/joomla4" />
-      <path value="../fof3/fof" />
+      <path value="$PROJECT_DIR$/component/backend/vendor/ezyang/htmlpurifier" />
+      <path value="$PROJECT_DIR$/component/backend/vendor/composer" />
+      <path value="$USER_HOME$/Sites/boot4/configuration.php" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />

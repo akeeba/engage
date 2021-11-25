@@ -3,7 +3,6 @@ PENDING
 ========================================================================================================
 
 Component
-    Mixins
     Backend
         Dispatcher
         Tables
@@ -48,3 +47,5 @@ Component
     Media: joomla.assets.json
     Service provider
     HTML Service
+    Mixins
+    SQL scripts

@@ -19,7 +19,7 @@ $user = $this->container->platform->getUser();
             @fieldtitle('key')
         </label>
 
-        {{ \FOF40\Html\FEFHelper\BrowseView::genericSelect('key', \Akeeba\Engage\Admin\Helper\Select::emailTemplateKey(), $item->key, ['fof.autosubmit' => false, 'translate' => false]) }}
+        {{ \FOF40\Html\FEFHelper\BrowseView::genericSelect('key', \Akeeba\Component\Engage\Administrator\Helper\Select::emailTemplateKey(), $item->key, ['fof.autosubmit' => false, 'translate' => false]) }}
 
         <p class="akeeba-help-text">
             @lang('COM_ENGAGE_EMAILTEMPLATES_FIELD_KEY_DESC')

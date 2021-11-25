@@ -13,7 +13,7 @@ defined('_JEXEC') or die();
  * Called from default.php
  */
 
-use Akeeba\Engage\Admin\Helper\Format;
+use Akeeba\Component\Engage\Administrator\Helper\Format;
 use FOF40\Date\Date;
 use Joomla\CMS\Language\Text;
 

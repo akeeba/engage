@@ -1,34 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="joomla.datasource" uuid="df73d0a6-c384-4d2f-843c-ece636682b1b">
+    <data-source source="LOCAL" name="joomla.datasource" uuid="e1aac8b3-42c9-454e-9c48-fa17310030f4">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>
-      <remarks>$PROJECT_DIR$/configuration.php</remarks>
+      <remarks>$USER_HOME$/Sites/boot4/configuration.php</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://127.0.0.1:3306/dev3</jdbc-url>
-      <driver-properties>
-        <property name="serverTimezone" value="Europe/Athens" />
-      </driver-properties>
-    </data-source>
-    <data-source source="LOCAL" name="dionysopoulos@localhost" uuid="aa618e84-4a0e-4de3-bdf5-afd57af2cb2d">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/dionysopoulos</jdbc-url>
-    </data-source>
-    <data-source source="LOCAL" name="dev4" uuid="dc63912f-1333-41da-afd2-4c5f5bec08fa">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/dev4</jdbc-url>
-    </data-source>
-    <data-source source="LOCAL" name="boot@localhost" uuid="0e4ab3e9-b95e-4514-a85b-1b4cb63882dd">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/boot</jdbc-url>
+      <jdbc-url>jdbc:mysql://127.0.0.1:3306/boot4</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
 </project>

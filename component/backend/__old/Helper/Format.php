@@ -9,6 +9,7 @@ namespace Akeeba\Engage\Admin\Helper;
 
 defined('_JEXEC') or die;
 
+use Akeeba\Component\Engage\Administrator\Helper\BBCode;
 use Akeeba\Engage\Site\Helper\Filter;
 use FOF40\Container\Container;
 

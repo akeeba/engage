@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Engage\Admin\Helper;
+namespace Akeeba\Component\Engage\Administrator\Helper;
 
 defined('_JEXEC') or die;
 

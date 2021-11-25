@@ -7,7 +7,7 @@
 
 /** @var \Akeeba\Engage\Admin\View\EmailTemplates\Html $this */
 
-use Akeeba\Engage\Admin\Helper\Select;
+use Akeeba\Component\Engage\Administrator\Helper\Select;
 
 $keyOptions = Select::emailTemplateKey(true);
 ?>

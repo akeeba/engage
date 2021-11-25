@@ -1,4 +1,6 @@
 /**
- * @var ${TYPE_HINT}
+ * Short description
+ *
+ * @var   ${TYPE_HINT}
  * @since version
  */

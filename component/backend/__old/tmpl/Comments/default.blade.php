@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-use Akeeba\Engage\Admin\Helper\Format;use Akeeba\Engage\Site\Helper\Filter;use Akeeba\Engage\Site\Helper\Meta;use Joomla\CMS\Environment\Browser;use Joomla\CMS\Language\Text;use Joomla\CMS\Uri\Uri;
+use Akeeba\Component\Engage\Administrator\Helper\Format;use Akeeba\Engage\Site\Helper\Filter;use Akeeba\Engage\Site\Helper\Meta;use Joomla\CMS\Environment\Browser;use Joomla\CMS\Language\Text;use Joomla\CMS\Uri\Uri;
 
 /** @var \Akeeba\Engage\Admin\View\Comments\Html $this */
 
@@ -71,7 +71,7 @@ $this->showBrowseOrderBy  = false;
     </div>
 
     <div class="akeeba-filter-element akeeba-form-group">
-        @selectfilter('enabled', \Akeeba\Engage\Admin\Helper\Select::published(), 'JENABLED', ['id' => 'filter_published', 'class' => 'akeebaGridViewAutoSubmitOnChange'])
+        @selectfilter('enabled', \Akeeba\Component\Engage\Administrator\Helper\Select::published(), 'JENABLED', ['id' => 'filter_published', 'class' => 'akeebaGridViewAutoSubmitOnChange'])
     </div>
 
     <div class="akeeba-filter-element akeeba-form-group">
@@ -180,7 +180,7 @@ $this->showBrowseOrderBy  = false;
                     </div>
                     @endunless
                 @endif
-                {{ $purifier->purify(\Akeeba\Engage\Admin\Helper\Format::processCommentTextForDisplay($item->body)) }}
+                {{ $purifier->purify(\Akeeba\Component\Engage\Administrator\Helper\Format::processCommentTextForDisplay($item->body)) }}
                 <div class="engage-edit-link">
                     <a href="@route('index.php?option=com_engage&view=Comments&task=edit&id=' . $item->getId())">
                         @lang('JGLOBAL_EDIT')
@@ -230,7 +230,7 @@ $this->showBrowseOrderBy  = false;
                 {{ (new FOF40\Date\Date($item->created_on))->format(\Joomla\CMS\Language\Text::_('DATE_FORMAT_LC2'), true, true) }}
             </td>
             <td>
-                {{ \Akeeba\Engage\Admin\Helper\Grid::published($item->enabled, $i, '', $canChange) }}
+                {{ \Akeeba\Component\Engage\Administrator\Helper\Grid::published($item->enabled, $i, '', $canChange) }}
             </td>
         </tr>
     @endforeach
