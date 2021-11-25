@@ -4,15 +4,11 @@ PENDING
 
 Component
     Backend
-        Models
-            Upgrade model
-            Update
-            Comments / Comment
-        Email templates helper
         MVC
             EmailTemplates
             Comments
             Comment
+        Email templates helper
     Frontend
         Dispatcher
         MVC
@@ -51,3 +47,4 @@ Component
     SQL scripts
     Backend
         Dispatcher
+        Upgrade & Update models

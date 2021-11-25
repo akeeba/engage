@@ -36,15 +36,6 @@
 		<language tag="es-ES">es-ES/com_engage.ini</language>
 	</languages>
 
-	<!-- Media files -->
-	<media destination="com_engage" folder="media">
-		<folder>css</folder>
-		<folder>images</folder>
-		<folder>js</folder>
-		<filename>index.html</filename>
-		<filename>joomla.asset.json</filename>
-	</media>
-
 	<!-- Administrator back-end section -->
 	<administration>
 		<!-- Administration menu -->
@@ -88,6 +79,31 @@
 		</languages>
 	</administration>
 
-	<!-- Installation / uninstallation script file -->
-	<scriptfile>script.com_engage.php</scriptfile>
+	<!-- Media files -->
+	<media destination="com_engage" folder="media">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+		<filename>index.html</filename>
+		<filename>joomla.asset.json</filename>
+	</media>
+
+	<!-- Database tables installation, uninstallation and update -->
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+
+	<uninstall>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+
+	<update>
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+		</schemas>
+	</update>
 </extension>

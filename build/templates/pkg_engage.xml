@@ -5,8 +5,8 @@
   ~ @license   GNU General Public License version 3, or later
   -->
 
-<extension version="3.9.0" type="package" method="upgrade">
-    <name>Akeeba Engage package</name>
+<extension version="4.0.0" type="package" method="upgrade">
+    <name>pkg_engage</name>
     <version>##VERSION##</version>
     <creationDate>##DATE##</creationDate>
 
@@ -22,7 +22,7 @@
     <copyright>Copyright (c)2020-2021 Akeeba Ltd</copyright>
     <license>GNU GPL v3 or later</license>
 
-    <description>Akeeba Engage installation package v.##VERSION##</description>
+    <description>Akeeba Engage installation package</description>
 
     <!-- List of extensions to install -->
     <files>
@@ -31,6 +31,9 @@
 
         <!-- Plugins: actionlog -->
         <file type="plugin" group="actionlog" id="engage">plg_actionlog_engage.zip</file>
+
+        <!-- Plugins: console -->
+        <file type="plugin" group="console" id="engage">plg_console_engage.zip</file>
 
         <!-- Plugins: content -->
         <file type="plugin" group="content" id="engage">plg_content_engage.zip</file>
