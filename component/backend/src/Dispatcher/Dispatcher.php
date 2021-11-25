@@ -25,7 +25,7 @@ class Dispatcher extends ComponentDispatcher
 	 * The prefixes of each string can be preset, style or script.
 	 *
 	 * @var   string[]
-	 * @since 5.0.0
+	 * @since 3.0.0
 	 */
 	protected $commonMediaKeys = ['preset:com_engage.backend'];
 
@@ -33,7 +33,7 @@ class Dispatcher extends ComponentDispatcher
 	 * The default controller (and view), if none is specified in the request.
 	 *
 	 * @var   string
-	 * @since 5.0.0
+	 * @since 3.0.0
 	 */
 	protected $defaultController = 'controlpanel';
 
@@ -43,7 +43,7 @@ class Dispatcher extends ComponentDispatcher
 	 * IMPORTANT! The keys must be in ALL LOWERCASE.
 	 *
 	 * @var   array
-	 * @since 5.0.0
+	 * @since 3.0.0
 	 */
 	protected $viewMap = [];
 
@@ -94,7 +94,7 @@ class Dispatcher extends ComponentDispatcher
 	 * easier and more consistent for us to handle.
 	 *
 	 * @return  void
-	 * @since   5.0.0
+	 * @since   3.0.0
 	 */
 	protected function applyViewAndController(): void
 	{
@@ -135,7 +135,7 @@ class Dispatcher extends ComponentDispatcher
 	 * Preload common static media files (CSS, JS) used throughout this side of the application.
 	 *
 	 * @return  void
-	 * @since   5.0.0
+	 * @since   3.0.0
 	 * @internal
 	 */
 	final protected function loadCommonStaticMedia(): void
@@ -185,7 +185,7 @@ class Dispatcher extends ComponentDispatcher
 	 * language file and the current application's language file.
 	 *
 	 * @return  void
-	 * @since   5.0.0
+	 * @since   3.0.0
 	 * @internal
 	 */
 	final protected function loadLanguage(): void
@@ -215,7 +215,7 @@ class Dispatcher extends ComponentDispatcher
 	 * Loads the version.php file. If it doesn't exist, fakes the version constants to simulate a dev release.
 	 *
 	 * @return  void
-	 * @since   5.0.0
+	 * @since   3.0.0
 	 * @internal
 	 */
 	final protected function loadVersion(): void
@@ -245,7 +245,7 @@ class Dispatcher extends ComponentDispatcher
 	 *
 	 * @return  string
 	 *
-	 * @since   5.0.0
+	 * @since   3.0.0
 	 * @internal
 	 */
 	protected function mapView(string $view): string
@@ -259,7 +259,7 @@ class Dispatcher extends ComponentDispatcher
 	 * Executes before dispatching a request made to this component
 	 *
 	 * @return  void
-	 * @since   5.0.0
+	 * @since   3.0.0
 	 */
 	protected function onBeforeDispatch(): void
 	{

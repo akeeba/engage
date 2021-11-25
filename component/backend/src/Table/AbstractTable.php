@@ -18,7 +18,7 @@ use Joomla\Event\DispatcherInterface;
 /**
  * Common class for all table objects
  *
- * @since  5.0.0
+ * @since  3.0.0
  */
 abstract class AbstractTable extends Table
 {
