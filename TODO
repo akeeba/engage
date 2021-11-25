@@ -1,0 +1,49 @@
+=============================================================================================================
+PENDING
+========================================================================================================
+
+Component
+    Mixins
+    service provider
+    Backend
+        Dispatcher
+        Tables
+            Comments
+        Models
+            Upgrade model
+            Update
+            Comments / Comment
+        Email templates helper
+        MVC
+            EmailTemplates
+            Comments
+            Comment
+    Frontend
+        Dispatcher
+        MVC
+            Comments
+CLI Scripts
+    Console plugin
+    Clean Spam
+    Create Demo Comments
+Plugins
+    Content – Engage
+    User – Engage
+    Engage – Akismet
+    Engage – Email
+    Engage – Gravatar
+    System – Engage Cache
+    Actionlog – Engage
+    DataCompliance – Engage
+    Privacy – Engage
+Documentation
+    Convert from Wiki using Pandoc
+
+=============================================================================================================
+DONE
+=============================================================================================================
+Component
+    Move language
+    Basic folder structure
+    XML Manifest
+    Media: joomla.assets.json

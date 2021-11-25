@@ -140,3 +140,8 @@
     content: '\0049';
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  @import 'sources/dark';
+  @import 'sources/admin_dark';
+}

@@ -1,0 +1,73 @@
+{
+	"$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+	"name": "com_engage",
+	"version": "3.0.0",
+	"description": "Akeeba Engage",
+	"license": "GPL-3.0-or-later",
+	"assets": [
+		{
+			"name": "com_engage.amp",
+			"description": "CSS for AMP pages",
+			"type": "style",
+			"uri": "com_engage/amp.css"
+		},
+
+		{
+			"name": "com_engage.backend",
+			"description": "CSS for backend pages",
+			"type": "style",
+			"uri": "com_engage/backend.css"
+		},
+
+		{
+			"name": "com_engage.comments",
+			"description": "CSS for the comments in the frontend",
+			"type": "style",
+			"uri": "com_engage/comments.css"
+		},
+
+		{
+			"name": "com_engage.backend",
+			"description": "Backend JavaScript",
+			"type": "script",
+			"uri": "com_engage/backend.min.js",
+			"dependencies": [
+				"core"
+			],
+			"attributes": {
+				"defer": true
+			}
+		},
+
+		{
+			"name": "com_engage.comments",
+			"description": "Comments JavaScript",
+			"type": "script",
+			"uri": "com_engage/comments.min.js",
+			"dependencies": [
+				"core"
+			],
+			"attributes": {
+				"defer": true
+			}
+		},
+
+		{
+			"name": "com_engage.backend",
+			"type": "preset",
+			"dependencies": [
+				"com_engage.backend#style",
+				"com_engage.backend#script"
+			]
+		},
+
+		{
+			"name": "com_engage.comments",
+			"type": "preset",
+			"dependencies": [
+				"com_engage.comments#style",
+				"com_engage.comments#script"
+			]
+		}
+	]
+}

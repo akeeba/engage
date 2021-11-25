@@ -7,40 +7,33 @@
 
 <extension type="component" version="3.9.0" method="upgrade">
 	<name>ENGAGE</name>
-	<version>2.0.5</version>
 	<creationDate>2021-10-26</creationDate>
-
 	<author>Akeeba Ltd</author>
 	<authorEmail>no-reply@akeeba.com</authorEmail>
 	<authorUrl>https://www.akeeba.com</authorUrl>
-
 	<copyright>Copyright (c)2020-2021 Akeeba Ltd</copyright>
 	<license>GNU/GPL v3 or any later version</license>
-
+	<version>2.0.5</version>
 	<description>COM_ENGAGE_XML_DESCRIPTION</description>
+	<namespace path="src">Akeeba\Component\Engage</namespace>
 
 	<!-- Public front end files -->
 	<files folder="frontend">
-		<folder>Controller</folder>
-		<folder>Dispatcher</folder>
-		<folder>Helper</folder>
-		<folder>Model</folder>
+		<folder>language</folder>
+		<folder>src</folder>
 		<folder>tmpl</folder>
-		<folder>View</folder>
-
-		<filename>engage.php</filename>
 
 		<filename>.htaccess</filename>
 		<filename>web.config</filename>
 	</files>
 
 	<!-- Front end translation files -->
-	<languages folder="language/frontend">
-		<language tag="de-DE">de-DE/de-DE.com_engage.ini</language>
-		<language tag="en-GB">en-GB/en-GB.com_engage.ini</language>
-		<language tag="el-GR">el-GR/el-GR.com_engage.ini</language>
-		<language tag="fr-FR">fr-FR/fr-FR.com_engage.ini</language>
-		<language tag="es-ES">es-ES/es-ES.com_engage.ini</language>
+	<languages folder="frontend/language">
+		<language tag="en-GB">en-GB/com_engage.ini</language>
+		<language tag="de-DE">de-DE/com_engage.ini</language>
+		<language tag="el-GR">el-GR/com_engage.ini</language>
+		<language tag="fr-FR">fr-FR/com_engage.ini</language>
+		<language tag="es-ES">es-ES/com_engage.ini</language>
 	</languages>
 
 	<!-- Media files -->
@@ -49,6 +42,7 @@
 		<folder>images</folder>
 		<folder>js</folder>
 		<filename>index.html</filename>
+		<filename>joomla.asset.json</filename>
 	</media>
 
 	<!-- Administrator back-end section -->
@@ -58,40 +52,39 @@
 
 		<!-- Back-end files -->
 		<files folder="backend">
-			<folder>Controller</folder>
-			<folder>Dispatcher</folder>
-			<folder>fields</folder>
-			<folder>Helper</folder>
-			<folder>Model</folder>
+			<folder>forms</folder>
+			<folder>language</folder>
+			<folder>layouts</folder>
+			<folder>services</folder>
+			<folder>sql</folder>
 			<folder>Toolbar</folder>
+			<folder>src</folder>
 			<folder>tmpl</folder>
 			<folder>vendor</folder>
-			<folder>View</folder>
-
-			<folder>sql</folder>
 
 			<filename>access.xml</filename>
 			<filename>config.xml</filename>
-			<filename>fof.xml</filename>
-
-			<filename>engage.php</filename>
 
 			<filename>.htaccess</filename>
 			<filename>web.config</filename>
 		</files>
 
 		<!-- Back-end translation files -->
-		<languages folder="language/backend">
-			<language tag="de-DE">de-DE/de-DE.com_engage.ini</language>
-			<language tag="de-DE">de-DE/de-DE.com_engage.sys.ini</language>
-			<language tag="en-GB">en-GB/en-GB.com_engage.ini</language>
-			<language tag="en-GB">en-GB/en-GB.com_engage.sys.ini</language>
-			<language tag="el-GR">el-GR/el-GR.com_engage.ini</language>
-			<language tag="el-GR">el-GR/el-GR.com_engage.sys.ini</language>
-			<language tag="fr-FR">fr-FR/fr-FR.com_engage.ini</language>
-			<language tag="fr-FR">fr-FR/fr-FR.com_engage.sys.ini</language>
-			<language tag="es-ES">es-ES/es-ES.com_engage.ini</language>
-			<language tag="es-ES">es-ES/es-ES.com_engage.sys.ini</language>
+		<languages folder="backend/language">
+			<language tag="en-GB">en-GB/com_engage.ini</language>
+			<language tag="en-GB">en-GB/com_engage.sys.ini</language>
+
+			<language tag="de-DE">de-DE/com_engage.ini</language>
+			<language tag="de-DE">de-DE/com_engage.sys.ini</language>
+
+			<language tag="el-GR">el-GR/com_engage.ini</language>
+			<language tag="el-GR">el-GR/com_engage.sys.ini</language>
+
+			<language tag="fr-FR">fr-FR/com_engage.ini</language>
+			<language tag="fr-FR">fr-FR/com_engage.sys.ini</language>
+
+			<language tag="es-ES">es-ES/com_engage.ini</language>
+			<language tag="es-ES">es-ES/com_engage.sys.ini</language>
 		</languages>
 	</administration>
 

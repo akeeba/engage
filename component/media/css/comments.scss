@@ -261,3 +261,12 @@ section.akengage-outer-container {
     display: block;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  section.akengage-outer-container {
+    background-color: darken($grey, 15%);
+    color: $light-grey;
+
+    @import 'sources/site_dark';
+  }
+}
