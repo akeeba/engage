@@ -4,7 +4,6 @@ PENDING
 
 Component
     Mixins
-    service provider
     Backend
         Dispatcher
         Tables
@@ -47,3 +46,5 @@ Component
     Basic folder structure
     XML Manifest
     Media: joomla.assets.json
+    Service provider
+    HTML Service
