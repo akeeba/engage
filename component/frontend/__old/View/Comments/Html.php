@@ -354,7 +354,7 @@ class Html extends DataHtml
 
 		$this->pageParams = $this->pageParams ?? new Registry();
 
-		// Script options and langauge keys
+		// Script options and language keys
 		$protoURL = 'index.php?option=com_engage&view=Comments&task=%s&id=';
 		$platform->addScriptOptions('akeeba.Engage.Comments.returnURL', base64_encode(Uri::getInstance()->toString()));
 		$platform->addScriptOptions('akeeba.Engage.Comments.editURL', Route::_(sprintf($protoURL, 'edit'), false, Route::TLS_IGNORE, true));

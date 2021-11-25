@@ -7,6 +7,7 @@
 
 namespace Akeeba\Engage\Admin\Model;
 
+use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use DateInterval;
 use Exception;
 use FOF40\Container\Container;
@@ -165,37 +166,6 @@ class Comments extends DataModel
 		return $ret;
 	}
 
-	/** @inheritDoc */
-	public function check()
-	{
-		parent::check();
-
-		// Make sure we have EITHER a user OR both an email and full name
-		$name = $this->getFieldValue('name');
-
-		if (!empty($name) && !empty($this->email))
-		{
-			$this->created_by = 0;
-		}
-
-		if (empty($name) || empty($this->email))
-		{
-			$this->setFieldValue('name', null);
-			$this->email = null;
-		}
-
-		if (empty($this->created_by) && empty($name) && empty($this->email))
-		{
-			throw new RuntimeException(Text::_('COM_ENGAGE_COMMENTS_ERR_NO_NAME_OR_EMAIL'));
-		}
-
-		// If we have a guest user, make sure we don't have another user with the same email address
-		if (($this->created_by <= 0) && !empty($this->getUserIdByEmail($this->email)))
-		{
-			throw new RuntimeException(Text::sprintf('COM_ENGAGE_COMMENTS_ERR_EMAIL_IN_USE', $this->email));
-		}
-	}
-
 	/**
 	 * Return a Joomla user object for the user that filed the comment.
 	 *
@@ -207,10 +177,10 @@ class Comments extends DataModel
 	{
 		if ($this->created_by)
 		{
-			return $this->container->platform->getUser($this->created_by);
+			return UserFetcher::getUser($this->created_by);
 		}
 
-		$user        = $this->container->platform->getUser(0);
+		$user        = UserFetcher::getUser(0);
 		$user->name  = $this->getFieldValue('name');
 		$user->email = $this->email;
 

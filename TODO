@@ -4,8 +4,6 @@ PENDING
 
 Component
     Backend
-        Tables
-            Comments
         Models
             Upgrade model
             Update
@@ -35,6 +33,9 @@ Plugins
     Privacy – Engage
 Documentation
     Convert from Wiki using Pandoc
+
+New features
+    User profile custom field as avatar source (maybe a plugin...?)
 
 =============================================================================================================
 DONE
