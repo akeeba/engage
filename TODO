@@ -4,7 +4,6 @@ PENDING
 
 Component
     Backend
-        Dispatcher
         Tables
             Comments
         Models
@@ -49,3 +48,5 @@ Component
     HTML Service
     Mixins
     SQL scripts
+    Backend
+        Dispatcher
