@@ -8,7 +8,6 @@
 namespace Akeeba\Component\Engage\Administrator\Table;
 
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
-use Akeeba\Component\Engage\Administrator\Table\Mixin\AssertionAware;
 use Akeeba\Component\Engage\Administrator\Table\Mixin\CreateModifyAware;
 use Joomla\CMS\Language\Text;
 use Joomla\Database\DatabaseDriver;
@@ -17,6 +16,25 @@ use RuntimeException;
 
 defined('_JEXEC') or die;
 
+/**
+ * Table class for Akeeba Engage Comment records
+ *
+ * @property int         $id          Comment ID
+ * @property int         $parent_id   Parent comment ID
+ * @property int         $asset_id    Asset ID being commented on
+ * @property string      $body        Comment body
+ * @property string|null $name        Commenter's name. Only used when created_by is 0.
+ * @property string|null $email       Commenter's email address. Only used when created_by is 0.
+ * @property string|null $ip          IP address of the visitor leaving the comment.
+ * @property string      $user_agent  User Agent string of the browser of the visitor leaving the comment.
+ * @property int         $enabled     Is the comment published?
+ * @property string|null $created     When was the comment created?
+ * @property int|null    $created_by  User ID of the user who created the comment, 0 for guest comments.
+ * @property string|null $modified    When was the comment modified?
+ * @property int|null    $modified_by User ID of the user who modified the comment.
+ *
+ * @since 3.0.0
+ */
 class CommentTable extends AbstractTable
 {
 	use CreateModifyAware
