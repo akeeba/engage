@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   AkeebaEngage
+  ~ @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+<form addfieldprefix="Akeeba\Component\Engage\Administrator\Field">
+    <fields name="filter">
+        <field
+                name="search"
+                type="text"
+                inputmode="search"
+                label="JSEARCH_FILTER"
+                hint="JSEARCH_FILTER"
+                default=""
+        />
+
+        <field
+                name="enabled"
+                type="status"
+                optionsFilter="0,1"
+                label="JENABLED"
+                description="JFIELD_ENABLED_DESC"
+                class="engageCommonEventsOnChangeSubmit"
+                default=""
+        >
+            <option value="">JOPTION_SELECT_PUBLISHED</option>
+            <option value="-2">COM_ENGAGE_COMMENT_ENABLED_OPT_SPAM</option>
+        </field>
+
+        <field
+                name="since"
+                type="calendar"
+                label="COM_ENGAGE_COMMENTS_SINCE_LABEL"
+                description="COM_ENGAGE_COMMENTS_SINCE_DESC"
+                hint="COM_ENGAGE_COMMENTS_SINCE_LABEL"
+                translateformat="true"
+                showtime="true"
+                filter="user_utc"
+                default=""
+        />
+
+        <field
+                name="to"
+                type="calendar"
+                label="COM_ENGAGE_COMMENTS_TO_LABEL"
+                description="COM_ENGAGE_COMMENTS_TO_DESC"
+                hint="COM_ENGAGE_COMMENTS_TO_LABEL"
+                translateformat="true"
+                showtime="true"
+                filter="user_utc"
+                default=""
+        />
+    </fields>
+    <fields name="list">
+        <field
+                name="fullordering"
+                type="list"
+                label="JGLOBAL_SORT_BY"
+                statuses="*,0,1"
+                class="engageCommonEventsOnChangeSubmit"
+                default="modified DESC"
+                validate="options"
+        >
+            <option value="">JGLOBAL_SORT_BY</option>
+            <option value="t.id ASC">JGRID_HEADING_ID_ASC</option>
+            <option value="t.id DESC">JGRID_HEADING_ID_DESC</option>
+            <option value="user_name ASC">JAUTHOR_ASC</option>
+            <option value="user_name DESC">JAUTHOR_DESC</option>
+            <option value="t.state ASC">JSTATUS_ASC</option>
+            <option value="t.state DESC">JSTATUS_DESC</option>
+            <option value="created ASC">JDATE_ASC</option>
+            <option value="created DESC">JDATE_DESC</option>
+        </field>
+
+        <field
+                name="limit"
+                type="limitbox"
+                label="JGLOBAL_LIST_LIMIT"
+                default="25"
+                class="atsCommonEventsOnChangeSubmit"
+        />
+    </fields>
+
+</form>
