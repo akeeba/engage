@@ -8,8 +8,12 @@
 namespace Akeeba\Component\Engage\Administrator\Table;
 
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
+use Akeeba\Component\Engage\Administrator\Model\CommentsModel;
 use Akeeba\Component\Engage\Administrator\Table\Mixin\CreateModifyAware;
+use Exception;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Event\DispatcherInterface;
 use RuntimeException;
@@ -42,6 +46,14 @@ class CommentTable extends AbstractTable
 		CreateModifyAware::onBeforeStore as onBeforeStoreCreateModifyAware;
 	}
 
+	/**
+	 * Object constructor.
+	 *
+	 * @param   DatabaseDriver            $db          DatabaseDriver object.
+	 * @param   DispatcherInterface|null  $dispatcher  Event dispatcher for this table
+	 *
+	 * @since   3.0.0
+	 */
 	public function __construct(DatabaseDriver $db, DispatcherInterface $dispatcher = null)
 	{
 		parent::__construct('#__engage_comments', 'id', $db, $dispatcher);
@@ -49,7 +61,68 @@ class CommentTable extends AbstractTable
 		$this->setColumnAlias('published', 'enabled');
 	}
 
-	protected function onBeforeCheck()
+	/**
+	 * Runs after deleting a comment. Used to automatically delete all child comments as well.
+	 *
+	 * @param   bool  $result  Was the comment deleted?
+	 * @param   int   $pk      Primary Key (ID) of the comment deleted
+	 *
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
+	protected function onAfterDelete(bool &$result, int $pk): void
+	{
+		if (!$result)
+		{
+			return;
+		}
+
+		// Get the child comments and delete them as well
+		$component = Factory::getApplication()->bootComponent('com_engage');
+
+		if (!$component instanceof MVCFactoryServiceInterface)
+		{
+			return;
+		}
+
+		$factory       = $component->getMVCFactory();
+		/** @var CommentsModel $commentsModel */
+		$commentsModel = $factory->createModel('Comments', 'Administrator', [
+			'ignore_request' => true,
+		]);
+
+		$commentsModel->setState('filter.parent_id', $pk);
+		$commentsModel->setState('list.limit', 30);
+
+		while (true)
+		{
+			$commentsSlice = $commentsModel->getItems();
+
+			if (empty($commentsSlice))
+			{
+				break;
+			}
+
+			$ids = array_map(function ($x) {
+				return $x->id;
+			}, $commentsSlice);
+
+			$table = clone $this;
+			$table->reset();
+
+			foreach ($ids as $id)
+			{
+				$table->delete($id);
+			}
+		}
+	}
+
+	/**
+	 * Runs before checking the table object's data for validity. Performs custom checks.
+	 *
+	 * @since   3.0.0
+	 */
+	protected function onBeforeCheck(): void
 	{
 		// Make sure we have EITHER a user OR both an email and full name
 		if (!empty($this->name) && !empty($this->email))
