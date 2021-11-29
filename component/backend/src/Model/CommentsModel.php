@@ -429,6 +429,13 @@ class CommentsModel extends ListModel
 				$query->where($db->quoteName('c.id') . ' = :filter_search')
 					->bind(':filter_search', $fsValue, ParameterType::INTEGER);
 			}
+			if (substr($fltSearch, 0, 3) === 'ip:')
+			{
+				$fsValue = '%' . substr($fltSearch, 3) . '%';
+
+				$query->where($db->quoteName('c.ip') . ' LIKE :filter_search')
+					->bind(':filter_search', $fsValue, ParameterType::INTEGER);
+			}
 			elseif (substr($fltSearch, 0, 5) === 'user:')
 			{
 				$fltCreatedBy = null;
