@@ -53,11 +53,25 @@
 		},
 
 		{
+			"name": "com_engage.events",
+			"description": "Common events handling JavaScript",
+			"type": "script",
+			"uri": "com_engage/events.min.js",
+			"dependencies": [
+				"core"
+			],
+			"attributes": {
+				"defer": true
+			}
+		},
+
+		{
 			"name": "com_engage.backend",
 			"type": "preset",
 			"dependencies": [
 				"com_engage.backend#style",
-				"com_engage.backend#script"
+				"com_engage.backend#script",
+				"com_engage.events#script"
 			]
 		},
 
