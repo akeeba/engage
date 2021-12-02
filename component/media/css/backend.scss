@@ -5,7 +5,24 @@
  */
 
 @import "sources/variables";
-@import 'sources/joomla';
+
+// Use the "Akeeba Products" font for a vector logo
+.icon-engage,
+.icon-engage-j4 {
+  &:before {
+    font-family: 'Akeeba Products' !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    line-height: 1 !important;
+
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    -moz-osx-font-smoothing: grayscale;
+
+    content: '\0049';
+  }
+}
 
 [class ^= "icon-akengage"], [class ^= "icon-akengage"]:before {
   color: black !important;
@@ -27,121 +44,6 @@
 .icon-akengage-reportspam:before { content: "\f100"; }
 .icon-akengage-reportham:before { content: "\f42c"; }
 
-#akeeba-renderer-fef {
-  .engage-userfield {
-    .engage-usersfield-avatar {
-      margin: 0 .5em .25em 0;
-    }
-
-    .engage-usersfield-usertype {
-      padding: .25em .5em;
-
-      .akion-star {
-        color: $orange;
-      }
-
-      .akion-person {
-        color: $green;
-      }
-
-      .akion-person-stalker {
-        color: $grey;
-      }
-    }
-
-    .engage-usersfield-name {
-      font-weight: bold;
-    }
-
-    .engage-usersfield-username {
-      color: darken($green, 20%);
-    }
-
-    .engage-usersfield-email {
-      display: block;
-    }
-  }
-
-  .engage_ip {
-    font-family: Consolas, Menlo, monospace;
-    font-size: 95%;
-  }
-
-  tr {
-    vertical-align: top;
-  }
-
-  a.engage-filter-by-content {
-    display: inline-block;
-    padding: 0 .75em;
-    min-width: 2em;
-    height: 2em;
-    font-size: 95%;
-    border-radius: 5px;
-    background-color: $grey;
-    color: $white;
-    line-height: 1.9;
-    text-align: center;
-    text-decoration: none !important;
-
-    &:after {
-      content: "";
-      display: block;
-      margin-left: .75em;
-      width: 0;
-      height: 0;
-      border-top: .5em solid $grey;
-      border-right: .5em solid transparent;
-    }
-  }
-
-  .engage-in-reply-to {
-    font-size: 105%;
-    color: $grey;
-    margin-bottom: 0.5em;
-  }
-
-  div.engage-content-title {
-    a {
-      font-weight: bold;
-      text-decoration: none;
-    }
-  }
-
-  .engage-sr-only {
-    border: 0;
-    clip: rect(1px, 1px, 1px, 1px);
-    clip-path: inset(50%);
-    -webkit-clip-path: inset(50%);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-    word-wrap: normal !important;
-  }
-}
-
-// Use the "Akeeba Products" font for a vector logo
-.icon-engage,
-.icon-engage-j4 {
-  &:before {
-    font-family: 'Akeeba Products' !important;
-    font-style: normal !important;
-    font-weight: normal !important;
-    line-height: 1 !important;
-
-    display: inline-block;
-    -webkit-font-smoothing: antialiased;
-    position: relative;
-    -moz-osx-font-smoothing: grayscale;
-
-    content: '\0049';
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  @import 'sources/dark';
-  @import 'sources/admin_dark';
+.comEngageLinkExternal:before {
+  content: unset !important;
 }

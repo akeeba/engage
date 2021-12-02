@@ -10,7 +10,7 @@ namespace Akeeba\Engage\Site\View\Comments;
 defined('_JEXEC') or die();
 
 use Akeeba\Component\Engage\Administrator\Helper\Format;
-use Akeeba\Engage\Site\Helper\Meta;
+use Akeeba\Component\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Site\Model\Comments;
 use DateTimeZone;
 use Exception;

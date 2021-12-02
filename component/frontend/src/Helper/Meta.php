@@ -5,16 +5,23 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Engage\Site\Helper;
+namespace Akeeba\Component\Engage\Site\Helper;
 
-use Akeeba\Engage\Admin\Model\Comments;
+use Akeeba\Component\Engage\Administrator\Model\CommentsModel;
+use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use DateInterval;
 use Exception;
-use FOF40\Container\Container;
+use InvalidArgumentException;
 use Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
+use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
+use Joomla\Database\DatabaseDriver;
+use Joomla\Event\Event;
 use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die();
@@ -22,25 +29,11 @@ defined('_JEXEC') or die();
 final class Meta
 {
 	/**
-	 * A temporary instance of the component's container
-	 *
-	 * @var  Container|null
-	 */
-	private static $container = null;
-
-	/**
 	 * Cached results of resource metadata per asset ID
 	 *
 	 * @var  array
 	 */
 	private static $cachedMeta = [];
-
-	/**
-	 * Number of comments per asset ID
-	 *
-	 * @var  int[]
-	 */
-	private static $numCommentsPerAsset = [];
 
 	/**
 	 * IDs of comments per asset in the same order they are paginated in the front-end
@@ -50,85 +43,19 @@ final class Meta
 	private static $commentIDsPerAsset = [];
 
 	/**
-	 * Returns the metadata of an asset.
+	 * The MVC Factory object for com_engage
 	 *
-	 * This method goes through the onAkeebaEngageGetAssetMeta plugin event, allowing different plugins to return
-	 * information about the asset IDs they recognize. The results are cached to avoid expensive roundtrips to the
-	 * Joomla plugin event system and the database.
-	 *
-	 * The returned keys are:
-	 *
-	 * * `type`: resource type
-	 * * `title`: display title
-	 * * `category`: display title for the category / parent item of the resource
-	 * * `url`: canonical (frontend) or edit (backend) link for the resource; null if not applicable
-	 * * `published`: is the asset published?
-	 * * `access`: access level for the resource (e.g. article) this asset ID corresponds to; null if it doesn't apply.
-	 * * `parent_access`: access level for the resource's parent (e.g. article category); null if it doesn't apply.
-	 *
-	 * @param   int  $assetId
-	 *
-	 * @return array
+	 * @var   MVCFactoryInterface|null
+	 * @since 3.0.0
 	 */
-	public static function getAssetAccessMeta(int $assetId = 0, bool $loadParameters = false): array
-	{
-		$metaKey    = md5($assetId . '_' . ($loadParameters ? 'with' : 'without') . '_parameters');
-		$altMetaKey = md5($assetId . '_with_parameters');
+	private static $mvcFactory;
 
-		if (array_key_exists($metaKey, self::$cachedMeta))
-		{
-			return self::$cachedMeta[$metaKey];
-		}
-
-		if (array_key_exists($altMetaKey, self::$cachedMeta))
-		{
-			return self::$cachedMeta[$altMetaKey];
-		}
-
-		self::$cachedMeta[$metaKey] = [
-			'type'          => 'unknown',
-			'title'         => '',
-			'category'      => null,
-			'author_name'   => null,
-			'author_email'  => null,
-			'url'           => null,
-			'public_url'    => null,
-			'published'     => false,
-			'published_on'  => new Date(),
-			'access'        => 0,
-			'parent_access' => null,
-			'parameters'    => new Registry(),
-		];
-
-		$container = Container::getInstance('com_engage');
-		$platform  = $container->platform;
-
-		$platform->importPlugin('content');
-		$pluginResults = $platform->runPlugins('onAkeebaEngageGetAssetMeta', [$assetId, $loadParameters]);
-
-		$pluginResults = array_filter($pluginResults, function ($x) {
-			return is_array($x);
-		});
-
-		if (empty($pluginResults))
-		{
-			return self::$cachedMeta[$metaKey];
-		}
-
-		$tempRet = array_shift($pluginResults);
-
-		foreach (self::$cachedMeta[$metaKey] as $k => $v)
-		{
-			if (!array_key_exists($k, $tempRet))
-			{
-				continue;
-			}
-
-			self::$cachedMeta[$metaKey][$k] = $tempRet[$k] ?? $v;
-		}
-
-		return self::$cachedMeta[$metaKey];
-	}
+	/**
+	 * Number of comments per asset ID
+	 *
+	 * @var  int[]
+	 */
+	private static $numCommentsPerAsset = [];
 
 	/**
 	 * Are the comments closed for the specified resource?
@@ -136,6 +63,7 @@ final class Meta
 	 * @param   int  $assetId  The asset ID of the resource
 	 *
 	 * @return  bool
+	 * @since   1.0.0
 	 */
 	public static function areCommentsClosed(int $assetId = 0)
 	{
@@ -171,6 +99,116 @@ final class Meta
 	}
 
 	/**
+	 * Returns the metadata of an asset.
+	 *
+	 * This method goes through the onAkeebaEngageGetAssetMeta plugin event, allowing different plugins to return
+	 * information about the asset IDs they recognize. The results are cached to avoid expensive roundtrips to the
+	 * Joomla plugin event system and the database.
+	 *
+	 * The returned keys are:
+	 *
+	 * * `type`: resource type
+	 * * `title`: display title
+	 * * `category`: display title for the category / parent item of the resource
+	 * * `url`: canonical (frontend) or edit (backend) link for the resource; null if not applicable
+	 * * `published`: is the asset published?
+	 * * `access`: access level for the resource (e.g. article) this asset ID corresponds to; null if it doesn't apply.
+	 * * `parent_access`: access level for the resource's parent (e.g. article category); null if it doesn't apply.
+	 *
+	 * @param   int   $assetId         The asset ID to load
+	 * @param   bool  $loadParameters  Should I also load the asset's parameters?
+	 *
+	 * @return  array
+	 * @since   1.0.0
+	 */
+	public static function getAssetAccessMeta(int $assetId = 0, bool $loadParameters = false): array
+	{
+		$metaKey    = md5($assetId . '_' . ($loadParameters ? 'with' : 'without') . '_parameters');
+		$altMetaKey = md5($assetId . '_with_parameters');
+
+		if (array_key_exists($metaKey, self::$cachedMeta))
+		{
+			return self::$cachedMeta[$metaKey];
+		}
+
+		if (array_key_exists($altMetaKey, self::$cachedMeta))
+		{
+			return self::$cachedMeta[$altMetaKey];
+		}
+
+		self::$cachedMeta[$metaKey] = [
+			'type'          => 'unknown',
+			'title'         => '',
+			'category'      => null,
+			'author_name'   => null,
+			'author_email'  => null,
+			'url'           => null,
+			'public_url'    => null,
+			'published'     => false,
+			'published_on'  => new Date(),
+			'access'        => 0,
+			'parent_access' => null,
+			'parameters'    => new Registry(),
+		];
+
+		PluginHelper::importPlugin('content');
+		$pluginResults = self::runPlugins('onAkeebaEngageGetAssetMeta', [$assetId, $loadParameters]);
+
+		$pluginResults = array_filter($pluginResults, function ($x) {
+			return is_array($x);
+		});
+
+		if (empty($pluginResults))
+		{
+			return self::$cachedMeta[$metaKey];
+		}
+
+		$tempRet = array_shift($pluginResults);
+
+		foreach (self::$cachedMeta[$metaKey] as $k => $v)
+		{
+			if (!array_key_exists($k, $tempRet))
+			{
+				continue;
+			}
+
+			self::$cachedMeta[$metaKey][$k] = $tempRet[$k] ?? $v;
+		}
+
+		return self::$cachedMeta[$metaKey];
+	}
+
+	/**
+	 * Returns the limitstart required to reach a specific comment in the frontend comments display.
+	 *
+	 * @param   CommentTable  $comment          The comment we're looking for
+	 * @param   int|null      $commentsPerPage  Number of comments per page. NULL to use global configuration.
+	 * @param   bool          $asManager        True to take into account unpublished / spam comments.
+	 *
+	 * @return  int
+	 * @since   1.0.0
+	 */
+	public static function getLimitStartForComment(CommentTable $comment, ?int $commentsPerPage = null, bool $asManager = false): int
+	{
+		// No limit set. Use the configured list limit, must be at least 5.
+		if (is_null($commentsPerPage))
+		{
+			$commentsPerPage = Factory::getApplication()->get('list_limit', 20);
+			$commentsPerPage = max((int) $commentsPerPage, 5);
+		}
+
+		$comments = self::getPaginatedCommentIDsForAsset($comment->asset_id, $asManager);
+		$index    = array_search($comment->id, $comments);
+
+		if ($index === false)
+		{
+			return 0;
+		}
+
+		return intdiv($index, $commentsPerPage) * $commentsPerPage;
+	}
+
+	/**
 	 * Returns the total number of comments for a specific asset ID
 	 *
 	 * @param   int  $asset_id  The asset ID to check for the total number of comments
@@ -184,9 +222,12 @@ final class Meta
 			return self::$numCommentsPerAsset[$asset_id];
 		}
 
-		/** @var Comments $model */
-		$model                                = self::getContainer()->factory->model('Comments')->tmpInstance();
-		self::$numCommentsPerAsset[$asset_id] = $model->asset_id($asset_id)->count() ?? 0;
+		/** @var CommentsModel $model */
+		$model = self::getMVCFactory()->createModel('Comments', 'Administrator', ['ignore_request' => true]);
+
+		$model->setState('filter.asset_id', $asset_id);
+
+		self::$numCommentsPerAsset[$asset_id] = $model->getTotal() ?: 0;
 
 		return self::$numCommentsPerAsset[$asset_id];
 	}
@@ -198,6 +239,7 @@ final class Meta
 	 * @param   bool  $asManager  True to take into account unpublished comments
 	 *
 	 * @return  array
+	 * @since   1.0.0
 	 */
 	public static function getPaginatedCommentIDsForAsset(int $asset_id, bool $asManager = false): array
 	{
@@ -206,47 +248,18 @@ final class Meta
 			return self::$commentIDsPerAsset[$asset_id];
 		}
 
-		/** @var Comments $model */
-		$model = self::getContainer()->factory->model('Comments')->tmpInstance();
-		$model->asset_id($asset_id);
+		/** @var CommentsModel $model */
+		$model = self::getMVCFactory()->createModel('Comments', 'Administrator', ['ignore_request' => true]);
+		$model->setState('filter.asset_id', $asset_id);
 
 		if (!$asManager)
 		{
-			$model->enabled(1);
+			$model->setState('filter.enabled', 1);
 		}
 
 		self::$commentIDsPerAsset[$asset_id] = array_keys($model->commentIDTreeSliceWithDepth(0, null));
 
 		return self::$commentIDsPerAsset[$asset_id];
-	}
-
-	/**
-	 * Returns the limitstart required to reach a specific comment in the frontend comments display.
-	 *
-	 * @param   Comments  $comment          The comment we're looking for
-	 * @param   int|null  $commentsPerPage  Number of comments per page. NULL to use global configuration.
-	 * @param   bool      $asManager        True to take into account unpublished / spam comments.
-	 *
-	 * @return  int
-	 */
-	public static function getLimitStartForComment(Comments $comment, ?int $commentsPerPage = null, bool $asManager = false): int
-	{
-		// No limit set. Use the configured list limit, must be at least 5.
-		if (is_null($commentsPerPage))
-		{
-			$commentsPerPage = self::getContainer()->platform->getConfig()->get('list_limit', 20);
-			$commentsPerPage = max((int) $commentsPerPage, 5);
-		}
-
-		$comments = self::getPaginatedCommentIDsForAsset($comment->asset_id, $asManager);
-		$index    = array_search($comment->getId(), $comments);
-
-		if ($index === false)
-		{
-			return 0;
-		}
-
-		return intdiv($index, $commentsPerPage) * $commentsPerPage;
 	}
 
 	/**
@@ -285,21 +298,21 @@ final class Meta
 			return [];
 		}
 
+		/** @var DatabaseDriver $db */
+		$db        = Factory::getContainer()->get('DatabaseDriver');
 		$cid       = [];
-		$container = self::getContainer();
-		$db        = $container->db;
 
 		// Nuke comments directly attributed to the user ID
 		$q   = $db->getQuery(true)
 			->select($db->qn('engage_comment_id'))
 			->from($db->qn('#__engage_comments'))
-			->where($db->qn('created_by') . ' = ' . $db->q($user->id));
+			->where($db->qn('created') . ' = ' . $db->q($user->id));
 		$cid = $db->setQuery($q)->loadColumn() ?? [];
 
 		$q = $db->getQuery(true)
 			->update($db->qn('#__engage_comments'))
 			->set($db->qn('body') . ' = ' . $db->q(Text::_('COM_ENGAGE_COMMENTS_LBL_DELETEDCOMMENT')))
-			->where($db->qn('created_by') . ' = ' . $db->q($user->id));
+			->where($db->qn('created') . ' = ' . $db->q($user->id));
 		$db->setQuery($q)->execute();
 
 		// Nuke comments attributed to the user's email address
@@ -352,17 +365,84 @@ final class Meta
 	}
 
 	/**
-	 * Returns the component's container (temporary instance)
+	 * Get the MVC factory for the component
 	 *
-	 * @return  Container|null
+	 * @return  MVCFactoryInterface|null
+	 * @throws  Exception
+	 * @since   3.0.0
 	 */
-	private static function getContainer(): Container
+	private static function getMVCFactory(): ?MVCFactoryInterface
 	{
-		if (is_null(self::$container))
+		if (!empty(self::$mvcFactory))
 		{
-			self::$container = Container::getInstance('com_engage');
+			return self::$mvcFactory;
 		}
 
-		return self::$container;
+		$component = Factory::getApplication()->bootComponent('com_engage');
+
+		if (!$component instanceof MVCFactoryServiceInterface)
+		{
+			self::$mvcFactory = null;
+
+			return null;
+		}
+
+		self::$mvcFactory = $component->getMVCFactory();
+
+		return self::$mvcFactory;
+	}
+
+	/**
+	 * Calls all handlers associated with an event group.
+	 *
+	 * This method will only return the 'result' argument of the event
+	 *
+	 * @param   string       $eventName  The event name.
+	 * @param   array|Event  $args       An array of arguments or an Event object (optional).
+	 *
+	 * @return  array  An array of results from each function call. Note this will be an empty array if no dispatcher
+	 *                 is set.
+	 *
+	 * @throws      InvalidArgumentException
+	 * @since       3.0.0
+	 */
+	private static function runPlugins($eventName, $args = [])
+	{
+		try
+		{
+			$app = Factory::getApplication();
+		}
+		catch (Exception $e)
+		{
+			return [];
+		}
+
+		try
+		{
+			$dispatcher = $app->getDispatcher();
+		}
+		catch (\UnexpectedValueException $exception)
+		{
+			$app->getLogger()->error(sprintf('Dispatcher not set in %s, cannot trigger events.', \get_class($app)));
+
+			return [];
+		}
+
+		if ($args instanceof Event)
+		{
+			$event = $args;
+		}
+		elseif (\is_array($args))
+		{
+			$event = new Event($eventName, $args);
+		}
+		else
+		{
+			throw new InvalidArgumentException('The arguments must either be an event or an array');
+		}
+
+		$result = $dispatcher->dispatch($eventName, $event);
+
+		return !isset($result['result']) || \is_null($result['result']) ? [] : $result['result'];
 	}
 }

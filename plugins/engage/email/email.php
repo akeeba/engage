@@ -5,9 +5,9 @@
  * @license   GNU General Public License version 3, or later
  */
 
+use Akeeba\Component\Engage\Site\Helper\Email;
+use Akeeba\Component\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Admin\Model\Comments;
-use Akeeba\Engage\Site\Helper\Email;
-use Akeeba\Engage\Site\Helper\Meta;
 use FOF40\Container\Container;
 use FOF40\Model\DataModel\Exception\RecordNotLoaded;
 use Joomla\CMS\Access\Access;

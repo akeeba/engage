@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die;
 
-use Akeeba\Engage\Site\Helper\Meta;
+use Akeeba\Component\Engage\Site\Helper\Meta;
 use FOF40\Container\Container;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Table\User as UserTable;

@@ -82,7 +82,8 @@
 
             <field
                     name="comments_enabled"
-                    type="fancyradio"
+                    type="radio"
+                    layout="joomla.form.field.radio.switcher"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_ENABLED_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_ENABLED_DESC"
                     useglobal="true"
@@ -106,10 +107,10 @@
 
             <field
                     name="comments_notify_author"
-                    type="fancyradio"
+                    type="radio"
+                    layout="joomla.form.field.radio.switcher"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_AUTHOR_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_AUTHOR_DESC"
-                    class="btn-group btn-group-yesno"
                     useglobal="true"
                     default=""
                     showon="comments_enabled!:0"
@@ -120,10 +121,10 @@
 
             <field
                     name="comments_notify_users"
-                    type="fancyradio"
+                    type="radio"
+                    layout="joomla.form.field.radio.switcher"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_USERS_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_USERS_DESC"
-                    class="btn-group btn-group-yesno"
                     useglobal="true"
                     default=""
                     showon="comments_enabled!:0"

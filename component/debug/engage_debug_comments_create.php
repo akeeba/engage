@@ -19,8 +19,8 @@
 // Enable Joomla's debug mode
 define('JDEBUG', 1);
 
+use Akeeba\Component\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Admin\Model\Comments;
-use Akeeba\Engage\Site\Helper\Meta;
 use Faker\Factory as FakerFactory;
 use Faker\Generator as FakerGenerator;
 use Faker\Provider\Biased;

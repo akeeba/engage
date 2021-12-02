@@ -24,6 +24,11 @@ use RuntimeException;
 use Throwable;
 use UnexpectedValueException;
 
+/**
+ * Utility class to clean the Joomla! cache in a predictable way.
+ *
+ * @since 3.0.0
+ */
 class CacheCleaner
 {
 	/**

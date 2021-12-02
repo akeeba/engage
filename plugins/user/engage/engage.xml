@@ -40,10 +40,10 @@
 
                 <field
                         name="own_comments"
-                        type="fancyradio"
+                        type="radio"
+                        layout="joomla.form.field.radio.switcher"
                         label="PLG_USER_ENGAGE_OWN_COMMENTS_LABEL"
                         description="PLG_USER_ENGAGE_OWN_COMMENTS_DESC"
-                        class="btn-group btn-group-yesno"
                         default="1"
                 >
                     <option value="0">JNO</option>

@@ -35,7 +35,7 @@ class Dispatcher extends ComponentDispatcher
 	 * @var   string
 	 * @since 3.0.0
 	 */
-	protected $defaultController = 'controlpanel';
+	protected $defaultController = 'comments';
 
 	/**
 	 * Maps old versions' view names to the current view names.

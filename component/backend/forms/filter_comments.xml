@@ -25,6 +25,7 @@
                 default=""
         >
             <option value="">JOPTION_SELECT_PUBLISHED</option>
+            <option value="-3">COM_ENGAGE_COMMENT_ENABLED_OPT_POSSIBLE_SPAM</option>
             <option value="-2">COM_ENGAGE_COMMENT_ENABLED_OPT_SPAM</option>
         </field>
 
@@ -63,14 +64,14 @@
                 validate="options"
         >
             <option value="">JGLOBAL_SORT_BY</option>
-            <option value="t.id ASC">JGRID_HEADING_ID_ASC</option>
-            <option value="t.id DESC">JGRID_HEADING_ID_DESC</option>
+            <option value="c.id ASC">JGRID_HEADING_ID_ASC</option>
+            <option value="c.id DESC">JGRID_HEADING_ID_DESC</option>
             <option value="user_name ASC">JAUTHOR_ASC</option>
             <option value="user_name DESC">JAUTHOR_DESC</option>
-            <option value="t.state ASC">JSTATUS_ASC</option>
-            <option value="t.state DESC">JSTATUS_DESC</option>
-            <option value="created ASC">JDATE_ASC</option>
-            <option value="created DESC">JDATE_DESC</option>
+            <option value="c.enabled ASC">JSTATUS_ASC</option>
+            <option value="c.enabled DESC">JSTATUS_DESC</option>
+            <option value="c.created ASC">JDATE_ASC</option>
+            <option value="c.created DESC">JDATE_DESC</option>
         </field>
 
         <field

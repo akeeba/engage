@@ -7,8 +7,8 @@
 
 defined('_JEXEC') or die;
 
+use Akeeba\Component\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Admin\Model\Comments as CommentsModel;
-use Akeeba\Engage\Site\Helper\Meta;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;

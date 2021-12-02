@@ -36,11 +36,11 @@ class Html extends HtmlView
 		parent::onBeforeBrowse();
 
 		$this->lists->sortFields = [
-			'engage_comment_id' => Text::_('JGLOBAL_FIELD_ID_LABEL'),
-			'asset_id'          => Text::_('COM_ENGAGE_COMMENT_FIELD_ASSET_ID'),
-			'body'              => Text::_('COM_ENGAGE_COMMENT_FIELD_BODY'),
-			'created_on'        => Text::_('JGLOBAL_FIELD_CREATED_LABEL'),
-			'modified_on'       => Text::_('JGLOBAL_FIELD_MODIFIED_LABEL'),
+			'id'          => Text::_('JGLOBAL_FIELD_ID_LABEL'),
+			'asset_id'    => Text::_('COM_ENGAGE_COMMENT_FIELD_ASSET_ID'),
+			'body'        => Text::_('COM_ENGAGE_COMMENT_FIELD_BODY'),
+			'created_on'  => Text::_('JGLOBAL_FIELD_CREATED_LABEL'),
+			'modified_on' => Text::_('JGLOBAL_FIELD_MODIFIED_LABEL'),
 		];
 
 	}

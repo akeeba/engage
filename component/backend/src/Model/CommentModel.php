@@ -16,9 +16,12 @@ use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Log\Log;
 use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\User\User;
+use Joomla\Utilities\ArrayHelper;
 use RuntimeException;
 
 /**
@@ -75,6 +78,107 @@ class CommentModel extends AdminModel
 		}
 
 		return $form;
+	}
+
+	/**
+	 * Report a message as ham or spam. The actual reporting is taken care of by the plugins.
+	 *
+	 * @param   bool  $asSpam  True to report as spam, false to report as ham.
+	 *
+	 * @return  bool
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
+	public function reportMessage(array &$pks, bool $asSpam = true): bool
+	{
+		$pks   = ArrayHelper::toInteger($pks);
+		$table = $this->getTable();
+		$context = $this->option . '.' . $this->name;
+
+		PluginHelper::importPlugin('engage');
+
+		try
+		{
+			$app = Factory::getApplication();
+
+			foreach ($pks as $i => $id)
+			{
+				if (!$table->load($id))
+				{
+					$this->setError($table->getError());
+
+					return false;
+				}
+
+				$event = $asSpam ? 'onAkeebaEngageReportSpam' : 'onAkeebaEngageReportHam';
+				$allowed = $asSpam ? $this->canDelete($table) : $this->canEditState($table);
+
+				if (!$allowed)
+				{
+					// Prune items that you can't change.
+					unset($pks[$i]);
+					$error = $this->getError();
+
+					if ($error)
+					{
+						Log::add($error, Log::WARNING, 'jerror');
+					}
+					else
+					{
+						Log::add(Text::_($asSpam ? 'JLIB_APPLICATION_ERROR_DELETE_NOT_PERMITTED' : 'JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'), Log::WARNING, 'jerror');
+					}
+
+					$this->cleanCache();
+
+					return false;
+				}
+
+				// Trigger the before change state / before delete event.
+				if (!$asSpam)
+				{
+					$result = Factory::getApplication()->triggerEvent($this->event_before_change_state, array($context, [$id], 1));
+				}
+				else
+				{
+					$result = Factory::getApplication()->triggerEvent($this->event_before_delete, array($context, $table));
+				}
+
+				if (\in_array(false, $result, true))
+				{
+					$this->setError($table->getError());
+
+					return false;
+				}
+
+				// Trigger the event
+				$app->triggerEvent($event, [$table]);
+
+				// Publish or delete the comment, depending on whether it's being reported as ham or spam
+				if (!$asSpam)
+				{
+					$table->publish();
+				}
+				else
+				{
+					$table->delete();
+				}
+			}
+		}
+		catch (Exception $e)
+		{
+			// Clear the component's cache
+			$this->cleanCache();
+
+			// Report the error
+			$this->setError($e->getMessage());
+
+			return false;
+		}
+
+		// Clear the component's cache
+		$this->cleanCache();
+
+		return true;
 	}
 
 	/**

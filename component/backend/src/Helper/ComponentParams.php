@@ -18,16 +18,13 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Registry\Registry;
 use ReflectionClass;
 
+/**
+ * Helper class to save component parameters back to the database, since Joomla! lacks such a feature.
+ *
+ * @since 3.0.0
+ */
 class ComponentParams
 {
-	/**
-	 * All possible ticket statuses and their description
-	 *
-	 * @var   array
-	 * @since 3.0.0
-	 */
-	private static $ticketStatuses;
-
 	/**
 	 * Actually Save the params into the db
 	 *

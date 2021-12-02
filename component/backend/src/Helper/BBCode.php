@@ -11,6 +11,15 @@ defined('_JEXEC') or die;
 
 final class BBCode
 {
+	/**
+	 * Convert BBcode to HTML
+	 *
+	 * @param   string  $text
+	 * @param   int     $nestingLevel
+	 *
+	 * @return   string
+	 * @since    1.0.0
+	 */
 	static public function parseBBCode(string $text, int $nestingLevel = 0): string
 	{
 		// Convert linebreaks (the CODE tag will revert them)
@@ -364,6 +373,17 @@ final class BBCode
 		return $text;
 	}
 
+	/**
+	 * Replace a substring inside a string
+	 *
+	 * @param   int     $from  Starting position
+	 * @param   int     $to    Ending position
+	 * @param   string  $new   Text to replace with
+	 * @param   string  $old   Text to find and replace with $new
+	 *
+	 * @return   string
+	 * @since    1.0.0
+	 */
 	private static function replace(int $from, int $to, string $new, string $old): string
 	{
 		if ($from > $to)
@@ -383,6 +403,16 @@ final class BBCode
 		}
 	}
 
+	/**
+	 * Find the closing BBcode tag.
+	 *
+	 * @param   string  $tag     The tag to look for.
+	 * @param   string  $text    The text to look the end tag in.
+	 * @param   int     $offset  Offset from the beginning $text the search will take place.
+	 *
+	 * @return   array|false[]
+	 * @since    1.0.0
+	 */
 	private static function findEndTag(string $tag, string $text, int $offset = 0)
 	{
 		$ret = [false, false];

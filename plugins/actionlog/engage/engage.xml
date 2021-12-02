@@ -41,10 +41,10 @@
 
                 <field
                         name="log_comments"
-                        type="fancyradio"
+                        type="radio"
+                        layout="joomla.form.field.radio.switcher"
                         label="PLG_ACTIONLOG_ENGAGE_LOG_COMMENTS_LABEL"
                         description="PLG_ACTIONLOG_ENGAGE_LOG_COMMENTS_DESC"
-                        class="btn-group btn-group-yesno"
                         default="0"
                 >
                     <option value="0">JNO</option>

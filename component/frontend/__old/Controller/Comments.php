@@ -9,18 +9,18 @@ namespace Akeeba\Engage\Site\Controller;
 
 defined('_JEXEC') or die();
 
+use Akeeba\Component\Engage\Site\Helper\Filter;
+use Akeeba\Component\Engage\Site\Helper\Meta;
+use Akeeba\Component\Engage\Site\Helper\SignedURL;
 use Akeeba\Engage\Admin\Model\Exception\BlatantSpam;
-use Akeeba\Engage\Site\Helper\Filter;
-use Akeeba\Engage\Site\Helper\Meta;
-use Akeeba\Engage\Site\Helper\SignedURL;
 use Akeeba\Engage\Site\Model\Comments as CommentsModel;
 use Akeeba\Engage\Site\View\Comments\Html;
 use Exception;
 use FOF40\Container\Container;
 use FOF40\Controller\DataController;
 use FOF40\Controller\Mixin\PredefinedTaskList;
-use FOF40\Model\DataModel\Exception\RecordNotLoaded;
 use FOF40\JoomlaAbstraction\CacheCleaner;
+use FOF40\Model\DataModel\Exception\RecordNotLoaded;
 use FOF40\View\Exception\AccessForbidden;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;

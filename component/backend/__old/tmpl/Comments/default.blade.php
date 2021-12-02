@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-use Akeeba\Component\Engage\Administrator\Helper\Format;use Akeeba\Engage\Site\Helper\Filter;use Akeeba\Engage\Site\Helper\Meta;use Joomla\CMS\Environment\Browser;use Joomla\CMS\Language\Text;use Joomla\CMS\Uri\Uri;
+use Akeeba\Component\Engage\Administrator\Helper\Format;use Akeeba\Component\Engage\Site\Helper\Filter;use Akeeba\Component\Engage\Site\Helper\Meta;use Joomla\CMS\Environment\Browser;use Joomla\CMS\Language\Text;use Joomla\CMS\Uri\Uri;
 
 /** @var \Akeeba\Engage\Admin\View\Comments\Html $this */
 

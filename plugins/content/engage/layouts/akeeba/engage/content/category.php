@@ -22,7 +22,7 @@ use Joomla\CMS\Uri\Uri;
  * @var  stdClass  $row         The Joomla article object.
  * @var  array     $meta        Display metadata, returned by Meta::getAssetAccessMeta().
  *
- * @see  \Akeeba\Engage\Site\Helper\Meta::getAssetAccessMeta()
+ * @see  \Akeeba\Component\Engage\Site\Helper\Meta::getAssetAccessMeta()
  */
 extract($displayData);
 

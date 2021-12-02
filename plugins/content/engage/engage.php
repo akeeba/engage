@@ -7,12 +7,12 @@
 
 defined('_JEXEC') or die();
 
+use Akeeba\Component\Engage\Site\Helper\Meta;
 use Akeeba\Engage\Admin\Model\Comments;
-use Akeeba\Engage\Site\Helper\Meta;
 use FOF40\Container\Container;
 use FOF40\Input\Input;
-use FOF40\Layout\LayoutHelper;
 use FOF40\JoomlaAbstraction\CacheCleaner;
+use FOF40\Layout\LayoutHelper;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Date\Date;

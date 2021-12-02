@@ -32,12 +32,10 @@ EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
 -- Change column names and convert to InnoDB
-ALTER TABLE `#__engage_comments`
-    CHANGE COLUMN `engage_comment_id` `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
-    CHANGE COLUMN `created_on` `created` datetime DEFAULT NULL,
-    CHANGE COLUMN `modified_on` `modified` datetime DEFAULT NULL,
-    ENGINE InnoDB;
-
+ALTER TABLE `#__engage_comments` CHANGE `engage_comment_id` `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT;
+ALTER TABLE `#__engage_comments` CHANGE `created_on` `created` datetime DEFAULT NULL;
+ALTER TABLE `#__engage_comments` CHANGE `modified_on` `modified` datetime DEFAULT NULL;
+ALTER TABLE `#__engage_comments` ENGINE InnoDB;
 
 -- Convert tables to InnoDB
 ALTER TABLE `#__engage_unsubscribe` ENGINE InnoDB;

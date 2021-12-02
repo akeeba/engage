@@ -21,6 +21,7 @@
                 default=""
         >
             <option value="">JOPTION_SELECT_PUBLISHED</option>
+            <option value="-3">COM_ENGAGE_COMMENT_ENABLED_OPT_POSSIBLE_SPAM</option>
             <option value="-2">COM_ENGAGE_COMMENT_ENABLED_OPT_SPAM</option>
         </field>
 

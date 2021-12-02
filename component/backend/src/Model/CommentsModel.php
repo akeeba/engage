@@ -52,6 +52,8 @@ class CommentsModel extends ListModel
 				// Sortable and/or filter columns
 				'id', 'asset_id', 'name', 'email', 'ip', 'user_agent', 'enabled',
 				'created', 'created_by', 'modified', 'modified_by',
+				// Sort–only fields
+				'c.id', 'user_name', 'c.enabled', 'c.created',
 				// Filter–only fields
 				'search', 'from', 'to',
 			];
@@ -69,7 +71,7 @@ class CommentsModel extends ListModel
 			// Internal filters
 			'asset_id'   => 'int',
 			'parent_id'  => 'int',
-		], 'created', 'DESC');
+		], 'c.created', 'DESC');
 	}
 
 	/**
@@ -202,10 +204,10 @@ class CommentsModel extends ListModel
 		$query  = $this->getListQuery(true)
 			->clear('select')
 			->select([
-				$db->qn('id'),
-				$db->qn('parent_id'),
+				$db->qn('c.id'),
+				$db->qn('c.parent_id'),
 			]);
-		$allIDs = $db->setQuery($query)->loadAssocList('engage_comment_id') ?? [];
+		$allIDs = $db->setQuery($query)->loadAssocList('id') ?? [];
 
 		$this->treeAwareCount = 0;
 
@@ -378,7 +380,7 @@ class CommentsModel extends ListModel
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true)
 			->select([
-				$db->quoteName('c' . '.*'),
+				$db->quoteName('c') . '.*',
 				'IFNULL(' . $db->quoteName('u.name') . ', ' . $db->quoteName('c.name') . ') AS ' . $db->quoteName('user_name'),
 				'IFNULL(' . $db->quoteName('u.email') . ', ' . $db->quoteName('c.email') . ') AS ' . $db->quoteName('user_email'),
 				$db->quoteName('a.title', 'article_title'),
@@ -558,9 +560,20 @@ class CommentsModel extends ListModel
 		}
 
 		// List ordering clause
-		$orderCol  = $this->state->get('list.ordering', 'created');
+		$orderCol  = $this->state->get('list.ordering', 'c.created');
 		$orderDirn = $this->state->get('list.direction', 'DESC');
 		$ordering  = $db->escape($orderCol) . ' ' . $db->escape($orderDirn);
+
+		/**
+		 * -- When ordering by a column other that the comment ID apply an additional ordering to make sure that the
+		 *    comments always appear in the same order. Otherwise if there are two or more comments filed on the same
+		 *    date and time (to the second) and we're sorting by date they would appear in a different order every time
+		 *    we load the page. Same for the user_name and enabled status.
+		 */
+		if ($orderCol != 'c.id')
+		{
+			$ordering .= ', c.id DESC';
+		}
 
 		$query->order($ordering);
 

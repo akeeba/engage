@@ -19,7 +19,7 @@ use ReflectionProperty;
  * @property string|null $template       The email body loaded
  * @property string|null $loadedLanguage The actual language we loaded (can be '*')
  *
- * @see     \Akeeba\Engage\Site\Helper\Email
+ * @see     \Akeeba\Component\Engage\Site\Helper\Email
  */
 final class LoadedTemplate
 {

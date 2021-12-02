@@ -19,7 +19,7 @@ CREATE TABLE `#__engage_comments`
     `created_by`  int(11) DEFAULT NULL,
     `modified`    datetime     DEFAULT NULL,
     `modified_by` int(11) DEFAULT NULL,
-    PRIMARY KEY (`engage_comment_id`),
+    PRIMARY KEY (`id`),
     KEY           `#__engage_comments_asset` (`asset_id`),
     KEY           `#__engage_comments_created_on` (`created_on` DESC)
 ) DEFAULT COLLATE utf8mb4_unicode_ci COMMENT='Content comments';
