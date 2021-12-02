@@ -7,8 +7,8 @@
 
 defined('_JEXEC') or die();
 
+use Akeeba\Component\Engage\Site\Exceptions\BlatantSpam;
 use Akeeba\Engage\Admin\Model\Comments;
-use Akeeba\Engage\Admin\Model\Exception\BlatantSpam;
 use FOF40\Date\Date;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;

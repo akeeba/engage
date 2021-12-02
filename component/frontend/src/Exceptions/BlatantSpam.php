@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Engage\Admin\Model\Exception;
+namespace Akeeba\Component\Engage\Site\Exceptions;
 
 defined('_JEXEC') or die();
 
@@ -14,8 +14,6 @@ use RuntimeException;
 use Throwable;
 
 /**
- * Class BlatantSpam
- *
  * Signals that a comment is blatant spam and needs to be discarded immediately.
  *
  * @package Akeeba\Engage\Admin\Model\Exception
@@ -31,5 +29,4 @@ class BlatantSpam extends RuntimeException
 
 		parent::__construct($message, $code, $previous);
 	}
-
 }

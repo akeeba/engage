@@ -4,9 +4,7 @@
   ~ @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
   ~ @license   GNU General Public License version 3, or later
   -->
-<config
-        addfieldpath="/administrator/components/com_engage/fields"
->
+<config>
     <fieldset
             name="basic"
             label="COM_ENGAGE_CONFIG_BASIC_FIELDSET_LABEL"
@@ -290,7 +288,8 @@
     >
         <field
                 name="login_module"
-                type="modulemodules"
+                type="ModulesModule"
+                addfieldprefix="Joomla\Component\Modules\Administrator\Field"
                 default="mod_login"
                 label="COM_ENGAGE_CONFIG_LOGIN_LABEL"
                 description="COM_ENGAGE_CONFIG_LOGIN_DESC"/>

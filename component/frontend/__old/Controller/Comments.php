@@ -9,10 +9,10 @@ namespace Akeeba\Engage\Site\Controller;
 
 defined('_JEXEC') or die();
 
+use Akeeba\Component\Engage\Site\Exceptions\BlatantSpam;
 use Akeeba\Component\Engage\Site\Helper\Filter;
 use Akeeba\Component\Engage\Site\Helper\Meta;
 use Akeeba\Component\Engage\Site\Helper\SignedURL;
-use Akeeba\Engage\Admin\Model\Exception\BlatantSpam;
 use Akeeba\Engage\Site\Model\Comments as CommentsModel;
 use Akeeba\Engage\Site\View\Comments\Html;
 use Exception;
