@@ -1,0 +1,282 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>A new spam comment on “{CONTENT_TITLE}” awaits your moderation</title>
+	<style type="text/css">
+        :root {
+            color-scheme: light dark;
+        }
+
+        /*Reset styles*/
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 12pt;
+            margin: 0;
+            padding: 0;
+            color: black;
+            background: slategrey;
+        }
+
+        .engageemail-outer-wrapper {
+            background: slategrey;
+        }
+
+        .engageemail-outer-wrapper table {
+            width: 100%;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .engageemail-wrapper {
+            width: 100%;
+            height: 100%;
+            padding: 1em;
+        }
+
+        .engageemail-container {
+            background-color: white;
+            color: black;
+            text-align: left;
+            box-shadow: black 0 0 8px;
+        }
+
+        .engageemail-sitename {
+            background-color: #efefef;
+            text-align: right;
+            padding: 1em 1em;
+            min-height: 40px;
+        }
+
+        .engageemail-sitename a {
+            color: black;
+            font-size: 16pt;
+            border: none;
+            text-decoration: none;
+        }
+
+        .engageemail-message {
+            padding: 0.5em 1em;
+        }
+
+        .engageemail-message a {
+            color: #38b5b8;
+            text-decoration: underline;
+        }
+
+        .engageemail-comment-header {
+            padding: 0.25em;
+            background-color: darkslategray;
+            color: white;
+        }
+
+        img.engageemail-comment-header-avatar {
+            float: left;
+            margin: 0 0.5em 0.5em 0;
+        }
+
+        span.engageemail-comment-name {
+            display: block;
+            font-weight: bold;
+        }
+
+        span.engageemail-comment-email {
+            display: block;
+            font-size: 90%;
+        }
+
+        span.engageemail-comment-ip,
+        span.engageemail-comment-date,
+        span.engageemail-comment-user-agent {
+            font-size: 90%;
+            color: lightgrey;
+        }
+
+        span.engageemail-comment-user-agent:before {
+            content: " • ";
+        }
+
+        .engageemail-comment {
+            margin: 0.5em 0;
+            border-left: 3px solid grey;
+            padding: 0 .5em;
+            overflow: scroll;
+        }
+
+        a.engageemail-button {
+            display: inline-block;
+            text-align: center;
+            padding: 0.25em 0.5em;
+            color: cornflowerblue;
+            box-sizing: border-box;
+            text-decoration: none;
+            font-size: 10pt;
+        }
+
+        a.engageemail-button:hover {
+            color: dodgerblue;
+        }
+
+        a.engageemail-button-success {
+            color: seagreen;
+        }
+
+        a.engageemail-button-success:hover {
+            color: darkseagreen;
+        }
+
+        a.engageemail-button-warning {
+            color: darkorange;
+        }
+
+        a.engageemail-button-warning:hover {
+            color: orange;
+        }
+
+        a.engageemail-button-danger {
+            color: red;
+        }
+
+        a.engageemail-button-danger:hover {
+            color: darkred;
+        }
+
+        .engageemail-legalinfo {
+            text-align: center;
+            width: 100%;
+            max-width: 960px;
+            color: lightgrey;
+            font-size: 9pt;
+            font-weight: normal;
+            background-color: rgba(0, 0, 0, 0.2);
+            margin: 2em auto;
+            padding: 0.5em 0;
+        }
+
+        .engageemail-legalinfo a {
+            color: white;
+            font-weight: bold;
+            text-decoration: underline;
+            border: none;
+        }
+
+        .engageemail-legalinfo p {
+            margin: 0.3em 1em 0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: darkslategray;
+            }
+
+            .engageemail-outer-wrapper {
+                background-color: darkslategray;
+            }
+
+            .engageemail-container {
+                background-color: #383636;
+                color: lightgrey;
+            }
+
+            .engageemail-sitename {
+                background-color: #1f2f2f;
+            }
+
+            .engageemail-sitename a {
+                color: whitesmoke;
+            }
+
+            a.engageemail-button-danger:hover {
+                color: orangered;
+            }
+        }
+
+	</style>
+</head>
+<body>
+<div class="engageemail-outer-wrapper">
+	<table>
+		<tr>
+			<td width="10%"></td>
+			<td>
+				<div class="engageemail-wrapper">
+					<div class="engageemail-container">
+						<!-- Logo Header -->
+						<div class="engageemail-sitename">
+							<a href="{SITEURL}" title="Visit {SITENAME}">
+								{SITENAME}
+							</a>
+						</div>
+						<!-- Message -->
+						<div class="engageemail-message">
+							<p>
+								Hello {RECIPIENT_NAME},
+							</p>
+							<p>
+								A new comment was filed on “<a href="{CONTENT_LINK}">{CONTENT_TITLE}</a>”. The comment is currently marked as spam.
+							</p>
+							<p>
+								Please find the comment details below.
+							</p>
+							<!-- Comment -->
+							<div class="engageemail-comment-header">
+								<img src="{AVATAR_URL}" class="engageemail-comment-header-avatar">
+								<span class="engageemail-comment-name">
+									{NAME}
+								</span>
+								<span class="engageemail-comment-email">
+									{EMAIL}
+								</span>
+								<span class="engageemail-comment-ip">
+									From {IP}
+								</span>
+								<span class="engageemail-comment-date">
+									on {DATE_LOCAL}
+								</span>
+								<span class="engageemail-comment-user-agent">
+									User Agent: {USER_AGENT}
+								</span>
+							</div>
+							<div class="engageemail-comment">
+								{COMMENT_SANITIZED}
+							</div>
+							<div>
+								<a class="engageemail-button" href="{COMMENT_LINK}">
+									View Comment
+								</a>
+								<a class="engageemail-button engageemail-button-success" href="{PUBLISH_URL}">
+									Publish
+								</a>
+								<a class="engageemail-button engageemail-button-danger" href="{DELETE_URL}">
+									Delete
+								</a>
+								<a class="engageemail-button engageemail-button-danger" href="{SPAM_URL}">
+									Spam and Delete
+								</a>
+								<a class="engageemail-button engageemail-button-success" href="{UNSPAM_URL}">
+									Not spam and Publish
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Legal info -->
+					<div class="engageemail-legalinfo">
+						<p>
+							You are receiving this email because you are a comments manager for the content that was commented on.
+						</p>
+						<p>
+							You <em>cannot</em> unsubscribe from these emails because you are a comments manager.
+						</p>
+						<p>
+							Please do not reply to this email, it''s sent from an unmonitored email address.
+						</p>
+					</div>
+				</div>
+			</td>
+			<td width="10%"></td>
+		</tr>
+	</table>
+</div>
+
+</body>
+</html>
