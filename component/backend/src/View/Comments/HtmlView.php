@@ -203,6 +203,9 @@ class HtmlView extends BaseHtmlView
 				->listCheck(true);
 		}
 
+		$toolbar->link('COM_ENGAGE_TITLE_EMAILTEMPLATES', 'index.php?option=com_engage&view=emailtemplates')
+			->icon('fa fa-envelope');
+
 		if ($user->authorise('core.admin', 'com_engage') || $user->authorise('core.options', 'com_engage'))
 		{
 			$toolbar->preferences('com_engage');

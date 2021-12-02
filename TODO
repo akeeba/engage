@@ -3,20 +3,24 @@ PENDING
 ========================================================================================================
 
 Component
+    Media
+        Logos Font
     Backend
         MVC
-            EmailTemplates
-            Comments
-            Comment
-        Email templates helper
+            Comment (edit)
     Frontend
         Dispatcher
         MVC
             Comments
+Plugins
+    Console - Engage
+        Also add it to the package
+        Also add it to the Upgrade model
 CLI Scripts
     Console plugin
     Clean Spam
     Create Demo Comments
+
 Plugins
     Content – Engage
     User – Engage
@@ -27,24 +31,13 @@ Plugins
     Actionlog – Engage
     DataCompliance – Engage
     Privacy – Engage
+
 Documentation
     Convert from Wiki using Pandoc
 
 New features
     User profile custom field as avatar source (maybe a plugin...?)
-
-=============================================================================================================
-DONE
-=============================================================================================================
-Component
-    Move language
-    Basic folder structure
-    XML Manifest
-    Media: joomla.assets.json
-    Service provider
-    HTML Service
-    Mixins
-    SQL scripts
-    Backend
-        Dispatcher
-        Upgrade & Update models
+    Help pages
+        Backend Comments
+        Backend Comment
+        Backend EmailTemplates
