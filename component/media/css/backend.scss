@@ -7,6 +7,12 @@
 @import "sources/variables";
 
 // Use the "Akeeba Products" font for a vector logo
+@font-face {
+  font-family: "Akeeba Products";
+  src: url("../fonts/Akeeba-Products.woff");
+  font-display: swap;
+}
+
 .icon-engage,
 .icon-engage-j4 {
   &:before {

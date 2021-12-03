@@ -82,6 +82,7 @@
 	<!-- Media files -->
 	<media destination="com_engage" folder="media">
 		<folder>css</folder>
+		<folder>fonts</folder>
 		<folder>images</folder>
 		<folder>js</folder>
 		<filename>index.html</filename>

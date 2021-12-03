@@ -156,7 +156,10 @@ class HtmlView extends BaseHtmlView
 		// Get the toolbar object instance
 		$toolbar = Toolbar::getInstance('toolbar');
 
-		ToolbarHelper::title(sprintf(Text::_('COM_ENGAGE_TITLE_COMMENTS')), 'icon-engage');
+		ToolbarHelper::title(
+			sprintf("%s: <span class=\"fw-bold\">%s</span>", Text::_('COM_ENGAGE'), Text::_('COM_ENGAGE_TITLE_COMMENTS')),
+			'icon-engage'
+		);
 
 		if (!$this->isEmptyState && $canDo->get('core.edit.state'))
 		{
