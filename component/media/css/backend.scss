@@ -4,8 +4,6 @@
  * @license   GNU General Public License version 3, or later
  */
 
-@import "sources/variables";
-
 // Use the "Akeeba Products" font for a vector logo
 @font-face {
   font-family: "Akeeba Products";
@@ -29,26 +27,6 @@
     content: '\0049';
   }
 }
-
-[class ^= "icon-akengage"], [class ^= "icon-akengage"]:before {
-  color: black !important;
-  display: inline-block;
-  font-family: "AKIonicons" !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  text-rendering: auto;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.icon-akengage-possiblespam:before { content: "\f42d"; }
-.icon-akengage-spam:before { content: "\f42d"; }
-.icon-akengage-reportspam:before { content: "\f100"; }
-.icon-akengage-reportham:before { content: "\f42c"; }
 
 .comEngageLinkExternal:before {
   content: unset !important;

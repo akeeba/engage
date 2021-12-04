@@ -6,13 +6,6 @@
 	"license": "GPL-3.0-or-later",
 	"assets": [
 		{
-			"name": "com_engage.amp",
-			"description": "CSS for AMP pages",
-			"type": "style",
-			"uri": "com_engage/amp.css"
-		},
-
-		{
 			"name": "com_engage.backend",
 			"description": "CSS for backend pages",
 			"type": "style",
@@ -76,10 +69,9 @@
 		},
 
 		{
-			"name": "com_engage.comments",
+			"name": "com_engage.frontend",
 			"type": "preset",
 			"dependencies": [
-				"com_engage.comments#style",
 				"com_engage.comments#script"
 			]
 		}
