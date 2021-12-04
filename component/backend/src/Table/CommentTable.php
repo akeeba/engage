@@ -7,16 +7,22 @@
 
 namespace Akeeba\Component\Engage\Administrator\Table;
 
+use Akeeba\Component\Engage\Administrator\Controller\Mixin\TriggerEvent;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Akeeba\Component\Engage\Administrator\Model\CommentsModel;
+use Akeeba\Component\Engage\Administrator\Table\Mixin\ColumnAliasAware;
 use Akeeba\Component\Engage\Administrator\Table\Mixin\CreateModifyAware;
 use Exception;
+use Joomla\CMS\Event\AbstractEvent;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Event\DispatcherInterface;
 use RuntimeException;
+use UnexpectedValueException;
+use function is_array;
+use function is_null;
 
 defined('_JEXEC') or die;
 
@@ -41,6 +47,8 @@ defined('_JEXEC') or die;
  */
 class CommentTable extends AbstractTable
 {
+	use TriggerEvent;
+	use ColumnAliasAware;
 	use CreateModifyAware
 	{
 		CreateModifyAware::onBeforeStore as onBeforeStoreCreateModifyAware;
@@ -59,6 +67,31 @@ class CommentTable extends AbstractTable
 		parent::__construct('#__engage_comments', 'id', $db, $dispatcher);
 
 		$this->setColumnAlias('published', 'enabled');
+		$this->_trackAssets = false;
+	}
+
+	/** @inheritdoc */
+	public function delete($pk = null)
+	{
+		$this->triggerEvent('onBeforeDelete', [&$pk]);
+
+		$result = $this->_realDelete($pk);
+
+		$this->triggerEvent('onAfterDelete', [&$result, $pk]);
+
+		return $result;
+	}
+
+	/** @inheritdoc */
+	public function store($updateNulls = false)
+	{
+		$this->triggerEvent('onBeforeStore', [&$updateNulls]);
+
+		$result = $this->_realStore($updateNulls);
+
+		$this->triggerEvent('onAfterStore', [&$result, $updateNulls]);
+
+		return $result;
 	}
 
 	/**
@@ -85,7 +118,7 @@ class CommentTable extends AbstractTable
 			return;
 		}
 
-		$factory       = $component->getMVCFactory();
+		$factory = $component->getMVCFactory();
 		/** @var CommentsModel $commentsModel */
 		$commentsModel = $factory->createModel('Comments', 'Administrator', [
 			'ignore_request' => true,
@@ -146,5 +179,150 @@ class CommentTable extends AbstractTable
 		{
 			throw new RuntimeException(Text::sprintf('COM_ENGAGE_COMMENTS_ERR_EMAIL_IN_USE', $this->email));
 		}
+	}
+
+	/**
+	 * Method to delete a row from the database table by primary key value.
+	 *
+	 * @param   mixed  $pk  An optional primary key value to delete.  If not set the instance property value is used.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @throws  UnexpectedValueException
+	 * @since   3.0.0
+	 */
+	private function _realDelete($pk = null)
+	{
+		if (is_null($pk))
+		{
+			$pk = [];
+
+			foreach ($this->_tbl_keys as $key)
+			{
+				$pk[$key] = $this->$key;
+			}
+		}
+		elseif (!is_array($pk))
+		{
+			$pk = [$this->_tbl_key => $pk];
+		}
+
+		foreach ($this->_tbl_keys as $key)
+		{
+			$pk[$key] = is_null($pk[$key]) ? $this->$key : $pk[$key];
+
+			if ($pk[$key] === null)
+			{
+				throw new UnexpectedValueException('Null primary key not allowed.');
+			}
+
+			$this->$key = $pk[$key];
+		}
+
+		// Pre-processing by observers
+		$event = AbstractEvent::create(
+			'onTableBeforeDelete',
+			[
+				'subject' => $this,
+				'pk'      => $pk,
+			]
+		);
+		$this->getDispatcher()->dispatch('onTableBeforeDelete', $event);
+
+		// Delete the row by primary key.
+		$query = $this->_db->getQuery(true)
+			->delete($this->_tbl);
+		$this->appendPrimaryKeys($query, $pk);
+
+		$this->_db->setQuery($query);
+
+		// Check for a database error.
+		$this->_db->execute();
+
+		// Post-processing by observers
+		$event = AbstractEvent::create(
+			'onTableAfterDelete',
+			[
+				'subject' => $this,
+				'pk'      => $pk,
+			]
+		);
+		$this->getDispatcher()->dispatch('onTableAfterDelete', $event);
+
+		return true;
+	}
+
+	/**
+	 * Method to store a row in the database from the Table instance properties.
+	 *
+	 * If a primary key value is set the row with that primary key value will be updated with the instance property
+	 * values. If no primary key value is set a new row will be inserted into the database with the properties from the
+	 * Table instance.
+	 *
+	 * @param   boolean  $updateNulls  True to update fields even if they are null.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   3.0.0
+	 */
+	private function _realStore($updateNulls = false)
+	{
+		$result = true;
+
+		$k = $this->_tbl_keys;
+
+		// Pre-processing by observers
+		$event = AbstractEvent::create(
+			'onTableBeforeStore',
+			[
+				'subject'     => $this,
+				'updateNulls' => $updateNulls,
+				'k'           => $k,
+			]
+		);
+		$this->getDispatcher()->dispatch('onTableBeforeStore', $event);
+
+		$currentAssetId = 0;
+
+		if (!empty($this->asset_id))
+		{
+			$currentAssetId = $this->asset_id;
+		}
+
+		// We have to unset typeAlias since updateObject / insertObject will try to insert / update all public variables...
+		$typeAlias = $this->typeAlias;
+		unset($this->typeAlias);
+
+		try
+		{
+			// If a primary key exists update the object, otherwise insert it.
+			if ($this->hasPrimaryKey())
+			{
+				$this->_db->updateObject($this->_tbl, $this, $this->_tbl_keys, $updateNulls);
+			}
+			else
+			{
+				$this->_db->insertObject($this->_tbl, $this, $this->_tbl_keys[0]);
+			}
+		}
+		catch (Exception $e)
+		{
+			$this->setError($e->getMessage());
+			$result = false;
+		}
+
+		$this->typeAlias = $typeAlias;
+
+		// Post-processing by observers
+		$event = AbstractEvent::create(
+			'onTableAfterStore',
+			[
+				'subject' => $this,
+				'result'  => &$result,
+			]
+		);
+		$this->getDispatcher()->dispatch('onTableAfterStore', $event);
+
+		return $result;
 	}
 }

@@ -140,7 +140,7 @@ class UserFetcher
 		}
 
 		/** @var DatabaseDriver $db */
-		$db = Factory::getContainer()->get('database.driver');
+		$db = Factory::getContainer()->get('DatabaseDriver');
 		$q  = $db->getQuery(true)
 			->select($db->qn('id'))
 			->from($db->qn('#__users'))

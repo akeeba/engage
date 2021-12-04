@@ -213,7 +213,7 @@ $i = 0;
 
 										<div class="flex-grow-1"></div>
 										<div class="engage-edit-link">
-											<a href="<?= Route::_('index.php?option=com_engage&view=comments&task=edit&id=' . $item->id) ?>"
+											<a href="<?= Route::_('index.php?option=com_engage&view=comment&task=edit&id=' . $item->id) ?>"
 											   class="btn btn-sm btn-primary text-decoration-none hasTooltip"
 											   title="<?= Text::_('JGLOBAL_EDIT_ITEM') ?>"
 											>

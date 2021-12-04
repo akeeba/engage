@@ -93,7 +93,10 @@ class HtmlView extends BaseHtmlView
 	{
 		Factory::getApplication()->input->set('hidemainmenu', true);
 
-		ToolbarHelper::title(Text::_('COM_ENGAGE_TITLE_COMMENTS_EDIT'), 'icon-engage');
+		ToolbarHelper::title(
+			sprintf("%s: <span class=\"fw-bold\">%s</span>", Text::_('COM_ENGAGE'), Text::_('COM_ENGAGE_TITLE_COMMENTS_EDIT')),
+			'icon-engage'
+		);
 
 		$toolbarButtons   = [];
 		$toolbarButtons[] = ['save', 'comment.save'];
