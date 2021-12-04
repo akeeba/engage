@@ -4,7 +4,7 @@
   ~ @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
   ~ @license   GNU General Public License version 3, or later
   -->
-<extension version="3.9.0" type="plugin" group="content" method="upgrade">
+<extension version="4.0.0" type="plugin" group="content" method="upgrade">
     <name>PLG_CONTENT_ENGAGE</name>
     <description>PLG_CONTENT_ENGAGE_XML_DESC</description>
     <version>2.0.5</version>
@@ -14,26 +14,28 @@
     <authorUrl>https://www.akeeba.com</authorUrl>
     <copyright>Copyright (c)2020-2021 Akeeba Ltd</copyright>
     <license>GNU/GPL v3 or any later version</license>
+    <namespace path="src">Joomla\Plugin\Content\Engage</namespace>
 
     <files>
         <folder>forms</folder>
         <folder>layouts</folder>
+        <folder>services</folder>
+        <folder plugin="engage">src</folder>
 
-        <filename plugin="engage">engage.php</filename>
         <filename>.htaccess</filename>
         <filename>web.config</filename>
     </files>
     <languages folder="language">
-        <language tag="de-DE">de-DE/de-DE.plg_content_engage.ini</language>
-        <language tag="de-DE">de-DE/de-DE.plg_content_engage.sys.ini</language>
-        <language tag="en-GB">en-GB/en-GB.plg_content_engage.ini</language>
-        <language tag="en-GB">en-GB/en-GB.plg_content_engage.sys.ini</language>
-        <language tag="el-GR">el-GR/el-GR.plg_content_engage.ini</language>
-        <language tag="el-GR">el-GR/el-GR.plg_content_engage.sys.ini</language>
-        <language tag="fr-FR">fr-FR/fr-FR.plg_content_engage.ini</language>
-        <language tag="fr-FR">fr-FR/fr-FR.plg_content_engage.sys.ini</language>
-        <language tag="es-ES">es-ES/es-ES.plg_content_engage.ini</language>
-        <language tag="es-ES">es-ES/es-ES.plg_content_engage.sys.ini</language>
+        <language tag="de-DE">de-DE/plg_content_engage.ini</language>
+        <language tag="de-DE">de-DE/plg_content_engage.sys.ini</language>
+        <language tag="en-GB">en-GB/plg_content_engage.ini</language>
+        <language tag="en-GB">en-GB/plg_content_engage.sys.ini</language>
+        <language tag="el-GR">el-GR/plg_content_engage.ini</language>
+        <language tag="el-GR">el-GR/plg_content_engage.sys.ini</language>
+        <language tag="fr-FR">fr-FR/plg_content_engage.ini</language>
+        <language tag="fr-FR">fr-FR/plg_content_engage.sys.ini</language>
+        <language tag="es-ES">es-ES/plg_content_engage.ini</language>
+        <language tag="es-ES">es-ES/plg_content_engage.sys.ini</language>
     </languages>
 
     <scriptfile>script.php</scriptfile>
