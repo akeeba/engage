@@ -27,8 +27,6 @@ use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
 use stdClass;
 use Throwable;
-use WbAMP;
-use WbampHelper_Runtime;
 
 class Html extends DataHtml
 {
@@ -136,106 +134,6 @@ class Html extends DataHtml
 	 */
 	public $userTimezone = null;
 
-	/**
-	 * WbAMP support. Is this an AMP page?
-	 *
-	 * @return  bool
-	 * @see     https://weeblr.com/documentation/products.wbamp/1/going-further/api/index.html
-	 */
-	public function isAMP(): bool
-	{
-		if (!class_exists('\WbAMP'))
-		{
-			return false;
-		}
-
-		try
-		{
-			return WbAMP::isAMPRequest();
-		}
-		catch (Throwable $e)
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * WbAMP support. Get the canonical (non-AMP) URL of this page
-	 *
-	 * @return  string
-	 * @see     https://weeblr.com/documentation/products.wbamp/1/going-further/api/index.html
-	 */
-	public function getNonAmpURL(): string
-	{
-		$current = Uri::getInstance()->toString();
-
-		if (!class_exists('\WbAMP'))
-		{
-			return $current;
-		}
-
-		try
-		{
-			return WbAMP::getCanonicalUrl();
-		}
-		catch (Throwable $e)
-		{
-			return $current;
-		}
-	}
-
-	/**
-	 * WbAMP support. Get the AMP URL of this page
-	 *
-	 * @return  string
-	 * @see     https://weeblr.com/documentation/products.wbamp/1/going-further/api/index.html
-	 */
-	public function getAmpURL(): string
-	{
-		$current = Uri::getInstance()->toString();
-
-		if (!class_exists('\WbAMP'))
-		{
-			return $current;
-		}
-
-		try
-		{
-			return WbAMP::getAMPUrl();
-		}
-		catch (Throwable $e)
-		{
-			return $current;
-		}
-	}
-
-	/**
-	 * WbAMP support. Rebase a pagination URL to its AMP equivalent
-	 *
-	 * @param   string  $link
-	 *
-	 * @return string
-	 */
-	public function rebasePageLink(string $link): string
-	{
-		$uri   = Uri::getInstance($link);
-		$start = $uri->getVar('akengage_limitstart', null);
-		$limit = $uri->getVar('akengage_limit', null);
-
-		$linkUri = clone Uri::getInstance();
-
-		if (!is_null($start))
-		{
-			$linkUri->setVar('akengage_limitstart', $start);
-		}
-
-		if (!is_null($limit))
-		{
-			$linkUri->setVar('akengage_limit', $limit);
-		}
-
-		return $linkUri->toString();
-	}
 
 	/**
 	 * Returns the consent checkbox' text.
@@ -265,15 +163,7 @@ class Html extends DataHtml
 	{
 		$this->userTimezone = $this->getUserTimezone();
 
-		$isAMP = $this->isAMP();
-
 		$this->setLayout('default');
-
-		if ($isAMP)
-		{
-			$this->setLayout('amp');
-			$this->injectAMPStyling();
-		}
 
 		// Load the CSS and JavaScript
 		$this->addJavascriptFile('media://com_engage/js/comments.min.js', $this->container->mediaVersion, 'text/javascript', true);
@@ -308,7 +198,7 @@ class Html extends DataHtml
 		$model->limit      = $this->lists->limit;
 
 		// Only show unpublished comments to users who can publish and unpublish comments (and never in AMP views)
-		if (!$this->perms['state'] || $isAMP)
+		if (!$this->perms['state'])
 		{
 			$model->enabled(1);
 		}
@@ -496,55 +386,6 @@ class Html extends DataHtml
 		$lang = $this->container->platform->getLanguage();
 
 		return $lang->hasKey($key) ? $key : null;
-	}
-
-	/**
-	 * Inject the amp.css file into the AMP pages.
-	 *
-	 * wbAMP sidesteps the Joomla HTML document (for good reason). Moreover, AMP doesn't support linked stylesheets, it
-	 * all has to be inline. The only options we have are:
-	 *
-	 * i.  Ask the user to enter the styling manually (which sucks for the user); or
-	 * ii. Use a hack-y way to make wbAMP believe the content of our amp.css file is custom CSS rules the user has
-	 *     entered into its configuration.
-	 *
-	 * I opted for the latter. However, if you are reading this, PLEASE do not do this unless you understand very well
-	 * the implications of adding CSS rules to AMP and have an option for your users to disable this behavior. Do as I
-	 * say, don't do as I do.
-	 */
-	private function injectAMPStyling(): void
-	{
-		// If I'm told to not inject CSS in AMP pages I will bail out early.
-		if ($this->container->params->get('amp_css', 1) == 0)
-		{
-			return;
-		}
-
-		if (!class_exists('\WbampHelper_Runtime'))
-		{
-			return;
-		}
-
-		try
-		{
-			$customCss     = WbampHelper_Runtime::$params->get('custom_css');
-			$customCssFile = $this->container->template->parsePath('media://com_engage/css/amp.css', true);
-			$content       = @file_get_contents($customCssFile);
-			if ($content === false)
-			{
-				return;
-			}
-			$content   = str_replace('/*# sourceMappingURL=amp.css.map */', '', $content);
-			$customCss .= (empty($customCss) ? "\n" : '') . $content;
-			WbampHelper_Runtime::$params->set('custom_css', $customCss);
-		}
-		catch (Throwable $e)
-		{
-			// Log the error and continue regardless. It won't be as pretty but it will still be readable!
-			Log::add(sprintf("Error injecting AMP styling: %s", $e->getMessage()), Log::CRITICAL, 'com_engage');
-
-			return;
-		}
 	}
 
 	private function getUserTimezone(): DateTimeZone

@@ -7,6 +7,8 @@
 
 namespace Akeeba\Component\Engage\Site\Helper;
 
+defined('_JEXEC') or die();
+
 use Akeeba\Component\Engage\Administrator\Model\CommentsModel;
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use DateInterval;
@@ -24,8 +26,11 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Event\Event;
 use Joomla\Registry\Registry;
 
-defined('_JEXEC') or die();
-
+/**
+ * Helper class to get information about articles and their comments
+ *
+ * @since 1.0.0
+ */
 final class Meta
 {
 	/**

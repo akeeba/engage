@@ -63,28 +63,6 @@ class Comments extends DataController
 	}
 
 	/**
-	 * DEBUG: Trigger email sending
-	 *
-	 * Don't worry, this will NOT work on your sites. This code is only accessible when I add 'debug' to the
-	 * setPredefinedTaskList array in the __construct method.
-	 */
-	public function debug()
-	{
-		$this->disableJoomlaCache();
-
-		$comment = $this->getModel();
-		$comment->load($this->input->getInt('comment_id'));
-
-		$this->container->platform->importPlugin('engage');
-		$this->container->platform->importPlugin('content');
-		$this->container->platform->runPlugins('onComEngageModelCommentsAfterCreate', [$comment]);
-
-		echo "OK";
-
-		$this->container->platform->closeApplication();
-	}
-
-	/**
 	 * Submit a new comment
 	 *
 	 * @throws BlatantSpam If the comment was reported to be blatant spam

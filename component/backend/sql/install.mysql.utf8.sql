@@ -4,8 +4,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-CREATE TABLE `#__engage_comments`
-(
+CREATE TABLE `#__engage_comments` (
     `id`          BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
     `parent_id`   BIGINT(20) unsigned NULL,
     `asset_id`    int(10) unsigned NOT NULL,
@@ -24,8 +23,7 @@ CREATE TABLE `#__engage_comments`
     KEY           `#__engage_comments_created_on` (`created_on` DESC)
 ) DEFAULT COLLATE utf8mb4_unicode_ci COMMENT='Content comments';
 
-CREATE TABLE `#__engage_unsubscribe`
-(
+CREATE TABLE `#__engage_unsubscribe` (
     `asset_id` bigint(20) NOT NULL,
     `email`    varchar(255) NOT NULL,
     PRIMARY KEY (`asset_id`, `email`)
