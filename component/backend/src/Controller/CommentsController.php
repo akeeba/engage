@@ -9,6 +9,7 @@ namespace Akeeba\Component\Engage\Administrator\Controller;
 
 defined('_JEXEC') or die;
 
+use Akeeba\Component\Engage\Administrator\Controller\Mixin\ControllerEvents;
 use Akeeba\Component\Engage\Administrator\Controller\Mixin\RegisterControllerTasks;
 use Akeeba\Component\Engage\Administrator\Controller\Mixin\ReturnURLAware;
 use Akeeba\Component\Engage\Administrator\Model\CommentModel;
@@ -25,6 +26,7 @@ use Joomla\Utilities\ArrayHelper;
 
 class CommentsController extends AdminController
 {
+	use ControllerEvents;
 	use RegisterControllerTasks;
 	use ReturnURLAware;
 
@@ -67,11 +69,23 @@ class CommentsController extends AdminController
 		return parent::getModel($name, $prefix, $config);
 	}
 
+	/**
+	 * Report a message as positively not spam and publish it.
+	 *
+	 * @throws  Exception
+	 * @since   1.0.0
+	 */
 	public function reportham()
 	{
 		$this->reportMessage();
 	}
 
+	/**
+	 * Report a message as positively spam and delete it.
+	 *
+	 * @throws  Exception
+	 * @since   1.0.0
+	 */
 	public function reportspam()
 	{
 		$this->reportMessage();
@@ -98,6 +112,7 @@ class CommentsController extends AdminController
 		else
 		{
 			// Get the model.
+			/** @var CommentModel $model */
 			$model = $this->getModel();
 
 			// Make sure the item ids are integers

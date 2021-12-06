@@ -158,7 +158,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 * @param   Event  $event  The event we are handling
 	 *
 	 * @return  void
-	 * @since   1.0.0
+	 * @since        1.0.0
 	 *
 	 * @noinspection PhpUnused
 	 */
@@ -213,8 +213,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	public function onAkeebaEngageGetAssetMeta(Event $event): void
 	{
 		/**
-		 * @var   int   $assetId         The asset ID to get the information for
-		 * @var   bool  $loadParameters  Should I load the comment parameters? (It's slow!)
+		 * @var   int  $assetId        The asset ID to get the information for
+		 * @var   bool $loadParameters Should I load the comment parameters? (It's slow!)
 		 */
 		[$assetId, $loadParameters] = array_merge([0, false], $event->getArguments());
 		$result = $event->getArgument('result', []);
@@ -271,7 +271,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 				'access'        => $row->access ?? 0,
 				'parent_access' => $row->category_access,
 				'parameters'    => $row->parameters,
-			]
+			],
 		]));
 	}
 
@@ -287,8 +287,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	public function onContentAfterDelete(Event $event): void
 	{
 		/**
-		 * @var   string|null           $context
-		 * @var   Content|object|mixed  $data
+		 * @var   string|null          $context
+		 * @var   Content|object|mixed $data
 		 */
 		[$context, $data] = $event->getArguments();
 		$result = $event->getArgument('result', []);
@@ -335,18 +335,18 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	public function onContentAfterDisplay(Event $event): void
 	{
 		/**
-		 * @var   string|null  $context  The context of the content being prepared. We only respond to
+		 * @var   string|null $context The context of the content being prepared. We only respond to
 		 *                                 'com_content.article'
-		 * @var   object       $row      A simple object with the article information
-		 * @var   object       $params   The category parameters, computed through the categories' hierarchy
-		 * @var   int|null     $page     Page number for multi-page articles
+		 * @var   object      $row     A simple object with the article information
+		 * @var   object      $params  The category parameters, computed through the categories' hierarchy
+		 * @var   int|null    $page    Page number for multi-page articles
 		 */
 		[$context, $row, $params, $page] = array_merge([null, null, null, 0], $event->getArguments());
 		$result = $event->getArgument('result', []);
 
 		$event->setArgument('result', array_merge($result, [
 			$this->renderCommentCount($params, $row, $context, false) .
-			$this->renderComments($params, $row, $context)
+			$this->renderComments($params, $row, $context),
 		]));
 	}
 
@@ -361,17 +361,17 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	public function onContentBeforeDisplay(Event $event): void
 	{
 		/**
-		 * @var   string|null  $context  The context of the content being prepared. We only respond to
+		 * @var   string|null $context The context of the content being prepared. We only respond to
 		 *                                 'com_content.article'
-		 * @var   object       $row      A simple object with the article information
-		 * @var   object       $params   The category parameters, computed through the categories' hierarchy
-		 * @var   int|null     $page     Page number for multi-page articles
+		 * @var   object      $row     A simple object with the article information
+		 * @var   object      $params  The category parameters, computed through the categories' hierarchy
+		 * @var   int|null    $page    Page number for multi-page articles
 		 */
 		[$context, $row, $params, $page] = array_merge([null, null, null, 0], $event->getArguments());
 		$result = $event->getArgument('result', []);
 
 		$event->setArgument('result', array_merge($result, [
-			$this->renderCommentCount($params, $row, $context, true)
+			$this->renderCommentCount($params, $row, $context, true),
 		]));
 	}
 
@@ -386,16 +386,16 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	public function onContentBeforeSave(Event $event): void
 	{
 		/**
-		 * @var   string|null   $context  Context for the content being saved
-		 * @var   Table|object  $table    Joomla table object where the content is being saved to
-		 * @var   bool          $isNew    Is this a new record?
-		 * @var   object        $data     Data being saved
+		 * @var   string|null  $context Context for the content being saved
+		 * @var   Table|object $table   Joomla table object where the content is being saved to
+		 * @var   bool         $isNew   Is this a new record?
+		 * @var   object       $data    Data being saved
 		 */
 		[$context, $row, $params, $page] = array_merge([null, null, false, null], $event->getArguments());
 		$result = $event->getArgument('result', []);
 
 		$event->setArgument('result', array_merge($result, [
-			true
+			true,
 		]));
 
 		if (!in_array($context, ['com_categories.category', 'com_content.article']))
@@ -427,13 +427,13 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	public function onContentPrepareData(Event $event)
 	{
 		/**
-		 * @var   string|null  $context  Context for the content being loaded
-		 * @var   object       $data     Data being saved
+		 * @var   string|null $context Context for the content being loaded
+		 * @var   object      $data    Data being saved
 		 */
 		[$context, &$data] = array_merge([null, new \stdClass()], $event->getArguments());
 		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [
-			true
+			true,
 		]));
 
 		if (!in_array($context, ['com_categories.category', 'com_content.article']))
@@ -465,13 +465,13 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	public function onContentPrepareForm(Event $event): void
 	{
 		/**
-		 * @var   Form    $form  The Joomla Form object we are manipulating
-		 * @var   object  $data  The data assigned to the form.
+		 * @var   Form   $form The Joomla Form object we are manipulating
+		 * @var   object $data The data assigned to the form.
 		 */
 		[&$form, $data] = $event->getArguments();
 		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [
-			true
+			true,
 		]));
 
 		if (!in_array($form->getName(), ['com_categories.categorycom_content', 'com_content.article']))
@@ -491,7 +491,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @return  void
 	 * @throws  Exception
-	 * @since   1.0.0
+	 * @since        1.0.0
 	 *
 	 * @noinspection PhpUnused
 	 */
@@ -1179,7 +1179,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 
 		$input->set('option', 'com_engage');
 		$input->set('view', 'comments');
-		$input->set('task', null);
+		$input->set('task', 'main');
 		$input->set('controller', null);
 		$input->set('asset_id', $assetId);
 		$input->set('filter_order_Dir', $commentParams->get('comments_ordering'));

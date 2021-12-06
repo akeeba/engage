@@ -179,6 +179,31 @@ class CommentTable extends AbstractTable
 		{
 			throw new RuntimeException(Text::sprintf('COM_ENGAGE_COMMENTS_ERR_EMAIL_IN_USE', $this->email));
 		}
+
+		// Make sure we have a non–empty comment
+		if (empty($this->body))
+		{
+			throw new RuntimeException(Text::_('COM_ENGAGE_COMMENTS_ERR_COMMENT_REQUIRED'));
+		}
+
+		// If it's a reply to another comment let's make sure it exists and for the correct asset ID
+		if ($this->parent_id !== 0)
+		{
+			// A non-zero parent ID was provided. Try to load the comment.
+			$parent = clone $this;
+			$parent->reset();
+
+			if (!$parent->load($this->parent_id))
+			{
+				throw new RuntimeException(Text::_('COM_ENGAGE_COMMENTS_ERR_INVALID_PARENT'));
+			}
+
+			// Make sure the parent belongs to the same asset ID we're trying to comment on.
+			if ($parent->asset_id != $this->asset_id)
+			{
+				throw new RuntimeException(Text::_('COM_ENGAGE_COMMENTS_ERR_INVALID_PARENT_ASSET'));
+			}
+		}
 	}
 
 	/**

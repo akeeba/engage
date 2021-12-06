@@ -48,9 +48,16 @@ abstract class AbstractTable extends Table
 	/** @inheritdoc */
 	public function check()
 	{
-		$this->triggerEvent('onBeforeCheck');
+		try
+		{
+			$this->triggerEvent('onBeforeCheck');
 
-		$result = parent::check();
+			$result = parent::check();
+		}
+		catch (\Exception $e)
+		{
+			$result = false;
+		}
 
 		$this->triggerEvent('onAfterCheck', [&$result]);
 
