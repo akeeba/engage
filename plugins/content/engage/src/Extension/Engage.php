@@ -23,6 +23,8 @@ use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Dispatcher\ComponentDispatcherFactory;
+use Joomla\CMS\Document\HtmlDocument;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\MVC\Factory\MVCFactory;
@@ -216,7 +218,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   int  $assetId        The asset ID to get the information for
 		 * @var   bool $loadParameters Should I load the comment parameters? (It's slow!)
 		 */
-		[$assetId, $loadParameters] = array_merge([0, false], $event->getArguments());
+		[$assetId, $loadParameters] = $event->getArguments();
 		$result = $event->getArgument('result', []);
 
 		if (empty($assetId))
@@ -341,7 +343,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   object      $params  The category parameters, computed through the categories' hierarchy
 		 * @var   int|null    $page    Page number for multi-page articles
 		 */
-		[$context, $row, $params, $page] = array_merge([null, null, null, 0], $event->getArguments());
+		[$context, $row, $params, $page] = $event->getArguments();
 		$result = $event->getArgument('result', []);
 
 		$event->setArgument('result', array_merge($result, [
@@ -367,7 +369,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   object      $params  The category parameters, computed through the categories' hierarchy
 		 * @var   int|null    $page    Page number for multi-page articles
 		 */
-		[$context, $row, $params, $page] = array_merge([null, null, null, 0], $event->getArguments());
+ 		[$context, $row, $params, $page] = $event->getArguments();
 		$result = $event->getArgument('result', []);
 
 		$event->setArgument('result', array_merge($result, [
@@ -391,7 +393,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   bool         $isNew   Is this a new record?
 		 * @var   object       $data    Data being saved
 		 */
-		[$context, $row, $params, $page] = array_merge([null, null, false, null], $event->getArguments());
+		[$context, $row, $params, $page] = $event->getArguments();
 		$result = $event->getArgument('result', []);
 
 		$event->setArgument('result', array_merge($result, [
@@ -430,7 +432,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   string|null $context Context for the content being loaded
 		 * @var   object      $data    Data being saved
 		 */
-		[$context, &$data] = array_merge([null, new \stdClass()], $event->getArguments());
+		[$context, &$data] = $event->getArguments();
 		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [
 			true,
@@ -480,7 +482,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		}
 
 		// Add the registration fields to the form.
-		Form::addFormPath(__DIR__ . '/forms');
+		Form::addFormPath(__DIR__ . '/../..//forms');
 		$form->loadFile('engage', false);
 	}
 
@@ -871,7 +873,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		}
 
 		$form     = new Form('engage_form');
-		$formData = file_get_contents(__DIR__ . '/forms/engage.xml');
+		$formData = file_get_contents(__DIR__ . '/../../forms/engage.xml');
 
 		if (!$form->load($formData))
 		{
@@ -1090,7 +1092,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		}
 
 		// Use a Layout file to display the appropriate summary
-		$basePath    = __DIR__ . '/layouts';
+		$basePath    = __DIR__ . '/../../layouts';
 		$layoutFile  = sprintf("akeeba.engage.content.%s", $area);
 		$displayData = [
 			'app'   => $this->app,
@@ -1189,13 +1191,19 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		{
 			@ob_start();
 
-			$this->comDispatcherFactory->createDispatcher($this->app, $input)->dispatch();
+			/** @var HtmlDocument $doc */
+			$doc   = Factory::getApplication()->getDocument();
+			$debug = defined('JDEBUG') && boolval(JDEBUG);
+
+			$doc->getWebAssetManager()->getRegistry()->addRegistryFile('media/com_engage/joomla.asset.json');
+
+			$this->comDispatcherFactory->createDispatcher($this->app, $input)->setUseErrorHandler($debug)->dispatch();
 
 			$comments = @ob_get_contents();
 
 			@ob_end_clean();
 		}
-		catch (Exception $e)
+		catch (Throwable $e)
 		{
 			$comments = '';
 		}

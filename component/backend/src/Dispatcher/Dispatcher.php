@@ -47,6 +47,14 @@ class Dispatcher extends ComponentDispatcher
 	 */
 	protected $viewMap = [];
 
+	/**
+	 * Should I use the error handler to catch and report errors?
+	 *
+	 * @var   bool
+	 * @since 3.0.0
+	 */
+	private $useErrorHandler = true;
+
 	/** @inheritdoc */
 	public function dispatch()
 	{
@@ -80,11 +88,25 @@ class Dispatcher extends ComponentDispatcher
 				throw $e;
 			}
 
-			if (!(include_once JPATH_ADMINISTRATOR . '/components/com_engage/tmpl/common/errorhandler.php'))
+			if (!$this->useErrorHandler || !(include_once JPATH_ADMINISTRATOR . '/components/com_engage/tmpl/common/errorhandler.php'))
 			{
 				throw $e;
 			}
 		}
+	}
+
+	/**
+	 * Set the flag to use the error handler
+	 *
+	 * @param   bool  $useErrorHandler
+	 *
+	 * @return  self
+	 */
+	public function setUseErrorHandler(bool $useErrorHandler): self
+	{
+		$this->useErrorHandler = $useErrorHandler;
+
+		return $this;
 	}
 
 	/**
