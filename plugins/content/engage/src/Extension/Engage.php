@@ -9,7 +9,7 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Joomla\Plugin\Content\Engage\src\Extension;
+namespace Joomla\Plugin\Content\Engage\Extension;
 
 defined('_JEXEC') or die;
 

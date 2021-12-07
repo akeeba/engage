@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   AkeebaEngage
+  ~ @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+<form addfieldprefix="Akeeba\Component\Engage\Administrator\Field"
+      addruleprefix="Akeeba\Component\Engage\Site\Form\Rule"
+>
+    <fieldset name="basic"
+              label="JGLOBAL_FIELDSET_GLOBAL"
+    >
+        <field name="id"
+               type="hidden"
+        />
+
+        <field name="parent_id"
+               type="hidden"
+        />
+
+        <field name="asset_id"
+               type="hidden"
+        />
+
+        <field name="name"
+               type="text"
+               label="COM_ENGAGE_COMMENT_FIELD_NAME"
+               default=""
+               required="false"
+               showon="created_by:0"
+        />
+
+        <field name="email"
+               type="email"
+               label="COM_ENGAGE_COMMENT_FIELD_EMAIL"
+               default=""
+               required="false"
+               showon="created_by:0"
+        />
+
+        <field name="body"
+               type="editor"
+               label="COM_ENGAGE_COMMENTS_FILTER_BODY"
+               default=""
+               id="commentText"
+               cols="50"
+               rows="5"
+               filter="JComponentHelper::filterText"
+               buttons="true"
+               hiddenLabel="true"
+               required="true"
+        />
+
+        <field
+                name="captcha"
+                type="captcha"
+                hiddenLabel="true"
+                label="COM_ATS_TICKET_LBL_CAPTCHA_LABEL"
+                validate="captcha"
+        />
+
+        <field
+                name="accept_tos"
+                type="checkbox"
+                label=""
+                checked="false"
+                filter="boolean"
+                required="required"
+                validate="tosaccept"
+        />
+
+    </fieldset>
+</form>

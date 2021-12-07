@@ -69,7 +69,7 @@
                 type="list"
                 label="COM_ENGAGE_CONFIG_CAPTCHA_FOR_LABEL"
                 description="COM_ENGAGE_CONFIG_CAPTCHA_FOR_DESC"
-                default="hide"
+                default="guests"
                 showon="captcha!:0"
         >
             <option value="guests">COM_ENGAGE_CONFIG_CAPTCHA_FOR_GUESTS</option>

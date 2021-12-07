@@ -7,6 +7,7 @@
 
 defined('_JEXEC') || die;
 
+use Joomla\CMS\Dispatcher\ComponentDispatcherFactoryInterface;
 use Joomla\CMS\Extension\PluginInterface;
 use Joomla\CMS\Extension\Service\Provider\ComponentDispatcherFactory;
 use Joomla\CMS\Extension\Service\Provider\MVCFactory;
@@ -15,7 +16,7 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
 use Joomla\Event\DispatcherInterface;
-use Joomla\Plugin\Content\Engage\src\Extension\Engage;
+use Joomla\Plugin\Content\Engage\Extension\Engage;
 
 return new class implements ServiceProviderInterface {
 	/**
@@ -39,7 +40,7 @@ return new class implements ServiceProviderInterface {
 				$config               = (array) PluginHelper::getPlugin('content', 'engage');
 				$subject              = $container->get(DispatcherInterface::class);
 				$mvcFactory           = $container->get(MVCFactoryInterface::class);
-				$comDispatcherFactory = $container->get(ComponentDispatcherFactory::class);
+				$comDispatcherFactory = $container->get(ComponentDispatcherFactoryInterface::class);
 
 				return new Engage($subject, $config, $mvcFactory, $comDispatcherFactory);
 			}

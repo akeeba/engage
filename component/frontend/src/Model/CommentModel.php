@@ -25,12 +25,47 @@ use RuntimeException;
 class CommentModel extends AdminCommentModel
 {
 	/**
-	 * TODO — Form manipulation
+	 * Method for getting a form.
 	 *
-	 * The form has two fields, accept_tos and captcha, which are only shown to guests and are contingent upon component
-	 * options. We have to modify the getForm() here and in the parent class to allow manipulation of the aforementioned
-	 * fields.
+	 * @param   array    $data      Data for the form.
+	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
+	 *
+	 * @return  Form|bool
+	 *
+	 * @throws  Exception
+	 * @since   3.0.0
+	 *
 	 */
+	public function getForm($data = [], $loadData = true)
+	{
+		$id     = $data['id'] ?? null;
+		$isNew  = empty($id);
+		$source = $isNew ? 'comment_new' : 'comment';
+
+		$form = $this->loadForm(
+			'com_engage.comment',
+			$source,
+			[
+				'control'   => 'jform',
+				'load_data' => $loadData,
+			]) ?: false;
+
+		if (empty($form))
+		{
+			return false;
+		}
+
+		if ($isNew)
+		{
+			$this->postProcessNewCommentForm($form, $data);
+		}
+		else
+		{
+			$this->postProcessEditCommentForm($form, $data);
+		}
+
+		return $form;
+	}
 
 	/**
 	 * Resubscribe a user to some content's comments
@@ -91,6 +126,101 @@ class CommentModel extends AdminCommentModel
 		$this->assertAcceptTos($data['accept_tos'] ?? false);
 
 		return parent::validate($form, $data, $group);
+	}
+
+	/**
+	 * Post–process the edit an existing comment comment form
+	 *
+	 * @param   Form   $form  The form we have already loaded
+	 * @param   array  $data  The data we loaded in the form
+	 *
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
+	protected function postProcessEditCommentForm(Form $form, array $data)
+	{
+		$user           = UserFetcher::getUser();
+		$removeFields   = [];
+		$readonlyFields = [];
+
+		if (!$user->authorise('core.manage', 'com_engage'))
+		{
+			$readonlyFields = ['name', 'email', 'created_by', 'created', 'enabled'];
+			$removeFields   = ['ip', 'user_agent', 'modified', 'modified_by'];
+
+			if ($user->authorise('core.edit.state', 'com_engage'))
+			{
+				array_pop($readonlyFields);
+			}
+		}
+
+		foreach ($removeFields as $fieldName)
+		{
+			$form->removeField($fieldName);
+		}
+
+		foreach ($readonlyFields as $fieldName)
+		{
+			$form->setFieldAttribute($fieldName, 'disabled', 'true');
+			$form->setFieldAttribute($fieldName, 'required', 'false');
+			$form->setFieldAttribute($fieldName, 'filter', 'unset');
+		}
+	}
+
+	/**
+	 * Post–process the new comment form
+	 *
+	 * @param   Form   $form  The form we have already loaded
+	 * @param   array  $data  The data we loaded in the form
+	 *
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
+	protected function postProcessNewCommentForm(Form $form, array $data)
+	{
+		$user          = UserFetcher::getUser();
+		$cParams       = ComponentHelper::getParams('com_engage');
+		$tosPrompt     = $cParams->get('tos_prompt');
+		$acceptTos     = $cParams->get('accept_tos', 0) == 1;
+		$tosChecked    = (bool) ($data['accept_tos'] ?? 0);
+		$captchaPlugin = $cParams->get('captcha', '0');
+		$captchaFor    = $cParams->get('captcha_for', 'guests');
+
+		// Only guests see the Accept ToS field and only if configured
+		if (!$user->guest || !$acceptTos || empty($tosPrompt))
+		{
+			$form->removeField('accept_tos');
+		}
+		else
+		{
+			$form->setFieldAttribute('accept_tos', 'label', $tosPrompt);
+			$form->setFieldAttribute('accept_tos', 'checked', $tosChecked ? 'true' : 'false');
+		}
+
+		// Should I display the CAPTCHA?
+		$showCaptcha = false;
+
+		switch ($captchaFor)
+		{
+			case 'guests':
+				$showCaptcha = $user->guest;
+				break;
+
+			case 'nonmanager':
+				$showCaptcha = !$user->guest && !$user->authorise('core.manage', 'com_engage');
+				break;
+		}
+
+		$showCaptcha &= ($captchaPlugin !== '0');
+
+		if (!$showCaptcha)
+		{
+			$form->removeField('captcha');
+		}
+		else
+		{
+			$form->setFieldAttribute('captcha', 'plugin', $captchaPlugin);
+		}
 	}
 
 	/**
