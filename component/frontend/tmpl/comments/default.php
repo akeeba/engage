@@ -20,26 +20,28 @@ defined('_JEXEC') or die();
  * - default_form.php  Comment / reply submission form
  */
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 
-/** @var \Akeeba\Engage\Site\View\Comments\Html $this */
+/** @var \Akeeba\Component\Engage\Site\View\Comments\HtmlView $this */
 
-$darkMode       = $this->container->params->get('dark_mode_backend', -1);
-$paginationData = $this->getPagination()->getData();
+$cParams = ComponentHelper::getParams('com_engage');
 ?>
-<section id="akengage-comments-section" class="akengage-outer-container<?= ($darkMode == 1) ? '--dark' : '' ?>" aria-label="<?= Text::_('COM_ENGAGE_COMMENTS_SECTION_HEADER') ?>">
+<section id="akengage-comments-section" class="akengage-outer-container"
+		aria-label="<?= Text::_('COM_ENGAGE_COMMENTS_SECTION_HEADER') ?>">
+
 	<h3 class="akengage-title">
-		<?= Text::plural($this->headerKey, $this->getItemCount(), $this->title) ?>
+		<?= Text::plural($this->headerKey, $this->pagination->total, $this->title) ?>
 	</h3>
 
-	<?= $this->container->template->loadPosition('engage-before-comments') ?>
+	<?= $this->loadPosition('engage-before-comments') ?>
 
-	<?php if ($this->getItemCount()): ?>
+	<?php if ($this->pagination->total): ?>
 		<div class="akengage-list-container">
-			<?php echo $this->loadAnyTemplate('any:com_engage/Comments/default_list') ?>
+			<?php // echo $this->loadTemplate('list') ?>
 		</div>
 
-		<?= $this->container->template->loadPosition('engage-after-comments') ?>
+		<?= $this->loadPosition('engage-after-comments') ?>
 
 		<?php if ($this->pagination->pagesTotal > 1): ?>
 		<div class="akengage-pagination">
@@ -51,10 +53,10 @@ $paginationData = $this->getPagination()->getData();
 	<?php endif; ?>
 
 	<?php if (!$this->areCommentsClosed && $this->user->guest && !$this->perms['create']): ?>
-		<?php echo $this->loadAnyTemplate('any:com_engage/Comments/default_login') ?>
+		<?php // echo $this->loadTemplate('login') ?>
 	<?php endif; ?>
 
 	<?php if ($this->perms['create'] && !$this->areCommentsClosed): ?>
-		<?php echo $this->loadAnyTemplate('any:com_engage/Comments/default_form') ?>
+		<?php // echo $this->loadTemplate('form') ?>
 	<?php endif; ?>
 </section>

@@ -1186,14 +1186,16 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		$input->set('asset_id', $assetId);
 		$input->set('filter_order_Dir', $commentParams->get('comments_ordering'));
 
+		// Is debug mode enabled?
+		$debug = defined('JDEBUG') && boolval(JDEBUG);
+
 		// Capture the output instead of pushing it to the browser
+		@ob_start();
+
 		try
 		{
-			@ob_start();
-
 			/** @var HtmlDocument $doc */
 			$doc   = Factory::getApplication()->getDocument();
-			$debug = defined('JDEBUG') && boolval(JDEBUG);
 
 			$doc->getWebAssetManager()->getRegistry()->addRegistryFile('media/com_engage/joomla.asset.json');
 
@@ -1206,7 +1208,33 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		catch (Throwable $e)
 		{
 			$comments = '';
+
+			$is403or404 = in_array($e->getCode(), [403, 404]);
+
+			if ($debug && !$is403or404)
+			{
+				@include JPATH_ADMINISTRATOR . '/components/com_engage/tmpl/common/errorhandler.php';
+
+				$comments = @ob_get_contents();
+			}
+			elseif ($debug && $is403or404)
+			{
+				$comments = <<< HTML
+<div class="card border-danger">
+	<h3 class="card-header bg-danger text-white">
+		<span class="badge bg-dark">{$e->getCode()}</span> {$e->getMessage()}
+	</h3>
+	<div class="card-body">
+		<p>{$e->getFile()}({$e->getLine()})</p>
+		<pre>{$e->getTraceAsString()}</pre>
+	</div>
+</div>
+HTML;
+
+			}
 		}
+
+		@ob_end_clean();
 
 		return $comments;
 	}

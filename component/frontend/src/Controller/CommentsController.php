@@ -15,12 +15,14 @@ use Akeeba\Component\Engage\Administrator\Controller\Mixin\ReturnURLAware;
 use Akeeba\Component\Engage\Administrator\Controller\Mixin\ReusableModels;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
+use Akeeba\Component\Engage\Site\View\Comments\HtmlView;
 use Exception;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\Database\DatabaseDriver;
-use Joomla\Plugin\Content\Engage\src\Extension\Engage;
+use Joomla\Plugin\Content\Engage\Extension\Engage;
 use RuntimeException;
 
 class CommentsController extends AdminCommentsController
@@ -219,17 +221,17 @@ class CommentsController extends AdminCommentsController
 		}
 
 		// Make sure we are allowed to show this page (we must be called by the plugin).
-		$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 6);
+		$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 		$allowed   = false;
 
 		foreach ($backtrace as $info)
 		{
-			if (!isset($info['class']) || !isset($info['method']))
+			if (!isset($info['class']) || !isset($info['function']))
 			{
 				continue;
 			}
 
-			if ($info['class'] === Engage::class && $info['method'] === 'renderComments')
+			if ($info['class'] === Engage::class && $info['function'] === 'renderComments')
 			{
 				$allowed = true;
 
@@ -242,13 +244,56 @@ class CommentsController extends AdminCommentsController
 			throw new RuntimeException(Text::_('JERROR_ALERTNOAUTHOR'), 403);
 		}
 
+		// Apply the custom pagination to the model.
+		$defaultLimit = $this->getDefaultListLimit();
+		$start        = $this->app->getUserStateFromRequest('com_engage.comments.limitstart', 'akengage_limitstart', 0);
+		$limit        = $this->app->getUserStateFromRequest('com_engage.comments.limit', 'akengage_limit', $defaultLimit);
+
+		$model = $this->getModel('Comments', 'Site', ['ignore_request' => true]);
+		$model->setState('list.start', $start);
+		$model->setState('list.limit', $limit);
+
 		// Get the asset_id and assert we have access to it
 		$assetId = $this->getAssetId();
 
 		// Pass the data to the view
 		/** @var HtmlView $view */
 		$view          = $this->getView();
+		$view->setModel($model, true);
 		$view->assetId = $assetId;
+	}
+
+	/**
+	 * Get the default list limit configured by the site administrator
+	 *
+	 * @return  int
+	 * @since   3.0.0
+	 */
+	private function getDefaultListLimit(): int
+	{
+		$defaultLimit = ComponentHelper::getParams('com_engage')->get('default_limit', 20);
+		$defaultLimit = ($defaultLimit > 0) ? $defaultLimit : 0;
+
+		if (!is_null($defaultLimit) || !class_exists(Factory::class))
+		{
+			return $defaultLimit;
+		}
+
+		try
+		{
+			$app = Factory::getApplication();
+		}
+		catch (Exception $e)
+		{
+			return $defaultLimit;
+		}
+
+		if (is_object($app) && method_exists($app, 'get'))
+		{
+			$defaultLimit = (int) $app->get('list_limit', 20);
+		}
+
+		return $defaultLimit;
 	}
 
 	/** @inheritDoc */
@@ -258,6 +303,28 @@ class CommentsController extends AdminCommentsController
 
 		$this->disableJoomlaCache();
 		$this->cleanCache();
+	}
+
+	/**
+	 * Get the asset ID from the request and verify it is real
+	 *
+	 * @return  int
+	 *
+	 * @throws  RuntimeException
+	 */
+	private function getAssetId(): int
+	{
+		// Get the asset ID from the request
+		$assetId = $this->input->getInt('asset_id', 0);
+
+		// Make sure the asset ID is non-zero
+		if (empty($assetId) || ($assetId <= 0))
+		{
+			throw new RuntimeException(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+		}
+
+		// Return the asset ID
+		return $assetId;
 	}
 
 }

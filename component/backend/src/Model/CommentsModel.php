@@ -93,15 +93,18 @@ class CommentsModel extends ListModel
 	/**
 	 * Tree-aware version of getItems(), returning a slice of the tree.
 	 *
-	 * @param   int       $start  Starting offset
+	 * @param   int|null  $start  Starting offset
 	 * @param   int|null  $limit  Max number of items to retrieve
 	 *
 	 * @return  array
 	 * @since   1.0.0
 	 * @see     self::get
 	 */
-	public function commentTreeSlice(int $start, ?int $limit): array
+	public function commentTreeSlice(?int $start = null, ?int $limit = null): array
 	{
+		$start = $start ?? $this->getStart();
+		$limit = $limit ?? $this->getState('list.limit');
+
 		// Get a slice of comment IDs and their depth in tree listing order
 		$idsAndDepth = $this->commentIDTreeSliceWithDepth($start, $limit);
 
@@ -134,13 +137,13 @@ class CommentsModel extends ListModel
 		{
 			$id = (int) $id;
 
-			if (!$items->has($id))
+			if (!isset($items[$id]))
 			{
 				continue;
 			}
 
 			// When adding the item to the collection we also need to set its level information.
-			$item        = $items['id'];
+			$item        = $items[$id];
 			$item->depth = $depth;
 			$ret[]       = $item;
 		}
@@ -579,4 +582,19 @@ class CommentsModel extends ListModel
 
 		return $query;
 	}
+
+	protected function getStoreId($id = '')
+	{
+		$id .= ':' . $this->getState('filter.search');
+		$id .= ':' . $this->getState('filter.from');
+		$id .= ':' . $this->getState('filter.to');
+		$id .= ':' . $this->getState('filter.created_by');
+		$id .= ':' . $this->getState('filter.enabled');
+		$id .= ':' . $this->getState('filter.asset_id');
+		$id .= ':' . $this->getState('filter.parent_id');
+
+		return parent::getStoreId($id);
+	}
+
+
 }
