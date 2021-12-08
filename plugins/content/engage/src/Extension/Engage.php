@@ -432,7 +432,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   string|null $context Context for the content being loaded
 		 * @var   object      $data    Data being saved
 		 */
-		[$context, &$data] = $event->getArguments();
+		[$context, $data] = $event->getArguments();
 		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [
 			true,
@@ -470,7 +470,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   Form   $form The Joomla Form object we are manipulating
 		 * @var   object $data The data assigned to the form.
 		 */
-		[&$form, $data] = $event->getArguments();
+		[$form, $data] = $event->getArguments();
 		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [
 			true,
