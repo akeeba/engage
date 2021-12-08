@@ -30,7 +30,7 @@ $cParams = ComponentHelper::getParams('com_engage');
 <section id="akengage-comments-section" class="akengage-outer-container"
 		aria-label="<?= Text::_('COM_ENGAGE_COMMENTS_SECTION_HEADER') ?>">
 
-	<h3 class="akengage-title">
+	<h3 class="akengage-title h4 border-bottom mb-2">
 		<?= Text::plural($this->headerKey, $this->pagination->total, $this->title) ?>
 	</h3>
 
@@ -38,7 +38,7 @@ $cParams = ComponentHelper::getParams('com_engage');
 
 	<?php if ($this->pagination->total): ?>
 		<div class="akengage-list-container">
-			<?php // echo $this->loadTemplate('list') ?>
+			<?php echo $this->loadTemplate('list') ?>
 		</div>
 
 		<?= $this->loadPosition('engage-after-comments') ?>

@@ -99,6 +99,41 @@ class Avatar
 	}
 
 	/**
+	 * Returns the URL for the user's profile page, empty if no profile is available
+	 *
+	 * @return  string  The user's profile page, empty if no profile is available
+	 */
+	public static function getProfileURL(User $user): string
+	{
+		try
+		{
+			PluginHelper::importPlugin('engage');
+
+			$dispatcher = Factory::getApplication()->getDispatcher();
+			$eventName  = 'onAkeebaEngageUserProfileURL';
+			$event      = new Event($eventName, [$user]);
+			$result     = $dispatcher->dispatch($eventName, $event);
+
+			$results = !isset($result['result']) || \is_null($result['result']) ? [] : $result['result'];
+		}
+		catch (Exception $e)
+		{
+			$results = [];
+		}
+
+		$results = array_filter($results, function ($x) {
+			return is_string($x) && !empty($x);
+		});
+
+		if (empty($results))
+		{
+			return '';
+		}
+
+		return array_shift($results);
+	}
+
+	/**
 	 * Get the user's avatar from a custom field.
 	 *
 	 * The custom field is expected to render EITHER an img element OR a URL to the avatar image.
