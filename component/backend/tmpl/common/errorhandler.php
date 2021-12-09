@@ -67,23 +67,23 @@ $isJoomla3 = version_compare(JVERSION, '3.999.999', 'le');
 
 <?php if ($hideTheError): ?>
 	<?php if ($isJoomla3): ?>
-	<h1>The application has stopped responding</h1>
-	<p>
-		Please contact the administrator of the site and let them know of this error and what you were doing when this
-		happened.
-	</p>
+		<h1>The application has stopped responding</h1>
+		<p>
+			Please contact the administrator of the site and let them know of this error and what you were doing when this
+			happened.
+		</p>
 	<?php else: ?>
-	<div class="card">
-		<h1 class="card-header bg-danger text-white">The application has stopped responding</h1>
-		<div class="card-body">
-			<p>
-				Please contact the administrator of the site and let them know of this error and what you were doing when this
-				happened.
-			</p>
+		<div class="card">
+			<h1 class="card-header bg-danger text-white">The application has stopped responding</h1>
+			<div class="card-body">
+				<p>
+					Please contact the administrator of the site and let them know of this error and what you were doing when this
+					happened.
+				</p>
+			</div>
 		</div>
-	</div>
 	<?php endif; ?>
-<?php return true; endif; ?>
+	<?php return true; endif; ?>
 <div class="<?php echo $isJoomla3 ? '' : 'card my-3' ?>">
 	<h1 class="<?php echo $isJoomla3 ? '' : 'card-header bg-danger text-white' ?>">
 		<?php echo $title ?> - An unhandled Exception has been detected
@@ -123,7 +123,7 @@ $isJoomla3 = version_compare(JVERSION, '3.999.999', 'le');
 			<p>
 				<strong>What about privacy?</strong>
 				Attachments are private in our ticket system: only you and us can see them, <em>even if you file a public
-				ticket</em>, and they are automatically deleted after a month.
+																								ticket</em>, and they are automatically deleted after a month.
 			</p>
 		<?php endif; ?>
 
