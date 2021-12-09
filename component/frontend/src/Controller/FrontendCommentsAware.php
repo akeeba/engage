@@ -14,6 +14,7 @@ use Exception;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Utilities\ArrayHelper;
 use RuntimeException;
 
 defined('_JEXEC') or die;
@@ -96,7 +97,15 @@ trait FrontendCommentsAware
 			return;
 		}
 
-		$id = $this->input->getInt('id', 0);
+		$cid = $this->input->get('cid', []);
+
+		if (!is_array($cid))
+		{
+			$cid = [$cid];
+		}
+
+		$cid = empty($cid) ? [] : ArrayHelper::toInteger($cid);
+		$id  = empty($cid) ? 0 : array_shift($cid);
 
 		if ($id <= 0)
 		{

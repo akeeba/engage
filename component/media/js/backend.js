@@ -4,6 +4,8 @@
  * @license   GNU General Public License version 3, or later
  */
 
+"use strict";
+
 if (typeof akeeba == "undefined")
 {
     var akeeba = {};
@@ -39,4 +41,4 @@ akeeba.System.documentReady(function ()
 {
     akeeba.System.addEventListener("comEngageResetFilters", "click", akeeba.Engage.AdminComments.onReset);
 
-})
+});

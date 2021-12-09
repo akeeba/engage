@@ -219,16 +219,36 @@ class HtmlView extends BaseHtmlView
 		$this->pageParams = $this->pageParams ?? new Registry();
 
 		// Script options and language keys
-		$protoURL = 'index.php?option=com_engage&view=Comments&task=%s&id=';
 		$doc = $app->getDocument();
-		$doc->addScriptOptions('akeeba.Engage.Comments.returnURL', base64_encode(Uri::getInstance()->toString()));
-		$doc->addScriptOptions('akeeba.Engage.Comments.editURL', Route::_(sprintf($protoURL, 'edit'), false, Route::TLS_IGNORE, true));
-		$doc->addScriptOptions('akeeba.Engage.Comments.deleteURL', Route::_(sprintf($protoURL, 'remove'), false, Route::TLS_IGNORE, true));
-		$doc->addScriptOptions('akeeba.Engage.Comments.publishURL', Route::_(sprintf($protoURL, 'publish'), false, Route::TLS_IGNORE, true));
-		$doc->addScriptOptions('akeeba.Engage.Comments.unpublishURL', Route::_(sprintf($protoURL, 'unpublish'), false, Route::TLS_IGNORE, true));
-		$doc->addScriptOptions('akeeba.Engage.Comments.markhamURL', Route::_(sprintf($protoURL, 'reportham'), false, Route::TLS_IGNORE, true));
-		$doc->addScriptOptions('akeeba.Engage.Comments.markspamURL', Route::_(sprintf($protoURL, 'reportspam'), false, Route::TLS_IGNORE, true));
-		$doc->addScriptOptions('akeeba.Engage.Comments.possiblespamURL', Route::_(sprintf($protoURL, 'possiblespam'), false, Route::TLS_IGNORE, true));
+
+		$baseUrl = Uri::getInstance(Route::_('index.php?option=com_engage'));
+		$baseUrl->setVar('returnurl', base64_encode(Uri::getInstance()->toString()));
+		$baseUrl->setVar($app->getFormToken(), 1);
+
+		$baseUrl->setVar('id', '__ID__');
+		$baseUrl->setVar('task', 'comment.edit');
+		$doc->addScriptOptions('akeeba.Engage.Comments.editURL', $baseUrl->toString());
+		$baseUrl->delVar('id');
+
+		$baseUrl->setVar('cid[]', '__ID__');
+
+		$baseUrl->setVar('task', 'comments.delete');
+		$doc->addScriptOptions('akeeba.Engage.Comments.deleteURL', $baseUrl->toString());
+
+		$baseUrl->setVar('task', 'comments.publish');
+		$doc->addScriptOptions('akeeba.Engage.Comments.publishURL', $baseUrl->toString());
+
+		$baseUrl->setVar('task', 'comments.unpublish');
+		$doc->addScriptOptions('akeeba.Engage.Comments.unpublishURL', $baseUrl->toString());
+
+		$baseUrl->setVar('task', 'comments.reportham');
+		$doc->addScriptOptions('akeeba.Engage.Comments.markhamURL', $baseUrl->toString());
+
+		$baseUrl->setVar('task', 'comments.reportspam');
+		$doc->addScriptOptions('akeeba.Engage.Comments.markspamURL', $baseUrl->toString());
+
+		$baseUrl->setVar('task', 'comments.possiblespam');
+		$doc->addScriptOptions('akeeba.Engage.Comments.possiblespamURL', $baseUrl->toString());
 
 		Text::script('COM_ENGAGE_COMMENTS_DELETE_PROMPT');
 

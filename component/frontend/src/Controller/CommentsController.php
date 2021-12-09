@@ -21,6 +21,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\View\ViewInterface;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Plugin\Content\Engage\Extension\Engage;
 use RuntimeException;
@@ -30,7 +31,19 @@ class CommentsController extends AdminCommentsController
 	use FrontendCommentsAware;
 	use GetRedirectionAware;
 	use ReturnURLAware;
-	use ReusableModels;
+	use ReusableModels
+	{
+		ReusableModels::getModel as reusableGetModel;
+		ReusableModels::getView as reusableGetView;
+	}
+
+	/**
+	 * The default view for the display method.
+	 *
+	 * @var    string
+	 * @since  3.0.0
+	 */
+	protected $default_view = 'comments';
 
 	/**
 	 * Disable method inapplicable to the frontend
@@ -43,7 +56,18 @@ class CommentsController extends AdminCommentsController
 		throw new RuntimeException(Text::_('JERROR_ALERTNOAUTHOR'), 403);
 	}
 
-	/** @inheritDoc */
+	/**
+	 * Default view display method
+	 *
+	 * @param   boolean  $cachable   If true, the view output will be cached
+	 * @param   array    $urlparams  An array of safe url parameters and their variable types, for valid values see
+	 *                               {@link InputFilter::clean()}.
+	 *
+	 * @return  static  A controller object to support chaining.
+	 *
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
 	public function display($cachable = false, $urlparams = [])
 	{
 		$urlparams = array_merge_recursive([
@@ -58,6 +82,40 @@ class CommentsController extends AdminCommentsController
 		], $urlparams);
 
 		return parent::display($cachable, $urlparams);
+	}
+
+	/**
+	 * Method to get a model object, loading it if required.
+	 *
+	 * @param   string  $name    The model name. Optional.
+	 * @param   string  $prefix  The class prefix. Optional.
+	 * @param   array   $config  Configuration array for model. Optional.
+	 *
+	 * @return  BaseDatabaseModel|boolean  Model object on success; otherwise false on failure.
+	 *
+	 * @since   3.0.0
+	 */
+	public function getModel($name = 'Comment', $prefix = 'Site', $config = ['ignore_request' => true])
+	{
+		return $this->reusableGetModel($name, $prefix, $config);
+	}
+
+	/**
+	 * Method to get a reference to the current view and load it if necessary.
+	 *
+	 * @param   string  $name    The view name. Optional, defaults to the controller name.
+	 * @param   string  $type    The view type. Optional.
+	 * @param   string  $prefix  The class prefix. Optional.
+	 * @param   array   $config  Configuration array for view. Optional.
+	 *
+	 * @return  ViewInterface  Reference to the view or an error.
+	 *
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
+	public function getView($name = '', $type = '', $prefix = '', $config = [])
+	{
+		return $this->reusableGetView($name, $type, $prefix, $config);
 	}
 
 	/**
@@ -160,6 +218,25 @@ class CommentsController extends AdminCommentsController
 		$this->applyReturnUrl();
 	}
 
+	/**
+	 * Runs after deleting a comment.
+	 *
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
+	protected function onAfterDelete(): void
+	{
+		$this->disableJoomlaCache();
+		$this->applyReturnUrl();
+		$this->cleanCache();
+	}
+
+	/**
+	 * Runs after marking a comment as possibly spam.
+	 *
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
 	protected function onAfterPossiblespam(): void
 	{
 		$this->addCommentFragmentToReturnURL();
@@ -174,14 +251,34 @@ class CommentsController extends AdminCommentsController
 	 */
 	protected function onAfterPublish()
 	{
+		$this->applyReturnUrl();
 		$this->disableJoomlaCache();
 		$this->addCommentFragmentToReturnURL();
 		$this->cleanCache();
 	}
 
+	/**
+	 * Runs after reporting a comment as non–spam.
+	 *
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
 	protected function onAfterReportham()
 	{
 		$this->addCommentFragmentToReturnURL();
+	}
+
+	/**
+	 * Runs after reporting a comment as spam and deleting it.
+	 *
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
+	protected function onAfterReportspam()
+	{
+		$this->applyReturnUrl();
+		$this->disableJoomlaCache();
+		$this->cleanCache();
 	}
 
 	/**
@@ -193,6 +290,7 @@ class CommentsController extends AdminCommentsController
 	 */
 	protected function onAfterUnpublish()
 	{
+		$this->applyReturnUrl();
 		$this->disableJoomlaCache();
 		$this->addCommentFragmentToReturnURL();
 		$this->cleanCache();
@@ -258,9 +356,32 @@ class CommentsController extends AdminCommentsController
 
 		// Pass the data to the view
 		/** @var HtmlView $view */
-		$view          = $this->getView();
+		$view = $this->getView();
 		$view->setModel($model, true);
 		$view->assetId = $assetId;
+	}
+
+	/**
+	 * Get the asset ID from the request.
+	 *
+	 * @return  int
+	 *
+	 * @throws  RuntimeException
+	 * @since   1.0.0
+	 */
+	private function getAssetId(): int
+	{
+		// Get the asset ID from the request
+		$assetId = $this->input->getInt('asset_id', 0);
+
+		// Make sure the asset ID is non-zero
+		if (empty($assetId) || ($assetId <= 0))
+		{
+			throw new RuntimeException(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+		}
+
+		// Return the asset ID
+		return $assetId;
 	}
 
 	/**
@@ -294,37 +415,6 @@ class CommentsController extends AdminCommentsController
 		}
 
 		return $defaultLimit;
-	}
-
-	/** @inheritDoc */
-	protected function postDeleteHook(BaseDatabaseModel $model, $id = null)
-	{
-		parent::postDeleteHook($model, $id);
-
-		$this->disableJoomlaCache();
-		$this->cleanCache();
-	}
-
-	/**
-	 * Get the asset ID from the request and verify it is real
-	 *
-	 * @return  int
-	 *
-	 * @throws  RuntimeException
-	 */
-	private function getAssetId(): int
-	{
-		// Get the asset ID from the request
-		$assetId = $this->input->getInt('asset_id', 0);
-
-		// Make sure the asset ID is non-zero
-		if (empty($assetId) || ($assetId <= 0))
-		{
-			throw new RuntimeException(Text::_('JERROR_ALERTNOAUTHOR'), 403);
-		}
-
-		// Return the asset ID
-		return $assetId;
 	}
 
 }

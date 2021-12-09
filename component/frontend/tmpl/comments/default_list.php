@@ -190,13 +190,21 @@ $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->ena
 						<?= Text::sprintf('COM_ENGAGE_COMMENTS_IP', $comment->ip ?? '???') ?>
 					</span>
 					<?php endif; ?>
-					<span class="akengage-comment-publish-type">
-						<?= Text::_('COM_ENGAGE_COMMENTS_TYPE_' . (($comment->enabled == 1) ? 'published' : (($comment->enabled == -3) ? 'spam' : 'unpublished'))) ?>
-					</span>
 				</div>
 				<?php endif; ?>
 			</div>
 		</footer>
+
+		<?php if ($comment->enabled == -3): ?>
+		<div class="akengage-comment-publish-type bg-warning text-white fw-bold p-2">
+			<?= Text::_('COM_ENGAGE_COMMENTS_TYPE_SPAM') ?>
+		</div>
+		<?php elseif ($comment->enabled != 1): ?>
+		<div class="akengage-comment-publish-type bg-danger text-white fw-bold p-2">
+			<?= Text::_('COM_ENGAGE_COMMENTS_TYPE_UNPUBLISHED') ?>
+		</div>
+		<?php endif ?>
+
 
 		<div class="akengage-comment-body" itemprop="text">
 			<?= HTMLHelper::_('engage.processCommentTextForDisplay', $comment->body) ?>

@@ -4,6 +4,8 @@
  * @license   GNU General Public License version 3, or later
  */
 
+"use strict";
+
 if (typeof akeeba == "undefined")
 {
     var akeeba = {};
@@ -44,7 +46,7 @@ akeeba.Engage.Comments.getAssetIdFromEvent = function (e)
         return 0;
     }
 
-    return akeeba.System.data.get(clickedElement, "akengageid", "0");
+    return clickedElement.dataset['akengageid'] ?? 0;
 };
 
 akeeba.Engage.Comments.onEditButton = function (e)
@@ -57,16 +59,16 @@ akeeba.Engage.Comments.onEditButton = function (e)
      */
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.editURL") + encodeURIComponent(id)
-        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
-        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.editURL") + encodeURIComponent(id)
+        + "&" + Joomla.getOptions("csrf.token") + "=1&returnurl=" +
+        encodeURIComponent(Joomla.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
 };
 
 akeeba.Engage.Comments.onDeleteButton = function (e)
 {
     e.preventDefault();
 
-    var shouldProceed = confirm(akeeba.System.Text._("COM_ENGAGE_COMMENTS_DELETE_PROMPT"));
+    var shouldProceed = confirm(Joomla.Text._("COM_ENGAGE_COMMENTS_DELETE_PROMPT"));
 
     if (!shouldProceed)
     {
@@ -79,9 +81,7 @@ akeeba.Engage.Comments.onDeleteButton = function (e)
      */
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.deleteURL") + encodeURIComponent(id)
-        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
-        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.deleteURL").replace('__ID__', id);
 };
 
 akeeba.Engage.Comments.onPublishButton = function (e)
@@ -94,9 +94,7 @@ akeeba.Engage.Comments.onPublishButton = function (e)
      */
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.publishURL") + encodeURIComponent(id)
-        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
-        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.publishURL").replace('__ID__', id);
 };
 
 akeeba.Engage.Comments.onUnpublishButton = function (e)
@@ -109,9 +107,7 @@ akeeba.Engage.Comments.onUnpublishButton = function (e)
      */
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.unpublishURL") + encodeURIComponent(id)
-        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
-        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.unpublishURL").replace('__ID__', id);
 };
 
 akeeba.Engage.Comments.onMarkHamButton = function (e)
@@ -120,9 +116,7 @@ akeeba.Engage.Comments.onMarkHamButton = function (e)
 
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.markhamURL") + encodeURIComponent(id)
-        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
-        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.markhamURL").replace('__ID__', id);
 };
 
 akeeba.Engage.Comments.onMarkSpamButton = function (e)
@@ -131,9 +125,7 @@ akeeba.Engage.Comments.onMarkSpamButton = function (e)
 
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.markspamURL") + encodeURIComponent(id)
-        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
-        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.markspamURL").replace('__ID__', id);
 };
 
 akeeba.Engage.Comments.onMarkPossibleSpamButton = function (e)
@@ -142,9 +134,7 @@ akeeba.Engage.Comments.onMarkPossibleSpamButton = function (e)
 
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = akeeba.System.getOptions("akeeba.Engage.Comments.possiblespamURL") + encodeURIComponent(id)
-        + "&" + akeeba.System.getOptions("csrf.token") + "=1&returnurl=" +
-        encodeURIComponent(akeeba.System.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.possiblespamURL").replace('__ID__', id);
 };
 
 akeeba.Engage.Comments.onReplyButton = function (e)
@@ -160,8 +150,8 @@ akeeba.Engage.Comments.onReplyButton = function (e)
 
     akeeba.Engage.Comments.unhideReplyArea();
 
-    var parentId      = akeeba.System.data.get(clickedElement, "akengageid", 0) * 1;
-    var inReplyToName = akeeba.System.data.get(clickedElement, "akengagereplyto", 0);
+    var parentId      = (clickedElement.dataset["akengageid"] ?? 0) * 1;
+    var inReplyToName = clickedElement.dataset["akengagereplyto"] ?? 0;
     var form          = document.forms["akengageCommentForm"];
     var wrapper       = document.getElementById("akengage-comment-inreplyto-wrapper");
 
@@ -288,7 +278,7 @@ akeeba.Engage.Comments.loadCommenterInfo = function ()
 akeeba.Engage.Comments.onHiderButton = function (e)
 {
     akeeba.Engage.Comments.unhideReplyArea();
-}
+};
 
 akeeba.Engage.Comments.unhideReplyArea = function()
 {
@@ -300,58 +290,44 @@ akeeba.Engage.Comments.unhideReplyArea = function()
     if (elHider) {
         elHider.style.display = 'none';
     }
-}
+};
 
-akeeba.Loader.add(['akeeba.System'], function ()
-{
-    akeeba.System.iterateNodes("button.akengage-comment-edit-btn", function (elButton)
-    {
-        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onEditButton);
-    });
-
-    akeeba.System.iterateNodes("button.akengage-comment-delete-btn", function (elButton)
-    {
-        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onDeleteButton);
-    });
-
-    akeeba.System.iterateNodes("button.akengage-comment-reply-btn", function (elButton)
-    {
-        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onReplyButton);
-    });
-
-    akeeba.System.iterateNodes("button.akengage-comment-unpublish-btn", function (elButton)
-    {
-        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onUnpublishButton);
-    });
-
-    akeeba.System.iterateNodes("button.akengage-comment-publish-btn", function (elButton)
-    {
-        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onPublishButton);
-    });
-
-    akeeba.System.iterateNodes("button.akengage-comment-markham-btn", function (elButton)
-    {
-        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onMarkHamButton);
-    });
-
-    akeeba.System.iterateNodes("button.akengage-comment-markspam-btn", function (elButton)
-    {
-        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onMarkSpamButton);
-    });
-
-    akeeba.System.iterateNodes("button.akengage-comment-possiblespam-btn", function (elButton)
-    {
-        akeeba.System.addEventListener(elButton, "click", akeeba.Engage.Comments.onMarkPossibleSpamButton);
-    });
-
-    akeeba.System.addEventListener(
-        "akengage-comment-inreplyto-cancel", "click", akeeba.Engage.Comments.onCancelReplyButton);
-
-    akeeba.System.addEventListener(
-        "akengageCommentForm", "submit", akeeba.Engage.Comments.saveCommenterInfo);
-
-    akeeba.System.addEventListener(
-        "akengage-comment-hider-button", "click", akeeba.Engage.Comments.onHiderButton);
-
-    akeeba.Engage.Comments.loadCommenterInfo();
+[].slice.call(document.querySelectorAll("button.akengage-comment-edit-btn")).forEach(function (el) {
+    el.addEventListener('click', akeeba.Engage.Comments.onEditButton);
 });
+
+[].slice.call(document.querySelectorAll("button.akengage-comment-delete-btn")).forEach(function (el) {
+    el.addEventListener('click', akeeba.Engage.Comments.onDeleteButton);
+});
+
+[].slice.call(document.querySelectorAll("button.akengage-comment-reply-btn")).forEach(function (el) {
+    el.addEventListener('click', akeeba.Engage.Comments.onReplyButton);
+});
+
+[].slice.call(document.querySelectorAll("button.akengage-comment-unpublish-btn")).forEach(function (el) {
+    el.addEventListener('click', akeeba.Engage.Comments.onUnpublishButton);
+});
+
+[].slice.call(document.querySelectorAll("button.akengage-comment-publish-btn")).forEach(function (el) {
+    el.addEventListener('click', akeeba.Engage.Comments.onPublishButton);
+});
+
+[].slice.call(document.querySelectorAll("button.akengage-comment-markham-btn")).forEach(function (el) {
+    el.addEventListener('click', akeeba.Engage.Comments.onMarkHamButton);
+});
+
+[].slice.call(document.querySelectorAll("button.akengage-comment-markspam-btn")).forEach(function (el) {
+    el.addEventListener('click', akeeba.Engage.Comments.onMarkSpamButton);
+});
+
+[].slice.call(document.querySelectorAll("button.akengage-comment-possiblespam-btn")).forEach(function (el) {
+    el.addEventListener('click', akeeba.Engage.Comments.onMarkPossibleSpamButton);
+});
+
+document.getElementById('akengage-comment-inreplyto-cancel').addEventListener('click', akeeba.Engage.Comments.onCancelReplyButton);
+
+document.getElementById('akengageCommentForm').addEventListener('submit', akeeba.Engage.Comments.saveCommenterInfo);
+
+document.getElementById('akengage-comment-hider-button').addEventListener('click', akeeba.Engage.Comments.onHiderButton);
+
+akeeba.Engage.Comments.loadCommenterInfo();

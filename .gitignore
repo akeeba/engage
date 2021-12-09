@@ -50,3 +50,6 @@ fef.min.css
 
 ### Junk
 /component/media/css/.sass-cache
+
+## NPM build dependencies
+node_modules/**
