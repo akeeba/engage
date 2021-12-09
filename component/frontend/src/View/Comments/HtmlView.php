@@ -168,7 +168,6 @@ class HtmlView extends BaseHtmlView
 		// Load the model and persist its state in the session
 		/** @var CommentsModel $model */
 		$model = $this->getModel();
-		// TODO Why is the state not taken into account in the model's commentTreeSlice --> commentIDTreeSliceWithDepth. Because I don't set the cache key to include all the filters, that's why!
 		$model->setState('filter.asset_id', $this->assetId);
 
 		// Only show unpublished comments to users who can publish and unpublish comments
@@ -183,6 +182,7 @@ class HtmlView extends BaseHtmlView
 
 		// Populate the pagination object
 		$this->pagination = $model->getPagination();
+		$this->pagination->prefix = 'akengage_';
 
 		// Asset metadata-based properties
 		$meta        = Meta::getAssetAccessMeta($this->assetId, true);
