@@ -112,7 +112,7 @@
                cols="50"
                rows="5"
                filter="JComponentHelper::filterText"
-               buttons="true"
+               buttons="false"
                hiddenLabel="true"
                required="true"
         />

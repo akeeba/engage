@@ -186,6 +186,13 @@ class CommentModel extends AdminCommentModel
 		$captchaPlugin = $cParams->get('captcha', '0');
 		$captchaFor    = $cParams->get('captcha_for', 'guests');
 
+		// Non-guests cannot change their name or email
+		if (!$user->guest)
+		{
+			$form->removeField('name');
+			$form->removeField('email');
+		}
+
 		// Only guests see the Accept ToS field and only if configured
 		if (!$user->guest || !$acceptTos || empty($tosPrompt))
 		{

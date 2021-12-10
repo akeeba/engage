@@ -4,8 +4,7 @@ PENDING
 
 Component
     Frontend
-        Comments
-            Login and comment form are still missing
+        Comment edit MVC (singular comment view)
 
 
 

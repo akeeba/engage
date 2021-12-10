@@ -46,7 +46,7 @@ akeeba.Engage.Comments.getAssetIdFromEvent = function (e)
         return 0;
     }
 
-    return clickedElement.dataset['akengageid'] ?? 0;
+    return clickedElement.dataset["akengageid"] ?? 0;
 };
 
 akeeba.Engage.Comments.onEditButton = function (e)
@@ -81,7 +81,7 @@ akeeba.Engage.Comments.onDeleteButton = function (e)
      */
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.deleteURL").replace('__ID__', id);
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.deleteURL").replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onPublishButton = function (e)
@@ -94,7 +94,7 @@ akeeba.Engage.Comments.onPublishButton = function (e)
      */
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.publishURL").replace('__ID__', id);
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.publishURL").replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onUnpublishButton = function (e)
@@ -107,7 +107,7 @@ akeeba.Engage.Comments.onUnpublishButton = function (e)
      */
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.unpublishURL").replace('__ID__', id);
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.unpublishURL").replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onMarkHamButton = function (e)
@@ -116,7 +116,7 @@ akeeba.Engage.Comments.onMarkHamButton = function (e)
 
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.markhamURL").replace('__ID__', id);
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.markhamURL").replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onMarkSpamButton = function (e)
@@ -125,7 +125,7 @@ akeeba.Engage.Comments.onMarkSpamButton = function (e)
 
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.markspamURL").replace('__ID__', id);
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.markspamURL").replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onMarkPossibleSpamButton = function (e)
@@ -134,7 +134,7 @@ akeeba.Engage.Comments.onMarkPossibleSpamButton = function (e)
 
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.possiblespamURL").replace('__ID__', id);
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.possiblespamURL").replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onReplyButton = function (e)
@@ -155,15 +155,15 @@ akeeba.Engage.Comments.onReplyButton = function (e)
     var form          = document.forms["akengageCommentForm"];
     var wrapper       = document.getElementById("akengage-comment-inreplyto-wrapper");
 
-    form.parent_id.value  = parentId;
-    wrapper.style.display = "none";
+    form["jform[parent_id]"].value = parentId;
+    wrapper.classList.add('d-none');
 
     if (parentId !== 0)
     {
         var inReplyTo       = document.getElementById("akengage-comment-inreplyto-name");
         inReplyTo.innerText = inReplyToName;
 
-        wrapper.style.display = "block";
+        wrapper.classList.remove('d-none');
     }
 
     document.location.hash = "";
@@ -178,9 +178,9 @@ akeeba.Engage.Comments.onCancelReplyButton = function (e)
     var wrapper   = document.getElementById("akengage-comment-inreplyto-wrapper");
     var inReplyTo = document.getElementById("akengage-comment-inreplyto-name");
 
-    form.parent_id.value  = 0;
-    wrapper.style.display = "none";
-    inReplyTo.innerText   = "";
+    form["jform[parent_id]"].value = 0;
+    wrapper.style.display          = "none";
+    inReplyTo.innerText            = "";
 };
 
 akeeba.Engage.Comments.saveCommenterInfo = function (e)
@@ -280,54 +280,68 @@ akeeba.Engage.Comments.onHiderButton = function (e)
     akeeba.Engage.Comments.unhideReplyArea();
 };
 
-akeeba.Engage.Comments.unhideReplyArea = function()
+akeeba.Engage.Comments.unhideReplyArea = function ()
 {
-    var elFormArea = document.getElementById('akengage-comment-form');
-    var elHider = document.getElementById('akengage-comment-hider');
+    var elFormArea = document.getElementById("akengageCommentForm");
+    var elHider    = document.getElementById("akengage-comment-hider");
 
-    elFormArea.style.display = '';
+    elFormArea.style.display = "";
 
-    if (elHider) {
-        elHider.style.display = 'none';
+    if (elHider)
+    {
+        elHider.style.display = "none";
     }
 };
 
-[].slice.call(document.querySelectorAll("button.akengage-comment-edit-btn")).forEach(function (el) {
-    el.addEventListener('click', akeeba.Engage.Comments.onEditButton);
+[].slice.call(document.querySelectorAll("button.akengage-comment-edit-btn")).forEach(function (el)
+{
+    el.addEventListener("click", akeeba.Engage.Comments.onEditButton);
 });
 
-[].slice.call(document.querySelectorAll("button.akengage-comment-delete-btn")).forEach(function (el) {
-    el.addEventListener('click', akeeba.Engage.Comments.onDeleteButton);
+[].slice.call(document.querySelectorAll("button.akengage-comment-delete-btn")).forEach(function (el)
+{
+    el.addEventListener("click", akeeba.Engage.Comments.onDeleteButton);
 });
 
-[].slice.call(document.querySelectorAll("button.akengage-comment-reply-btn")).forEach(function (el) {
-    el.addEventListener('click', akeeba.Engage.Comments.onReplyButton);
+[].slice.call(document.querySelectorAll("button.akengage-comment-reply-btn")).forEach(function (el)
+{
+    el.addEventListener("click", akeeba.Engage.Comments.onReplyButton);
 });
 
-[].slice.call(document.querySelectorAll("button.akengage-comment-unpublish-btn")).forEach(function (el) {
-    el.addEventListener('click', akeeba.Engage.Comments.onUnpublishButton);
+[].slice.call(document.querySelectorAll("button.akengage-comment-unpublish-btn")).forEach(function (el)
+{
+    el.addEventListener("click", akeeba.Engage.Comments.onUnpublishButton);
 });
 
-[].slice.call(document.querySelectorAll("button.akengage-comment-publish-btn")).forEach(function (el) {
-    el.addEventListener('click', akeeba.Engage.Comments.onPublishButton);
+[].slice.call(document.querySelectorAll("button.akengage-comment-publish-btn")).forEach(function (el)
+{
+    el.addEventListener("click", akeeba.Engage.Comments.onPublishButton);
 });
 
-[].slice.call(document.querySelectorAll("button.akengage-comment-markham-btn")).forEach(function (el) {
-    el.addEventListener('click', akeeba.Engage.Comments.onMarkHamButton);
+[].slice.call(document.querySelectorAll("button.akengage-comment-markham-btn")).forEach(function (el)
+{
+    el.addEventListener("click", akeeba.Engage.Comments.onMarkHamButton);
 });
 
-[].slice.call(document.querySelectorAll("button.akengage-comment-markspam-btn")).forEach(function (el) {
-    el.addEventListener('click', akeeba.Engage.Comments.onMarkSpamButton);
+[].slice.call(document.querySelectorAll("button.akengage-comment-markspam-btn")).forEach(function (el)
+{
+    el.addEventListener("click", akeeba.Engage.Comments.onMarkSpamButton);
 });
 
-[].slice.call(document.querySelectorAll("button.akengage-comment-possiblespam-btn")).forEach(function (el) {
-    el.addEventListener('click', akeeba.Engage.Comments.onMarkPossibleSpamButton);
+[].slice.call(document.querySelectorAll("button.akengage-comment-possiblespam-btn")).forEach(function (el)
+{
+    el.addEventListener("click", akeeba.Engage.Comments.onMarkPossibleSpamButton);
 });
 
-document.getElementById('akengage-comment-inreplyto-cancel').addEventListener('click', akeeba.Engage.Comments.onCancelReplyButton);
+document.getElementById("akengage-comment-inreplyto-cancel")
+        .addEventListener("click", akeeba.Engage.Comments.onCancelReplyButton);
 
-document.getElementById('akengageCommentForm').addEventListener('submit', akeeba.Engage.Comments.saveCommenterInfo);
+document.getElementById("akengageCommentForm").addEventListener("submit", akeeba.Engage.Comments.saveCommenterInfo);
 
-document.getElementById('akengage-comment-hider-button').addEventListener('click', akeeba.Engage.Comments.onHiderButton);
+var elHider = document.getElementById("akengage-comment-hider-button");
+if (elHider)
+{
+    elHider.addEventListener("click", akeeba.Engage.Comments.onHiderButton);
+}
 
 akeeba.Engage.Comments.loadCommenterInfo();

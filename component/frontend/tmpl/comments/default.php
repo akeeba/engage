@@ -38,7 +38,7 @@ $cParams = ComponentHelper::getParams('com_engage');
 
 	<?php if ($this->pagination->total): ?>
 		<div class="akengage-list-container">
-			<?php echo $this->loadTemplate('list') ?>
+			<?= $this->loadTemplate('list') ?>
 		</div>
 
 		<?= $this->loadPosition('engage-after-comments') ?>
@@ -53,10 +53,10 @@ $cParams = ComponentHelper::getParams('com_engage');
 	<?php endif; ?>
 
 	<?php if (!$this->areCommentsClosed && $this->user->guest && !$this->perms['create']): ?>
-		<?php // echo $this->loadTemplate('login') ?>
+		<?= $this->loadTemplate('login') ?>
 	<?php endif; ?>
 
 	<?php if ($this->perms['create'] && !$this->areCommentsClosed): ?>
-		<?php // echo $this->loadTemplate('form') ?>
+		<?= $this->loadTemplate('form') ?>
 	<?php endif; ?>
 </section>

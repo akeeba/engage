@@ -12,6 +12,7 @@ defined('_JEXEC') or die;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Akeeba\Component\Engage\Administrator\View\Mixin\LoadAnyTemplate;
 use Akeeba\Component\Engage\Site\Helper\Meta;
+use Akeeba\Component\Engage\Site\Model\CommentModel;
 use Akeeba\Component\Engage\Site\Model\CommentsModel;
 use Akeeba\Component\Engage\Site\View\Mixin\ModuleRenderAware;
 use DateTimeZone;
@@ -19,6 +20,7 @@ use Exception;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
@@ -27,7 +29,6 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
-use stdClass;
 
 class HtmlView extends BaseHtmlView
 {
@@ -125,6 +126,14 @@ class HtmlView extends BaseHtmlView
 	public $userTimezone = null;
 
 	/**
+	 * The comment form
+	 *
+	 * @var   bool|Form|null
+	 * @since 3.0.0
+	 */
+	private $form;
+
+	/**
 	 * Number of comments being displayed
 	 *
 	 * @var   int
@@ -181,7 +190,7 @@ class HtmlView extends BaseHtmlView
 		$this->itemCount = $model->getTreeAwareCount();
 
 		// Populate the pagination object
-		$this->pagination = $model->getPagination();
+		$this->pagination         = $model->getPagination();
 		$this->pagination->prefix = 'akengage_';
 
 		// Asset metadata-based properties
@@ -251,6 +260,24 @@ class HtmlView extends BaseHtmlView
 		$doc->addScriptOptions('akeeba.Engage.Comments.possiblespamURL', $baseUrl->toString());
 
 		Text::script('COM_ENGAGE_COMMENTS_DELETE_PROMPT');
+
+		// Comment form
+		if (!$this->areCommentsClosed && $this->perms['create'])
+		{
+			/**
+			 * Joomla always try to load the form from the current component. However, the current component is
+			 * com_content as we're emulating HMVC (Hierarchical Model–View–Controller). As a result we need to hint
+			 * Joomla that it should be loading the form from Akeeba Engage's forms folder.
+			 */
+			$basePath = JPATH_SITE . '/components/com_engage';
+			Form::addFormPath($basePath . '/forms');
+
+			/** @var CommentModel $formModel */
+			$formModel  = $this->getModel('comment');
+			$this->form = $formModel->getForm([
+				'asset_id' => $this->assetId
+			], true);
+		}
 
 		parent::display($tpl);
 	}

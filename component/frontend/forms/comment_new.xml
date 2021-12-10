@@ -15,10 +15,12 @@
         />
 
         <field name="parent_id"
+               default="0"
                type="hidden"
         />
 
         <field name="asset_id"
+               default="0"
                type="hidden"
         />
 
@@ -46,7 +48,7 @@
                cols="50"
                rows="5"
                filter="JComponentHelper::filterText"
-               buttons="true"
+               buttons="false"
                hiddenLabel="true"
                required="true"
         />

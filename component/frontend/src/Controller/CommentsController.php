@@ -348,6 +348,7 @@ class CommentsController extends AdminCommentsController
 		$limit        = $this->app->getUserStateFromRequest('com_engage.comments.limit', 'akengage_limit', $defaultLimit);
 
 		$model = $this->getModel('Comments', 'Site', ['ignore_request' => true]);
+		$formModel = $this->getModel('Comment', 'Site', ['ignore_request' => true]);
 		$model->setState('list.start', $start);
 		$model->setState('list.limit', $limit);
 
@@ -358,6 +359,7 @@ class CommentsController extends AdminCommentsController
 		/** @var HtmlView $view */
 		$view = $this->getView();
 		$view->setModel($model, true);
+		$view->setModel($formModel);
 		$view->assetId = $assetId;
 	}
 
