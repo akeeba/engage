@@ -2,12 +2,6 @@
 PENDING
 ========================================================================================================
 
-Component
-    Frontend
-        Comment edit MVC (singular comment view)
-
-
-
 Plugins
     Console - Engage
         Also add it to the package
@@ -22,7 +16,6 @@ Plugins
     User – Engage
     Engage – Akismet
     Engage – Email
-    System – Engage Cache
     Actionlog – Engage
     DataCompliance – Engage
     Privacy – Engage

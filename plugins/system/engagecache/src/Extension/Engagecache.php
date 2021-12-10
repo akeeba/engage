@@ -5,25 +5,25 @@
  * @license   GNU General Public License version 3, or later
  */
 
+namespace Joomla\Plugin\System\Engagecache\Extension;
+
 defined('_JEXEC') or die;
 
-use FOF40\Container\Container;
+use Exception;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\Event\Event;
+use Joomla\Event\SubscriberInterface;
 
 /**
  * Workaround for paginated frontend comments display to guest users when caching is enabled.
  */
-class plgSystemEngagecache extends CMSPlugin
+class Engagecache extends CMSPlugin implements SubscriberInterface
 {
-	public function __construct(&$subject, $config = [])
+	public static function getSubscribedEvents(): array
 	{
-		if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
-		{
-			$this->enabled = false;
-		}
-
-		parent::__construct($subject, $config);
+		return ['onAfterInitialise' => 'onAfterInitialise'];
 	}
 
 	/**
@@ -38,11 +38,13 @@ class plgSystemEngagecache extends CMSPlugin
 	 * if it's there so we prime it with the contents of our pagination parameters. This forces Joomla to take into
 	 * account BOTH the active component's (e.g. com_content) caching parameters AND our comment pagination parameters.
 	 *
+	 * @param   Event  $event  The event we are handling
+	 *
 	 * @return  void
 	 *
 	 * @see     BaseController::display()
 	 */
-	public function onAfterInitialise()
+	public function onAfterInitialise(Event $event)
 	{
 		try
 		{
@@ -53,8 +55,8 @@ class plgSystemEngagecache extends CMSPlugin
 			return;
 		}
 
-		$masterContainer  = Container::getInstance('com_engage');
-		$defaultListLimit = $masterContainer->params->get('default_limit', 20);
+		$cParams          = ComponentHelper::getParams('com_engage');
+		$defaultListLimit = $cParams->get('default_limit', 20);
 		$defaultListLimit = ($defaultListLimit == -1) ? 20 : $defaultListLimit;
 
 		$limitStart = $app->input->getInt('akengage_limitstart', 0);
@@ -66,7 +68,7 @@ class plgSystemEngagecache extends CMSPlugin
 		}
 		else
 		{
-			$registeredurlparams = new stdClass;
+			$registeredurlparams = new \stdClass;
 		}
 
 		if (!empty($limitStart))
