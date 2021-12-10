@@ -5,26 +5,47 @@
  * @license   GNU General Public License version 3, or later
  */
 
+namespace Joomla\Plugin\User\Engage\Extension;
+
 defined('_JEXEC') or die;
 
+use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Akeeba\Component\Engage\Site\Helper\Meta;
-use FOF40\Container\Container;
-use FOF40\Utils\ArrayHelper;
+use Exception;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\User\User;
 use Joomla\CMS\User\UserHelper;
+use Joomla\Database\DatabaseDriver;
+use Joomla\Event\DispatcherInterface;
+use Joomla\Utilities\ArrayHelper;
 
-class plgUserEngage extends CMSPlugin
+class Engage extends CMSPlugin
 {
+	/**
+	 * Affects constructor behavior. If true, language files will be loaded automatically.
+	 *
+	 * @var    boolean
+	 * @since  3.0.0
+	 */
+	protected $autoloadLanguage = true;
+
 	/**
 	 * Joomla's database driver (auto-assigned on class instantiation)
 	 *
-	 * @var   JDatabaseDriver
+	 * @var   DatabaseDriver
 	 * @since 1.0.0.b3
 	 */
 	protected $db;
+
+	/**
+	 * The current application
+	 *
+	 * @var   CMSApplication
+	 * @since 3.0.0
+	 */
+	protected $app;
 
 	/**
 	 * Should this plugin be allowed to run?
@@ -37,13 +58,6 @@ class plgUserEngage extends CMSPlugin
 	private $enabled = true;
 
 	/**
-	 * The Akeeba Engage component container
-	 *
-	 * @var  Container|null
-	 */
-	private $container;
-
-	/**
 	 * Cache the user objects to remove
 	 *
 	 * @var User[]
@@ -53,69 +67,19 @@ class plgUserEngage extends CMSPlugin
 	/**
 	 * Constructor
 	 *
-	 * @param   object  &$subject  The object to observe
-	 * @param   array    $config   An optional associative array of configuration settings.
+	 * @param   DispatcherInterface  &$subject  The object to observe
+	 * @param   array                 $config   An optional associative array of configuration settings.
 	 *
 	 * @return  void
 	 */
 	public function __construct(&$subject, $config = [])
 	{
-		if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
-		{
-			$this->enabled = false;
-		}
-
 		if (!ComponentHelper::isEnabled('com_engage'))
 		{
 			$this->enabled = false;
 		}
 
 		parent::__construct($subject, $config);
-
-		$this->loadLanguage();
-	}
-
-
-	/**
-	 * Remove all user profile information for the given user ID.
-	 *
-	 * Method is called before user data is deleted from the database. We use it to cache the user object so we can use
-	 * it onUserAfterDelete when the user object is no longer available through the Joomla API.
-	 *
-	 * @param   array  $user  Holds the user data
-	 *
-	 * @return  bool
-	 *
-	 * @throws  Exception
-	 */
-	public function onUserBeforeDelete($user): bool
-	{
-		// Make sure we can actually run
-		if (!$this->enabled)
-		{
-			return true;
-		}
-
-		// Get the user ID; fail if it's not available
-		$userId = ArrayHelper::getValue($user, 'id', 0, 'int');
-
-		if (!$userId)
-		{
-			return true;
-		}
-
-		// Get and verify the user object
-		$userObject = Factory::getUser($userId);
-
-		if ($userObject->id != $userId)
-		{
-			return true;
-		}
-
-		// Cache the user object
-		$this->usersToRemove[$userId] = clone $userObject;
-
-		return true;
 	}
 
 	/**
@@ -162,11 +126,54 @@ class plgUserEngage extends CMSPlugin
 		}
 
 		// Remove the comments and uncache the user object.
-		$this->getContainer()->platform->loadTranslations('com_engage');
+		$this->app->getLanguage()->load('com_engage', JPATH_ADMINISTRATOR);
+		$this->app->getLanguage()->load('com_engage', JPATH_SITE);
 
 		Meta::pseudonymiseUserComments($this->usersToRemove[$userId], true);
 
 		unset($this->usersToRemove[$userId]);
+
+		return true;
+	}
+
+	/**
+	 * Remove all user profile information for the given user ID.
+	 *
+	 * Method is called before user data is deleted from the database. We use it to cache the user object so we can use
+	 * it onUserAfterDelete when the user object is no longer available through the Joomla API.
+	 *
+	 * @param   array  $user  Holds the user data
+	 *
+	 * @return  bool
+	 *
+	 * @throws  Exception
+	 */
+	public function onUserBeforeDelete($user): bool
+	{
+		// Make sure we can actually run
+		if (!$this->enabled)
+		{
+			return true;
+		}
+
+		// Get the user ID; fail if it's not available
+		$userId = ArrayHelper::getValue($user, 'id', 0, 'int');
+
+		if (!$userId)
+		{
+			return true;
+		}
+
+		// Get and verify the user object
+		$userObject = UserFetcher::getUser($userId);
+
+		if ($userObject->id != $userId)
+		{
+			return true;
+		}
+
+		// Cache the user object
+		$this->usersToRemove[$userId] = clone $userObject;
 
 		return true;
 	}
@@ -242,21 +249,5 @@ class plgUserEngage extends CMSPlugin
 		{
 			// No problem if this fails.
 		}
-	}
-
-	/**
-	 * Get the Akeeba Engage container, preloaded for comments display
-	 *
-	 * @return  Container
-	 */
-	private function getContainer(): Container
-	{
-		if (empty($this->container))
-		{
-			// Get the container singleton instance
-			$this->container = Container::getInstance('com_engage');
-		}
-
-		return $this->container;
 	}
 }

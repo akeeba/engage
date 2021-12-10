@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/component/frontend/src" isTestSource="false" packagePrefix="Akeeba\Component\Engage\Site" />
       <sourceFolder url="file://$MODULE_DIR$/plugins/content/engage/src" isTestSource="false" packagePrefix="Joomla\Plugin\Content\Engage" />
       <sourceFolder url="file://$MODULE_DIR$/plugins/system/engagecache/src" isTestSource="false" packagePrefix="Joomla\Plugin\System\Engagecache" />
+      <sourceFolder url="file://$MODULE_DIR$/plugins/user/engage/src" isTestSource="false" packagePrefix="Joomla\Plugin\User\Engage" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
