@@ -40,7 +40,6 @@ class UpgradeModel extends BaseModel
 		'plg_console_engage',
 		'plg_content_engage',
 		'plg_engage_email',
-		'plg_engage_gravatar',
 		'plg_user_engage',
 	];
 
@@ -77,6 +76,7 @@ class UpgradeModel extends BaseModel
 	/** @var string[] Extensions to always uninstall if they are still installed (runs on install and upgrade) */
 	private const REMOVE_EXTENSIONS = [
 		'file_engage',
+		'plg_engage_gravatar',
 	];
 
 	/**
