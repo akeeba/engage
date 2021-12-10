@@ -18,7 +18,11 @@ use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
+
+// Maximum avatar width, in pixels.
+$maxAvatarWidth = 48;
 
 /** @var \Akeeba\Component\Engage\Site\View\Comments\HtmlView $this  */
 
@@ -62,7 +66,7 @@ else: ?>
 
 <?php
 $previousLevel = $comment->depth;
-$avatar        = Avatar::getUserAvatar($comment->created_by, 48, $comment->email);
+$avatar        = Avatar::getUserAvatar($comment->created_by, $maxAvatarWidth, $comment->email);
 $profile       = Avatar::getProfileURL($user);
 $commentDate   = (new Date($comment->created))->setTimezone($this->userTimezone);
 $ipLookupURL  = $this->getIPLookupURL($comment->ip);
@@ -79,7 +83,7 @@ $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->ena
 				itemprop="author" itemscope itemtype="http://schema.org/Person"
 				class="akengage-comment-properties d-flex flex-row gap-1 mb-1 bg-light p-1 small border-bottom border-2">
 			<?php if (!empty($avatar)): ?>
-			<div class="d-none d-sm-block flex-shrink-1">
+			<div class="d-none d-sm-block flex-shrink-1" style="max-width: <?= (int) $maxAvatarWidth ?>px">
 				<?php if (empty($profile)): ?>
 				<img src="<?= $avatar ?>" alt="" class="akengage-commenter-avatar img-fluid rounded-3 shadow-sm" itemprop="image">
 				<?php else: ?>
@@ -112,9 +116,14 @@ $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->ena
 					<?php endif; ?>
 				</div>
 				<div class="akengage-comment-info d-flex flex-row flex-wrap gap-2 align-items-center">
-					<div class="akengage-comment-permalink flex-grow-1"
-							itemprop="dateCreated" content="<?= $commentDate->toISO8601(false) ?>">
-						<?= $commentDate->format(Text::_('DATE_FORMAT_LC2'), true) ?>
+					<div class="akengage-comment-permalink flex-grow-1">
+						<a href="<?= (clone Uri::getInstance())->setFragment(sprintf('akengage-comment-%u', $comment->id))->toString() ?>"
+								class="text-body text-decoration-none"
+						>
+						<span itemprop="dateCreated" content="<?= $commentDate->toISO8601(false) ?>">
+							<?= $commentDate->format(Text::_('DATE_FORMAT_LC2'), true) ?>
+						</span>
+						</a>
 					</div>
 					<div class="akengage-comment-actions d-flex gap-1">
 					<?php if ($this->perms['state']): ?>

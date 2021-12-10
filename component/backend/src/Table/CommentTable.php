@@ -186,8 +186,15 @@ class CommentTable extends AbstractTable
 			throw new RuntimeException(Text::_('COM_ENGAGE_COMMENTS_ERR_COMMENT_REQUIRED'));
 		}
 
+		// Unset the modified data if identical to created data
+		if (($this->created == $this->modified) && ($this->created_by == $this->modified_by))
+		{
+			$this->modified    = null;
+			$this->modified_by = null;
+		}
+
 		// If it's a reply to another comment let's make sure it exists and for the correct asset ID
-		if ($this->parent_id !== 0)
+		if ($this->parent_id != 0)
 		{
 			// A non-zero parent ID was provided. Try to load the comment.
 			$parent = clone $this;

@@ -47,6 +47,8 @@ HTMLHelper::_('behavior.formvalidator');
 	aria-label="<?= Text::_('COM_ENGAGE_COMMENTS_FORM_HEADER', true) ?>"
 >
 	<input type="hidden" name="returnurl" value="<?= base64_encode(Uri::getInstance()->toString(['scheme', 'user', 'pass', 'host', 'port', 'path', 'query', 'fragment'])) ?>">
+	<input type="hidden" name="view" value="">
+	<input type="hidden" name="id" value="">
 	<?= HTMLHelper::_('form.token') ?>
 
 	<div class="mt-3 pt-2 mb-2 border-top border-2 border-dark">

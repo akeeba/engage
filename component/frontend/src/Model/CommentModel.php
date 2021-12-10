@@ -14,12 +14,14 @@ use Akeeba\Component\Engage\Administrator\Model\CommentModel as AdminCommentMode
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use Akeeba\Component\Engage\Site\Helper\Meta;
 use Exception;
+use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\User\User;
+use Joomla\Utilities\IpHelper;
 use RuntimeException;
 
 class CommentModel extends AdminCommentModel
@@ -243,24 +245,41 @@ class CommentModel extends AdminCommentModel
 	 */
 	protected function prepareTable($table)
 	{
+		// We only do something for new comments
+		$isNew = empty($table->getId());
+
+		if (!$isNew)
+		{
+			return;
+		}
+
+		// Get the user and the component parameters — I'll use them later.
 		$user    = UserFetcher::getUser();
 		$cParams = ComponentHelper::getParams('com_engage');
 
-		// Non-admin users may have their comments auto-unpublished by default
-		if (!$user->authorise('core.manage', 'com_engage'))
-		{
-			$table->enabled = $cParams->get('default_publish', 1);
-		}
+		// Set the created and modified information
+		$date               = Factory::getDate();
+		$table->created     = $date->toSql();
+		$table->created_by  = $user->guest ? null : $user->id;
+		$table->modified_by = null;
+		$table->modified    = null;
 
-		// If it's not a guest user we need to unset the name and email
+		// If it's not a guest user we need to unset the custom name and email
 		if (!$user->guest)
 		{
 			$table->name       = null;
 			$table->email      = null;
-			$table->created_by = $user->id;
 		}
 
-		// Spam check
+		/**
+		 * Set the publish state.
+		 *
+		 * Managers have their comments always published (they can publish their own comments, so why add an unnecessary
+		 * step?). Regular users' comments may be published or not, depending on the component's default_publish option.
+		 */
+		$table->enabled = ($user->authorise('core.manage', 'com_engage') || $cParams->get('default_publish', 1)) ? 1 : 0;
+
+		// Spam check. Possible spam is marked with publish status -3. Definite spam just doesn't post at all!
 		PluginHelper::importPlugin('engage');
 		$spamResults = Factory::getApplication()->triggerEvent('onAkeebaEngageCheckSpam', [$table]);
 
@@ -269,7 +288,11 @@ class CommentModel extends AdminCommentModel
 			$table->enabled = -3;
 		}
 
-		parent::prepareTable($table);
+		// Set the IP and User Agent from the server environment. Only applies on web applications.
+		$app               = Factory::getApplication();
+		$isWebApplication  = $app instanceof CMSWebApplicationInterface;
+		$table->ip         = $isWebApplication ? IpHelper::getIp() : null;
+		$table->user_agent = $isWebApplication ? $app->input->server->getRaw('HTTP_USER_AGENT', '') : '';
 	}
 
 	/**
