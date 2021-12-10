@@ -217,12 +217,17 @@ $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->ena
 
 		<div class="akengage-comment-body" itemprop="text">
 			<?= HTMLHelper::_('engage.processCommentTextForDisplay', $comment->body) ?>
+			<?php if (!empty($comment->modified_by)): ?>
+			<div class="my-2 border-top border-1 border-muted text-muted small">
+				<?= Text::sprintf('COM_ENGAGE_LBL_COMMENT_MODIFIED', (new Date($comment->modified))->setTimezone($this->userTimezone)->format(Text::_('DATE_FORMAT_LC2'), true), $comment->name ?: UserFetcher::getUser($comment->modified_by)->name) ?>
+			</div>
+			<?php endif; ?>
 		</div>
 
 		<?php if ($this->perms['create']): ?>
 			<div class="akengage-comment-reply">
 				<?php // You can reply to $this->maxLevel - 1 level comments only. Replies to deeper nested comments are to the $this->maxLevel - 1 level parent. ?>
-				<button class="akengage-comment-reply-btn btn btn-sm btn-outline-primary"
+				<button class="akengage-comment-reply-btn btn btn-sm btn-outline-primary mb-1"
 						data-akengageid="<?= ($comment->depth < $this->maxLevel) ? $comment->id : $parentIds[$this->maxLevel - 1] ?>"
 						data-akengagereplyto="<?= $this->escape(($comment->depth < $this->maxLevel) ? $user->name : $parentNames[$this->maxLevel - 1]) ?>"
 				>

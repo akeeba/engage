@@ -222,7 +222,7 @@ class CommentsModel extends ListModel
 
 		// Convert into an ID => parent array
 		$allIDs = array_map(function ($x) {
-			return $x['parent_id'];
+			return $x['parent_id'] ?: null;
 		}, $allIDs);
 
 		$this->treeAwareCount = count($allIDs);

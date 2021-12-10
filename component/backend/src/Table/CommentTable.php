@@ -193,8 +193,12 @@ class CommentTable extends AbstractTable
 			$this->modified_by = null;
 		}
 
+		// Any parent ID that's empty or a negative integer gets quashed to zero
+		$this->parent_id = (empty($this->parent_id) || (is_numeric($this->parent_id) && ($this->parent_id < 0)))
+			? null : (int) $this->parent_id;
+
 		// If it's a reply to another comment let's make sure it exists and for the correct asset ID
-		if ($this->parent_id != 0)
+		if ($this->parent_id !== null)
 		{
 			// A non-zero parent ID was provided. Try to load the comment.
 			$parent = clone $this;
