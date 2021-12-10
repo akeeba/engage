@@ -59,9 +59,7 @@ akeeba.Engage.Comments.onEditButton = function (e)
      */
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.editURL") + encodeURIComponent(id)
-        + "&" + Joomla.getOptions("csrf.token") + "=1&returnurl=" +
-        encodeURIComponent(Joomla.getOptions("akeeba.Engage.Comments.returnURL", "index.php"));
+    window.location = Joomla.getOptions("akeeba.Engage.Comments.editURL").replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onDeleteButton = function (e)

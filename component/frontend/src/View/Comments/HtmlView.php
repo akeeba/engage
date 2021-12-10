@@ -157,6 +157,7 @@ class HtmlView extends BaseHtmlView
 	 */
 	private $pagination;
 
+	/** @inheritDoc */
 	public function display($tpl = null)
 	{
 		$this->setLayout('default');

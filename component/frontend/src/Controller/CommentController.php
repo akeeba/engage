@@ -88,10 +88,10 @@ class CommentController extends AdminCommentController
 		$this->cleanCache();
 	}
 
-	protected function onBeforeEdit()
+	protected function onBeforeMain()
 	{
 		$this->disableJoomlaCache();
-		$this->getView()->returnURL = $this->getRedirection() ?: $this->getReturnUrl() ?: '';
+		$this->getView()->returnUrl = $this->getRedirection() ?: $this->getReturnUrl() ?: '';
 	}
 
 	protected function postSaveHook(BaseDatabaseModel $model, $validData = [])

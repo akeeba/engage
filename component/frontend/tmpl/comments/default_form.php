@@ -8,14 +8,9 @@
 defined('_JEXEC') or die();
 
 /**
- * View Template for the editing comments. This is used ONLY on Joomla 4.
+ * View Template for the submitting comments.
  *
- * This View Template allows a user to edit a comment. This happens in two cases:
- * - A user with the Edit Own privilege edits their own comment
- * - A user with the Edit privilege edits their own OR someone else's comment
- *
- * When editing someone else's comment you can also edit their name and email address, as long as the comment was filed
- * by a guest user.
+ * This is called by default.php
  */
 
 use Joomla\CMS\Component\ComponentHelper;

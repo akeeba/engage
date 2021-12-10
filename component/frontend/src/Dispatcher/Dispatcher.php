@@ -36,4 +36,17 @@ class Dispatcher extends AdminDispatcher
 		parent::onBeforeDispatch();
 	}
 
+	protected function applyViewAndController(): void
+	{
+		parent::applyViewAndController();
+
+		$controller = $this->input->get('controller', null);
+
+		if (!empty($controller))
+		{
+			$this->input->set('view', null);
+		}
+	}
+
+
 }
