@@ -14,15 +14,27 @@ use Akeeba\Component\Engage\Site\Helper\Meta;
 use Exception;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\User\User;
+use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\CMS\User\UserHelper;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Event\DispatcherInterface;
+use Joomla\Event\Event;
+use Joomla\Event\SubscriberInterface;
 use Joomla\Utilities\ArrayHelper;
 
-class Engage extends CMSPlugin
+class Engage extends CMSPlugin implements SubscriberInterface
 {
+	/**
+	 * The current application
+	 *
+	 * @var   CMSApplication
+	 * @since 3.0.0
+	 */
+	protected $app;
+
 	/**
 	 * Affects constructor behavior. If true, language files will be loaded automatically.
 	 *
@@ -40,14 +52,6 @@ class Engage extends CMSPlugin
 	protected $db;
 
 	/**
-	 * The current application
-	 *
-	 * @var   CMSApplication
-	 * @since 3.0.0
-	 */
-	protected $app;
-
-	/**
 	 * Should this plugin be allowed to run?
 	 *
 	 * If the runtime dependencies are not met the plugin effectively self-disables even if it's published. This
@@ -63,6 +67,7 @@ class Engage extends CMSPlugin
 	 * @var User[]
 	 */
 	private $usersToRemove = [];
+
 
 	/**
 	 * Constructor
@@ -83,24 +88,41 @@ class Engage extends CMSPlugin
 	}
 
 	/**
+	 * Returns an array of events this subscriber will listen to.
+	 *
+	 * @return  array
+	 *
+	 * @since   3.0.0
+	 */
+	public static function getsubscribedevents(): array
+	{
+		return [
+			'onUserAfterDelete'  => 'onUserAfterDelete',
+			'onUserBeforeDelete' => 'onUserBeforeDelete',
+			'onUserLogin'        => 'onUserLogin',
+		];
+	}
+
+	/**
 	 * Remove all user profile information for the given user ID
 	 *
 	 * Method is called after user data is deleted from the database
 	 *
-	 * @param   array        $user     Holds the user data
-	 * @param   bool         $success  True if user was successfully stored in the database
-	 * @param   string|null  $msg      Message
+	 * @param   Event  $event  The event we are listening to
 	 *
-	 * @return  bool
+	 * @return  void
 	 *
-	 * @throws  Exception
 	 */
-	public function onUserAfterDelete(array $user, bool $success = true, ?string $msg = null): bool
+	public function onUserAfterDelete(Event $event): void
 	{
+		[$user, $success, $msg] = $event->getArguments();
+		$result = $event->getArgument('result') ?? [];
+		$event->setArgument('result', array_merge($result, [true]));
+
 		// Make sure we can actually run
 		if (!$this->enabled)
 		{
-			return true;
+			return;
 		}
 
 		// Get the user ID; fail if it's not available
@@ -108,13 +130,13 @@ class Engage extends CMSPlugin
 
 		if (!$userId)
 		{
-			return true;
+			return;
 		}
 
 		// Make sure we've seen this user ID before
 		if (array_key_exists($userId, $this->usersToRemove))
 		{
-			return true;
+			return;
 		}
 
 		// If Joomla reported failure to remove the user we don't remove the comments.
@@ -122,7 +144,7 @@ class Engage extends CMSPlugin
 		{
 			unset($this->usersToRemove[$userId]);
 
-			return true;
+			return;
 		}
 
 		// Remove the comments and uncache the user object.
@@ -132,8 +154,6 @@ class Engage extends CMSPlugin
 		Meta::pseudonymiseUserComments($this->usersToRemove[$userId], true);
 
 		unset($this->usersToRemove[$userId]);
-
-		return true;
 	}
 
 	/**
@@ -142,18 +162,22 @@ class Engage extends CMSPlugin
 	 * Method is called before user data is deleted from the database. We use it to cache the user object so we can use
 	 * it onUserAfterDelete when the user object is no longer available through the Joomla API.
 	 *
-	 * @param   array  $user  Holds the user data
+	 * @param   Event  $event
 	 *
-	 * @return  bool
+	 * @return  void
 	 *
-	 * @throws  Exception
+	 * @throws Exception
 	 */
-	public function onUserBeforeDelete($user): bool
+	public function onUserBeforeDelete(Event $event): void
 	{
+		[$user] = $event->getArguments();
+		$result = $event->getArgument('result') ?? [];
+		$event->setArgument('result', array_merge($result, [true]));
+
 		// Make sure we can actually run
 		if (!$this->enabled)
 		{
-			return true;
+			return;
 		}
 
 		// Get the user ID; fail if it's not available
@@ -161,7 +185,7 @@ class Engage extends CMSPlugin
 
 		if (!$userId)
 		{
-			return true;
+			return;
 		}
 
 		// Get and verify the user object
@@ -169,48 +193,47 @@ class Engage extends CMSPlugin
 
 		if ($userObject->id != $userId)
 		{
-			return true;
+			return;
 		}
 
 		// Cache the user object
 		$this->usersToRemove[$userId] = clone $userObject;
-
-		return true;
 	}
 
 	/**
 	 * This method should handle any login logic and report back to the subject
 	 *
-	 * @param   array  $user     Holds the user data
-	 * @param   array  $options  Array holding options (remember, autoregister, group)
+	 * @param   Event  $event
 	 *
-	 * @return  boolean  True on success
+	 * @return  void
 	 *
 	 * @since   1.0.0.b3
 	 */
-	public function onUserLogin(array $user, array $options = []): bool
+	public function onUserLogin(Event $event): void
 	{
+		/**
+		 * @var   array  $user     Holds the user data
+		 * @var   array  $options  Array holding options (remember, autoregister, group)
+		 */
+		[$user, $options] = $event->getArguments();
+		$result = $event->getArgument('result') ?? [];
+		$event->setArgument('result', array_merge($result, [true]));
+
 		// Is the “Own guest comments on login“ option enabled?
 		if ($this->params->get('own_comments', 1) != 1)
 		{
-			return true;
-		}
-
-		// Can we find a user ID?
-		$id = (int) UserHelper::getUserId($user['username']);
-
-		if ($id <= 0)
-		{
-			return true;
+			return;
 		}
 
 		// Load the user object and own the comments
-		$userObject = User::getInstance();
+		$userObject = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserByUsername($user['username']);
 
-		$userObject->load($id);
+		if (empty($userObject) || ($userObject->id <= 0))
+		{
+			return;
+		}
+
 		$this->ownComments($userObject);
-
-		return true;
 	}
 
 	/**
