@@ -275,7 +275,8 @@ class HtmlView extends BaseHtmlView
 			/** @var CommentModel $formModel */
 			$formModel  = $this->getModel('comment');
 			$this->form = $formModel->getForm([
-				'asset_id' => $this->assetId
+				'id'       => null,
+				'asset_id' => $this->assetId,
 			], true);
 		}
 

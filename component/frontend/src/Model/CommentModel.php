@@ -55,6 +55,8 @@ class CommentModel extends AdminCommentModel
 			return false;
 		}
 
+		$form->bind($data);
+
 		if ($isNew)
 		{
 			$this->postProcessNewCommentForm($form, $data);
