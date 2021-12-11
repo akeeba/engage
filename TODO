@@ -13,7 +13,6 @@ CLI Scripts
     Create Demo Comments
 
 Plugins
-    Engage – Akismet
     Engage – Email
     Actionlog – Engage
     DataCompliance – Engage
@@ -23,6 +22,9 @@ Documentation
     Convert from Wiki using Pandoc
 
 New features
+    Akismet new features
+        Report spam
+        Report ham
     User profile custom field as avatar source (maybe a plugin...?)
     Help pages
         Backend Comments

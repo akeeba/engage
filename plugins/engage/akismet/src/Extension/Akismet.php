@@ -5,72 +5,67 @@
  * @license   GNU General Public License version 3, or later
  */
 
+namespace Joomla\Plugin\Engage\Akismet\Extension;
+
 defined('_JEXEC') or die();
 
+use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
+use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use Akeeba\Component\Engage\Site\Exceptions\BlatantSpam;
-use Akeeba\Engage\Admin\Model\Comments;
-use FOF40\Date\Date;
-use Joomla\CMS\Component\ComponentHelper;
+use Exception;
+use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\HttpFactory;
-use Joomla\CMS\Http\Response;
 use Joomla\CMS\Language\LanguageHelper;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\User\User;
+use Joomla\Event\Event;
+use Joomla\Event\SubscriberInterface;
+use Joomla\Http\Response;
+use RuntimeException;
 
 /**
  * Akeeba Engage – Akismet integration for spam protection
  *
- * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
- * @license   GNU General Public License version 3, or later
+ * @since  1.0.0
  */
-class plgEngageAkismet extends CMSPlugin
+class Akismet extends CMSPlugin implements SubscriberInterface
 {
-	/**
-	 * Should this plugin be allowed to run?
-	 *
-	 * If the runtime dependencies are not met the plugin effectively self-disables even if it's published. This
-	 * prevents a WSOD should the user e.g. uninstall a library or the component without unpublishing the plugin first.
-	 *
-	 * @var  bool
-	 */
-	private $enabled = true;
-
-	/**
-	 * Constructor
-	 *
-	 * @param   object  &$subject  The object to observe
-	 * @param   array    $config   An optional associative array of configuration settings.
-	 *
-	 * @return  void
-	 */
-	public function __construct(&$subject, $config = [])
+	public static function getSubscribedEvents(): array
 	{
-		if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
-		{
-			$this->enabled = false;
-		}
-
-		if (!ComponentHelper::isEnabled('com_engage'))
-		{
-			$this->enabled = false;
-		}
-
-		parent::__construct($subject, $config);
-
-		$this->loadLanguage();
+		return [
+			'onAkeebaEngageCheckSpam' => 'onAkeebaEngageCheckSpam',
+		];
 	}
 
-	public function onAkeebaEngageCheckSpam(?Comments $comment, bool $isNew = true): ?bool
+	/**
+	 * Handle the Akeeba Engage spam check event.
+	 *
+	 * @param   Event  $event  The event we are handling
+	 *
+	 * @return  void
+	 * @throws  Exception
+	 * @since   1.0.0
+	 */
+	public function onAkeebaEngageCheckSpam(Event $event): void
 	{
+		/**
+		 * @var   CommentTable|null $comment The comment to check
+		 * @var   bool              $isNew   Is this a new comment?
+		 */
+		[$comment, $isNew] = $event->getArguments();
+		$result = $event->getArgument('result');
+
 		if (is_null($comment))
 		{
-			return false;
+			$event->setArgument('result', array_merge($result, [false]));
+
+			return;
 		}
 
 		$checkWhen = $this->params->get('check', 'nonmanagers');
-		$user      = $comment->getUser();
+		$user      = $this->getUser($comment);
 
 		switch ($checkWhen)
 		{
@@ -83,7 +78,9 @@ class plgEngageAkismet extends CMSPlugin
 			case 'guest':
 				if (!$user->guest)
 				{
-					return false;
+					$event->setArgument('result', array_merge($result, [false]));
+
+					return;
 				}
 				break;
 
@@ -91,7 +88,9 @@ class plgEngageAkismet extends CMSPlugin
 			case 'nonmanager':
 				if ($user->authorise('core.edit'))
 				{
-					return false;
+					$event->setArgument('result', array_merge($result, [false]));
+
+					return;
 				}
 				break;
 		}
@@ -113,7 +112,9 @@ class plgEngageAkismet extends CMSPlugin
 		}
 		catch (Exception $e)
 		{
-			return false;
+			$event->setArgument('result', array_merge($result, [false]));
+
+			return;
 		}
 
 		// Should I discard blatant spam?
@@ -129,10 +130,21 @@ class plgEngageAkismet extends CMSPlugin
 			throw new RuntimeException('Your comment has been identified as a blatant spam and was discarded without further consideration.');
 		}
 
-		return $response->body == 'true';
+		$event->setArgument('result', array_merge($result, [$response->body == 'true']));
 	}
 
-	private function apiCall(Comments $comment, string $action, array $additional = []): Response
+	/**
+	 * Execute an Akismet API call
+	 *
+	 * @param   CommentTable  $comment     The comment to execute an API call against
+	 * @param   string        $action      Akismet API action to execute
+	 * @param   array         $additional  Additional query string parameters
+	 *
+	 * @return  Response
+	 * @throws  Exception
+	 * @since   1.0.0
+	 */
+	private function apiCall(CommentTable $comment, string $action, array $additional = []): Response
 	{
 		$apiKey = trim($this->params->get('key', ''));
 
@@ -166,13 +178,15 @@ class plgEngageAkismet extends CMSPlugin
 			$modifiedOn = null;
 		}
 
+		$commentUser = $this->getUser($comment);
+
 		$struct = array_merge([
 			'blog'                      => Uri::base(),
 			'user_ip'                   => $comment->ip,
 			'user_agent'                => $comment->user_agent,
 			'comment_type'              => 'comment',
-			'comment_author'            => $comment->getUser()->name,
-			'comment_author_email'      => $comment->getUser()->email,
+			'comment_author'            => $commentUser->name,
+			'comment_author_email'      => $commentUser->email,
 			'comment_content'           => $comment->body,
 			'comment_date_gmt'          => $createdOn,
 			'comment_post_modified_gmt' => $modifiedOn,
@@ -196,6 +210,7 @@ class plgEngageAkismet extends CMSPlugin
 	 * Returns all the content languages of the site as a comma separated string suitable for Akismet.
 	 *
 	 * @return  string|null
+	 * @since   1.0.0
 	 */
 	private function getSiteLanguages(): ?string
 	{
@@ -217,5 +232,28 @@ class plgEngageAkismet extends CMSPlugin
 		}
 
 		return implode(',', $langCodes);
+	}
+
+	/**
+	 * Get a user object from a comment object
+	 *
+	 * @param   CommentTable  $comment
+	 *
+	 * @return  User|null
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
+	private function getUser(CommentTable $comment): ?User
+	{
+		if ($comment->created)
+		{
+			return UserFetcher::getUser($comment->created);
+		}
+
+		$user        = new User(0);
+		$user->name  = $comment->name;
+		$user->email = $comment->email;
+
+		return $user;
 	}
 }
