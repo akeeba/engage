@@ -16,7 +16,6 @@ use Akeeba\Component\Engage\Administrator\View\Mixin\LoadAnyTemplate;
 use Exception;
 use HTMLPurifier;
 use HTMLPurifier_Config;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
