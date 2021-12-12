@@ -85,11 +85,15 @@ class CommentTable extends AbstractTable
 	/** @inheritdoc */
 	public function store($updateNulls = false)
 	{
+		$isNew = empty($this->id);
+
+		$this->triggerEvent($isNew ? 'onBeforeCreate' : 'onBeforeUpdate', [&$updateNulls]);
 		$this->triggerEvent('onBeforeStore', [&$updateNulls]);
 
 		$result = $this->_realStore($updateNulls);
 
 		$this->triggerEvent('onAfterStore', [&$result, $updateNulls]);
+		$this->triggerEvent($isNew ? 'onAfterCreate' : 'onAfterUpdate', [&$updateNulls]);
 
 		return $result;
 	}

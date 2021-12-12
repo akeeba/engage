@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/component/backend/src" isTestSource="false" packagePrefix="Akeeba\Component\Engage\Administrator" />
       <sourceFolder url="file://$MODULE_DIR$/component/frontend/src" isTestSource="false" packagePrefix="Akeeba\Component\Engage\Site" />
       <sourceFolder url="file://$MODULE_DIR$/plugins/content/engage/src" isTestSource="false" packagePrefix="Joomla\Plugin\Content\Engage" />
+      <sourceFolder url="file://$MODULE_DIR$/plugins/actionlog/engage/src" isTestSource="false" packagePrefix="Joomla\Plugin\Actionlog\Engage" />
       <sourceFolder url="file://$MODULE_DIR$/plugins/engage/akismet/src" isTestSource="false" packagePrefix="Joomla\Plugin\Engage\Akismet" />
       <sourceFolder url="file://$MODULE_DIR$/plugins/engage/email/src" isTestSource="false" packagePrefix="Joomla\Plugin\Engage\Email" />
       <sourceFolder url="file://$MODULE_DIR$/plugins/system/engagecache/src" isTestSource="false" packagePrefix="Joomla\Plugin\System\Engagecache" />
