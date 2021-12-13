@@ -5,22 +5,51 @@
  * @license   GNU General Public License version 3, or later
  */
 
+namespace Joomla\Plugin\Datacompliance\Engage\Extension;
+
 defined('_JEXEC') or die;
 
+use Akeeba\Component\DataCompliance\Administrator\Helper\Export;
+use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Akeeba\Component\Engage\Site\Helper\Meta;
-use Akeeba\DataCompliance\Admin\Helper\Export;
-use FOF40\Container\Container;
+use Akeeba\DataCompliance\Admin\Helper\Export as OldExport;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\Database\DatabaseDriver;
 
 /**
  * Data Compliance plugin for Akeeba Engage
  */
-class plgDatacomplianceEngage extends CMSPlugin
+class Engage extends CMSPlugin
 {
+	/**
+	 * The current CMS application
+	 *
+	 * @var   CMSApplication
+	 * @since 3.0.0
+	 */
+	protected $app;
+
+	/**
+	 * Affects constructor behavior. If true, language files will be loaded automatically.
+	 *
+	 * @var    boolean
+	 * @since  3.0
+	 */
+	protected $autoloadLanguage = true;
+
+	/**
+	 * The application's database connection object
+	 *
+	 * @var   DatabaseDriver
+	 * @since 3.0.0
+	 */
+	protected $db;
+
 	/**
 	 * Should this plugin be allowed to run?
 	 *
@@ -31,33 +60,12 @@ class plgDatacomplianceEngage extends CMSPlugin
 	 */
 	private $enabled = true;
 
-	/**
-	 * The Akeeba Engage component container
-	 *
-	 * @var  Container|null
-	 */
-	private $container;
-
 	public function __construct(&$subject, $config = [])
 	{
-		if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
-		{
-			$this->enabled = false;
-		}
-
-		if (!ComponentHelper::isEnabled('com_engage'))
-		{
-			$this->enabled = false;
-		}
-
 		parent::__construct($subject, $config);
 
-		$this->loadLanguage();
-
-		// Required here for Akeeba Engage's class autoloader to kick in.
-		$this->container = Container::getInstance('com_engage');
+		$this->enabled = ComponentHelper::isEnabled('com_engage');
 	}
-
 
 	/**
 	 * Performs the necessary actions for deleting a user. Returns an array of the infomration categories and any
@@ -87,34 +95,14 @@ class plgDatacomplianceEngage extends CMSPlugin
 
 		Log::add("Deleting user #$userID, type ‘{$type}’, Akeeba Engage data", Log::INFO, 'com_datacompliance');
 
-		$user = Factory::getUser($userID);
+		$user = UserFetcher::getUser($userID);
 
-		$this->container->platform->loadTranslations('com_engage');
+		$this->app->getLanguage()->load('com_engage', JPATH_ADMINISTRATOR);
+		$this->app->getLanguage()->load('com_engage', JPATH_SITE);
 
 		$ret['engage']['engage_comment_id'] = Meta::pseudonymiseUserComments($user);
 
 		return $ret;
-	}
-
-	/**
-	 * Return a list of human readable actions which will be carried out by this plugin if the user proceeds with wiping
-	 * their user account.
-	 *
-	 * @param   int     $userID  The user ID we are asked to delete
-	 * @param   string  $type    The export type (user, admin, lifecycle)
-	 *
-	 * @return  string[]
-	 */
-	public function onDataComplianceGetWipeBulletpoints(int $userID, string $type): ?array
-	{
-		if (!$this->enabled)
-		{
-			return null;
-		}
-
-		return [
-			Text::_('PLG_DATACOMPLIANCE_ENGAGE_DOMAINNAMEACTIONS_1'),
-		];
 	}
 
 	/**
@@ -136,7 +124,7 @@ class plgDatacomplianceEngage extends CMSPlugin
 		}
 
 		$export = new SimpleXMLElement("<root></root>");
-		$db     = $this->container->db;
+		$db     = $this->db;
 
 		// #__engage_comments by created_by
 		$domain = $export->addChild('domain');
@@ -151,7 +139,14 @@ class plgDatacomplianceEngage extends CMSPlugin
 
 		foreach ($db->setQuery($selectQuery)->getIterator() as $record)
 		{
-			Export::adoptChild($domain, Export::exportItemFromObject($record));
+			if (class_exists(Export::class))
+			{
+				Export::adoptChild($domain, Export::exportItemFromObject($record));
+			}
+			elseif (class_exists(OldExport::class))
+			{
+				OldExport::adoptChild($domain, OldExport::exportItemFromObject($record));
+			}
 
 			unset($record);
 		}
@@ -167,11 +162,39 @@ class plgDatacomplianceEngage extends CMSPlugin
 
 		foreach ($db->setQuery($selectQuery)->getIterator() as $record)
 		{
-			Export::adoptChild($domain, Export::exportItemFromObject($record));
+			if (class_exists(Export::class))
+			{
+				Export::adoptChild($domain, Export::exportItemFromObject($record));
+			}
+			elseif (class_exists(OldExport::class))
+			{
+				OldExport::adoptChild($domain, OldExport::exportItemFromObject($record));
+			}
 
 			unset($record);
 		}
 
 		return $export;
+	}
+
+	/**
+	 * Return a list of human readable actions which will be carried out by this plugin if the user proceeds with wiping
+	 * their user account.
+	 *
+	 * @param   int     $userID  The user ID we are asked to delete
+	 * @param   string  $type    The export type (user, admin, lifecycle)
+	 *
+	 * @return  string[]
+	 */
+	public function onDataComplianceGetWipeBulletpoints(int $userID, string $type): ?array
+	{
+		if (!$this->enabled)
+		{
+			return null;
+		}
+
+		return [
+			Text::_('PLG_DATACOMPLIANCE_ENGAGE_DOMAINNAMEACTIONS_1'),
+		];
 	}
 }

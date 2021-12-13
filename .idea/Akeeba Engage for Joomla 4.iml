@@ -10,6 +10,7 @@
       <sourceFolder url="file://$MODULE_DIR$/plugins/engage/email/src" isTestSource="false" packagePrefix="Joomla\Plugin\Engage\Email" />
       <sourceFolder url="file://$MODULE_DIR$/plugins/system/engagecache/src" isTestSource="false" packagePrefix="Joomla\Plugin\System\Engagecache" />
       <sourceFolder url="file://$MODULE_DIR$/plugins/user/engage/src" isTestSource="false" packagePrefix="Joomla\Plugin\User\Engage" />
+      <sourceFolder url="file://$MODULE_DIR$/plugins/datacompliance/engage/src" isTestSource="false" packagePrefix="Joomla\Plugin\Datacompliance\Engage" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -14,6 +14,7 @@
     <authorUrl>https://www.akeeba.com</authorUrl>
     <copyright>Copyright (c)2020-2021 Akeeba Ltd</copyright>
     <license>GNU/GPL v3 or any later version</license>
+    <namespace path="src">Joomla\Plugin\Datacompliance\Engage</namespace>
 
     <files>
         <filename plugin="engage">engage.php</filename>
@@ -21,18 +22,16 @@
         <filename>web.config</filename>
     </files>
     <languages folder="language">
-        <language tag="de-DE">de-DE/de-DE.plg_datacompliance_engage.ini</language>
-        <language tag="de-DE">de-DE/de-DE.plg_datacompliance_engage.sys.ini</language>
-        <language tag="en-GB">en-GB/en-GB.plg_datacompliance_engage.ini</language>
-        <language tag="en-GB">en-GB/en-GB.plg_datacompliance_engage.sys.ini</language>
-        <language tag="el-GR">el-GR/el-GR.plg_datacompliance_engage.ini</language>
-        <language tag="el-GR">el-GR/el-GR.plg_datacompliance_engage.sys.ini</language>
-        <language tag="fr-FR">fr-FR/fr-FR.plg_datacompliance_engage.ini</language>
-        <language tag="fr-FR">fr-FR/fr-FR.plg_datacompliance_engage.sys.ini</language>
-        <language tag="es-ES">es-ES/es-ES.plg_datacompliance_engage.ini</language>
-        <language tag="es-ES">es-ES/es-ES.plg_datacompliance_engage.sys.ini</language>
+        <language tag="de-DE">de-DE/plg_datacompliance_engage.ini</language>
+        <language tag="de-DE">de-DE/plg_datacompliance_engage.sys.ini</language>
+        <language tag="en-GB">en-GB/plg_datacompliance_engage.ini</language>
+        <language tag="en-GB">en-GB/plg_datacompliance_engage.sys.ini</language>
+        <language tag="el-GR">el-GR/plg_datacompliance_engage.ini</language>
+        <language tag="el-GR">el-GR/plg_datacompliance_engage.sys.ini</language>
+        <language tag="fr-FR">fr-FR/plg_datacompliance_engage.ini</language>
+        <language tag="fr-FR">fr-FR/plg_datacompliance_engage.sys.ini</language>
+        <language tag="es-ES">es-ES/plg_datacompliance_engage.ini</language>
+        <language tag="es-ES">es-ES/plg_datacompliance_engage.sys.ini</language>
     </languages>
-
-    <scriptfile>script.php</scriptfile>
 
 </extension>

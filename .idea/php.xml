@@ -3,7 +3,7 @@
   <component name="PhpIncludePathManager">
     <include_path>
       <path value="../../dionysopoulos/joomlatypehints/generated_hints" />
-      <path value="../com_datacompliance/component---" />
+      <path value="../com_datacompliance/component" />
       <path value="../../master/joomla4" />
       <path value="$PROJECT_DIR$/component/backend/vendor/ezyang/htmlpurifier" />
       <path value="$PROJECT_DIR$/component/backend/vendor/composer" />
