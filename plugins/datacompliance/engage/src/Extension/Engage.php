@@ -13,6 +13,7 @@ use Akeeba\Component\DataCompliance\Administrator\Helper\Export;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Akeeba\Component\Engage\Site\Helper\Meta;
 use Akeeba\DataCompliance\Admin\Helper\Export as OldExport;
+use Exception;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
@@ -20,11 +21,14 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Event\Event;
+use Joomla\Event\SubscriberInterface;
+use SimpleXMLElement;
 
 /**
  * Data Compliance plugin for Akeeba Engage
  */
-class Engage extends CMSPlugin
+class Engage extends CMSPlugin implements SubscriberInterface
 {
 	/**
 	 * The current CMS application
@@ -51,20 +55,25 @@ class Engage extends CMSPlugin
 	protected $db;
 
 	/**
-	 * Should this plugin be allowed to run?
+	 * Returns an array of events this subscriber will listen to.
 	 *
-	 * If the runtime dependencies are not met the plugin effectively self-disables even if it's published. This
-	 * prevents a WSOD should the user e.g. uninstall a library or the component without unpublishing the plugin first.
+	 * @return  array
 	 *
-	 * @var  bool
+	 * @since   3.0.0
 	 */
-	private $enabled = true;
-
-	public function __construct(&$subject, $config = [])
+	public static function getSubscribedEvents(): array
 	{
-		parent::__construct($subject, $config);
+		if (!ComponentHelper::isEnabled('com_engage'))
+		{
+			return [];
+		}
 
-		$this->enabled = ComponentHelper::isEnabled('com_engage');
+
+		return [
+			'onDataComplianceDeleteUser'          => 'onDataComplianceDeleteUser',
+			'onDataComplianceExportUser'          => 'onDataComplianceExportUser',
+			'onDataComplianceGetWipeBulletpoints' => 'onDataComplianceGetWipeBulletpoints',
+		];
 	}
 
 	/**
@@ -75,17 +84,20 @@ class Engage extends CMSPlugin
 	 * This plugin takes the following actions:
 	 * - Sanitize comments relevant to the user
 	 *
-	 * @param   int     $userID  The user ID we are asked to delete
-	 * @param   string  $type    The export type (user, admin, lifecycle)
+	 * @param   Event  $event  The event we are handling
 	 *
-	 * @return  array
+	 * @return  void
+	 * @throws  Exception
+	 * @since   1.0.0
 	 */
-	public function onDataComplianceDeleteUser(int $userID, string $type): ?array
+	public function onDataComplianceDeleteUser(Event $event): void
 	{
-		if (!$this->enabled)
-		{
-			return null;
-		}
+		/**
+		 * @var   int    $userID The user ID we are asked to delete
+		 * @var   string $type   The export type (user, admin, lifecycle)
+		 */
+		[$userID, $type] = $event->getArguments();
+		$result = $event->getArgument('result', []);
 
 		$ret = [
 			'engage' => [
@@ -102,7 +114,7 @@ class Engage extends CMSPlugin
 
 		$ret['engage']['engage_comment_id'] = Meta::pseudonymiseUserComments($user);
 
-		return $ret;
+		$event->setArgument('result', array_merge($result, [$ret]));
 	}
 
 	/**
@@ -112,16 +124,16 @@ class Engage extends CMSPlugin
 	 * This plugin exports the following tables / models:
 	 * - #__engage_comments
 	 *
-	 * @param   int  $userID
+	 * @param   Event  $event  The event we are handling
 	 *
-	 * @return  SimpleXMLElement
+	 * @return  void
+	 * @since   1.0.0
 	 */
-	public function onDataComplianceExportUser(int $userID): ?SimpleXMLElement
+	public function onDataComplianceExportUser(Event $event): void
 	{
-		if (!$this->enabled)
-		{
-			return null;
-		}
+		/** @var   int $userID The user ID to export data for */
+		[$int] = $event->getArguments();
+		$result = $event->getArgument('result');
 
 		$export = new SimpleXMLElement("<root></root>");
 		$db     = $this->db;
@@ -174,27 +186,24 @@ class Engage extends CMSPlugin
 			unset($record);
 		}
 
-		return $export;
+		$event->setArgument('result', array_merge($result, [$export]));
 	}
 
 	/**
 	 * Return a list of human readable actions which will be carried out by this plugin if the user proceeds with wiping
 	 * their user account.
 	 *
-	 * @param   int     $userID  The user ID we are asked to delete
-	 * @param   string  $type    The export type (user, admin, lifecycle)
+	 * @param   Event  $event  The event we are handling
 	 *
-	 * @return  string[]
+	 * @return  void
+	 * @since   1.0.0
 	 */
-	public function onDataComplianceGetWipeBulletpoints(int $userID, string $type): ?array
+	public function onDataComplianceGetWipeBulletpoints(Event $event): ?array
 	{
-		if (!$this->enabled)
-		{
-			return null;
-		}
-
-		return [
-			Text::_('PLG_DATACOMPLIANCE_ENGAGE_DOMAINNAMEACTIONS_1'),
-		];
+		$event->setArgument('result', array_merge($event->getArgument('result', []), [
+			[
+				Text::_('PLG_DATACOMPLIANCE_ENGAGE_DOMAINNAMEACTIONS_1'),
+			]
+		]));
 	}
 }
