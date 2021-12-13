@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   AkeebaEngage
+  ~ @copyright Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+
+<extension version="4.0.0" type="plugin" group="console" method="upgrade">
+	<name>PLG_CONSOLE_ENGAGE</name>
+	<version>3.0.0</version>
+	<creationDate>2021-10-20</creationDate>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>https://www.akeeba.com</authorUrl>
+	<copyright>Copyright (c)2020-2021 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<description>PLG_CONSOLE_ENGAGE_XML_DESCRIPTION</description>
+	<namespace path="src">Joomla\Plugin\Console\Engage</namespace>
+	<files>
+		<folder plugin="engage">services</folder>
+		<folder>src</folder>
+
+		<filename>.htaccess</filename>
+		<filename>web.config</filename>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/plg_console_engage.ini</language>
+		<language tag="en-GB">en-GB/plg_console_engage.sys.ini</language>
+	</languages>
+</extension>
