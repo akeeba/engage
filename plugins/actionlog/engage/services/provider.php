@@ -29,7 +29,7 @@ return new class implements ServiceProviderInterface {
 		$container->set(
 			PluginInterface::class,
 			function (Container $container) {
-				$config  = (array) PluginHelper::getPlugin('content', 'engage');
+				$config  = (array) PluginHelper::getPlugin('actionlog', 'engage');
 				$subject = $container->get(DispatcherInterface::class);
 
 				return new Engage($subject, $config);
