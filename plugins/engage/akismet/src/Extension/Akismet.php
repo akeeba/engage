@@ -12,6 +12,7 @@ defined('_JEXEC') or die();
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use Akeeba\Component\Engage\Site\Exceptions\BlatantSpam;
+use Akeeba\Component\Engage\Site\Helper\Meta;
 use Exception;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
@@ -35,7 +36,9 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 	public static function getSubscribedEvents(): array
 	{
 		return [
-			'onAkeebaEngageCheckSpam' => 'onAkeebaEngageCheckSpam',
+			'onAkeebaEngageCheckSpam'  => 'onAkeebaEngageCheckSpam',
+			'onAkeebaEngageReportHam'  => 'onAkeebaEngageReportHam',
+			'onAkeebaEngageReportSpam' => 'onAkeebaEngageReportSpam',
 		];
 	}
 
@@ -134,6 +137,84 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 	}
 
 	/**
+	 * Handle the Akeeba Engage report ham (not spam) event.
+	 *
+	 * @param   Event  $event  The event we are handling
+	 *
+	 * @return  void
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
+	public function onAkeebaEngageReportHam(Event $event): void
+	{
+		[$comment] = $event->getArguments();
+		$result = $event->getArgument('result');
+
+		if (is_null($comment))
+		{
+			$event->setArgument('result', array_merge($result, [false]));
+
+			return;
+		}
+
+		try
+		{
+			$app = Factory::getApplication();
+
+			$additional = [
+				'referrer' => $app->input->server->getString('REFERER', null),
+			];
+
+			$this->apiCall($comment, 'submit-ham', $additional);
+
+			$event->setArgument('result', array_merge($result, [true]));
+		}
+		catch (Exception $e)
+		{
+			$event->setArgument('result', array_merge($result, [false]));
+		}
+	}
+
+	/**
+	 * Handle the Akeeba Engage report spam event.
+	 *
+	 * @param   Event  $event  The event we are handling
+	 *
+	 * @return  void
+	 * @throws  Exception
+	 * @since   3.0.0
+	 */
+	public function onAkeebaEngageReportSpam(Event $event): void
+	{
+		[$comment] = $event->getArguments();
+		$result = $event->getArgument('result');
+
+		if (is_null($comment))
+		{
+			$event->setArgument('result', array_merge($result, [false]));
+
+			return;
+		}
+
+		try
+		{
+			$app = Factory::getApplication();
+
+			$additional = [
+				'referrer' => $app->input->server->getString('REFERER', null),
+			];
+
+			$this->apiCall($comment, 'submit-spam', $additional);
+
+			$event->setArgument('result', array_merge($result, [true]));
+		}
+		catch (Exception $e)
+		{
+			$event->setArgument('result', array_merge($result, [false]));
+		}
+	}
+
+	/**
 	 * Execute an Akismet API call
 	 *
 	 * @param   CommentTable  $comment     The comment to execute an API call against
@@ -164,14 +245,9 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 
 		try
 		{
-			$jModifiedOn = new Date($comment->modified_on);
-
-			if ($jModifiedOn->toUnix() < 765158400)
-			{
-				throw new Exception('Not a real date, is it?');
-			}
-
-			$modifiedOn = $jModifiedOn->toISO8601();
+			$meta        = Meta::getAssetAccessMeta();
+			$jModifiedOn = $meta['published_on'];
+			$modifiedOn  = $jModifiedOn->toISO8601();
 		}
 		catch (Exception $e)
 		{
@@ -199,7 +275,9 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 		});
 
 		$apiUrl   = "https://{$apiKey}.rest.akismet.com/1.1/";
-		$http     = HttpFactory::getHttp();
+		$http     = HttpFactory::getHttp([
+			'userAgent' => sprintf('Joomla/%s | AkeebaEngage/%s', JVERSION, defined('AKENGAGE_VERSION') ? AKENGAGE_VERSION : 'dev'),
+		]);
 		$uri      = new Uri($apiUrl . $action);
 		$response = $http->post($uri->toString(), $struct);
 

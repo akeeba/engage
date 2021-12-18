@@ -2,16 +2,10 @@
 PENDING
 ========================================================================================================
 
-CLI Scripts (in Internal)
-    Create Demo Comments
-
 Documentation
     Convert from Wiki using Pandoc
 
 New features
-    Akismet new features
-        Report spam
-        Report ham
     User profile custom field as avatar source (maybe a plugin...?)
     Help pages
         Backend Comments

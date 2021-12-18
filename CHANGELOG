@@ -1,4 +1,9 @@
 <?php die(); ?>
+Akeeba Engage 3.0.0
+================================================================================
+! Rewritten as native Joomla 4 extension
++ The Akismet plugin can now report ham and spam back to Akismet
+
 Akeeba Engage 2.0.5
 ================================================================================
 + Full support for the Newsflash module
