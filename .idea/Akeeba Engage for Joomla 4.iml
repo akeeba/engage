@@ -12,6 +12,7 @@
       <sourceFolder url="file://$MODULE_DIR$/plugins/user/engage/src" isTestSource="false" packagePrefix="Joomla\Plugin\User\Engage" />
       <sourceFolder url="file://$MODULE_DIR$/plugins/datacompliance/engage/src" isTestSource="false" packagePrefix="Joomla\Plugin\Datacompliance\Engage" />
       <sourceFolder url="file://$MODULE_DIR$/plugins/privacy/engage/src" isTestSource="false" packagePrefix="Joomla\Plugin\Privacy\Engage" />
+      <sourceFolder url="file://$MODULE_DIR$/plugins/engage/gravatar/src" isTestSource="false" packagePrefix="Joomla\Plugin\Engage\Gravatar" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

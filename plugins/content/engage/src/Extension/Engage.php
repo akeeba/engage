@@ -49,6 +49,14 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	use MVCFactoryAwareTrait;
 
 	/**
+	 * Disallow registering legacy listeners since we use SubscriberInterface
+	 *
+	 * @var   bool
+	 * @since 3.0.0
+	 */
+	protected $allowLegacyListeners = false;
+
+	/**
 	 * Application object
 	 *
 	 * @var   CMSApplication
@@ -369,7 +377,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   object      $params  The category parameters, computed through the categories' hierarchy
 		 * @var   int|null    $page    Page number for multi-page articles
 		 */
- 		[$context, $row, $params, $page] = $event->getArguments();
+		[$context, $row, $params, $page] = $event->getArguments();
 		$result = $event->getArgument('result', []);
 
 		$event->setArgument('result', array_merge($result, [
@@ -1195,7 +1203,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		try
 		{
 			/** @var HtmlDocument $doc */
-			$doc   = Factory::getApplication()->getDocument();
+			$doc = Factory::getApplication()->getDocument();
 
 			$doc->getWebAssetManager()->getRegistry()->addRegistryFile('media/com_engage/joomla.asset.json');
 

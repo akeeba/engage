@@ -27,6 +27,14 @@ use const JPATH_SITE;
 class Engage extends PrivacyPlugin implements SubscriberInterface
 {
 	/**
+	 * Disallow registering legacy listeners since we use SubscriberInterface
+	 *
+	 * @var   bool
+	 * @since 3.0.0
+	 */
+	protected $allowLegacyListeners = false;
+
+	/**
 	 * The application under which we are running
 	 *
 	 * @var   CMSApplication

@@ -29,6 +29,14 @@ use Joomla\Event\SubscriberInterface;
 class Engage extends ActionLogPlugin implements SubscriberInterface
 {
 	/**
+	 * Disallow registering legacy listeners since we use SubscriberInterface
+	 *
+	 * @var   bool
+	 * @since 3.0.0
+	 */
+	protected $allowLegacyListeners = false;
+
+	/**
 	 * The CMS application object we are running under.
 	 *
 	 * @var   CMSApplication
@@ -94,7 +102,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	 * @param   Event  $event  The event we are handling
 	 *
 	 * @return  void
-	 * @since   1.0.0
+	 * @since        1.0.0
 	 * @noinspection PhpUnused
 	 */
 	public function onAkeebaEngageReportHam(Event $event): void
@@ -124,7 +132,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	 * @param   Event  $event  The event we are handling
 	 *
 	 * @return  void
-	 * @since   1.0.0
+	 * @since        1.0.0
 	 * @noinspection PhpUnused
 	 */
 	public function onAkeebaEngageReportSpam(Event $event): void
@@ -153,7 +161,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	 * @param   Event  $event  The event we are handling
 	 *
 	 * @return  void
-	 * @since   3.0.0
+	 * @since        3.0.0
 	 * @noinspection PhpUnused
 	 */
 	public function onComEngageCommentTableAfterCreate(Event $event): void
@@ -186,7 +194,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	 * @param   Event  $event  The event we are handling
 	 *
 	 * @return  void
-	 * @since   3.0.0
+	 * @since        3.0.0
 	 * @noinspection PhpUnused
 	 */
 	public function onComEngageCommentTableAfterUpdate(Event $event): void
@@ -213,7 +221,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	 * @param   Event  $event  The event we are handling
 	 *
 	 * @return  void
-	 * @since   3.0.0
+	 * @since        3.0.0
 	 * @noinspection PhpUnused
 	 */
 	public function onComEngageCommentsControllerAfterDelete(Event $event): void
@@ -245,7 +253,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	 * @param   Event  $event  The event we are handling
 	 *
 	 * @return void
-	 * @since   3.0.0
+	 * @since        3.0.0
 	 * @noinspection PhpUnused
 	 */
 	public function onComEngageCommentsControllerAfterPublish(Event $event): void
@@ -287,7 +295,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	 * @param   Event  $event  The event we are handling
 	 *
 	 * @return  void
-	 * @since   3.0.0
+	 * @since        3.0.0
 	 * @noinspection PhpUnused
 	 */
 	public function onComEngageCommentsControllerAfterUnpublish(Event $event): void
@@ -313,7 +321,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	 * @param   Event  $event  The event we are handling
 	 *
 	 * @return  void
-	 * @since   1.0.0
+	 * @since        1.0.0
 	 * @noinspection PhpUnused
 	 */
 	public function onEngageUnsubscribeEmail(Event $event): void

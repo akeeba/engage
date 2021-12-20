@@ -31,6 +31,14 @@ use SimpleXMLElement;
 class Engage extends CMSPlugin implements SubscriberInterface
 {
 	/**
+	 * Disallow registering legacy listeners since we use SubscriberInterface
+	 *
+	 * @var   bool
+	 * @since 3.0.0
+	 */
+	protected $allowLegacyListeners = false;
+
+	/**
 	 * The current CMS application
 	 *
 	 * @var   CMSApplication
@@ -203,7 +211,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		$event->setArgument('result', array_merge($event->getArgument('result', []), [
 			[
 				Text::_('PLG_DATACOMPLIANCE_ENGAGE_DOMAINNAMEACTIONS_1'),
-			]
+			],
 		]));
 	}
 }

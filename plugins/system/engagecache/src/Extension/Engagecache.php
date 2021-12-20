@@ -21,6 +21,14 @@ use Joomla\Event\SubscriberInterface;
  */
 class Engagecache extends CMSPlugin implements SubscriberInterface
 {
+	/**
+	 * Disallow registering legacy listeners since we use SubscriberInterface
+	 *
+	 * @var   bool
+	 * @since 3.0.0
+	 */
+	protected $allowLegacyListeners = false;
+
 	public static function getSubscribedEvents(): array
 	{
 		return ['onAfterInitialise' => 'onAfterInitialise'];

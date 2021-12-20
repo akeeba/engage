@@ -29,6 +29,14 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	];
 
 	/**
+	 * Disallow registering legacy listeners since we use SubscriberInterface
+	 *
+	 * @var   bool
+	 * @since 3.0.0
+	 */
+	protected $allowLegacyListeners = false;
+
+	/**
 	 * Application object.
 	 *
 	 * @var    ConsoleApplication

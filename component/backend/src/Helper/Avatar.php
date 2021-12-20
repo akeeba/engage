@@ -147,7 +147,7 @@ class Avatar
 	 */
 	private static function getAvatarFromCustomField(?int $user_id): ?string
 	{
-		$cParams       = ComponentHelper::getParams('com_ats');
+		$cParams       = ComponentHelper::getParams('com_engage');
 		$customFieldId = $cParams->get('customfield_avatar', '');
 
 		if (empty($customFieldId))

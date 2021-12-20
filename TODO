@@ -2,12 +2,5 @@
 PENDING
 ========================================================================================================
 
-Documentation
-    Convert from Wiki using Pandoc
-
 New features
-    User profile custom field as avatar source (maybe a plugin...?)
-    Help pages
-        Backend Comments
-        Backend Comment
-        Backend EmailTemplates
+    User profile custom field as avatar source (component configuration)

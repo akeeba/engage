@@ -18,7 +18,6 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\User\User;
 use Joomla\CMS\User\UserFactoryInterface;
-use Joomla\CMS\User\UserHelper;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Event\DispatcherInterface;
 use Joomla\Event\Event;
@@ -27,6 +26,14 @@ use Joomla\Utilities\ArrayHelper;
 
 class Engage extends CMSPlugin implements SubscriberInterface
 {
+	/**
+	 * Disallow registering legacy listeners since we use SubscriberInterface
+	 *
+	 * @var   bool
+	 * @since 3.0.0
+	 */
+	protected $allowLegacyListeners = false;
+
 	/**
 	 * The current application
 	 *
@@ -212,8 +219,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	public function onUserLogin(Event $event): void
 	{
 		/**
-		 * @var   array  $user     Holds the user data
-		 * @var   array  $options  Array holding options (remember, autoregister, group)
+		 * @var   array $user    Holds the user data
+		 * @var   array $options Array holding options (remember, autoregister, group)
 		 */
 		[$user, $options] = $event->getArguments();
 		$result = $event->getArgument('result') ?? [];

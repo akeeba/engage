@@ -37,6 +37,14 @@ defined('_JEXEC') or die;
 class Email extends CMSPlugin
 {
 	/**
+	 * Disallow registering legacy listeners since we use SubscriberInterface
+	 *
+	 * @var   bool
+	 * @since 3.0.0
+	 */
+	protected $allowLegacyListeners = false;
+
+	/**
 	 * The application we are running in.
 	 *
 	 * @var   CMSApplication
@@ -60,7 +68,7 @@ class Email extends CMSPlugin
 	 * @noinspection PhpUnused
 	 *
 	 * @return  void
-	 * @since   1.0.0
+	 * @since        1.0.0
 	 */
 	public function onComEngageModelCommentsAfterCreate(CommentTable $comment): void
 	{
@@ -223,8 +231,7 @@ class Email extends CMSPlugin
 			->select($db->quoteName('email'))
 			->from($db->quoteName('#__engage_unsubscribe'))
 			->where($db->quoteName('asset_id') . ' = :asset_id')
-			->bind(':asset_id', $asset_id, ParameterType::INTEGER)
-		;
+			->bind(':asset_id', $asset_id, ParameterType::INTEGER);
 
 		return $db->setQuery($query)->loadColumn() ?? [];
 	}
