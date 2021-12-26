@@ -17,7 +17,9 @@
     <namespace path="src">Joomla\Plugin\Datacompliance\Engage</namespace>
 
     <files>
-        <filename plugin="engage">engage.php</filename>
+        <folder>services</folder>
+        <folder plugin="engage">src</folder>
+
         <filename>.htaccess</filename>
         <filename>web.config</filename>
     </files>

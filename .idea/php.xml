@@ -9,6 +9,9 @@
       <path value="$PROJECT_DIR$/component/backend/vendor/composer" />
       <path value="$USER_HOME$/Sites/boot4/configuration.php" />
       <path value="$USER_HOME$/Sites/boot4---" />
+      <path value="../fof3/fof" />
+      <path value="../../master/joomla-cms" />
+      <path value="/var/www/boot4/configuration.php" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />

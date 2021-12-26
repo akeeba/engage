@@ -1,5 +1,5 @@
 /**
- * Short descriptions of this class
+ * @package     ${NAMESPACE}
  *
  * @since version
  */

@@ -1,8 +1,9 @@
 /**
 ${PARAM_DOC}
 *
-#if (${TYPE_HINT} != "void") * @return   ${TYPE_HINT}
+#if (${TYPE_HINT} != "void") * @return ${TYPE_HINT}
 #end
-* @since   version
+*
+* @since version
 ${THROWS_DOC}
 */

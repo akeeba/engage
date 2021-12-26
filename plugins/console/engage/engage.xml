@@ -17,8 +17,8 @@
 	<description>PLG_CONSOLE_ENGAGE_XML_DESCRIPTION</description>
 	<namespace path="src">Joomla\Plugin\Console\Engage</namespace>
 	<files>
-		<folder plugin="engage">services</folder>
-		<folder>src</folder>
+		<folder>services</folder>
+		<folder plugin="engage">src</folder>
 
 		<filename>.htaccess</filename>
 		<filename>web.config</filename>

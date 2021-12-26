@@ -20,7 +20,7 @@ CREATE TABLE `#__engage_comments` (
     `modified_by` int(11) DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY           `#__engage_comments_asset` (`asset_id`),
-    KEY           `#__engage_comments_created_on` (`created_on` DESC)
+    KEY           `#__engage_comments_created_on` (`created` DESC)
 ) DEFAULT COLLATE utf8mb4_unicode_ci COMMENT='Content comments';
 
 CREATE TABLE `#__engage_unsubscribe` (

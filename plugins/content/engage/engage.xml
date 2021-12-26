@@ -38,6 +38,4 @@
         <language tag="es-ES">es-ES/plg_content_engage.sys.ini</language>
     </languages>
 
-    <scriptfile>script.php</scriptfile>
-
 </extension>
