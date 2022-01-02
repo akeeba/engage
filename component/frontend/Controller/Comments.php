@@ -556,7 +556,7 @@ class Comments extends DataController
 
 			if (empty($token))
 			{
-				throw new RuntimeException('', 0xDEADBEEF);
+				throw new RuntimeException('', 0xDEAD);
 			}
 
 			// Do I have a comment ID? Otherwise fall through to FOF's anti-CSRF protection.
@@ -566,14 +566,14 @@ class Comments extends DataController
 
 			if (empty($ids))
 			{
-				throw new RuntimeException('', 0xDEADBEEF);
+				throw new RuntimeException('', 0xDEAD);
 			}
 
 			$id = array_shift($ids);
 
 			if (empty($id))
 			{
-				throw new RuntimeException('', 0xDEADBEEF);
+				throw new RuntimeException('', 0xDEAD);
 			}
 
 			// Load the comment or fall through to FOF's anti-CSRF protection.
@@ -597,7 +597,7 @@ class Comments extends DataController
 		catch (RuntimeException $e)
 		{
 			// If it's not a "fall-through" exception we need to throw it back.
-			if ($e->getCode() != 0xDEADBEEF)
+			if ($e->getCode() != 0xDEAD)
 			{
 				throw $e;
 			}

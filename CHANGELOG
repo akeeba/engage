@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 2.0.6
+================================================================================
+# [LOW] There people still using a 32–bit version of PHP in 2022...
+
 Akeeba Engage 2.0.5
 ================================================================================
 + Full support for the Newsflash module
