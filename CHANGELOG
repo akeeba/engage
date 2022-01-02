@@ -3,6 +3,7 @@ Akeeba Engage 3.0.0
 ================================================================================
 ! Rewritten as native Joomla 4 extension
 + The Akismet plugin can now report ham and spam back to Akismet
+# [LOW] There people still using a 32–bit version of PHP in 2022...
 
 Akeeba Engage 2.0.5
 ================================================================================

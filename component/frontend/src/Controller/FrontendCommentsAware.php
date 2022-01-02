@@ -46,7 +46,7 @@ trait FrontendCommentsAware
 			// Make sure we have a token and a valid comment ID
 			if (empty($token) || empty($id) || $table->load($id) === false)
 			{
-				throw new RuntimeException('', 0xDEADBEEF);
+				throw new RuntimeException('', 0xDEAD);
 			}
 
 			// If the token is valid we can return true
@@ -63,7 +63,7 @@ trait FrontendCommentsAware
 		catch (RuntimeException $e)
 		{
 			// If it's not a "fall-through" exception we need to throw it back.
-			if ($e->getCode() != 0xDEADBEEF)
+			if ($e->getCode() != 0xDEAD)
 			{
 				throw $e;
 			}
