@@ -1,6 +1,6 @@
-/*
- * @package   ats
- * @copyright Copyright (c)2011-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
+/**
+ * @package   AkeebaEngage
+ * @copyright Copyright (c)2020-2022 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
