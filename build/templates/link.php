@@ -5,12 +5,8 @@
  * @license   GNU General Public License version 3, or later
  */
 
-$hardlink_files = [
-];
+$hardlink_files = [];
 
-$symlink_files = [
-	'../fef/out/css/fef-joomla.min.css' => 'fef.min.css',
-];
+$symlink_files = [];
 
-$symlink_folders = [
-];
+$symlink_folders = [];
