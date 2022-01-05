@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.0.1
+================================================================================
+! Bug in Joomla prevents update from Engage 2.x
+
 Akeeba Engage 3.0.0
 ================================================================================
 ! Rewritten as native Joomla 4 extension

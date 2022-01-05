@@ -10,8 +10,10 @@ defined('_JEXEC') or die();
 
 use Akeeba\Component\Engage\Administrator\Helper\TemplateEmails;
 use Akeeba\Component\Engage\Administrator\Model\UpgradeModel;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Installer\Adapter\PackageAdapter;
 use Joomla\CMS\Log\Log;
+use Joomla\Database\DatabaseDriver;
 
 /**
  * Akeeba Engage package extension installation script file.
@@ -21,27 +23,6 @@ use Joomla\CMS\Log\Log;
  */
 class Pkg_EngageInstallerScript
 {
-	public function preflight(string $type, PackageAdapter $parent): bool
-	{
-		// Do not run on uninstall.
-		if ($type === 'uninstall')
-		{
-			return true;
-		}
-
-		// Prevent users from installing this on Joomla 3
-		if (version_compare(JVERSION, '3.999.999', 'le'))
-		{
-			$msg = "<p>This version of Akeeba Engage cannot run on Joomla 3. Please download and install Akeeba Engage 2 instead. Kindly note that our site's Downloads page clearly indicates which version of our software is compatible with Joomla 3 and which version is compatible with Joomla 4.</p>";
-
-			Log::add($msg, Log::WARNING, 'jerror');
-
-			return false;
-		}
-
-		return true;
-	}
-
 	/**
 	 * Called after any type of installation / uninstallation action.
 	 *
@@ -78,7 +59,68 @@ class Pkg_EngageInstallerScript
 
 		$this->updateEmails();
 
+		if ($type === 'update')
+		{
+			$this->addUnsubscribeKey();
+		}
+
 		return true;
+	}
+
+	public function preflight(string $type, PackageAdapter $parent): bool
+	{
+		// Do not run on uninstall.
+		if ($type === 'uninstall')
+		{
+			return true;
+		}
+
+		// Prevent users from installing this on Joomla 3
+		if (version_compare(JVERSION, '3.999.999', 'le'))
+		{
+			$msg = "<p>This version of Akeeba Engage cannot run on Joomla 3. Please download and install Akeeba Engage 2 instead. Kindly note that our site's Downloads page clearly indicates which version of our software is compatible with Joomla 3 and which version is compatible with Joomla 4.</p>";
+
+			Log::add($msg, Log::WARNING, 'jerror');
+
+			return false;
+		}
+
+		if ($type === 'update')
+		{
+			$this->dropUnsubscribeKey();
+		}
+
+		return true;
+	}
+
+	private function addUnsubscribeKey()
+	{
+		/** @var DatabaseDriver $db */
+		$db    = Factory::getContainer()->get('DatabaseDriver');
+		$query = "ALTER TABLE `#__engage_unsubscribe` ADD PRIMARY KEY (`asset_id`,`email`)";
+		try
+		{
+			$db->setQuery($query)->execute();
+		}
+		catch (Exception $e)
+		{
+			// We expect this to fail if updating from a version beyond 3.0.0
+		}
+	}
+
+	private function dropUnsubscribeKey()
+	{
+		/** @var DatabaseDriver $db */
+		$db    = Factory::getContainer()->get('DatabaseDriver');
+		$query = "ALTER TABLE `#__engage_unsubscribe` DROP KEY `#__engage_unsubscribe_unique`";
+		try
+		{
+			$db->setQuery($query)->execute();
+		}
+		catch (Exception $e)
+		{
+			// We expect this to fail if updating from a version beyond 3.0.0
+		}
 	}
 
 	/**
