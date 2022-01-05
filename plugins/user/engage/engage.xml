@@ -7,7 +7,7 @@
 <extension version="3.9.0" type="plugin" group="user" method="upgrade">
     <name>PLG_USER_ENGAGE</name>
     <description>PLG_USER_ENGAGE_XML_DESC</description>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
     <creationDate>2022-01-05</creationDate>
     <author>Akeeba Ltd</author>
     <authorEmail>no-reply@akeeba.com</authorEmail>
