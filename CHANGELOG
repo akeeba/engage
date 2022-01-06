@@ -2,6 +2,7 @@
 Akeeba Engage 3.0.2
 ================================================================================
 # [HIGH] Cannot save category options
+# [HIGH] Displaying comments could result in a broken display depending on your Joomla caching settings
 # [LOW] “Leave your comment” button does nto work in the frontend
 
 Akeeba Engage 3.0.1

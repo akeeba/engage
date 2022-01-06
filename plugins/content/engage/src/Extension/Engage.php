@@ -1210,8 +1210,6 @@ class Engage extends CMSPlugin implements SubscriberInterface
 			$this->comDispatcherFactory->createDispatcher($this->app, $input)->setUseErrorHandler($debug)->dispatch();
 
 			$comments = @ob_get_contents();
-
-			@ob_end_clean();
 		}
 		catch (Throwable $e)
 		{
