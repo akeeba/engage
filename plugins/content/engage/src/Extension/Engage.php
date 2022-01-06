@@ -401,7 +401,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   bool         $isNew   Is this a new record?
 		 * @var   object       $data    Data being saved
 		 */
-		[$context, $row, $params, $page] = $event->getArguments();
+		[$context, $table, $isNew, $data] = $event->getArguments();
 		$result = $event->getArgument('result', []);
 
 		$event->setArgument('result', array_merge($result, [
