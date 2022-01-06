@@ -39,6 +39,7 @@ HTMLHelper::_('behavior.formvalidator');
 <form action="<?= Route::_('index.php?option=com_engage&task=comment.save') ?>"
 	method="post" name="akengage-comment-form" id="akengageCommentForm"
 	class="form-validate <?= $badUx ? 'd-none' : ''; ?>"
+	style="<?= $badUx ? 'display: none;' : ''; ?>"
 	aria-label="<?= Text::_('COM_ENGAGE_COMMENTS_FORM_HEADER', true) ?>"
 >
 	<input type="hidden" name="returnurl" value="<?= base64_encode(Uri::getInstance()->toString(['scheme', 'user', 'pass', 'host', 'port', 'path', 'query', 'fragment'])) ?>">

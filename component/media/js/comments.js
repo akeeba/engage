@@ -283,10 +283,12 @@ akeeba.Engage.Comments.unhideReplyArea = function ()
     var elFormArea = document.getElementById("akengageCommentForm");
     var elHider    = document.getElementById("akengage-comment-hider");
 
+    elFormArea.classList.remove('d-none');
     elFormArea.style.display = "";
 
     if (elHider)
     {
+        elHider.classList.add('d-none');
         elHider.style.display = "none";
     }
 };
