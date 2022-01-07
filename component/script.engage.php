@@ -97,7 +97,7 @@ class Pkg_EngageInstallerScript
 	{
 		/** @var DatabaseDriver $db */
 		$db    = Factory::getContainer()->get('DatabaseDriver');
-		$query = "ALTER TABLE `#__engage_unsubscribe` ADD PRIMARY KEY (`asset_id`,`email`)";
+		$query = "ALTER TABLE `#__engage_unsubscribe` ADD PRIMARY KEY (`asset_id`,`email`(100))";
 		try
 		{
 			$db->setQuery($query)->execute();

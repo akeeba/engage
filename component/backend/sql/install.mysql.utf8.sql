@@ -21,12 +21,12 @@ CREATE TABLE `#__engage_comments` (
     PRIMARY KEY (`id`),
     KEY           `#__engage_comments_asset` (`asset_id`),
     KEY           `#__engage_comments_created_on` (`created` DESC)
-) DEFAULT COLLATE utf8mb4_unicode_ci COMMENT='Content comments';
+) ENGINE InnoDB DEFAULT CHARSET = utf8mb4 DEFAULT COLLATE = utf8mb4_unicode_ci COMMENT='Content comments';
 
 CREATE TABLE `#__engage_unsubscribe` (
     `asset_id` bigint(20) NOT NULL,
     `email`    varchar(255) NOT NULL,
-    PRIMARY KEY (`asset_id`, `email`)
-) DEFAULT COLLATE utf8mb4_unicode_ci COMMENT='Unsubscribed emails';
+    PRIMARY KEY (`asset_id`, `email`(100))
+) ENGINE InnoDB DEFAULT CHARSET = utf8mb4 DEFAULT COLLATE = utf8mb4_unicode_ci COMMENT='Unsubscribed emails';
 
 DROP TABLE IF EXISTS `#__engage_emailtemplates`;

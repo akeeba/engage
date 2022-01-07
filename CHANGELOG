@@ -4,6 +4,7 @@ Akeeba Engage 3.0.2
 # [HIGH] Cannot save category options
 # [HIGH] Displaying comments could result in a broken display depending on your Joomla caching settings
 # [MEDIUM] The Gravatar plugin was missing from the package
+# [MEDIUM] Some servers may have a problem installing from scratch due to db key length
 # [LOW] “Leave your comment” button does nto work in the frontend
 
 Akeeba Engage 3.0.1
