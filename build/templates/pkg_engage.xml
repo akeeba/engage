@@ -44,6 +44,7 @@
         <!-- Plugins: engage -->
         <file type="plugin" group="engage" id="akismet">plg_engage_akismet.zip</file>
         <file type="plugin" group="engage" id="email">plg_engage_email.zip</file>
+        <file type="plugin" group="engage" id="gravatar">plg_engage_gravatar.zip</file>
 
         <!-- Plugins: privacy -->
         <file type="plugin" group="privacy" id="engage">plg_privacy_engage.zip</file>
