@@ -292,7 +292,9 @@
                 addfieldprefix="Joomla\Component\Modules\Administrator\Field"
                 default="mod_login"
                 label="COM_ENGAGE_CONFIG_LOGIN_LABEL"
-                description="COM_ENGAGE_CONFIG_LOGIN_DESC"/>
+                description="COM_ENGAGE_CONFIG_LOGIN_DESC">
+            <option value="-1">COM_ENGAGE_CONFIG_LOGIN_NONE</option>
+        </field>
 
         <field
                 name="iplookup"
