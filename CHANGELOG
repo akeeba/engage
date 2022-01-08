@@ -8,6 +8,7 @@ Akeeba Engage 3.0.2
 # [MEDIUM] Some servers may have a problem installing from scratch due to db key length
 # [MEDIUM] The Login Module option did not have the “( Do not display )” option
 # [LOW] “Leave your comment” button does nto work in the frontend
+# [LOW] The component extension name in the XML manifest was missing the com_ prefix
 
 Akeeba Engage 3.0.1
 ================================================================================
