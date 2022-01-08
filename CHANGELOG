@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Engage 3.0.2
 ================================================================================
+~ Remove old language files with language tag prefix which are no longer used
 # [HIGH] Cannot save category options
 # [HIGH] Displaying comments could result in a broken display depending on your Joomla caching settings
 # [MEDIUM] The Gravatar plugin was missing from the package
