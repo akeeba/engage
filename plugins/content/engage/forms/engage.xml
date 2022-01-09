@@ -82,8 +82,7 @@
 
             <field
                     name="comments_enabled"
-                    type="radio"
-                    layout="joomla.form.field.radio.switcher"
+                    type="list"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_ENABLED_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_ENABLED_DESC"
                     useglobal="true"
@@ -107,8 +106,7 @@
 
             <field
                     name="comments_notify_author"
-                    type="radio"
-                    layout="joomla.form.field.radio.switcher"
+                    type="list"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_AUTHOR_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_AUTHOR_DESC"
                     useglobal="true"
@@ -121,8 +119,7 @@
 
             <field
                     name="comments_notify_users"
-                    type="radio"
-                    layout="joomla.form.field.radio.switcher"
+                    type="list"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_USERS_LABEL"
                     description="PLG_CONTENT_ENGAGE_COMMENTS_NOTIFY_USERS_DESC"
                     useglobal="true"
