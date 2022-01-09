@@ -8,6 +8,7 @@ Akeeba Engage 3.0.3
 # [LOW] Filtering comments by user was broken
 # [LOW] Failing to post a comment redirects you to a comment edit page, not the article itself
 # [LOW] Failure to accept ToS results in Application Has Stopped Responding instead of an error that makes sense
+# [LOW] Name and Email not marked required for Guests even though they're treated as such
 
 Akeeba Engage 3.0.2
 ================================================================================

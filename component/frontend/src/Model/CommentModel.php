@@ -205,6 +205,11 @@ class CommentModel extends AdminCommentModel
 			$form->removeField('name');
 			$form->removeField('email');
 		}
+		else
+		{
+			$form->setFieldAttribute('name', 'required', 'true');
+			$form->setFieldAttribute('email', 'required', 'true');
+		}
 
 		// Only guests see the Accept ToS field and only if configured
 		if (!$user->guest || !$acceptTos)
