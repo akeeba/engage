@@ -285,7 +285,8 @@ abstract class TemplateEmails
 			$user = UserFetcher::getUser();
 		}
 
-		if ($user->guest || $user->block || !$user->sendEmail)
+		//if ($user->guest || $user->block || !$user->sendEmail)
+		if ($user->guest || $user->block)
 		{
 			return false;
 		}

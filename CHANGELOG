@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Engage 3.0.3
 ================================================================================
+# [HIGH] The Email plugin never fired
 # [MEDIUM] Joomla no longer supports multi–state toggles
 # [MEDIUM] German translation was partially broken
 # [LOW] Filtering comments by user was broken

@@ -31,10 +31,12 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\ParameterType;
+use Joomla\Event\Event;
+use Joomla\Event\SubscriberInterface;
 
 defined('_JEXEC') or die;
 
-class Email extends CMSPlugin
+class Email extends CMSPlugin implements SubscriberInterface
 {
 	/**
 	 * Disallow registering legacy listeners since we use SubscriberInterface
@@ -50,7 +52,7 @@ class Email extends CMSPlugin
 	 * @var   CMSApplication
 	 * @since 3.0.0
 	 */
-	protected $api;
+	protected $app;
 
 	/**
 	 * The application's database driver object
@@ -61,17 +63,32 @@ class Email extends CMSPlugin
 	protected $db;
 
 	/**
+	 * Returns an array of events this subscriber will listen to.
+	 *
+	 * @return  array
+	 *
+	 * @since   3.0.3
+	 */
+	public static function getSubscribedEvents(): array
+	{
+		return [
+			'onComEngageCommentTableAfterCreate' => 'sendEmailsAfterPostCreation',
+		];
+	}
+
+	/**
 	 * Automatically triggered right after Akeeba Engage saves a NEW comment record to its database table.
 	 *
-	 * @param   CommentTable  $comment  The comment that has just been saved.
-	 *
-	 * @noinspection PhpUnused
+	 * @param   Event  $event  The event we are handling
 	 *
 	 * @return  void
-	 * @since        1.0.0
+	 * @since   1.0.0
 	 */
-	public function onComEngageTableCommentsAfterCreate(CommentTable $comment): void
+	public function sendEmailsAfterPostCreation(Event $event): void
 	{
+		/** @var CommentTable $comment The comment table being saved */
+		[$comment] = $event->getArguments();
+
 		// No emails in non-web applications, please
 		if (!($this->app instanceof WebApplication))
 		{
@@ -191,7 +208,7 @@ class Email extends CMSPlugin
 				{
 					return;
 				}
-				$ret[$user->email] = $ret[$user->name];
+				$ret[$user->email] = $user->name;
 			});
 		}
 
@@ -389,7 +406,7 @@ class Email extends CMSPlugin
 			// Get the recipient Joomla user
 			try
 			{
-				$recipient = UserFetcher::getUserByEmail($userIDs[$email]);
+				$recipient = UserFetcher::getUser($userIDs[$email]);
 			}
 			catch (Exception $e)
 			{
@@ -455,11 +472,11 @@ class Email extends CMSPlugin
 	 */
 	private function getUser(CommentTable $comment): ?User
 	{
-		if ($comment->created)
+		if ($comment->created_by)
 		{
 			try
 			{
-				return UserFetcher::getUser($comment->created);
+				return UserFetcher::getUser($comment->created_by);
 			}
 			catch (Exception $e)
 			{
