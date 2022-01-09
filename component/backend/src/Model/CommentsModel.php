@@ -453,11 +453,21 @@ class CommentsModel extends ListModel
 				}
 
 				$query->extendWhere('AND', [
-					$db->quoteName('user_name') . ' LIKE :filter_search_1',
-					$db->quoteName('user_email') . ' LIKE :filter_search_2',
+					$db->quoteName('u.name') . ' LIKE :filter_search_1',
+					$db->quoteName('c.name') . ' LIKE :filter_search_2',
+					$db->quoteName('u.email') . ' LIKE :filter_search_3',
+					$db->quoteName('c.email') . ' LIKE :filter_search_3',
 				], 'OR')
 					->bind(':filter_search_1', $fsValue, ParameterType::STRING)
-					->bind(':filter_search_2', $fsValue, ParameterType::STRING);
+					->bind(':filter_search_2', $fsValue, ParameterType::STRING)
+					->bind(':filter_search_3', $fsValue, ParameterType::STRING)
+					->bind(':filter_search_4', $fsValue, ParameterType::STRING);
+			}
+			elseif (substr($fltSearch, 0, 9) === 'username:')
+			{
+				$fsValue = '%' . substr($fltSearch, 9) . '%';
+				$query->where($db->quoteName('u.username') . ' LIKE :filter_search')
+					->bind(':filter_search', $fsValue, ParameterType::STRING);
 			}
 			elseif (substr($fltSearch, 0, 6) === 'title:')
 			{
@@ -484,12 +494,16 @@ class CommentsModel extends ListModel
 
 				$query->extendWhere('AND', [
 					$db->quoteName('c.body') . 'LIKE :filter_search',
-					$db->quoteName('user_name') . ' LIKE :filter_search_1',
-					$db->quoteName('user_email') . ' LIKE :filter_search_2',
+					$db->quoteName('u.name') . ' LIKE :filter_search_1',
+					$db->quoteName('c.name') . ' LIKE :filter_search_2',
+					$db->quoteName('u.email') . ' LIKE :filter_search_3',
+					$db->quoteName('c.email') . ' LIKE :filter_search_4',
 				], 'OR')
 					->bind(':filter_search', $fsValue, ParameterType::STRING)
 					->bind(':filter_search_1', $fsValue, ParameterType::STRING)
-					->bind(':filter_search_2', $fsValue, ParameterType::STRING);
+					->bind(':filter_search_2', $fsValue, ParameterType::STRING)
+					->bind(':filter_search_3', $fsValue, ParameterType::STRING)
+					->bind(':filter_search_4', $fsValue, ParameterType::STRING);
 			}
 		}
 

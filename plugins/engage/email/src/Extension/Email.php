@@ -70,7 +70,7 @@ class Email extends CMSPlugin
 	 * @return  void
 	 * @since        1.0.0
 	 */
-	public function onComEngageModelCommentsAfterCreate(CommentTable $comment): void
+	public function onComEngageTableCommentsAfterCreate(CommentTable $comment): void
 	{
 		// No emails in non-web applications, please
 		if (!($this->app instanceof WebApplication))
