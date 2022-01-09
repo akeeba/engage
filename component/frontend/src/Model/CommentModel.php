@@ -184,8 +184,8 @@ class CommentModel extends AdminCommentModel
 	{
 		$user          = UserFetcher::getUser();
 		$cParams       = ComponentHelper::getParams('com_engage');
-		$tosPrompt     = $cParams->get('tos_prompt');
-		$acceptTos     = $cParams->get('accept_tos', 0) == 1;
+		$tosPrompt     = $cParams->get('tos_prompt') ?: Text::_('COM_ENGAGE_COMMENTS_FORM_LBL_ACCEPT');
+		$acceptTos     = $cParams->get('tos_accept', 0) == 1;
 		$tosChecked    = (bool) ($data['accept_tos'] ?? 0);
 		$captchaPlugin = $cParams->get('captcha', '0');
 		$captchaFor    = $cParams->get('captcha_for', 'guests');
@@ -198,7 +198,7 @@ class CommentModel extends AdminCommentModel
 		}
 
 		// Only guests see the Accept ToS field and only if configured
-		if (!$user->guest || !$acceptTos || empty($tosPrompt))
+		if (!$user->guest || !$acceptTos)
 		{
 			$form->removeField('accept_tos');
 		}

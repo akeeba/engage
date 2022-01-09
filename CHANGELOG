@@ -2,6 +2,7 @@
 Akeeba Engage 3.0.3
 ================================================================================
 # [HIGH] The Email plugin never fired
+# [MEDIUM] Accept ToS frontend checkbox would not be displayed
 # [MEDIUM] Joomla no longer supports multi–state toggles
 # [MEDIUM] German translation was partially broken
 # [LOW] Filtering comments by user was broken
