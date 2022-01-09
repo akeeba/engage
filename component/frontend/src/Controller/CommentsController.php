@@ -395,11 +395,16 @@ class CommentsController extends AdminCommentsController
 	private function getDefaultListLimit(): int
 	{
 		$defaultLimit = ComponentHelper::getParams('com_engage')->get('default_limit', 20);
-		$defaultLimit = ($defaultLimit > 0) ? $defaultLimit : 0;
 
-		if (!is_null($defaultLimit) || !class_exists(Factory::class))
+		if ($defaultLimit >= 0)
 		{
 			return $defaultLimit;
+		}
+
+		// This should never happen. Fallback to all comments when the CMS Factory class does not exist.
+		if (!class_exists(Factory::class))
+		{
+			return 0;
 		}
 
 		try

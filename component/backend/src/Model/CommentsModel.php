@@ -241,7 +241,12 @@ class CommentsModel extends ListModel
 
 		unset($allIDs);
 
-		return array_slice($flattened, $start, $limit, true);
+		if ($limit > 0)
+		{
+			return array_slice($flattened, $start, $limit, true);
+		}
+
+		return array_slice($flattened, $start, null, true);
 	}
 
 	/**
