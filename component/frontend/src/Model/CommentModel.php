@@ -125,9 +125,18 @@ class CommentModel extends AdminCommentModel
 	{
 		$assetId = $data['asset_id'] ?? 0;
 
-		$this->assertAssetAccess($assetId);
-		$this->assertCommentsOpen($assetId);
-		$this->assertAcceptTos($data['accept_tos'] ?? false);
+		try
+		{
+			$this->assertAssetAccess($assetId);
+			$this->assertCommentsOpen($assetId);
+			$this->assertAcceptTos($data['accept_tos'] ?? false);
+		}
+		catch (Exception $e)
+		{
+			$this->setError($e->getMessage());
+
+			return false;
+		}
 
 		return parent::validate($form, $data, $group);
 	}
