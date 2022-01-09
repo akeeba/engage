@@ -80,11 +80,15 @@ class CommentController extends AdminCommentController
 
 	protected function onAfterApply()
 	{
+		$this->applyReturnUrl();
+
 		$this->cleanCache();
 	}
 
 	protected function onAfterSave()
 	{
+		$this->applyReturnUrl();
+
 		$this->cleanCache();
 	}
 
