@@ -57,7 +57,6 @@
                 name="captcha"
                 type="captcha"
                 hiddenLabel="true"
-                label="COM_ATS_TICKET_LBL_CAPTCHA_LABEL"
                 validate="captcha"
         />
 
