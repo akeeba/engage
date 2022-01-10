@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Engage 3.0.3
 ================================================================================
+~ Improved default CSS for non-Bootstrap 5 frontend templates
 # [HIGH] Comments would not show when “Number of comments per page” in the component's Options was set to Use Global.
 # [HIGH] The Email plugin never fired
 # [MEDIUM] Accept ToS frontend checkbox would not be displayed

@@ -38,21 +38,61 @@ section.akengage-outer-container {
 
       button {
         background: none;
-        border: 2px solid rgba(0, 0, 0, 0);
+        border: 1px solid $teal;
         color: $teal;
-        display: inline-block;
         margin: 0;
         padding: .25em .5em;
         vertical-align: center;
+        transition: color .25s, background-color .25s;
 
         &:hover {
-          color: lighten($teal, 10%);
+          background-color: $teal;
+          color: $white;
+          border-color: darken($teal, 20%);
         }
+
+        &.btn-outline-secondary {
+          color: $grey;
+          border-color: $grey;
+
+          &:hover {
+            background-color: $grey;
+            color: $white;
+            border-color: darken($grey, 20%);
+          }
+        }
+
+        &.btn-outline-warning {
+          color: darken($orange, 20%);
+          border-color: $orange;
+
+          &:hover {
+            background-color: $orange;
+            color: $black;
+            border-color: darken($orange, 20%);
+          }
+        }
+
+        &.btn-outline-danger {
+          color: darken($red, 20%);
+          border-color: $red;
+
+          &:hover {
+            background-color: $red;
+            color: $white;
+            border-color: darken($red, 20%);
+          }
+        }
+
       }
 
       li.akengage-comment-item {
         list-style: none;
         margin-top: 1em;
+
+        & ul.akengage-comment-list {
+          margin-left: 2em;
+        }
 
         article[class^=akengage-comment] {
           border-left: 4px solid $light-grey;
@@ -60,141 +100,129 @@ section.akengage-outer-container {
           margin-top: .5em;
           padding-left: 1em;
 
-          footer.akengage-comment-properties {
-            background-color: lighten($light-grey, 5%);
-            margin-bottom: .25em;
-
-            img.akengage-commenter-avatar {
-              float: left;
-              margin-right: 1em;
-              max-height: 32px;
-              max-width: 32px;
-            }
-
-            div.akengange-commenter-name {
-              color: $grey;
-              font-size: 110%;
-              font-weight: bold;
-
-              span.akengage-commenter-username {
-                color: darken($green, 10%);
-                font-family: Hack, "Fira Code Retina", Consolas, "SF Mono", "Courier New", Courier, monospace;
-              }
-
-              span.akengage-commenter-email {
-                font-weight: normal;
-                font-family: Hack, "Fira Code Retina", Consolas, "SF Mono", "Courier New", Courier, monospace;
-                font-size: 93%;
-              }
-
-              span.akengage-commenter-ismoderator,
-              span.akengage-commenter-isuser,
-              span.akengage-commenter-isguest {
-                padding-left: 1em;
-              }
-
-              span.akengage-commenter-ismoderator {
-                color: $orange;
-              }
-
-              span.akengage-commenter-isguest {
-                color: $red;
-              }
-            }
-
-            span.akengage-comment-permalink > a {
-              color: $grey;
-              text-underline: none;
-            }
-
-            span.akengage-comment-actions {
-              span.akengage-comment-edit,
-              span.akengage-comment-delete,
-              span.akengage-comment-mark-ham,
-              span.akengage-comment-mark-spam,
-              span.akengage-comment-mark-possiblespam,
-              span.akengage-comment-publish_unpublish {
-                display: block;
-                float: right;
-                position: relative;
-                top: -.5em;
-              }
-
-              span.akengage-comment-delete,
-              span.akengage-comment-mark-spam {
-                button {
-                  color: $red;
-
-                  &:hover {
-                    background-color: lighten($red, 40%);
-                    border: 2px solid darken($red, 10%);
-                    color: darken($red, 10%);
-                  }
-                }
-              }
-
-              span.akengage-comment-mark-ham {
-                button {
-                  color: darken($green, 20%);
-
-                  &:hover {
-                    background-color: lighten($green, 40%);
-                    border: 2px solid darken($green, 10%);
-                    color: darken($green, 10%);
-                  }
-                }
-              }
-
-              span.akengage-comment-mark-possiblespam {
-                button {
-                  color: darken($orange, 20%);
-
-                  &:hover {
-                    background-color: lighten($orange, 30%);
-                    border: 2px solid darken($orange, 10%);
-                    color: darken($orange, 10%);
-                  }
-                }
-              }
-            }
-
-            span.akengage-comment-publish-type {
-              display: block;
-              font-weight: bold;
-            }
-          }
-
           &[class*=--unpublished] {
             background-color: lighten($orange, 36%);
             border-left: 4px solid $orange;
-
-            footer.akengage-comment-properties {
-              background-color: lighten($orange, 30%);
-              margin-bottom: .25em;
-            }
           }
 
           &[class*=--spam] {
             background-color: lighten($red, 44%);
             border-left: 4px solid $red;
+          }
 
-            footer.akengage-comment-properties {
-              background-color: lighten($red, 40%);
-              margin-bottom: .25em;
+          footer.akengage-comment-properties {
+            background-color: lighten($light-grey, 5%);
+            margin-bottom: .25em;
+            padding: .25em;
+            display: flex;
+            flex-direction: row;
+            gap: .25em;
+            font-size: 90%;
+            border-bottom: 2px solid $light-grey;
+
+            div.akengage-commenter-avatar-container {
+              flex-shrink: 1;
+            }
+
+            img.akengage-commenter-avatar {
+              width: 100%;
+              aspect-ratio: 1;
+              border-radius: .75em;
+              max-height: 32px;
+              max-width: 32px;
+            }
+
+            div.akengange-comment-head {
+              display: flex;
+              flex-direction: column;
+              width: 100%;
+
+              div.akengange-commenter-name {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: .75em;
+                align-items: center;
+                margin-bottom: .25em;
+                color: $grey;
+                font-size: 110%;
+                font-weight: bold;
+
+                span.akengage-commenter-ismoderator {
+                  color: $orange;
+                }
+
+                span.akengage-commenter-isuser {
+                  color: $grey;
+                }
+
+                span.akengage-commenter-isguest {
+                  color: $red;
+                }
+
+                span.akengage-commenter-username {
+                  color: darken($green, 10%);
+                  font-family: Hack, "Fira Code Retina", Consolas, "SF Mono", "Courier New", Courier, monospace;
+                }
+
+                span.akengage-commenter-email {
+                  font-weight: normal;
+                  font-family: Hack, "Fira Code Retina", Consolas, "SF Mono", "Courier New", Courier, monospace;
+                  font-size: 93%;
+                }
+
+                span.akengage-commenter-ismoderator,
+                span.akengage-commenter-isuser,
+                span.akengage-commenter-isguest {
+                  padding-left: 1em;
+                }
+
+                span.akengage-commenter-ismoderator {
+                  color: $orange;
+                }
+
+                span.akengage-commenter-isguest {
+                  color: $red;
+                }
+              }
+
+              div.akengage-comment-info {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: .5em;
+                align-items: center;
+
+                div.akengage-comment-permalink {
+                  flex-grow: 1;
+
+                  &> a {
+                    color: $grey;
+                    text-underline: none;
+                  }
+                }
+
+                div.akengage-comment-actions {
+                  flex-shrink: 1;
+                  display: flex;
+                  gap: .25em;
+                }
+              }
             }
           }
 
-          div.akengage-comment-reply {
-            & > button {
-              border: thin solid $light-grey;
-              font-size: 115%;
-              padding: .25em .5em;
+          span.akengage-comment-publish-type {
+            display: block;
+            font-weight: bold;
 
-              &:hover {
-                background-color: lighten($light-grey, 3%);
-                border-color: $grey;
-                color: $grey;
-              }
+            &.bg-warning {
+              background-color: $orange;
+              color: $white;
+            }
+
+            &.bg-danger {
+              background-color: $red;
+              color: $white;
             }
           }
         }
@@ -202,12 +230,12 @@ section.akengage-outer-container {
     }
   }
 
-  div#akengage-comment-form {
+  #akengageCommentForm {
     border-top: thin solid $grey;
     margin: 1em 0;
     padding: 1em;
 
-    h4 {
+    h3 {
       color: darken($teal, 10%);
       font-size: 120%;
     }
@@ -241,32 +269,6 @@ section.akengage-outer-container {
       }
     }
 
-    div.akengage-comment-captcha-wrapper,
-    div.akengage-comment-captcha-clear {
-      clear: both;
-    }
-  }
-}
-
-// Small screens
-@media only screen and (max-width: 600px) {
-  span.akengage-comment-actions {
-    display: block;
-    padding: .25em 0;
-
-    span.akengage-comment-actions {
-      span.akengage-comment-edit,
-      span.akengage-comment-delete,
-      span.akengage-comment-publish_unpublish {
-        display: inline-block;
-        float: none;
-      }
-    }
-  }
-
-  span.akengage-comment-ip {
-    clear: both;
-    display: block;
   }
 }
 
@@ -286,50 +288,20 @@ section.akengage-outer-container {
     div.akengage-list-container {
       ul.akengage-comment-list {
         button {
+          &.btn-outline-secondary {
+            color: $light-grey;
+            border-color: $light-grey;
 
+            &:hover {
+              background-color: $light-grey;
+              color: $black;
+              border-color: darken($light-grey, 20%);
+            }
+          }
         }
 
         li.akengage-comment-item {
           article[class^=akengage-comment] {
-            footer.akengage-comment-properties {
-              background-color: darken($grey, 10%);
-
-              div.akengange-commenter-name {
-                color: $light-grey;
-
-                span.akengage-commenter-username {
-                  color: $green;
-                }
-              }
-
-              span.akengage-comment-permalink > a {
-                color: $light-grey;
-              }
-
-              span.akengage-comment-actions {
-                span.akengage-comment-delete,
-                span.akengage-comment-mark-spam {
-                  button {
-                    color: lighten($red, 10%)
-                  }
-                }
-
-                span.akengage-comment-mark-ham {
-                  button {
-                    color: $green;
-                  }
-                }
-
-                span.akengage-comment-mark-possiblespam {
-                  button {
-                    color: $orange;
-                  }
-                }
-
-              }
-
-            }
-
             &[class*=--unpublished] {
               background-color: darken($orange, 48%);
               border-color: $orange;
@@ -345,6 +317,29 @@ section.akengage-outer-container {
 
               footer.akengage-comment-properties {
                 background-color: darken($red, 50%);
+              }
+            }
+
+            footer.akengage-comment-properties {
+              background-color: darken($grey, 10%);
+
+              div.akengange-comment-head {
+                div.akengange-commenter-name {
+                  color: $light-grey;
+
+                  span.akengage-commenter-username {
+                    color: $green;
+                  }
+                }
+
+              }
+
+              div.akengage-comment-info {
+                div.akengage-comment-permalink {
+                  &> a {
+                    color: $light-grey !important;
+                  }
+                }
               }
             }
           }

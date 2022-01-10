@@ -83,7 +83,7 @@ $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->ena
 				itemprop="author" itemscope itemtype="http://schema.org/Person"
 				class="akengage-comment-properties d-flex flex-row gap-1 mb-1 bg-light p-1 small border-bottom border-2">
 			<?php if (!empty($avatar)): ?>
-			<div class="d-none d-sm-block flex-shrink-1" style="max-width: <?= (int) $maxAvatarWidth ?>px">
+			<div class="akengage-commenter-avatar-container d-none d-sm-block flex-shrink-1" style="max-width: <?= (int) $maxAvatarWidth ?>px">
 				<?php if (empty($profile)): ?>
 				<img src="<?= $avatar ?>" alt="" class="akengage-commenter-avatar img-fluid rounded-3 shadow-sm" itemprop="image">
 				<?php else: ?>

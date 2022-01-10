@@ -333,10 +333,17 @@ akeeba.Engage.Comments.unhideReplyArea = function ()
     el.addEventListener("click", akeeba.Engage.Comments.onMarkPossibleSpamButton);
 });
 
-document.getElementById("akengage-comment-inreplyto-cancel")
-        .addEventListener("click", akeeba.Engage.Comments.onCancelReplyButton);
+var inReplyTo = document.getElementById("akengage-comment-inreplyto-cancel");
+if (inReplyTo)
+{
+    inReplyTo.addEventListener("click", akeeba.Engage.Comments.onCancelReplyButton);
+}
 
-document.getElementById("akengageCommentForm").addEventListener("submit", akeeba.Engage.Comments.saveCommenterInfo);
+var commentForm = document.getElementById("akengageCommentForm");
+if (commentForm)
+{
+    commentForm.addEventListener("submit", akeeba.Engage.Comments.saveCommenterInfo);
+}
 
 var elHider = document.getElementById("akengage-comment-hider-button");
 if (elHider)
