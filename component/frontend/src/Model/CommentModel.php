@@ -236,13 +236,13 @@ class CommentModel extends AdminCommentModel
 				break;
 		}
 
-		$showCaptcha &= ($captchaPlugin !== '0');
+		$showCaptcha &= ($captchaPlugin !== '-1');
 
 		if (!$showCaptcha)
 		{
 			$form->removeField('captcha');
 		}
-		else
+		elseif (!empty($captchaPlugin))
 		{
 			$form->setFieldAttribute('captcha', 'plugin', $captchaPlugin);
 		}

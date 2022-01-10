@@ -61,7 +61,7 @@
                 filter="cmd"
                 useglobal="true"
         >
-            <option value="0">JOPTION_DO_NOT_USE</option>
+            <option value="-1">JOPTION_DO_NOT_USE</option>
         </field>
 
         <field
@@ -70,7 +70,7 @@
                 label="COM_ENGAGE_CONFIG_CAPTCHA_FOR_LABEL"
                 description="COM_ENGAGE_CONFIG_CAPTCHA_FOR_DESC"
                 default="guests"
-                showon="captcha!:0"
+                showon="captcha!:-1"
         >
             <option value="guests">COM_ENGAGE_CONFIG_CAPTCHA_FOR_GUESTS</option>
             <option value="nonmanager">COM_ENGAGE_CONFIG_CAPTCHA_FOR_NONMANAGER</option>
