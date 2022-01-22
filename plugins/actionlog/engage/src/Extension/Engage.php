@@ -82,14 +82,13 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 		}
 
 		return [
-			'onAkeebaEngageReportHam'                     => 'onAkeebaEngageReportHam',
-			'onAkeebaEngageReportSpam'                    => 'onAkeebaEngageReportSpam',
-			'onComEngageCommentTableAfterCreate'          => 'onComEngageCommentTableAfterCreate',
-			'onComEngageCommentTableAfterUpdate'          => 'onComEngageCommentTableAfterUpdate',
-			'onComEngageCommentsControllerAfterDelete'    => 'onComEngageCommentsControllerAfterDelete',
-			'onComEngageCommentsControllerAfterPublish'   => 'onComEngageCommentsControllerAfterPublish',
-			'onComEngageCommentsControllerAfterUnpublish' => 'onComEngageCommentsControllerAfterUnpublish',
-			'onEngageUnsubscribeEmail'                    => 'onEngageUnsubscribeEmail',
+			'onAkeebaEngageReportHam'            => 'onAkeebaEngageReportHam',
+			'onAkeebaEngageReportSpam'           => 'onAkeebaEngageReportSpam',
+			'onComEngageCommentTableAfterCreate' => 'onComEngageCommentTableAfterCreate',
+			'onComEngageCommentTableAfterUpdate' => 'onComEngageCommentTableAfterUpdate',
+			'onContentAfterDelete'               => 'onContentAfterDelete',
+			'onContentChangeState'               => 'onContentChangeState',
+			'onEngageUnsubscribeEmail'           => 'onEngageUnsubscribeEmail',
 		];
 	}
 
@@ -224,10 +223,18 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	 * @since        3.0.0
 	 * @noinspection PhpUnused
 	 */
-	public function onComEngageCommentsControllerAfterDelete(Event $event): void
+	public function onContentAfterDelete(Event $event): void
 	{
-		/** @var   CommentTable $comment */
-		[$comment] = $event->getArguments();
+		/**
+		 * @var   string       $context
+		 * @var   CommentTable $comment
+		 */
+		[$context, $comment] = $event->getArguments();
+
+		if (!in_array($context, ['com_engage.comment', 'com_engage.comments']))
+		{
+			return;
+		}
 
 		if ($this->app->getIdentity()->guest)
 		{
@@ -248,71 +255,66 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	 * Log changing the publish status of a comment.
 	 *
 	 * This method can handle all publish status changes through the comment model's publish() method including
-	 * unpublishing (when publish(0) is used instead of unpublish), publishing and marking a comment as possible spam.
-	 *
-	 * @param   Event  $event  The event we are handling
-	 *
-	 * @return void
-	 * @since        3.0.0
-	 * @noinspection PhpUnused
-	 */
-	public function onComEngageCommentsControllerAfterPublish(Event $event): void
-	{
-		/** @var   CommentTable $comment */
-		[$comment] = $event->getArguments();
-
-		if ($this->app->getIdentity()->guest)
-		{
-			return;
-		}
-
-		$info = $this->getCommentInfo($comment);
-
-		switch ($comment->enabled)
-		{
-			case 0:
-			default:
-				$langKey = 'COM_ENGAGE_USERLOG_COMMENT_UNPUBLISH';
-				break;
-
-			case 1:
-				$langKey = 'COM_ENGAGE_USERLOG_COMMENT_PUBLISH';
-				break;
-
-			case -3:
-				$langKey = 'COM_ENGAGE_USERLOG_COMMENT_SPAM';
-				break;
-		}
-
-		$langKey = $this->prepareLanguageKey($langKey, $info);
-
-		$this->logUserAction($info, $langKey, 'com_engage');
-	}
-
-	/**
-	 * Log unpublishing a comment
+	 * unpublishing, publishing and marking a comment as possible spam.
 	 *
 	 * @param   Event  $event  The event we are handling
 	 *
 	 * @return  void
-	 * @since        3.0.0
+	 * @since        3.0.4
+	 *
 	 * @noinspection PhpUnused
 	 */
-	public function onComEngageCommentsControllerAfterUnpublish(Event $event): void
+	public function onContentChangeState(Event $event): void
 	{
-		/** @var   CommentTable $comment */
-		[$comment] = $event->getArguments();
+		/**
+		 * @var  string $context
+		 * @var  array  $pks
+		 * @var  int    $value
+		 */
+		[$context, $pks, $value] = $event->getArguments();
+
+		if (!in_array($context, ['com_engage.comment', 'com_engage.comments']))
+		{
+			return;
+		}
 
 		if ($this->app->getIdentity()->guest)
 		{
 			return;
 		}
 
-		$info    = $this->getCommentInfo($comment);
-		$langKey = 'COM_ENGAGE_USERLOG_COMMENT_UNPUBLISH';
-		$langKey = $this->prepareLanguageKey($langKey, $info);
+		/** @var   CommentTable $comment */
+		$comment = new CommentTable($this->db, $this->app->getDispatcher());
 
-		$this->logUserAction($info, $langKey, 'com_engage');
+		foreach ($pks as $id)
+		{
+			if (!$comment->load($id))
+			{
+				continue;
+			}
+
+			$info = $this->getCommentInfo($comment);
+
+			switch ($comment->enabled)
+			{
+				case 0:
+				default:
+					$langKey = 'COM_ENGAGE_USERLOG_COMMENT_UNPUBLISH';
+					break;
+
+				case 1:
+					$langKey = 'COM_ENGAGE_USERLOG_COMMENT_PUBLISH';
+					break;
+
+				case -3:
+					$langKey = 'COM_ENGAGE_USERLOG_COMMENT_SPAM';
+					break;
+			}
+
+			$langKey = $this->prepareLanguageKey($langKey, $info);
+
+			$this->logUserAction($info, $langKey, 'com_engage');
+		}
 	}
 
 	/**
