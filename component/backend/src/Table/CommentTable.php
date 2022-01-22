@@ -73,6 +73,8 @@ class CommentTable extends AbstractTable
 	/** @inheritdoc */
 	public function delete($pk = null)
 	{
+		$pk = $pk ?? $this->getId();
+
 		$this->triggerEvent('onBeforeDelete', [&$pk]);
 
 		$result = $this->_realDelete($pk);

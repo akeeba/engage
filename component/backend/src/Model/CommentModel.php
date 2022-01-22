@@ -11,6 +11,7 @@ defined('_JEXEC') or die;
 
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Akeeba\Component\Engage\Administrator\Model\Mixin\GetItemAware;
+use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use Exception;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
@@ -91,8 +92,9 @@ class CommentModel extends AdminModel
 	 */
 	public function reportMessage(array &$pks, bool $asSpam = true): bool
 	{
-		$pks   = ArrayHelper::toInteger($pks);
-		$table = $this->getTable();
+		/** @var CommentTable $table */
+		$pks     = ArrayHelper::toInteger($pks);
+		$table   = $this->getTable();
 		$context = $this->option . '.' . $this->name;
 
 		PluginHelper::importPlugin('engage');

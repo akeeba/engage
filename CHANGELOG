@@ -3,6 +3,7 @@ Akeeba Engage 3.0.4
 ================================================================================
 # [HIGH] Immediate error on the backend on Windows [gh-165]
 # [HIGH] Action Log plugin would cause an error on comment publish, unpublish and delete [gh-167]
+# [MEDIUM] Mark As Spam And Delete causes an exception in CommentsTable [gh-170]
 
 Akeeba Engage 3.0.3
 ================================================================================
