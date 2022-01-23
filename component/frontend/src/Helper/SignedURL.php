@@ -65,7 +65,7 @@ final class SignedURL
 		$expires = (int) $uri->getVar('expires', time() + 86400);
 		$uri->setVar('email', $email);
 		$uri->setVar('expires', $expires);
-		$uri->setVar('id', $comment->id);
+		$uri->setVar('cid[]', $comment->id);
 		$uri->setVar('token', self::getToken($task, $email, $comment->asset_id, $expires));
 
 		return $uri->toString(['path', 'query', 'fragment']);

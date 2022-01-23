@@ -446,13 +446,13 @@ class Email extends CMSPlugin implements SubscriberInterface
 					'RECIPIENT_NAME'   => htmlentities($recipient->name),
 					'RECIPIENT_EMAIL'  => htmlentities($recipient->email),
 					'DATE_LOCAL'       => $jCreatedOn->format($dateFormat, true),
-					'PUBLISH_URL'      => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.publish', $returnUrlComment), $comment, $recipient->email),
-					'UNPUBLISH_URL'    => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.unpublish', $returnUrl), $comment, $recipient->email),
-					'DELETE_URL'       => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.delete', $returnUrl), $comment, $recipient->email),
-					'POSSIBLESPAM_URL' => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.possiblespam', $returnUrl), $comment, $recipient->email),
-					'SPAM_URL'         => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.reportspam', $returnUrl), $comment, $recipient->email),
-					'UNSPAM_URL'       => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.reportham', $returnUrlComment), $comment, $recipient->email),
-					'UNSUBSCRIBE_URL'  => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.unsubscribe', $returnUrl), $comment, $recipient->email),
+					'PUBLISH_URL'      => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.publish', urlencode($returnUrlComment)), $comment, $recipient->email),
+					'UNPUBLISH_URL'    => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.unpublish', urlencode($returnUrl)), $comment, $recipient->email),
+					'DELETE_URL'       => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.delete', urlencode($returnUrl)), $comment, $recipient->email),
+					'POSSIBLESPAM_URL' => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.possiblespam', urlencode($returnUrl)), $comment, $recipient->email),
+					'SPAM_URL'         => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.reportspam', urlencode($returnUrl)), $comment, $recipient->email),
+					'UNSPAM_URL'       => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.reportham', urlencode($returnUrlComment)), $comment, $recipient->email),
+					'UNSUBSCRIBE_URL'  => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.unsubscribe', urlencode($returnUrl)), $comment, $recipient->email),
 				]), $recipient);
 			}
 			catch (Exception $e)

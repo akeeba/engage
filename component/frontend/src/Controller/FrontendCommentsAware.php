@@ -41,7 +41,12 @@ trait FrontendCommentsAware
 			/** @var CommentTable $table */
 			$table = $this->getModel()->getTable('Comment', 'Administrator');
 			$token = $this->input->get->getString('token');
+			$ids   = $this->input->get('cid', [], 'array');
 			$id    = $this->input->get->getInt('id', null);
+
+			$ids     = is_array($ids) ? $ids : [];
+			$firstId = array_shift($ids);
+			$id      = (is_numeric($firstId) && !empty($firstId)) ? intval($firstId) : $id;
 
 			// Make sure we have a token and a valid comment ID
 			if (empty($token) || empty($id) || $table->load($id) === false)
