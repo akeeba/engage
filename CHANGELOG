@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Engage 3.0.4
 ================================================================================
+~ Backend “View content” link takes language into account on multi–language sites
 # [HIGH] Immediate error on the backend on Windows [gh-165]
 # [HIGH] Action Log plugin would cause an error on comment publish, unpublish and delete [gh-167]
 # [HIGH] Wrong email link for admin actions [gh-166]

@@ -248,7 +248,9 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		// Get the link to the article
 		$url = '';
 
-		$public_url = Route::link('site', sprintf("index.php?option=com_content&view=article&id=%s&catid=%s", $row->id, $row->catid), false, Route::TLS_IGNORE, true);
+		$nonSefUrl  = "index.php?option=com_content&view=article&id=%s&catid=%s";
+		$nonSefUrl  .= empty($row->language) ? '' : "&lang={$row->language}";
+		$public_url = Route::link('site', sprintf($nonSefUrl, $row->id, $row->catid), false, Route::TLS_IGNORE, true);
 
 		if ($this->app->isClient('site'))
 		{
@@ -589,6 +591,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 			'publish_up'      => $row->publish_up,
 			'publish_down'    => $row->publish_down,
 			'access'          => $row->access,
+			'language'        => $row->language ?? '*',
 			'category_title'  => $row->category_title ?? '',
 			'category_alias'  => $row->category_alias ?? 0,
 			'category_access' => $row->category_access ?? $row->access,
