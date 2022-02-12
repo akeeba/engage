@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.0.5
+================================================================================
+# [HIGH] Unhandled exception when you have turned off email sending in your site's Global Configuration
+
 Akeeba Engage 3.0.4
 ================================================================================
 ~ Backend “View content” link takes language into account on multi–language sites

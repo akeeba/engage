@@ -14,7 +14,7 @@ use Joomla\CMS\Mail\Mail;
 use Joomla\CMS\Mail\MailTemplate;
 use Joomla\CMS\User\User;
 use Joomla\Database\DatabaseDriver;
-use PHPMailer\PHPMailer\Exception;
+use Exception;
 use stdClass;
 
 /**
