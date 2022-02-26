@@ -2,6 +2,7 @@
 Akeeba Engage 3.0.5
 ================================================================================
 # [HIGH] Unhandled exception when you have turned off email sending in your site's Global Configuration
+# [HIGH] The SQL directory was removed when installing the component
 
 Akeeba Engage 3.0.4
 ================================================================================

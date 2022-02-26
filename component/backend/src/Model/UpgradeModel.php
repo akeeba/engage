@@ -225,7 +225,6 @@ class UpgradeModel extends BaseModel
 			JPATH_ADMINISTRATOR . '/components/com_engage/fields',
 			JPATH_ADMINISTRATOR . '/components/com_engage/Helper',
 			JPATH_ADMINISTRATOR . '/components/com_engage/Model',
-			JPATH_ADMINISTRATOR . '/components/com_engage/sql',
 			JPATH_ADMINISTRATOR . '/components/com_engage/Toolbar',
 			JPATH_ADMINISTRATOR . '/components/com_engage/View',
 			// Old frontend MVC
