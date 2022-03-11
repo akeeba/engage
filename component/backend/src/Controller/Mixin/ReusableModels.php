@@ -79,7 +79,9 @@ trait ReusableModels
 		if (!$hadView)
 		{
 			// Get/Create the model
-			if ($model = $this->getModel($name, 'Administrator', ['base_path' => $this->basePath]))
+			$side = $this->app->isClient('site') ? 'Site' : 'Administrator';
+
+			if ($model = $this->getModel($name, $side, ['base_path' => $this->basePath]))
 			{
 				// Push the model into the view (as default)
 				$view->setModel($model, true);

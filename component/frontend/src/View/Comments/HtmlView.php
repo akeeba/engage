@@ -157,11 +157,26 @@ class HtmlView extends BaseHtmlView
 	 */
 	private $pagination;
 
+	/**
+	 * The URL option for the component.
+	 *
+	 * This is used to automatically determine the template overrides path when using _setPath().
+	 *
+	 * @var    string
+	 * @since  3.0.6
+	 */
+	protected $option = 'com_engage';
+
 	/** @inheritDoc */
 	public function display($tpl = null)
 	{
 		$this->setLayout('default');
-		$this->addTemplatePath(JPATH_SITE . '/components/com_engage/tmpl/comments');
+		$this->_setPath('template', [
+			JPATH_SITE . '/components/com_engage/tmpl/comments'
+		]);
+		$this->_setPath('helper', [
+			JPATH_SITE . '/components/com_engage/helpers'
+		]);
 
 		// User information
 		$this->user         = Factory::getUser();
