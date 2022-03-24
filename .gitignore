@@ -1,3 +1,6 @@
+### Package XML file (copy)
+/pkg_*.xml
+
 ### phpStorm
 # User-specific stuff
 .idea/**/workspace.xml
