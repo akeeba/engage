@@ -2,6 +2,7 @@
 Akeeba Engage 3.0.6
 ================================================================================
 # [HIGH] Template overrides are not working
+# [MEDIUM] Privacy plugin may not work if it's published first in order among all privacy plugins
 
 Akeeba Engage 3.0.5
 ================================================================================
