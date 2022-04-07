@@ -1196,7 +1196,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		$input->set('controller', null);
 		$input->set('layout', null);
 		$input->set('asset_id', $assetId);
-		$input->set('filter_order_Dir', $commentParams->get('comments_ordering'));
+		$input->set('akengage_order_Dir', $commentParams->get('comments_ordering'));
 
 		// Is debug mode enabled?
 		$debug = defined('JDEBUG') && boolval(JDEBUG);

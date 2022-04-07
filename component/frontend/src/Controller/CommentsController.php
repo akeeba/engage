@@ -346,11 +346,14 @@ class CommentsController extends AdminCommentsController
 		$defaultLimit = $this->getDefaultListLimit();
 		$start        = $this->app->getUserStateFromRequest('com_engage.comments.limitstart', 'akengage_limitstart', 0);
 		$limit        = $this->app->getUserStateFromRequest('com_engage.comments.limit', 'akengage_limit', $defaultLimit);
+		$orderDir     = strtoupper($this->input->get('akengage_order_Dir', 'DESC') ?: 'DESC');
+		$orderDir     = in_array($orderDir, ['ASC', 'DESC']) ? $orderDir : 'DESC';
 
 		$model = $this->getModel('Comments', 'Site', ['ignore_request' => true]);
 		$formModel = $this->getModel('Comment', 'Site', ['ignore_request' => true]);
 		$model->setState('list.start', $start);
 		$model->setState('list.limit', $limit);
+		$model->setState('list.direction', $orderDir);
 
 		// Get the asset_id and assert we have access to it
 		$assetId = $this->getAssetId();

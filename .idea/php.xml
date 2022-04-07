@@ -4,11 +4,11 @@
     <include_path>
       <path value="../../dionysopoulos/joomlatypehints/generated_hints" />
       <path value="../com_datacompliance/component" />
-      <path value="../../master/joomla4" />
+      <path value="../../master/joomla4--" />
       <path value="$PROJECT_DIR$/component/backend/vendor/ezyang/htmlpurifier" />
       <path value="$PROJECT_DIR$/component/backend/vendor/composer" />
       <path value="$USER_HOME$/Sites/boot4/configuration.php" />
-      <path value="$USER_HOME$/Sites/boot4---" />
+      <path value="$USER_HOME$/Sites/boot4" />
       <path value="../fof3/fof" />
       <path value="../../master/joomla-cms" />
       <path value="/var/www/boot4/configuration.php" />

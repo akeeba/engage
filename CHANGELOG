@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.0.7
+================================================================================
+# [LOW] Frontend comments order preference is not applied (gh-184)
+
 Akeeba Engage 3.0.6
 ================================================================================
 # [HIGH] Template overrides are not working
