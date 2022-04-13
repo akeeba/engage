@@ -34,7 +34,7 @@ trait FrontendCommentsAware
 	 * @see     Session::checkToken()
 	 * @since   1.0.0
 	 */
-	public function checkToken($method = 'post', $redirect = true): bool
+	public function checkToken($method = 'request', $redirect = true): bool
 	{
 		try
 		{

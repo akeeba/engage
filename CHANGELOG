@@ -2,6 +2,7 @@
 Akeeba Engage 3.0.7
 ================================================================================
 # [LOW] Frontend comments order preference is not applied (gh-184)
+# [HIGH] Joomla 4.1.1 and later broke all frontend comment administration links
 
 Akeeba Engage 3.0.6
 ================================================================================
