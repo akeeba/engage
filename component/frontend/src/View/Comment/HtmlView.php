@@ -57,7 +57,7 @@ class HtmlView extends BaseHtmlView
 	{
 		$this->setLayout('edit');
 		$this->_setPath('template', [
-			JPATH_SITE . '/components/com_engage/tmpl/comments'
+			JPATH_SITE . '/components/com_engage/tmpl/comment'
 		]);
 		$this->_setPath('helper', [
 			JPATH_SITE . '/components/com_engage/helpers'
