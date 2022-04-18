@@ -112,6 +112,27 @@
             <option value="1">JYES</option>
         </field>
 
+        <field
+                name="min_length"
+                type="number"
+                label="COM_ENGAGE_COMMENTS_MIN_LENGTH_LABEL"
+                description="COM_ENGAGE_COMMENTS_MIN_LENGTH_DESC"
+                default="0"
+                min="0"
+                max="1048576"
+                step="1"
+        />
+
+        <field
+                name="max_length"
+                type="number"
+                label="COM_ENGAGE_COMMENTS_MAX_LENGTH_LABEL"
+                description="COM_ENGAGE_COMMENTS_MAX_LENGTH_DESC"
+                default="0"
+                min="0"
+                max="1048576"
+                step="1"
+        />
 
         <field
                 name="header_overridable"

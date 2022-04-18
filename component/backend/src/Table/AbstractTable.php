@@ -56,6 +56,8 @@ abstract class AbstractTable extends Table
 		}
 		catch (\Exception $e)
 		{
+			$this->setError($e->getMessage());
+
 			$result = false;
 		}
 

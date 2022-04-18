@@ -13,6 +13,7 @@ use Akeeba\Component\Engage\Administrator\Model\CommentsModel;
 use Akeeba\Component\Engage\Administrator\Table\Mixin\ColumnAliasAware;
 use Akeeba\Component\Engage\Administrator\Table\Mixin\CreateModifyAware;
 use Exception;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Event\AbstractEvent;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -187,9 +188,32 @@ class CommentTable extends AbstractTable
 		}
 
 		// Make sure we have a non–empty comment
+		$this->body = trim($this->body ?? '');
+
 		if (empty($this->body))
 		{
 			throw new RuntimeException(Text::_('COM_ENGAGE_COMMENTS_ERR_COMMENT_REQUIRED'));
+		}
+
+		// Check the limits
+		$cparams       = ComponentHelper::getParams('com_engage');
+		$minLength     = $cparams->get('min_length', 0);
+		$maxLength     = $cparams->get('max_length', 0);
+		$commentLength = function_exists('mb_strlen') ? mb_strlen($this->body ?? '', '8bit') : strlen($this->body ?? '');
+
+		if ($maxLength > 0 && $minLength > 0 && $maxLength < $minLength)
+		{
+			$maxLength = 0;
+		}
+
+		if ($minLength && $commentLength < $minLength)
+		{
+			throw new RuntimeException(Text::sprintf('COM_ENGAGE_COMMENTS_ERR_COMMENT_MINLENGTH', $minLength));
+		}
+
+		if ($maxLength && $commentLength > $maxLength)
+		{
+			throw new RuntimeException(Text::sprintf('COM_ENGAGE_COMMENTS_ERR_COMMENT_MAXLENGTH', $maxLength));
 		}
 
 		// Unset the modified data if identical to created data
