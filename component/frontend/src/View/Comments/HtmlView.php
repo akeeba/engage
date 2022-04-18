@@ -126,6 +126,24 @@ class HtmlView extends BaseHtmlView
 	public $userTimezone = null;
 
 	/**
+	 * Are the comments closed because a certain amount of time elapsed since the article's creation?
+	 *
+	 * @var   bool
+	 * @since 3.0.7
+	 */
+	public $areCommentsClosedAfterTime = false;
+
+	/**
+	 * The URL option for the component.
+	 *
+	 * This is used to automatically determine the template overrides path when using _setPath().
+	 *
+	 * @var    string
+	 * @since  3.0.6
+	 */
+	protected $option = 'com_engage';
+
+	/**
 	 * The comment form
 	 *
 	 * @var   bool|Form|null
@@ -157,25 +175,15 @@ class HtmlView extends BaseHtmlView
 	 */
 	private $pagination;
 
-	/**
-	 * The URL option for the component.
-	 *
-	 * This is used to automatically determine the template overrides path when using _setPath().
-	 *
-	 * @var    string
-	 * @since  3.0.6
-	 */
-	protected $option = 'com_engage';
-
 	/** @inheritDoc */
 	public function display($tpl = null)
 	{
 		$this->setLayout('default');
 		$this->_setPath('template', [
-			JPATH_SITE . '/components/com_engage/tmpl/comments'
+			JPATH_SITE . '/components/com_engage/tmpl/comments',
 		]);
 		$this->_setPath('helper', [
-			JPATH_SITE . '/components/com_engage/helpers'
+			JPATH_SITE . '/components/com_engage/helpers',
 		]);
 
 		// User information
@@ -218,7 +226,8 @@ class HtmlView extends BaseHtmlView
 			$this->headerKey = $this->getHeaderKey($meta['type']) ?? 'COM_ENGAGE_COMMENTS_HEADER_N_COMMENTS';
 		}
 
-		$this->areCommentsClosed = Meta::areCommentsClosed($this->assetId);
+		$this->areCommentsClosed          = Meta::areCommentsClosed($this->assetId);
+		$this->areCommentsClosedAfterTime = Meta::areCommentsClosedAfterTime($this->assetId);
 
 		// Populate properties based on component parameters
 		$params         = ComponentHelper::getParams('com_engage');

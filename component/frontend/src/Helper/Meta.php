@@ -63,7 +63,7 @@ final class Meta
 	private static $numCommentsPerAsset = [];
 
 	/**
-	 * Are the comments closed for the specified resource?
+	 * Are the comments closed for the specified resource for any reason?
 	 *
 	 * @param   int  $assetId  The asset ID of the resource
 	 *
@@ -82,6 +82,22 @@ final class Meta
 			return true;
 		}
 
+		return self::areCommentsClosedAfterTime($assetId);
+	}
+
+	/**
+	 * Are the comments autoamtically closed for the specified resource because a certain amoutn of time elapsed?
+	 *
+	 * @param   int  $assetId  The asset ID of the resource
+	 *
+	 * @return  bool
+	 * @since   3.0.7
+	 */
+	public static function areCommentsClosedAfterTime(int $assetId = 0): bool
+	{
+		$meta = self::getAssetAccessMeta($assetId, true);
+		/** @var Registry $params */
+		$params     = $meta['parameters'];
 		$closeAfter = $params->get('comments_close_after', 0);
 
 		if ($closeAfter <= 0)

@@ -59,4 +59,19 @@ $cParams = ComponentHelper::getParams('com_engage');
 	<?php if ($this->perms['create'] && !$this->areCommentsClosed): ?>
 		<?= $this->loadTemplate('form') ?>
 	<?php endif; ?>
+
+	<?php if ($this->perms['create'] && $this->areCommentsClosed): ?>
+		<div class="alert alert-info">
+			<h3 class="alert-heading">
+				<?= Text::_('COM_ENGAGE_COMMENTS_LBL_CLOSED_HEADER') ?>
+			</h3>
+			<p>
+				<?php if ($this->areCommentsClosedAfterTime): ?>
+					<?= Text::_('COM_ENGAGE_COMMENTS_LBL_CLOSED_AFTERTIME') ?>
+				<?php else: ?>
+					<?= Text::_('COM_ENGAGE_COMMENTS_LBL_CLOSED_BODY') ?>
+				<?php endif; ?>
+			</p>
+		</div>
+	<?php endif; ?>
 </section>

@@ -2,6 +2,7 @@
 Akeeba Engage 3.0.7
 ================================================================================
 + Min / Max character count [gh-102]
++ Show a notice when comments are closed because the comments open period has lapsed [gh-176]
 # [HIGH] Editing a comment would not work properly anymore
 # [HIGH] Joomla 4.1.1 and later broke all frontend comment administration links
 # [LOW] Frontend comments order preference is not applied (gh-184)
