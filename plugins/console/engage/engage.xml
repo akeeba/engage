@@ -7,8 +7,8 @@
 
 <extension version="4.0.0" type="plugin" group="console" method="upgrade">
 	<name>PLG_CONSOLE_ENGAGE</name>
-	<version>3.0.6</version>
-	<creationDate>2022-03-28</creationDate>
+	<version>3.0.7</version>
+	<creationDate>2022-05-03</creationDate>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
 	<authorUrl>https://www.akeeba.com</authorUrl>
