@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.0.8
+================================================================================
+# [MEDIUM] Spam check with Akismet may not work because of a typo in the plugin (thanks Rick for the heads up!)
+
 Akeeba Engage 3.0.7
 ================================================================================
 + Min / Max character count [gh-102]

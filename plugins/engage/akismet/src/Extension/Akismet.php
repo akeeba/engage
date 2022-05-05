@@ -331,9 +331,9 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 	 */
 	private function getUser(CommentTable $comment): ?User
 	{
-		if ($comment->created)
+		if ($comment->created_by)
 		{
-			return UserFetcher::getUser($comment->created);
+			return UserFetcher::getUser($comment->created_by);
 		}
 
 		$user        = new User(0);
