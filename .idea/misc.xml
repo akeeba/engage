@@ -3,11 +3,6 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES5" />
   </component>
-  <component name="SwUserDefinedSpecifications">
-    <option name="specTypeByUrl">
-      <map />
-    </option>
-  </component>
   <component name="TaskProjectConfiguration">
     <server type="GitHub" url="https://github.com" />
   </component>

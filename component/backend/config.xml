@@ -5,6 +5,7 @@
   ~ @license   GNU General Public License version 3, or later
   -->
 <config>
+    <inlinehelp button="show"/>
     <fieldset
             name="basic"
             label="COM_ENGAGE_CONFIG_BASIC_FIELDSET_LABEL"
