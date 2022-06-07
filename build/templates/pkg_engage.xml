@@ -29,6 +29,9 @@
         <!-- Component -->
         <file type="component" id="com_engage">com_engage.zip</file>
 
+        <!-- Modules -->
+        <file type="module" client="site" id="mod_engage_latest">mod_engage_latest.zip</file>
+
         <!-- Plugins: actionlog -->
         <file type="plugin" group="actionlog" id="engage">plg_actionlog_engage.zip</file>
 

@@ -14,8 +14,10 @@ use Akeeba\Component\Engage\Administrator\Model\Mixin\PopulateStateAware;
 use DateInterval;
 use Exception;
 use Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\User\User;
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\ParameterType;
 
@@ -71,6 +73,7 @@ class CommentsModel extends ListModel
 			// Internal filters
 			'asset_id'   => 'int',
 			'parent_id'  => 'int',
+			'frontend'   => 'int',
 		], 'c.created', 'DESC');
 	}
 
@@ -408,6 +411,24 @@ class CommentsModel extends ListModel
 				$db->quoteName('cat.id') . ' = ' . $db->quoteName('a.catid')
 			);
 
+		// Frontend listing filter
+		$fltFrontend = $this->getState('filter.frontend');
+
+		if ($fltFrontend === 1)
+		{
+			$user       = Factory::getApplication()->getIdentity() ?? (new User());
+			$userAccess = $user->getAuthorisedViewLevels() ?: [];
+			$query
+				->select([
+					$db->quoteName('a.id', 'article_id'),
+					$db->quoteName('cat.id', 'cat_id'),
+				])
+				->where($db->quoteName('cat.published') . ' = 1')
+				->where($db->quoteName('a.state') . ' = 1')
+				->whereIn($db->quoteName('a.access'), $userAccess, ParameterType::INTEGER)
+				->whereIn($db->quoteName('cat.access'), $userAccess, ParameterType::INTEGER);
+		}
+
 		// Asset ID filter
 		$fltAssetId = $this->getState('filter.asset_id');
 
@@ -611,6 +632,7 @@ class CommentsModel extends ListModel
 		$id .= ':' . $this->getState('filter.enabled');
 		$id .= ':' . $this->getState('filter.asset_id');
 		$id .= ':' . $this->getState('filter.parent_id');
+		$id .= ':' . $this->getState('filter.frontend');
 
 		return parent::getStoreId($id);
 	}
