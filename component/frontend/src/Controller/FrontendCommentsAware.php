@@ -118,6 +118,7 @@ trait FrontendCommentsAware
 		}
 
 		$uri->setFragment('akengage-comment-' . $id);
+		$uri->setVar('akengage_cid', $id);
 
 		$this->setRedirect($uri->toString());
 	}

@@ -15,6 +15,7 @@ use Akeeba\Component\Engage\Administrator\Controller\Mixin\ReturnURLAware;
 use Akeeba\Component\Engage\Administrator\Controller\Mixin\ReusableModels;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
+use Akeeba\Component\Engage\Site\Model\CommentsModel;
 use Akeeba\Component\Engage\Site\View\Comments\HtmlView;
 use Exception;
 use Joomla\CMS\Component\ComponentHelper;
@@ -22,8 +23,10 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\MVC\View\ViewInterface;
+use Joomla\CMS\Uri\Uri;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Plugin\Content\Engage\Extension\Engage;
+use Joomla\Utilities\ArrayHelper;
 use RuntimeException;
 
 class CommentsController extends AdminCommentsController
@@ -79,6 +82,7 @@ class CommentsController extends AdminCommentsController
 			'asset_id'            => 'INT',
 			'akengage_limitstart' => 'INT',
 			'akengage_limit'      => 'INT',
+			'akengage_cid'        => 'INT',
 		], $urlparams);
 
 		return parent::display($cachable, $urlparams);
@@ -350,7 +354,8 @@ class CommentsController extends AdminCommentsController
 		$orderDir     = strtoupper($this->input->get('akengage_order_Dir', 'DESC') ?: 'DESC');
 		$orderDir     = in_array($orderDir, ['ASC', 'DESC']) ? $orderDir : 'DESC';
 
-		$model = $this->getModel('Comments', 'Site', ['ignore_request' => true]);
+		/** @var CommentsModel $model */
+		$model     = $this->getModel('Comments', 'Site', ['ignore_request' => true]);
 		$formModel = $this->getModel('Comment', 'Site', ['ignore_request' => true]);
 		$model->setState('list.start', $start);
 		$model->setState('list.limit', $limit);
@@ -359,6 +364,21 @@ class CommentsController extends AdminCommentsController
 
 		// Get the asset_id and assert we have access to it
 		$assetId = $this->getAssetId();
+		$model->setState('filter.asset_id', $assetId);
+
+		$cid = $this->input->getInt('akengage_cid', null);
+		$limitstart = $this->input->getInt('akengage_limit', null);
+
+		if ($cid > 0 && is_null($limitstart))
+		{
+			$commentIDs = ArrayHelper::toInteger(array_keys($model->commentIDTreeSliceWithDepth(0, 0) ?: []));
+			$index      = array_search($cid, $commentIDs) ?: 0;
+			$start      = intdiv($index, $limit) * $limit;
+
+			$model->setState('list.start', $start);
+			$this->app->setUserState('com_engage.comments.limitstart', $start);
+			$this->input->set('akengage_limitstart', $start);
+		}
 
 		// Pass the data to the view
 		/** @var HtmlView $view */

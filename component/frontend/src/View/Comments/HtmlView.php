@@ -216,6 +216,7 @@ class HtmlView extends BaseHtmlView
 		// Populate the pagination object
 		$this->pagination         = $model->getPagination();
 		$this->pagination->prefix = 'akengage_';
+		$this->pagination->setAdditionalUrlParam('akengage_cid', '');
 
 		// Asset metadata-based properties
 		$meta        = Meta::getAssetAccessMeta($this->assetId, true);

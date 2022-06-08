@@ -200,36 +200,6 @@ final class Meta
 	}
 
 	/**
-	 * Returns the limitstart required to reach a specific comment in the frontend comments display.
-	 *
-	 * @param   CommentTable  $comment          The comment we're looking for
-	 * @param   int|null      $commentsPerPage  Number of comments per page. NULL to use global configuration.
-	 * @param   bool          $asManager        True to take into account unpublished / spam comments.
-	 *
-	 * @return  int
-	 * @since   1.0.0
-	 */
-	public static function getLimitStartForComment(CommentTable $comment, ?int $commentsPerPage = null, bool $asManager = false): int
-	{
-		// No limit set. Use the configured list limit, must be at least 5.
-		if (is_null($commentsPerPage))
-		{
-			$commentsPerPage = Factory::getApplication()->get('list_limit', 20);
-			$commentsPerPage = max((int) $commentsPerPage, 5);
-		}
-
-		$comments = self::getPaginatedCommentIDsForAsset($comment->asset_id, $asManager);
-		$index    = array_search($comment->id, $comments);
-
-		if ($index === false)
-		{
-			return 0;
-		}
-
-		return intdiv($index, $commentsPerPage) * $commentsPerPage;
-	}
-
-	/**
 	 * Returns the total number of comments for a specific asset ID
 	 *
 	 * @param   int  $asset_id  The asset ID to check for the total number of comments

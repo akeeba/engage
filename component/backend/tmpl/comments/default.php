@@ -119,10 +119,9 @@ $i = 0;
 										throw new RuntimeException('Parent not found.');
 									}
 
-									$limitStart = Meta::getLimitStartForComment($parent, null, $user->authorise('core.edit.state', 'com_engage'));
 									$public_uri = new Uri($meta['public_url']);
+									$public_uri->setVar('akengage_cid', $parent->getId());
 									$public_uri->setFragment('akengage-comment-' . $parent->getId());
-									$public_uri->setVar('akengage_limitstart', $limitStart);
 
 									$parentUser   = UserFetcher::getUser($parent->created_by);
 									$parentAuthor = empty($parentUser) ? '' : $parentUser->name;

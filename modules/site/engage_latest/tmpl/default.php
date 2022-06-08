@@ -59,7 +59,7 @@ $commentTable = Factory::getApplication()
 		$commentTable->load($comment->id);
 
 		$uri->setFragment('akengage-comment-' . $comment->id);
-		$uri->setVar('akengage_limitstart', Meta::getLimitStartForComment($commentTable, null, false));
+		$uri->setVar('akengage_cid', $comment->id);
 	?>
 	<li class="engage-latest-list-item list-group-item d-flex flex-column mb-2">
 		<div class="d-flex justify-content-between align-items-start">

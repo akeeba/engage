@@ -422,7 +422,7 @@ class Email extends CMSPlugin implements SubscriberInterface
 
 			// Get the comment's URL
 			$publicUri->setFragment('akengage-comment-' . $comment->getId());
-			$publicUri->setVar('akengage_limitstart', Meta::getLimitStartForComment($comment, null, $recipient->authorise('core.edit.state', 'com_engage')));
+			$publicUri->setVar('akengage_cid', $comment->getId());
 
 			$returnUrlComment = base64_encode($publicUri->toString());
 

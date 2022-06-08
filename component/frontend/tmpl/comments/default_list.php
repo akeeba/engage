@@ -117,7 +117,12 @@ $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->ena
 				</div>
 				<div class="akengage-comment-info d-flex flex-row flex-wrap gap-2 align-items-center">
 					<div class="akengage-comment-permalink flex-grow-1">
-						<a href="<?= (clone Uri::getInstance())->setFragment(sprintf('akengage-comment-%u', $comment->id))->toString() ?>"
+						<?php
+						$tempUri = clone Uri::getInstance();
+						$tempUri->setFragment(sprintf('akengage-comment-%u', $comment->id));
+						$tempUri->setVar('akengage_cid', $comment->id);
+						?>
+						<a href="<?= $tempUri->toString() ?>"
 								class="text-body text-decoration-none"
 						>
 						<span itemprop="dateCreated" content="<?= $commentDate->toISO8601(false) ?>">

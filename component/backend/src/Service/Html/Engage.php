@@ -298,7 +298,6 @@ final class Engage
 	{
 		$text = preg_replace_callback('/(<a\s*[^>]*\s+)href\s*=/i', function (array $matches): string {
 			return rtrim($matches[1]) . ' rel="nofollow noreferrer" href=';
-			//var_dump($matches);die;
 		}, $text);
 
 		return $text;
