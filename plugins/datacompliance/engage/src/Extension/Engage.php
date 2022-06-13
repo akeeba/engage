@@ -109,7 +109,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 
 		$ret = [
 			'engage' => [
-				'engage_comment_id' => [],
+				'id' => [],
 			],
 		];
 
@@ -120,7 +120,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		$this->app->getLanguage()->load('com_engage', JPATH_ADMINISTRATOR);
 		$this->app->getLanguage()->load('com_engage', JPATH_SITE);
 
-		$ret['engage']['engage_comment_id'] = Meta::pseudonymiseUserComments($user);
+		$ret['engage']['id'] = Meta::pseudonymiseUserComments($user);
 
 		$event->setArgument('result', array_merge($result, [$ret]));
 	}

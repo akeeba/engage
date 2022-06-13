@@ -295,21 +295,21 @@ final class Meta
 
 		// Nuke comments directly attributed to the user ID
 		$q   = $db->getQuery(true)
-			->select($db->qn('engage_comment_id'))
+			->select($db->qn('id'))
 			->from($db->qn('#__engage_comments'))
-			->where($db->qn('created') . ' = ' . $db->q($user->id));
+			->where($db->qn('created_by') . ' = ' . $db->q($user->id));
 		$cid = $db->setQuery($q)->loadColumn() ?? [];
 
 		$q = $db->getQuery(true)
 			->update($db->qn('#__engage_comments'))
 			->set($db->qn('body') . ' = ' . $db->q(Text::_('COM_ENGAGE_COMMENTS_LBL_DELETEDCOMMENT')))
-			->where($db->qn('created') . ' = ' . $db->q($user->id));
+			->where($db->qn('created_by') . ' = ' . $db->q($user->id));
 		$db->setQuery($q)->execute();
 
 		// Nuke comments attributed to the user's email address
 		$uri = Uri::getInstance();
 		$q   = $db->getQuery(true)
-			->select($db->qn('engage_comment_id'))
+			->select($db->qn('id'))
 			->from($db->qn('#__engage_comments'))
 			->where($db->qn('email') . ' = ' . $db->q($user->email));
 		$cid = array_merge($cid, $db->setQuery($q)->loadColumn() ?? []);
@@ -337,7 +337,7 @@ final class Meta
 					$db->qn('name') . ' = ' . $db->q(Text::sprintf('COM_ENGAGE_COMMENTS_LBL_DELETEDUSER', $user->id)),
 					$db->qn('email') . ' = ' . $db->q(sprintf('deleted.%u@%s', $user->id, $uri->getHost())),
 				])
-				->where($db->qn('engage_comment_id') . ' IN(' . implode(
+				->where($db->qn('id') . ' IN(' . implode(
 						',',
 						array_filter(array_unique($cid), function ($id) {
 							return is_numeric($id) && ($id > 0);

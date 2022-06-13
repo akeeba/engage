@@ -100,7 +100,7 @@ class Engage extends PrivacyPlugin implements SubscriberInterface
 
 		foreach ($db->setQuery($selectQuery)->getIterator() as $record)
 		{
-			$domain->addItem($this->createItemFromArray((array) $record, $record->engage_comment_id));
+			$domain->addItem($this->createItemFromArray((array) $record, $record->id));
 
 			unset($record);
 		}
@@ -114,7 +114,7 @@ class Engage extends PrivacyPlugin implements SubscriberInterface
 
 		foreach ($db->setQuery($selectQuery)->getIterator() as $record)
 		{
-			$domain->addItem($this->createItemFromArray((array) $record, $record->engage_comment_id));
+			$domain->addItem($this->createItemFromArray((array) $record, $record->id));
 
 			unset($record);
 		}
