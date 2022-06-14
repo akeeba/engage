@@ -8,12 +8,12 @@
 <extension type="module" method="upgrade" client="site">
 	<name>MOD_ENGAGE_LATEST</name>
 	<author>Nicholas K. Dionysopoulos</author>
-	<creationDate>2022-05-27</creationDate>
+	<creationDate>2022-06-14</creationDate>
 	<copyright>Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd</copyright>
 	<license>GNU GPL v3 or later</license>
 	<authorEmail>nicholas@akeeba.com</authorEmail>
 	<authorUrl>www.akeeba.com</authorUrl>
-	<version>3.0.0</version>
+	<version>3.0.9</version>
 	<description>MOD_ENGAGE_LATEST_DESCRIPTION</description>
 	<namespace path="src">Joomla\Module\EngageLatest</namespace>
 

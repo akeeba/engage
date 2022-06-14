@@ -7,13 +7,13 @@
 
 <extension type="component" version="4.0.0" method="upgrade">
 	<name>COM_ENGAGE</name>
-	<creationDate>2022-05-27</creationDate>
+	<creationDate>2022-06-14</creationDate>
 	<author>Akeeba Ltd</author>
 	<authorEmail>no-reply@akeeba.com</authorEmail>
 	<authorUrl>https://www.akeeba.com</authorUrl>
 	<copyright>Copyright (c)2020-2021 Akeeba Ltd</copyright>
 	<license>GNU/GPL v3 or any later version</license>
-	<version>3.0.8</version>
+	<version>3.0.9</version>
 	<description>COM_ENGAGE_XML_DESCRIPTION</description>
 	<namespace path="src">Akeeba\Component\Engage</namespace>
 
