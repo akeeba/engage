@@ -1,7 +1,7 @@
 <?php die(); ?>
 Akeeba Engage 3.0.9
 ================================================================================
-+ Latest tickets module
++ Latest comments module
 # [HIGH] Comment permalinks did not always work
 # [MEDIUM] DataCompliance and Privacy plugins would fail with a MySQL error scrubbing user comments
 
