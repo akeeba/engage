@@ -273,7 +273,7 @@ class CommentsModel extends ListModel
 
 		$orderDirn = $this->state->get('list.direction', 'DESC');
 
-		if (is_null($parentId) && strtoupper($orderDirn) === 'DESC')
+		if (!is_null($parentId) && strtoupper($orderDirn) === 'DESC')
 		{
 			$childIDs = array_reverse($childIDs);
 		}
