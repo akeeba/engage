@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.0.10
+================================================================================
+# [LOW] PHP 8.1 deprecated notice when checking if FOF is still installed
+
 Akeeba Engage 3.0.9
 ================================================================================
 + Latest comments module
