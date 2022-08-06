@@ -14,9 +14,11 @@ defined('_JEXEC') or die;
 
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use Akeeba\Component\Engage\Site\Helper\Meta;
+use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
 
 /** @var CommentTable $commentTable */
 $commentTable = Factory::getApplication()
@@ -66,18 +68,18 @@ $commentTable = Factory::getApplication()
 			<div class="h5">
 				<?= htmlspecialchars($comment->article_title) ?>
 			</div>
-			<span class="badge bg-primary rounded-pill"><?= \Akeeba\Component\Engage\Site\Helper\Meta::getNumCommentsForAsset($comment->asset_id) ?></span>
+			<span class="badge bg-primary rounded-pill"><?= Meta::getNumCommentsForAsset($comment->asset_id) ?></span>
 		</div>
 		<div class="text-muted my-1">
 			<?= Text::sprintf(
 				'MOD_ENGAGE_LATEST_LBL_COMMENTED_ON',
 				$comment->user_name,
 				$uri->toString(),
-				(new \Joomla\CMS\Date\Date($comment->created_on))->format(Text::_('DATE_FORMAT_LC2'))
+				HTMLHelper::_('engage.date',new Date($comment->created))
 			) ?>
 		</div>
 		<div>
-			<?= htmlspecialchars($comment->body) ?>
+			<?= HTMLHelper::_('engage.textExcerpt', $comment->body) ?>
 		</div>
 	</li>
 <?php endforeach; ?>

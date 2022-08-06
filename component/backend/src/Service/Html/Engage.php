@@ -9,7 +9,11 @@ namespace Akeeba\Component\Engage\Administrator\Service\Html;
 
 use Akeeba\Component\Engage\Administrator\Helper\BBCode;
 use Akeeba\Component\Engage\Administrator\Helper\HtmlFilter;
+use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
+use DateTimeZone;
+use Exception;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\Helpers\JGrid;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -181,7 +185,7 @@ final class Engage
 	 * @see     JHtmlJGrid::state()
 	 * @since   1.6
 	 */
-	public static function published($value, $i, $prefix = '', $enabled = true, $checkbox = 'cb', $publishUp = null, $publishDown = null,
+	public function published($value, $i, $prefix = '', $enabled = true, $checkbox = 'cb', $publishUp = null, $publishDown = null,
 	                                 $formId = null
 	)
 	{
@@ -268,6 +272,41 @@ final class Engage
 
 		return JGrid::state($states, $value, $i, $prefix, $enabled, true, $checkbox, $formId);
 	}
+
+	/**
+	 * Format a date. Default is to format as a GMT date in DATE_FORMAT_LC2 format.
+	 *
+	 * @param   string       $date      The date to format.
+	 * @param   string|null  $format    The format to use, default is DATE_FORMAT_LC2
+	 * @param   bool         $local     Display the date in the user's local timezone? Default: true.
+	 * @param   bool         $timezone  Include timezone if $format doesn't do so already? Default: false.
+	 *
+	 * @return  string  The formatted date
+	 * @throws  Exception
+	 * @since   3.0.10
+	 */
+	public function date(?string $date, ?string $format = null, bool $local = true, bool $timezone = false): string
+	{
+		$date   = new Date($date ?? 'now', 'GMT');
+		$format = $format ?: Text::_('DATE_FORMAT_LC2');
+
+		if ($timezone && substr($format, -1) != 'T')
+		{
+			$format .= ' T';
+		}
+
+		if ($local)
+		{
+			$app  = Factory::getApplication();
+			$zone = UserFetcher::getUser()->getParam('timezone', $app->get('offset', 'UTC'));
+			$tz   = new DateTimeZone($zone);
+
+			$date->setTimezone($tz);
+		}
+
+		return $date->format($format, $local);
+	}
+
 
 	/**
 	 * Remove existing rel attributes from all tags
