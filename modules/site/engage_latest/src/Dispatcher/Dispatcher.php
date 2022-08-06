@@ -9,6 +9,7 @@ namespace Joomla\Module\EngageLatest\Site\Dispatcher;
 
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Dispatcher\AbstractModuleDispatcher;
+use Joomla\CMS\Extension\ModuleInterface;
 use Joomla\Input\Input;
 use Joomla\Module\EngageLatest\Site\Helper\EngageLatestHelper;
 use Joomla\Registry\Registry;
@@ -37,7 +38,7 @@ class Dispatcher extends AbstractModuleDispatcher
 	protected function getLayoutData()
 	{
 		/** @var EngageLatestHelper $helper */
-		$helper = $this->moduleExtension->getHelper('EngageLatestHelper');
+		$helper    = $this->moduleExtension->getHelper('EngageLatestHelper');
 		$hasEngage = $helper->hasEngage();
 
 		if ($hasEngage)
@@ -46,11 +47,13 @@ class Dispatcher extends AbstractModuleDispatcher
 		}
 
 		$params = new Registry($this->module->params);
-		$params->get('count', 10);
 
 		return array_merge(parent::getLayoutData(), [
-			'hasEngage' => $hasEngage,
-			'comments'  => $helper->getLatestComments(),
+			'hasEngage'          => $hasEngage,
+			'comments'           => $helper->getLatestComments($params->get('count', 10)),
+			'excerpt'            => (int) ($params->get('excerpt', 1)) === 1,
+			'excerpt_words'      => (int) ($params->get('excerpt_words', 50)),
+			'excerpt_characters' => (int) ($params->get('excerpt_characters', 350)),
 		]);
 	}
 

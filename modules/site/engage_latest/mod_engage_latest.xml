@@ -43,6 +43,37 @@
 						min="1"
 						validate="number"
 				/>
+
+				<field
+						name="excerpt"
+						type="radio"
+						layout="joomla.form.field.radio.switcher"
+						label="MOD_ENGAGE_LATEST_FIELD_EXCERPT_LABEL"
+						description="MOD_ENGAGE_LATEST_FIELD_EXCERPT_DESC"
+						default="1"
+				>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+						name="excerpt_words"
+						type="number"
+						label="MOD_ENGAGE_LATEST_FIELD_EXCERPT_WORDS_LABEL"
+						default="50"
+						filter="integer"
+						showon="excerpt:1"
+				/>
+
+				<field
+						name="excerpt_characters"
+						type="number"
+						label="MOD_ENGAGE_LATEST_FIELD_EXCERPT_CHARACTERS_LABEL"
+						default="350"
+						filter="integer"
+						showon="excerpt:1"
+				/>
+
 			</fieldset>
 			<fieldset name="advanced">
 				<field

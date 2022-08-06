@@ -8,8 +8,11 @@
 defined('_JEXEC') or die;
 
 /**
- * @var   bool        $hasEngage  Is Akeeba Engage installed and activated
- * @var   stdClass[]  $comments   Latest comments list
+ * @var   bool       $hasEngage          Is Akeeba Engage installed and activated?
+ * @var   bool       $excerpt            Only show an excerpt of the comment?
+ * @var   stdClass[] $comments           Latest comments list.
+ * @var   int        $excerpt_words      Maximum number of words in the excerpt
+ * @var   int        $excerpt_characters Maximum number of characters in the excerpt
  */
 
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
@@ -28,33 +31,33 @@ $commentTable = Factory::getApplication()
 ?>
 
 <?php if (!$hasEngage): ?>
-<div class="alert alert-danger">
-	<h4 class="alert-heading">
-		<?= Text::_('MOD_ENGAGE_LATEST_ERR_NOCOMPONENT_HEAD') ?>
-	</h4>
-	<p>
-		<?= Text::_('MOD_ENGAGE_LATEST_ERR_NOCOMPONENT_BODY') ?>
-	</p>
-</div>
-<?php
+	<div class="alert alert-danger">
+		<h4 class="alert-heading">
+			<?= Text::_('MOD_ENGAGE_LATEST_ERR_NOCOMPONENT_HEAD') ?>
+		</h4>
+		<p>
+			<?= Text::_('MOD_ENGAGE_LATEST_ERR_NOCOMPONENT_BODY') ?>
+		</p>
+	</div>
+	<?php
 	return;
-	elseif (empty($comments)): ?>
-<div class="alert alert-info">
-	<h4 class="alert-heading">
-		<?= Text::_('MOD_ENGAGE_LATEST_ERR_NOCOMMENTS_HEAD') ?>
-	</h4>
-	<p>
-		<?= Text::_('MOD_ENGAGE_LATEST_ERR_NOCOMMENTS_BODY') ?>
-	</p>
-</div>
-<?php
+elseif (empty($comments)): ?>
+	<div class="alert alert-info">
+		<h4 class="alert-heading">
+			<?= Text::_('MOD_ENGAGE_LATEST_ERR_NOCOMMENTS_HEAD') ?>
+		</h4>
+		<p>
+			<?= Text::_('MOD_ENGAGE_LATEST_ERR_NOCOMMENTS_BODY') ?>
+		</p>
+	</div>
+	<?php
 	return;
-	endif;
+endif;
 ?>
 
 <ul class="engage-latest-list list-group list-group-flush">
-<?php foreach($comments as $comment): ?>
-	<?php
+	<?php foreach ($comments as $comment): ?>
+		<?php
 		$meta = Meta::getAssetAccessMeta($comment->asset_id);
 		$uri  = Uri::getInstance($meta['public_url']);
 
@@ -62,25 +65,29 @@ $commentTable = Factory::getApplication()
 
 		$uri->setFragment('akengage-comment-' . $comment->id);
 		$uri->setVar('akengage_cid', $comment->id);
-	?>
-	<li class="engage-latest-list-item list-group-item d-flex flex-column mb-2">
-		<div class="d-flex justify-content-between align-items-start">
-			<div class="h5">
-				<?= htmlspecialchars($comment->article_title) ?>
+		?>
+		<li class="engage-latest-list-item list-group-item d-flex flex-column mb-2">
+			<div class="d-flex justify-content-between align-items-start">
+				<div class="h5">
+					<?= htmlspecialchars($comment->article_title) ?>
+				</div>
+				<span class="badge bg-primary rounded-pill"><?= Meta::getNumCommentsForAsset($comment->asset_id) ?></span>
 			</div>
-			<span class="badge bg-primary rounded-pill"><?= Meta::getNumCommentsForAsset($comment->asset_id) ?></span>
-		</div>
-		<div class="text-muted my-1">
-			<?= Text::sprintf(
-				'MOD_ENGAGE_LATEST_LBL_COMMENTED_ON',
-				$comment->user_name,
-				$uri->toString(),
-				HTMLHelper::_('engage.date',new Date($comment->created))
-			) ?>
-		</div>
-		<div>
-			<?= HTMLHelper::_('engage.textExcerpt', $comment->body) ?>
-		</div>
-	</li>
-<?php endforeach; ?>
+			<div class="text-muted my-1">
+				<?= Text::sprintf(
+					'MOD_ENGAGE_LATEST_LBL_COMMENTED_ON',
+					$comment->user_name,
+					$uri->toString(),
+					HTMLHelper::_('engage.date', new Date($comment->created))
+				) ?>
+			</div>
+			<div>
+				<?php if ($excerpt): ?>
+					<?= HTMLHelper::_('engage.textExcerpt', $comment->body, $excerpt_words, $excerpt_characters, '[…]') ?>
+				<?php else: ?>
+					<?= $comment->body ?>
+				<?php endif; ?>
+			</div>
+		</li>
+	<?php endforeach; ?>
 </ul>

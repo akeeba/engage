@@ -87,12 +87,15 @@ final class Engage
 	/**
 	 * Create an excerpt of the comment text (maximum 50 words or 350 characters).
 	 *
-	 * @param   string|null  $text
+	 * @param   string|null  $text           The HTML text to condense
+	 * @param   int          $maxWords       Maximum words to keep
+	 * @param   int          $maxCharacters  Maximum characters to keep
+	 * @param   string       $ellipsis       The text to append to excerpts (not appended if it's the original text).
 	 *
 	 * @return  string
 	 * @since   3.0.0
 	 */
-	public function textExcerpt(?string $text): string
+	public function textExcerpt(?string $text, int $maxWords = 50, int $maxCharacters = 350, string $ellipsis = '…'): string
 	{
 		if (empty($text))
 		{
@@ -103,7 +106,7 @@ final class Engage
 		$excerpt = str_replace(["<br/>", "<br />", "</p>"], ["\n", "\n", "\n"], $excerpt);
 		$excerpt = strip_tags($excerpt);
 
-		if (str_word_count($excerpt) <= 50 || strlen($excerpt) <= 350)
+		if (str_word_count($excerpt) <= $maxWords || strlen($excerpt) <= $maxCharacters)
 		{
 			return $text;
 		}
@@ -112,15 +115,15 @@ final class Engage
 		$excerpt = array_filter($excerpt, function ($x) {
 			return !empty($x);
 		});
-		$excerpt = array_slice($excerpt, 0, min(50, count($excerpt)));
+		$excerpt = array_slice($excerpt, 0, min($maxWords, count($excerpt)));
 		$excerpt = implode(' ', $excerpt);
 
-		if (strlen($excerpt) > 350)
+		if (strlen($excerpt) > $maxCharacters)
 		{
-			$excerpt = substr($excerpt, 0, 350);
+			$excerpt = substr($excerpt, 0, $maxCharacters);
 		}
 
-		$excerpt .= '…';
+		$excerpt  .= $ellipsis;
 
 		return nl2br($excerpt);
 	}
@@ -185,28 +188,30 @@ final class Engage
 	 * @see     JHtmlJGrid::state()
 	 * @since   1.6
 	 */
-	public function published($value, $i, $prefix = '', $enabled = true, $checkbox = 'cb', $publishUp = null, $publishDown = null,
-	                                 $formId = null
+	public function published(
+		$value, $i, $prefix = '', $enabled = true, $checkbox = 'cb', $publishUp = null, $publishDown = null,
+		$formId = null
 	)
 	{
 		if (is_array($prefix))
 		{
-			$options = $prefix;
-			$enabled = array_key_exists('enabled', $options) ? $options['enabled'] : $enabled;
+			$options  = $prefix;
+			$enabled  = array_key_exists('enabled', $options) ? $options['enabled'] : $enabled;
 			$checkbox = array_key_exists('checkbox', $options) ? $options['checkbox'] : $checkbox;
-			$prefix = array_key_exists('prefix', $options) ? $options['prefix'] : '';
+			$prefix   = array_key_exists('prefix', $options) ? $options['prefix'] : '';
 		}
 
 		$states = [
-			1 => ['unpublish', 'JPUBLISHED', 'JLIB_HTML_UNPUBLISH_ITEM', 'JPUBLISHED', true, 'publish', 'publish'],
-			0 => ['publish', 'JUNPUBLISHED', 'JLIB_HTML_PUBLISH_ITEM', 'JUNPUBLISHED', true, 'unpublish', 'unpublish'],
+			1  => ['unpublish', 'JPUBLISHED', 'JLIB_HTML_UNPUBLISH_ITEM', 'JPUBLISHED', true, 'publish', 'publish'],
+			0  => ['publish', 'JUNPUBLISHED', 'JLIB_HTML_PUBLISH_ITEM', 'JUNPUBLISHED', true, 'unpublish', 'unpublish'],
 			-3 => [
 				'reportham', 'COM_ENGAGE_COMMENT_ENABLED_OPT_POSSIBLE_SPAM', 'COM_ENGAGE_COMMENTS_TOOLBAR_REPORTHAM',
 				'COM_ENGAGE_COMMENT_ENABLED_OPT_POSSIBLE_SPAM', true, 'flag text-warning border-warning', 'flag',
 			],
 			-2 => [
 				'reportspam', 'COM_ENGAGE_COMMENT_ENABLED_OPT_SPAM', 'COM_ENGAGE_COMMENTS_TOOLBAR_REPORTSPAM',
-				'COM_ENGAGE_COMMENT_ENABLED_OPT_SPAM', true, 'exclamation-circle text-danger border-danger', 'exclamation-circle',
+				'COM_ENGAGE_COMMENT_ENABLED_OPT_SPAM', true, 'exclamation-circle text-danger border-danger',
+				'exclamation-circle',
 			],
 		];
 
@@ -214,15 +219,15 @@ final class Engage
 		if ($publishUp || $publishDown)
 		{
 			$nullDate = Factory::getDbo()->getNullDate();
-			$nowDate = Factory::getDate()->toUnix();
+			$nowDate  = Factory::getDate()->toUnix();
 
 			$tz = Factory::getUser()->getTimezone();
 
-			$publishUp = ($publishUp !== null && $publishUp !== $nullDate) ? Factory::getDate($publishUp, 'UTC')->setTimezone($tz) : false;
+			$publishUp   = ($publishUp !== null && $publishUp !== $nullDate) ? Factory::getDate($publishUp, 'UTC')->setTimezone($tz) : false;
 			$publishDown = ($publishDown !== null && $publishDown !== $nullDate) ? Factory::getDate($publishDown, 'UTC')->setTimezone($tz) : false;
 
 			// Create tip text, only we have publish up or down settings
-			$tips = array();
+			$tips = [];
 
 			if ($publishUp)
 			{
@@ -267,7 +272,9 @@ final class Engage
 				}
 			}
 
-			return JGrid::state($states, $value, $i, array('prefix' => $prefix, 'translate' => !$tip), $enabled, true, $checkbox, $formId);
+			return JGrid::state($states, $value, $i, [
+				'prefix' => $prefix, 'translate' => !$tip,
+			], $enabled, true, $checkbox, $formId);
 		}
 
 		return JGrid::state($states, $value, $i, $prefix, $enabled, true, $checkbox, $formId);

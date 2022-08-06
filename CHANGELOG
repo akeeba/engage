@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Engage 3.0.10
 ================================================================================
++ Latest comments: choose whether to show excerpts or the full text of the comment
 # [MEDIUM] Latest Comments: date not shown (gh-201)
 # [LOW] PHP 8.1 deprecated notice when checking if FOF is still installed
 # [LOW] Latest Comments: Advanced options displayed outside of their tab when configuring the module
