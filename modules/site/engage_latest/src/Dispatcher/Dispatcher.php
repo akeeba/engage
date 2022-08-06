@@ -51,6 +51,9 @@ class Dispatcher extends AbstractModuleDispatcher
 		return array_merge(parent::getLayoutData(), [
 			'hasEngage'          => $hasEngage,
 			'comments'           => $helper->getLatestComments($params->get('count', 10)),
+			'show_title'         => (int) ($params->get('show_title', 1)) === 1,
+			'link_title'         => (int) ($params->get('link_title', 0)) === 1,
+			'show_count'         => (int) ($params->get('show_count', 1)) === 1,
 			'excerpt'            => (int) ($params->get('excerpt', 1)) === 1,
 			'excerpt_words'      => (int) ($params->get('excerpt_words', 50)),
 			'excerpt_characters' => (int) ($params->get('excerpt_characters', 350)),

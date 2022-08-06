@@ -45,6 +45,41 @@
 				/>
 
 				<field
+						name="show_title"
+						type="radio"
+						layout="joomla.form.field.radio.switcher"
+						label="MOD_ENGAGE_LATEST_FIELD_SHOW_TITLE_LABEL"
+						default="1"
+				>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+						name="link_title"
+						type="radio"
+						layout="joomla.form.field.radio.switcher"
+						label="MOD_ENGAGE_LATEST_FIELD_LINK_TITLE_LABEL"
+						default="0"
+						showon="show_title:1"
+				>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+						name="show_count"
+						type="radio"
+						layout="joomla.form.field.radio.switcher"
+						label="MOD_ENGAGE_LATEST_FIELD_SHOW_COUNT_LABEL"
+						default="1"
+						showon="show_title:1"
+				>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
 						name="excerpt"
 						type="radio"
 						layout="joomla.form.field.radio.switcher"

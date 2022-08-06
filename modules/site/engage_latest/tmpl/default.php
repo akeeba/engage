@@ -9,6 +9,9 @@ defined('_JEXEC') or die;
 
 /**
  * @var   bool       $hasEngage          Is Akeeba Engage installed and activated?
+ * @var   bool       $show_title         Show the article title?
+ * @var   bool       $link_title         Link the article title?
+ * @var   bool       $show_count         Show the count of article comments?
  * @var   bool       $excerpt            Only show an excerpt of the comment?
  * @var   stdClass[] $comments           Latest comments list.
  * @var   int        $excerpt_words      Maximum number of words in the excerpt
@@ -58,26 +61,39 @@ endif;
 <ul class="engage-latest-list list-group list-group-flush">
 	<?php foreach ($comments as $comment): ?>
 		<?php
-		$meta = Meta::getAssetAccessMeta($comment->asset_id);
-		$uri  = Uri::getInstance($meta['public_url']);
+		$meta        = Meta::getAssetAccessMeta($comment->asset_id);
+		$commentUri  = Uri::getInstance($meta['public_url']);
+		$commentsUri = Uri::getInstance($meta['public_url']);
 
 		$commentTable->load($comment->id);
 
-		$uri->setFragment('akengage-comment-' . $comment->id);
-		$uri->setVar('akengage_cid', $comment->id);
+		$commentUri->setFragment('akengage-comment-' . $comment->id);
+		$commentUri->setVar('akengage_cid', $comment->id);
+
+		$commentsUri->setFragment('akengage-comments-section');
 		?>
 		<li class="engage-latest-list-item list-group-item d-flex flex-column mb-2">
-			<div class="d-flex justify-content-between align-items-start">
-				<div class="h5">
-					<?= htmlspecialchars($comment->article_title) ?>
+			<?php if ($show_title): ?>
+				<div class="d-flex justify-content-between align-items-start">
+					<div class="h5">
+						<?php if ($link_title): ?>
+							<a href="<?= $commentsUri->toString() ?>">
+								<?= htmlspecialchars($comment->article_title) ?>
+							</a>
+						<?php else: ?>
+							<?= htmlspecialchars($comment->article_title) ?>
+						<?php endif; ?>
+					</div>
+					<?php if ($show_count): ?>
+					<span class="badge bg-primary rounded-pill"><?= Meta::getNumCommentsForAsset($comment->asset_id) ?></span>
+					<?php endif ?>
 				</div>
-				<span class="badge bg-primary rounded-pill"><?= Meta::getNumCommentsForAsset($comment->asset_id) ?></span>
-			</div>
+			<?php endif; ?>
 			<div class="text-muted my-1">
 				<?= Text::sprintf(
 					'MOD_ENGAGE_LATEST_LBL_COMMENTED_ON',
 					$comment->user_name,
-					$uri->toString(),
+					$commentUri->toString(),
 					HTMLHelper::_('engage.date', new Date($comment->created))
 				) ?>
 			</div>
