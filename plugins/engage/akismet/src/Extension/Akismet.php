@@ -66,7 +66,7 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 		 * @var   bool              $isNew   Is this a new comment?
 		 */
 		[$comment, $isNew] = $event->getArguments();
-		$result = $event->getArgument('result');
+		$result = $event->getArgument('result', []);
 
 		if (is_null($comment))
 		{
@@ -156,7 +156,7 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 	public function onAkeebaEngageReportHam(Event $event): void
 	{
 		[$comment] = $event->getArguments();
-		$result = $event->getArgument('result');
+		$result = $event->getArgument('result', []);
 
 		if (is_null($comment))
 		{
@@ -195,7 +195,7 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 	public function onAkeebaEngageReportSpam(Event $event): void
 	{
 		[$comment] = $event->getArguments();
-		$result = $event->getArgument('result');
+		$result = $event->getArgument('result', []);
 
 		if (is_null($comment))
 		{

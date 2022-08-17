@@ -81,7 +81,7 @@ class Engage extends PrivacyPlugin implements SubscriberInterface
 		 * @var   User                $user    The user account associated with this request if available
 		 */
 		[$request, $user] = $event->getArguments();
-		$result = $event->getArgument('result') ?? [];
+		$result = $event->getArgument('result', []);
 
 		/** @var UserTable $userTable */
 		$userTable = User::getTable();

@@ -123,7 +123,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	public function onUserAfterDelete(Event $event): void
 	{
 		[$user, $success, $msg] = $event->getArguments();
-		$result = $event->getArgument('result') ?? [];
+		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [true]));
 
 		// Make sure we can actually run
@@ -178,7 +178,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	public function onUserBeforeDelete(Event $event): void
 	{
 		[$user] = $event->getArguments();
-		$result = $event->getArgument('result') ?? [];
+		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [true]));
 
 		// Make sure we can actually run
@@ -223,7 +223,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   array $options Array holding options (remember, autoregister, group)
 		 */
 		[$user, $options] = $event->getArguments();
-		$result = $event->getArgument('result') ?? [];
+		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [true]));
 
 		// Is the “Own guest comments on login“ option enabled?

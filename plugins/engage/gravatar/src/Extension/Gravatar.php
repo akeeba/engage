@@ -92,7 +92,7 @@ class Gravatar extends CMSPlugin implements SubscriberInterface
 			$url .= '&f=y';
 		}
 
-		$result = $event->getArgument('result') ?: [];
+		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [$url]));
 	}
 
@@ -119,7 +119,7 @@ class Gravatar extends CMSPlugin implements SubscriberInterface
 			$url = 'https://www.gravatar.com/' . md5($user->email);
 		}
 
-		$result = $event->getArgument('result') ?: [];
+		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [$url]));
 	}
 }

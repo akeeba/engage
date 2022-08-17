@@ -141,7 +141,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	{
 		/** @var   int $userID The user ID to export data for */
 		[$int] = $event->getArguments();
-		$result = $event->getArgument('result');
+		$result = $event->getArgument('result', []);
 
 		$export = new SimpleXMLElement("<root></root>");
 		$db     = $this->db;
