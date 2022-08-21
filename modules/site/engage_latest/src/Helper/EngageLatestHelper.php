@@ -37,6 +37,7 @@ class EngageLatestHelper
 		/** @var CommentsModel $model */
 		$model      = $mvcFactory->createModel('Comments', 'Site', ['ignore_request' => true]);
 
+		$model->setState('filter.enabled', 1);
 		$model->setState('filter.frontend', 1);
 		$model->setState('list.ordering', 'c.created');
 		$model->setState('list.direction', 'DESC');
