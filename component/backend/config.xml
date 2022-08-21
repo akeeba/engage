@@ -21,18 +21,6 @@
         />
 
         <field
-                name="default_publish"
-                type="radio"
-                layout="joomla.form.field.radio.switcher"
-                label="COM_ENGAGE_DEFAULT_PUBLISH_LABEL"
-                description="COM_ENGAGE_DEFAULT_PUBLISH_DESC"
-                default="1"
-        >
-            <option value="1">JPUBLISHED</option>
-            <option value="0">JUNPUBLISHED</option>
-        </field>
-
-        <field
                 name="default_limit"
                 type="list"
                 label="COM_ENGAGE_DEFAULT_LIMIT_LABEL"
@@ -146,6 +134,18 @@
                 class="alert alert-info"
                 description="COM_ENGAGE_CONFIG_HEADER_OVERRIDABLE_DESC"
         />
+
+        <field
+                name="default_publish"
+                type="radio"
+                layout="joomla.form.field.radio.switcher"
+                label="COM_ENGAGE_DEFAULT_PUBLISH_LABEL"
+                description="COM_ENGAGE_DEFAULT_PUBLISH_DESC"
+                default="1"
+        >
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+        </field>
 
         <field
                 name="comments_show"

@@ -3,6 +3,7 @@ Akeeba Engage 3.1.0
 ================================================================================
 + Latest comments: choose whether to show excerpts or the full text of the comment
 + Latest comments: article title display options
++ Article comment options: choose whether to auto-publish comments or not, overriding global setting (gh-205)
 # [HIGH] PHP 8.1 type error in the Akismet plugin
 # [MEDIUM] Latest Comments: date not shown (gh-201)
 # [LOW] PHP 8.1 deprecated notice when checking if FOF is still installed

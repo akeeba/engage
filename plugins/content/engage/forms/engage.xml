@@ -26,6 +26,21 @@
             </field>
 
             <field
+                    name="default_publish"
+                    type="radio"
+                    X_layout="joomla.form.field.radio.switcher"
+                    class="btn-group btn-group-yesno"
+                    label="PLG_CONTENT_ENGAGE_DEFAULT_PUBLISH_LABEL"
+                    description="PLG_CONTENT_ENGAGE_DEFAULT_PUBLISH_DESC"
+                    default="-1"
+                    showon="comments_show!:0"
+            >
+                <option value="-1">JGLOBAL_USE_GLOBAL</option>
+                <option value="1">JPUBLISHED</option>
+                <option value="0">JUNPUBLISHED</option>
+            </field>
+
+            <field
                     name="comments_show_featured"
                     type="list"
                     label="PLG_CONTENT_ENGAGE_COMMENTS_SHOW_FEATURE_LABEL"
