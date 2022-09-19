@@ -98,14 +98,8 @@ class HtmlView extends BaseHtmlView
 			'icon-engage'
 		);
 
-		$toolbarButtons   = [];
-		$toolbarButtons[] = ['save', 'comment.save'];
-		$toolbarButtons[] = ['apply', 'comment.apply'];
-
-		ToolbarHelper::saveGroup(
-			$toolbarButtons,
-			'btn-success'
-		);
+		ToolbarHelper::apply('comment.save');
+		ToolbarHelper::save('comment.apply');
 
 		ToolbarHelper::cancel('comment.cancel', 'JTOOLBAR_CLOSE');
 	}
