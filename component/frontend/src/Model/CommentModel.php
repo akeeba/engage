@@ -297,8 +297,8 @@ class CommentModel extends AdminCommentModel
 		 * Managers have their comments always published (they can publish their own comments, so why add an unnecessary
 		 * step?). Regular users' comments may be published or not, depending on the component's default_publish option.
 		 */
-		$assetMeta      = Meta::getAssetAccessMeta($table->asset_id);
-		$defaultPublish = $assetMeta['parameters']->get('default_publish') == -1
+		$assetMeta      = Meta::getAssetAccessMeta($table->asset_id, true);
+		$defaultPublish = $assetMeta['parameters']->get('default_publish', -1) == -1
 			? $cParams->get('default_publish', 1)
 			: $assetMeta['parameters']->get('default_publish');
 		$table->enabled = ($defaultPublish || $user->authorise('core.manage', 'com_engage')) ? 1 : 0;
