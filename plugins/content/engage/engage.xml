@@ -7,8 +7,8 @@
 <extension version="3.9.0" type="plugin" group="content" method="upgrade">
     <name>PLG_CONTENT_ENGAGE</name>
     <description>PLG_CONTENT_ENGAGE_XML_DESC</description>
-    <version>2.0.5</version>
-    <creationDate>2021-10-26</creationDate>
+    <version>2.0.6</version>
+    <creationDate>2022-09-27</creationDate>
     <author>Akeeba Ltd</author>
     <authorEmail>no-reply@akeeba.com</authorEmail>
     <authorUrl>https://www.akeeba.com</authorUrl>
