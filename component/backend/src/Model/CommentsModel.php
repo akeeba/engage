@@ -271,13 +271,6 @@ class CommentsModel extends ListModel
 			return [];
 		}
 
-		$orderDirn = $this->state->get('list.direction', 'DESC');
-
-		if (is_null($parentId) && strtoupper($orderDirn) === 'DESC')
-		{
-			$childIDs = array_reverse($childIDs);
-		}
-
 		$ret = [];
 
 		foreach ($childIDs as $thisParentId)
@@ -605,7 +598,7 @@ class CommentsModel extends ListModel
 		// List ordering clause
 		$orderCol  = $this->state->get('list.ordering', 'c.created');
 		$orderDirn = $this->state->get('list.direction', 'DESC');
-		$ordering  = $db->escape($orderCol) . ' ' . $db->escape($orderDirn);
+		$ordering  = $db->quoteName($orderCol) . ' ' . $db->escape($orderDirn);
 
 		/**
 		 * -- When ordering by a column other that the comment ID apply an additional ordering to make sure that the
@@ -615,7 +608,7 @@ class CommentsModel extends ListModel
 		 */
 		if ($orderCol != 'c.id')
 		{
-			$ordering .= ', c.id DESC';
+			$ordering .= ', ' . $db->quoteName('c.id') . ' DESC';
 		}
 
 		$query->order($ordering);

@@ -3,6 +3,7 @@ Akeeba Engage 3.1.1
 ================================================================================
 ~ Save and Save & Close buttons are now separate, as per Joomla 4.2 UI guidelines
 # [MEDIUM] Default published option in categories and article is ignored (gh-210)
+# [MEDIUM] Ordering does not take effect (gh-211)
 
 Akeeba Engage 3.1.0
 ================================================================================

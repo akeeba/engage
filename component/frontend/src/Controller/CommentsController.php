@@ -350,7 +350,7 @@ class CommentsController extends AdminCommentsController
 		$defaultLimit = $this->getDefaultListLimit();
 		$start        = $this->app->getUserStateFromRequest('com_engage.comments.limitstart', 'akengage_limitstart', 0);
 		$limit        = $this->app->getUserStateFromRequest('com_engage.comments.limit', 'akengage_limit', $defaultLimit);
-		$ordering     = $this->input->get('akengage_order', 'id');
+		$ordering     = $this->input->get('akengage_order', 'c.created');
 		$orderDir     = strtoupper($this->input->get('akengage_order_Dir', 'DESC') ?: 'DESC');
 		$orderDir     = in_array($orderDir, ['ASC', 'DESC']) ? $orderDir : 'DESC';
 
