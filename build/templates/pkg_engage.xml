@@ -9,60 +9,47 @@
     <name>pkg_engage</name>
     <version>##VERSION##</version>
     <creationDate>##DATE##</creationDate>
-
     <author>Akeeba Ltd</author>
     <authorEmail>no-reply@akeeba.com</authorEmail>
     <authorUrl>https://www.akeeba.com</authorUrl>
-
     <packagename>engage</packagename>
     <url>https://www.akeeba.com</url>
     <packager>Akeeba Ltd</packager>
     <packagerurl>https://www.akeeba.com</packagerurl>
-
     <copyright>Copyright (c)2020-2021 Akeeba Ltd</copyright>
     <license>GNU GPL v3 or later</license>
+    <description>PKG_ENGAGE_XML_DESCRIPTION</description>
 
-    <description>Akeeba Engage installation package</description>
-
-    <!-- List of extensions to install -->
     <files>
-        <!-- Component -->
         <file type="component" id="com_engage">com_engage.zip</file>
 
-        <!-- Modules -->
         <file type="module" client="site" id="mod_engage_latest">mod_engage_latest.zip</file>
 
-        <!-- Plugins: actionlog -->
         <file type="plugin" group="actionlog" id="engage">plg_actionlog_engage.zip</file>
 
-        <!-- Plugins: console -->
         <file type="plugin" group="console" id="engage">plg_console_engage.zip</file>
 
-        <!-- Plugins: content -->
         <file type="plugin" group="content" id="engage">plg_content_engage.zip</file>
 
-        <!-- Plugins: datacompliance -->
         <file type="plugin" group="datacompliance" id="engage">plg_datacompliance_engage.zip</file>
 
-        <!-- Plugins: engage -->
         <file type="plugin" group="engage" id="akismet">plg_engage_akismet.zip</file>
         <file type="plugin" group="engage" id="email">plg_engage_email.zip</file>
         <file type="plugin" group="engage" id="gravatar">plg_engage_gravatar.zip</file>
 
-        <!-- Plugins: privacy -->
         <file type="plugin" group="privacy" id="engage">plg_privacy_engage.zip</file>
 
-        <!-- Plugins: system -->
         <file type="plugin" group="system" id="engagecache">plg_system_engagecache.zip</file>
 
-        <!-- Plugins: user -->
         <file type="plugin" group="user" id="engage">plg_user_engage.zip</file>
     </files>
 
-    <!-- Installation script -->
+    <languages folder="language">
+        <language tag="en-GB">en-GB/pkg_engage.sys.ini</language>
+    </languages>
+
     <scriptfile>script.engage.php</scriptfile>
 
-    <!-- Update servers -->
     <updateservers>
         <server type="extension" priority="1" name="Akeeba Engage Updates">https://cdn.akeeba.com/updates/pkgengage.xml</server>
     </updateservers>
