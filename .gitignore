@@ -40,6 +40,7 @@ fef.min.css
 /component/backend/views
 /component/cli/file_engage.xml
 /component/frontend/views
+/pkg_engage.xml
 
 ### Release files
 /release
