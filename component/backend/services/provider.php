@@ -9,6 +9,7 @@ defined('_JEXEC') || die;
 
 use Akeeba\Component\Engage\Administrator\Extension\EngageComponent;
 use Akeeba\Component\Engage\Administrator\Provider\CacheCleaner as CacheCleanerProvider;
+use Akeeba\Component\Engage\Administrator\Provider\ComponentParameters as ComponentParametersProvider;
 use Joomla\CMS\Dispatcher\ComponentDispatcherFactoryInterface;
 use Joomla\CMS\Extension\ComponentInterface;
 use Joomla\CMS\Extension\Service\Provider\ComponentDispatcherFactory;
@@ -35,6 +36,7 @@ return new class implements ServiceProviderInterface {
 		$container->registerServiceProvider(new MVCFactory('Akeeba\\Component\\Engage'));
 		$container->registerServiceProvider(new ComponentDispatcherFactory('Akeeba\\Component\\Engage'));
 		$container->registerServiceProvider(new CacheCleanerProvider());
+		$container->registerServiceProvider(new ComponentParametersProvider('com_engage'));
 
 		$container->set(
 			ComponentInterface::class,

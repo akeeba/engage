@@ -18,6 +18,7 @@ use Akeeba\Component\Engage\Administrator\Helper\CacheCleaner;
 use Akeeba\Component\Engage\Administrator\Helper\ComponentParams;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Akeeba\Component\Engage\Administrator\Model\CommentsModel;
+use Akeeba\Component\Engage\Administrator\Service\ComponentParameters;
 use Akeeba\Component\Engage\Site\Helper\Meta;
 use Exception;
 use Joomla\CMS\Application\CMSApplication;
@@ -550,7 +551,11 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		// I need to run. Save the current timestamp in the component parameters.
 		$cParams->set('spam_lastRun', time());
 
-		ComponentParams::save($cParams);
+		/** @var ComponentParameters $cParamsService */
+		$cParamsService = $this->getApplication()
+			->bootComponent('com_engage')
+			->getComponentParametersService();
+		$cParamsService->save($cParams);
 
 		// Get the model and delete comments. No problem if we fail for any reason.
 		try

@@ -10,6 +10,7 @@ namespace Akeeba\Component\Engage\Administrator\Extension;
 defined('_JEXEC') or die;
 
 use Akeeba\Component\Engage\Administrator\Service\CacheCleaner;
+use Akeeba\Component\Engage\Administrator\Service\ComponentParameters;
 use Akeeba\Component\Engage\Administrator\Service\Html\Engage;
 use Joomla\CMS\Extension\BootableExtensionInterface;
 use Joomla\CMS\Extension\MVCComponent;
@@ -47,6 +48,18 @@ class EngageComponent extends MVCComponent implements BootableExtensionInterface
 	public function getCacheCleanerService(): CacheCleaner
 	{
 		return $this->container->get(CacheCleaner::class);
+	}
+
+	/**
+	 * Get the Component Parameters service
+	 *
+	 * @return  ComponentParameters
+	 *
+	 * @since   3.2.0
+	 */
+	public function getComponentParametersService(): ComponentParameters
+	{
+		return $this->container->get(ComponentParameters::class);
 	}
 
 }
