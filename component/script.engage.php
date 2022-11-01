@@ -11,6 +11,7 @@ defined('_JEXEC') or die();
 use Akeeba\Component\Engage\Administrator\Helper\TemplateEmails;
 use Akeeba\Component\Engage\Administrator\Model\UpgradeModel;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Installer\Adapter\PackageAdapter;
 use Joomla\CMS\Log\Log;
 use Joomla\Database\DatabaseDriver;
@@ -21,8 +22,18 @@ use Joomla\Database\DatabaseDriver;
  * @see https://docs.joomla.org/Manifest_files#Script_file
  * @see \Akeeba\Component\Engage\Administrator\Model\UpgradeModel
  */
-class Pkg_EngageInstallerScript
+class Pkg_EngageInstallerScript extends InstallerScript
 {
+	protected $minimumPhp = '7.4.0';
+
+	protected $minimumJoomla = '4.2.0';
+
+	/**
+	 * @since 3.2.0
+	 * @var   DatabaseDriver|DatabaseInterface|null
+	 */
+	protected $dbo;
+
 	/**
 	 * Called after any type of installation / uninstallation action.
 	 *
@@ -39,6 +50,8 @@ class Pkg_EngageInstallerScript
 		{
 			return true;
 		}
+
+		$this->setDboFromAdapter($parent);
 
 		$model = $this->getUpgradeModel();
 
@@ -74,6 +87,8 @@ class Pkg_EngageInstallerScript
 		{
 			return true;
 		}
+
+		$this->setDboFromAdapter($parent);
 
 		// Prevent users from installing this on Joomla 3
 		if (version_compare(JVERSION, '3.999.999', 'le'))
@@ -157,12 +172,28 @@ class Pkg_EngageInstallerScript
 
 		try
 		{
-			return new UpgradeModel();
+			$upgradeModel = new UpgradeModel();
 		}
 		catch (Throwable $e)
 		{
 			return null;
 		}
+
+		if (method_exists($upgradeModel, 'setDatabase'))
+		{
+			$upgradeModel->setDatabase($this->dbo ?? Factory::getContainer()->get('DatabaseDriver'));
+		}
+		elseif (method_exists($upgradeModel, 'setDbo'))
+		{
+			$upgradeModel->setDbo($this->dbo ?? Factory::getContainer()->get('DatabaseDriver'));
+		}
+
+		if (method_exists($upgradeModel, 'init'))
+		{
+			$upgradeModel->init();
+		}
+
+		return $upgradeModel;
 	}
 
 	private function updateEmails(): void
@@ -197,5 +228,45 @@ class Pkg_EngageInstallerScript
 		catch (Exception $e)
 		{
 		}
+	}
+
+	/**
+	 * Set the database object from the installation adapter, if possible
+	 *
+	 * @param   InstallerAdapter|mixed  $adapter  The installation adapter, hopefully.
+	 *
+	 * @since   3.2.0
+	 * @return  void
+	 */
+	private function setDboFromAdapter($adapter): void
+	{
+		$this->dbo = null;
+
+		if (class_exists(InstallerAdapter::class) && ($adapter instanceof InstallerAdapter))
+		{
+			/**
+			 * If this is Joomla 4.2+ the adapter has a protected getDatabase() method which we can access with the
+			 * magic property $adapter->db. On Joomla 4.1 and lower this is not available. So, we have to first figure
+			 * out if we can actually use the magic property...
+			 */
+
+			try
+			{
+				$refObj = new ReflectionObject($adapter);
+
+				if ($refObj->hasMethod('getDatabase'))
+				{
+					$this->dbo = $adapter->db;
+
+					return;
+				}
+			}
+			catch (Throwable $e)
+			{
+				// If something breaks we will fall through
+			}
+		}
+
+		$this->dbo = Factory::getContainer()->get('DatabaseDriver');
 	}
 }
