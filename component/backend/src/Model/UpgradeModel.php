@@ -215,6 +215,10 @@ class UpgradeModel extends BaseDatabaseModel
 			JPATH_ADMINISTRATOR . '/language/es-ES/es-ES.plg_user_engage.sys.ini',
 			JPATH_ADMINISTRATOR . '/language/fr-FR/fr-FR.plg_user_engage.ini',
 			JPATH_ADMINISTRATOR . '/language/fr-FR/fr-FR.plg_user_engage.sys.ini',
+
+			// Refactored helpers
+			JPATH_ADMINISTRATOR . '/components/com_engage/Helper/CacheCleaner.php',
+			JPATH_ADMINISTRATOR . '/components/com_engage/Helper/ComponentParams.php',
 		],
 		'folders' => [
 			// Old backend templates
@@ -234,6 +238,12 @@ class UpgradeModel extends BaseDatabaseModel
 			JPATH_SITE . '/components/com_engage/Helper',
 			JPATH_SITE . '/components/com_engage/Model',
 			JPATH_SITE . '/components/com_engage/View',
+
+			// Moved traits
+			JPATH_ADMINISTRATOR . '/components/com_engage/Controller/Mixin',
+			JPATH_ADMINISTRATOR . '/components/com_engage/Model/Mixin',
+			JPATH_ADMINISTRATOR . '/components/com_engage/Table/Mixin',
+			JPATH_ADMINISTRATOR . '/components/com_engage/View/Mixin',
 		],
 	];
 
