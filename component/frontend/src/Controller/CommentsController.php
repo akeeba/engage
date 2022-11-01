@@ -15,6 +15,7 @@ use Akeeba\Component\Engage\Administrator\Mixin\ControllerRedirectionTrait;
 use Akeeba\Component\Engage\Administrator\Mixin\ControllerReturnURLTrait;
 use Akeeba\Component\Engage\Administrator\Mixin\ControllerReusableModelsTrait;
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
+use Akeeba\Component\Engage\Site\Mixin\ControllerFrontendCommentsTrait;
 use Akeeba\Component\Engage\Site\Model\CommentsModel;
 use Akeeba\Component\Engage\Site\View\Comments\HtmlView;
 use Exception;
@@ -30,7 +31,7 @@ use RuntimeException;
 
 class CommentsController extends AdminCommentsController
 {
-	use FrontendCommentsAware;
+	use ControllerFrontendCommentsTrait;
 	use ControllerRedirectionTrait;
 	use ControllerReturnURLTrait;
 	use ControllerReusableModelsTrait

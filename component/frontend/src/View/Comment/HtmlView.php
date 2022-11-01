@@ -10,7 +10,7 @@ namespace Akeeba\Component\Engage\Site\View\Comment;
 defined('_JEXEC') or die;
 
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
-use Akeeba\Component\Engage\Site\View\Mixin\ModuleRenderAware;
+use Akeeba\Component\Engage\Site\Mixin\ModuleRenderAware;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 

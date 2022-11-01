@@ -5,9 +5,9 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Component\Engage\Site\Controller;
+namespace Akeeba\Component\Engage\Site\Mixin;
 
-use Akeeba\Component\Engage\Administrator\Helper\CacheCleaner;
+use Akeeba\Component\Engage\Administrator\Service\CacheCleaner;
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use Akeeba\Component\Engage\Site\Helper\SignedURL;
 use Exception;
@@ -19,7 +19,7 @@ use RuntimeException;
 
 defined('_JEXEC') or die;
 
-trait FrontendCommentsAware
+trait ControllerFrontendCommentsTrait
 {
 	/**
 	 * Checks for a signed URL or a form token in the request.
@@ -31,8 +31,8 @@ trait FrontendCommentsAware
 	 * @return  boolean  True if found and valid, otherwise return false or redirect to referrer page.
 	 *
 	 * @throws  Exception
-	 * @see     Session::checkToken()
 	 * @since   1.0.0
+	 * @see     Session::checkToken()
 	 */
 	public function checkToken($method = 'request', $redirect = true): bool
 	{
@@ -133,9 +133,17 @@ trait FrontendCommentsAware
 	 */
 	private function cleanCache(): void
 	{
-		CacheCleaner::clearCacheGroups([
-			'com_engage',
-		], [0], 'onEngageClearCache');
+		/** @var CacheCleaner $cacheCleanerService */
+		$cacheCleanerService = $this->app->bootComponent('com_engage')
+		                                 ->getCacheCleanerService();
+
+		$cacheCleanerService
+		          ->clearGroups(
+			          [
+				          'com_engage',
+			          ],
+			          'onEngageClearCache'
+		          );
 	}
 
 	/**

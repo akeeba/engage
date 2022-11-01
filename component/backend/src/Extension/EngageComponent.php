@@ -9,21 +9,44 @@ namespace Akeeba\Component\Engage\Administrator\Extension;
 
 defined('_JEXEC') or die;
 
+use Akeeba\Component\Engage\Administrator\Service\CacheCleaner;
 use Akeeba\Component\Engage\Administrator\Service\Html\Engage;
 use Joomla\CMS\Extension\BootableExtensionInterface;
 use Joomla\CMS\Extension\MVCComponent;
 use Joomla\CMS\HTML\HTMLRegistryAwareTrait;
+use Joomla\DI\Container;
 use Psr\Container\ContainerInterface;
 
 class EngageComponent extends MVCComponent implements BootableExtensionInterface
 {
 	use HTMLRegistryAwareTrait;
 
-	/** @inheritdoc  */
+	/**
+	 * The container we were created with
+	 *
+	 * @since 3.2.0
+	 * @var   Container
+	 */
+	private $container;
+
+	/** @inheritdoc */
 	public function boot(ContainerInterface $container)
 	{
-		$db = $container->get('DatabaseDriver');
+		$this->container = $container;
+		$db              = $container->get('DatabaseDriver');
 		$this->getRegistry()->register('engage', new Engage($db));
+	}
+
+	/**
+	 * Get the Cache Cleaner service
+	 *
+	 * @return  CacheCleaner
+	 *
+	 * @since   3.2.0
+	 */
+	public function getCacheCleanerService(): CacheCleaner
+	{
+		return $this->container->get(CacheCleaner::class);
 	}
 
 }

@@ -13,6 +13,7 @@ namespace Joomla\Plugin\Content\Engage\Extension;
 
 defined('_JEXEC') or die;
 
+use Akeeba\Component\Engage\Administrator\Extension\EngageComponent;
 use Akeeba\Component\Engage\Administrator\Helper\CacheCleaner;
 use Akeeba\Component\Engage\Administrator\Helper\ComponentParams;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
@@ -515,10 +516,16 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * Sounds a bit too much? Well, this is how Joomla itself does it. For real.
 		 *
 		 * @see ContentModelArticle::cleanCache()
+		 * @var EngageComponent $ext
 		 */
-		CacheCleaner::clearCacheGroups([
-			'com_content',
-		], [0]);
+		$ext = $this->getApplication()
+		            ->bootComponent('com_engage');
+		$ext->getCacheCleanerService()
+		    ->clearGroups(
+			    [
+				    'com_content',
+			    ]
+		    );
 	}
 
 	/**

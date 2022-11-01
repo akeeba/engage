@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Component\Engage\Site\View\Mixin;
+namespace Akeeba\Component\Engage\Site\Mixin;
 
 defined('_JEXEC') or die;
 

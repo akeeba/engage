@@ -15,6 +15,7 @@ use Akeeba\Component\Engage\Administrator\Mixin\ControllerRedirectionTrait;
 use Akeeba\Component\Engage\Administrator\Mixin\ControllerReturnURLTrait;
 use Akeeba\Component\Engage\Administrator\Mixin\ControllerReusableModelsTrait;
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
+use Akeeba\Component\Engage\Site\Mixin\ControllerFrontendCommentsTrait;
 use Exception;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
@@ -22,7 +23,7 @@ use RuntimeException;
 
 class CommentController extends AdminCommentController
 {
-	use FrontendCommentsAware;
+	use ControllerFrontendCommentsTrait;
 	use ControllerRedirectionTrait;
 	use ControllerReturnURLTrait;
 	use ControllerReusableModelsTrait;
