@@ -18,7 +18,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\Helpers\JGrid;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\MVC\Model\DatabaseAwareTrait;
+use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Database\DatabaseDriver;
 
 defined('_JEXEC') or die;
@@ -34,7 +34,7 @@ final class Engage
 	 */
 	public function __construct(DatabaseDriver $db)
 	{
-		$this->setDbo($db);
+		$this->setDatabase($db);
 	}
 
 	/**

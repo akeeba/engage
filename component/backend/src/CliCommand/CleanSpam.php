@@ -18,9 +18,9 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Factory\MVCFactoryAwareTrait;
-use Joomla\CMS\MVC\Model\DatabaseAwareTrait;
 use Joomla\CMS\Router\Route;
 use Joomla\Console\Command\AbstractCommand;
+use Joomla\Database\DatabaseDriver;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,7 +32,6 @@ class CleanSpam extends AbstractCommand
 	use TimeInfo;
 	use CliRouting;
 	use MVCFactoryAwareTrait;
-	use DatabaseAwareTrait;
 
 	/**
 	 * The default command name
@@ -77,8 +76,9 @@ class CleanSpam extends AbstractCommand
 		$this->configureSymfonyIO($input, $output);
 
 		// Disable database query logging (causes out–of–memory errors)
-		$this->setDbo(Factory::getContainer()->get('DatabaseDriver'));
-		$this->getDbo()->setMonitor(null);
+		/** @var DatabaseDriver $db */
+		$db = Factory::getContainer()->get('DatabaseDriver');
+		$db->setMonitor(null);
 
 		// Initialise the CLI routing
 		$this->initCliRouting();
