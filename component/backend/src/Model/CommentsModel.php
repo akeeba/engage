@@ -118,7 +118,7 @@ class CommentsModel extends ListModel
 		}
 
 		// Get the comments with the IDs specified. They are NOT in order.
-		$db = $this->getDbo();
+		$db = $this->getDatabase();
 		$query = $this->getListQuery()
 			->whereIn($db->quoteName('c.id'), array_map('trim', array_keys($idsAndDepth)))
 			->clear('order');
@@ -206,7 +206,7 @@ class CommentsModel extends ListModel
 	public function commentIDTreeSliceWithDepth(int $start, ?int $limit = null): array
 	{
 		// Get all the IDs filtered by the model
-		$db     = $this->getDbo();
+		$db     = $this->getDatabase();
 		$query  = $this->getListQuery(true)
 			->clear('select')
 			->select([
@@ -381,7 +381,7 @@ class CommentsModel extends ListModel
 	 */
 	protected function getListQuery()
 	{
-		$db    = $this->getDbo();
+		$db    = $this->getDatabase();
 		$query = $db->getQuery(true)
 			->select([
 				$db->quoteName('c') . '.*',

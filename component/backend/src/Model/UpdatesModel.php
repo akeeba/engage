@@ -75,7 +75,7 @@ class UpdatesModel extends BaseDatabaseModel
 		}
 
 		// Find the extension ID
-		$db    = $this->getDbo();
+		$db    = $this->getDatabase();
 		$query = $db->getQuery(true)
 			->select('*')
 			->from($db->qn('#__extensions'))
@@ -145,7 +145,7 @@ class UpdatesModel extends BaseDatabaseModel
 	 */
 	public function getUpdateSiteIds(): array
 	{
-		$db    = $this->getDbo();
+		$db    = $this->getDatabase();
 		$query = $db->getQuery(true)
 			->select($db->qn('update_site_id'))
 			->from($db->qn('#__update_sites_extensions'))
@@ -172,7 +172,7 @@ class UpdatesModel extends BaseDatabaseModel
 	public function getUpdateSites(): ?array
 	{
 		$updateSiteIDs = $this->getUpdateSiteIds();
-		$db            = $this->getDbo();
+		$db            = $this->getDatabase();
 		$query         = $db->getQuery(true)
 			->select('*')
 			->from($db->qn('#__update_sites'))
@@ -230,7 +230,7 @@ class UpdatesModel extends BaseDatabaseModel
 		];
 
 		// Get a reference to the db driver
-		$db = $this->getDbo();
+		$db = $this->getDatabase();
 
 		// Get the update sites for our extension
 		$updateSiteIds = $this->getUpdateSiteIds();
@@ -466,7 +466,7 @@ class UpdatesModel extends BaseDatabaseModel
 	private function createFakePackageExtension()
 	{
 		/** @var DatabaseDriver $db */
-		$db = $this->getDbo();
+		$db = $this->getDatabase();
 
 		$manifestCacheJson = json_encode([
 			'name'         => 'Akeeba Engage package',
@@ -596,7 +596,7 @@ XML;
 	 */
 	private function findExtensionId(string $element, string $type = 'component', ?string $folder = null): int
 	{
-		$db    = $this->getDbo();
+		$db    = $this->getDatabase();
 		$query = $db->getQuery(true)
 			->select($db->qn('extension_id'))
 			->from($db->qn('#__extensions'))
