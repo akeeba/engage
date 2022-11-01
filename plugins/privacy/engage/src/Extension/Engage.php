@@ -35,14 +35,6 @@ class Engage extends PrivacyPlugin implements SubscriberInterface
 	protected $allowLegacyListeners = false;
 
 	/**
-	 * The application under which we are running
-	 *
-	 * @var   CMSApplication
-	 * @since 3.0.0
-	 */
-	protected $app;
-
-	/**
 	 * Returns an array of events this subscriber will listen to.
 	 *
 	 * @return  array
@@ -142,7 +134,7 @@ class Engage extends PrivacyPlugin implements SubscriberInterface
 		 */
 		[$request, $user] = $event->getArguments();
 
-		$language = $this->app->getLanguage();
+		$language = $this->getApplication()->getLanguage();
 		$language->load('com_engage', JPATH_ADMINISTRATOR);
 		$language->load('com_engage', JPATH_SITE);
 

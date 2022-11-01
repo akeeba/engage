@@ -38,6 +38,7 @@ use Joomla\CMS\Table\Content;
 use Joomla\CMS\Table\Table;
 use Joomla\Component\Categories\Administrator\Model\CategoryModel;
 use Joomla\Component\Content\Administrator\Model\ArticleModel;
+use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Event\DispatcherInterface;
 use Joomla\Event\Event;
@@ -49,6 +50,7 @@ use Throwable;
 class Engage extends CMSPlugin implements SubscriberInterface
 {
 	use MVCFactoryAwareTrait;
+	use DatabaseAwareTrait;
 
 	/**
 	 * Disallow registering legacy listeners since we use SubscriberInterface
@@ -57,22 +59,6 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 * @since 3.0.0
 	 */
 	protected $allowLegacyListeners = false;
-
-	/**
-	 * Application object
-	 *
-	 * @var   CMSApplication
-	 * @since 1.0.0
-	 */
-	protected $app;
-
-	/**
-	 * Database driver
-	 *
-	 * @var   DatabaseDriver|null
-	 * @since   1.0.0
-	 */
-	protected $db;
 
 	/**
 	 * A cache of basic article information keyed to the asset ID
@@ -198,7 +184,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 
 		try
 		{
-			$db    = $this->db;
+			$db    = $this->getDatabase();
 			$query = $db->getQuery(true)
 				->select([$db->qn('asset_id')])
 				->from($db->qn('#__content'))
@@ -254,17 +240,17 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		$nonSefUrl  .= empty($row->language) ? '' : "&lang={$row->language}";
 		$public_url = Route::link('site', sprintf($nonSefUrl, $row->id, $row->catid), false, Route::TLS_IGNORE, true);
 
-		if ($this->app->isClient('site'))
+		if ($this->getApplication()->isClient('site'))
 		{
 			$url = $public_url;
 		}
-		elseif ($this->app->isClient('administrator'))
+		elseif ($this->getApplication()->isClient('administrator'))
 		{
 			$url = 'index.php?option=com_content&task=article.edit&id=' . $row->id;
 		}
 
 		$publishUp = new Date();
-		$db        = $this->db;
+		$db        = $this->getDatabase();
 
 		if (!empty($row->publish_up) && ($row->publish_up != $db->getNullDate()))
 		{
@@ -323,7 +309,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		}
 
 		$assetId = $data->asset_id;
-		$db      = $this->db;
+		$db      = $this->getDatabase();
 		$query   = $db->getQuery(true)
 			->delete($db->qn('#__engage_comments'))
 			->where($db->qn('asset_id') . ' = ' . $db->q($assetId));
@@ -646,7 +632,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 
 		$this->cachedArticles[$metaKey] = null;
 
-		$db    = $this->db;
+		$db    = $this->getDatabase();
 		$query = $db->getQuery(true)
 			->select([
 				$db->qn('id'),
@@ -670,7 +656,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		try
 		{
 			/** @var MVCFactoryInterface $factory */
-			$factory = $this->app->bootComponent('com_content')->getMVCFactory();
+			$factory = $this->getApplication()->bootComponent('com_content')->getMVCFactory();
 			/** @var ArticleModel $model */
 			$model = $factory->createModel('Article', 'Administrator');
 
@@ -713,7 +699,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 			return null;
 		}
 
-		$db    = $this->db;
+		$db    = $this->getDatabase();
 		$query = $db->getQuery(true)
 			->select($db->qn('asset_id'))
 			->from($db->qn('#__content'))
@@ -829,7 +815,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		$catId = $row->catid;
 
 		/** @var MVCFactoryInterface $factory */
-		$factory = $this->app->bootComponent('com_categories')->getMVCFactory();
+		$factory = $this->getApplication()->bootComponent('com_categories')->getMVCFactory();
 		/** @var CategoryModel $model */
 		$model = $factory->createModel('Category', 'Administrator');
 
@@ -934,7 +920,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 			return false;
 		}
 
-		$db = $this->db;
+		$db = $this->getDatabase();
 
 		// Do we have a publish up date?
 		if (!empty($row->publish_up) && ($row->publish_up != $db->getNullDate()))
@@ -1026,7 +1012,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		}
 
 		// We need to be in the frontend of the site
-		if (!$this->app->isClient('site'))
+		if (!$this->getApplication()->isClient('site'))
 		{
 			return '';
 		}
@@ -1118,7 +1104,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		$basePath    = __DIR__ . '/../../layouts';
 		$layoutFile  = sprintf("akeeba.engage.content.%s", $area);
 		$displayData = [
-			'app'   => $this->app,
+			'app'   => $this->getApplication(),
 			'model' => $this->getMVCFactory()->createModel('Comments', 'Administrator', ['ignore_request' => true]),
 			'row'   => $row,
 			'meta'  => Meta::getAssetAccessMeta($row->asset_id),
@@ -1143,7 +1129,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		}
 
 		// We need to be in the frontend of the site
-		if (!$this->app->isClient('site'))
+		if (!$this->getApplication()->isClient('site'))
 		{
 			return '';
 		}
@@ -1199,7 +1185,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 			return '';
 		}
 
-		$input   = new Input($this->app->input->getArray());
+		$input   = new Input($this->getApplication()->input->getArray());
 		$assetId = $row->asset_id;
 
 		$input->set('option', 'com_engage');
@@ -1223,7 +1209,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 
 			$doc->getWebAssetManager()->getRegistry()->addRegistryFile('media/com_engage/joomla.asset.json');
 
-			$this->comDispatcherFactory->createDispatcher($this->app, $input)->setUseErrorHandler($debug)->dispatch();
+			$this->comDispatcherFactory->createDispatcher($this->getApplication(), $input)->setUseErrorHandler($debug)->dispatch();
 
 			$comments = @ob_get_contents();
 		}

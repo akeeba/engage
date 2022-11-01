@@ -8,6 +8,7 @@
 defined('_JEXEC') || die;
 
 use Joomla\CMS\Extension\PluginInterface;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
@@ -33,7 +34,12 @@ return new class implements ServiceProviderInterface {
 				$config  = (array) PluginHelper::getPlugin('engage', 'email');
 				$subject = $container->get(DispatcherInterface::class);
 
-				return new Email($subject, $config);
+				$plugin = new Email($subject, $config);
+
+				$plugin->setApplication(Factory::getApplication());
+				$plugin->setDatabase($container->get('DatabaseDriver'));
+
+				return $plugin;
 			}
 		);
 	}

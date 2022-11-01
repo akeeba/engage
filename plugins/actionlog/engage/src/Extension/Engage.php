@@ -17,6 +17,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\User\User;
 use Joomla\Component\Actionlogs\Administrator\Plugin\ActionLogPlugin;
+use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Event\Event;
 use Joomla\Event\SubscriberInterface;
@@ -28,6 +29,8 @@ use Joomla\Event\SubscriberInterface;
  */
 class Engage extends ActionLogPlugin implements SubscriberInterface
 {
+	use DatabaseAwareTrait;
+
 	/**
 	 * Disallow registering legacy listeners since we use SubscriberInterface
 	 *
@@ -37,28 +40,12 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	protected $allowLegacyListeners = false;
 
 	/**
-	 * The CMS application object we are running under.
-	 *
-	 * @var   CMSApplication
-	 * @since 3.0.0
-	 */
-	protected $app;
-
-	/**
 	 * Affects constructor behavior. If true, language files will be loaded automatically.
 	 *
 	 * @var    boolean
 	 * @since  3.0.0
 	 */
 	protected $autoloadLanguage = true;
-
-	/**
-	 * The application database driver object
-	 *
-	 * @var   DatabaseDriver
-	 * @since 3.0.0
-	 */
-	protected $db;
 
 	/**
 	 * The extension we are logging user actions for.
@@ -109,7 +96,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 		/** @var   CommentTable $comment */
 		[$comment] = $event->getArguments();
 
-		if ($this->app->getIdentity()->guest)
+		if ($this->getApplication()->getIdentity()->guest)
 		{
 			return;
 		}
@@ -139,7 +126,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 		/** @var   CommentTable $comment */
 		[$comment] = $event->getArguments();
 
-		if ($this->app->getIdentity()->guest)
+		if ($this->getApplication()->getIdentity()->guest)
 		{
 			return;
 		}
@@ -168,7 +155,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 		/** @var   CommentTable $comment */
 		[$comment] = $event->getArguments();
 
-		if ($this->app->getIdentity()->guest)
+		if ($this->getApplication()->getIdentity()->guest)
 		{
 			return;
 		}
@@ -201,7 +188,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 		/** @var   CommentTable $comment */
 		[$comment] = $event->getArguments();
 
-		if ($this->app->getIdentity()->guest)
+		if ($this->getApplication()->getIdentity()->guest)
 		{
 			return;
 		}
@@ -236,7 +223,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 			return;
 		}
 
-		if ($this->app->getIdentity()->guest)
+		if ($this->getApplication()->getIdentity()->guest)
 		{
 			return;
 		}
@@ -278,13 +265,13 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 			return;
 		}
 
-		if ($this->app->getIdentity()->guest)
+		if ($this->getApplication()->getIdentity()->guest)
 		{
 			return;
 		}
 
 		/** @var   CommentTable $comment */
-		$comment = new CommentTable($this->db, $this->app->getDispatcher());
+		$comment = new CommentTable($this->getDatabase(), $this->getApplication()->getDispatcher());
 
 		foreach ($pks as $id)
 		{
@@ -334,7 +321,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 		 */
 		[$comment, $email] = $event->getArguments();
 
-		if ($this->app->getIdentity()->guest)
+		if ($this->getApplication()->getIdentity()->guest)
 		{
 			return;
 		}
@@ -393,7 +380,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	private function logUserAction($dataOrTitle, string $messageLanguageKey, ?string $context = null, ?User $user = null): void
 	{
 		// Get the user if not defined
-		$user = $user ?? $this->app->getIdentity();
+		$user = $user ?? $this->getApplication()->getIdentity();
 
 		// No log for guests
 		if (empty($user) || ($user->guest))

@@ -29,6 +29,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
+use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\ParameterType;
 use Joomla\Event\Event;
@@ -38,6 +39,8 @@ defined('_JEXEC') or die;
 
 class Email extends CMSPlugin implements SubscriberInterface
 {
+	use DatabaseAwareTrait;
+
 	/**
 	 * Disallow registering legacy listeners since we use SubscriberInterface
 	 *
@@ -45,22 +48,6 @@ class Email extends CMSPlugin implements SubscriberInterface
 	 * @since 3.0.0
 	 */
 	protected $allowLegacyListeners = false;
-
-	/**
-	 * The application we are running in.
-	 *
-	 * @var   CMSApplication
-	 * @since 3.0.0
-	 */
-	protected $app;
-
-	/**
-	 * The application's database driver object
-	 *
-	 * @var   DatabaseDriver
-	 * @since 3.0.0
-	 */
-	protected $db;
 
 	/**
 	 * Returns an array of events this subscriber will listen to.
@@ -90,7 +77,7 @@ class Email extends CMSPlugin implements SubscriberInterface
 		[$comment] = $event->getArguments();
 
 		// No emails in non-web applications, please
-		if (!($this->app instanceof WebApplication))
+		if (!($this->getApplication() instanceof WebApplication))
 		{
 			return;
 		}
@@ -162,7 +149,7 @@ class Email extends CMSPlugin implements SubscriberInterface
 	protected function getCommentManagerGroups(): array
 	{
 		// Get all groups
-		$db    = $this->db;
+		$db    = $this->getDatabase();
 		$query = $db->getQuery(true)
 			->select([$db->qn('id')])
 			->from($db->qn('#__usergroups'));
@@ -243,7 +230,7 @@ class Email extends CMSPlugin implements SubscriberInterface
 	 */
 	protected function getUnsubscribedEmails(int $asset_id): array
 	{
-		$db    = $this->db;
+		$db    = $this->getDatabase();
 		$query = $db->getQuery(true)
 			->select($db->quoteName('email'))
 			->from($db->quoteName('#__engage_unsubscribe'))
@@ -263,7 +250,7 @@ class Email extends CMSPlugin implements SubscriberInterface
 	 */
 	protected function getUserIDsByEmail(array $emails): array
 	{
-		$db     = $this->db;
+		$db     = $this->getDatabase();
 		$emails = array_map([$db, 'q'], $emails);
 		$query  = $db->getQuery(true)
 			->select([
@@ -384,7 +371,7 @@ class Email extends CMSPlugin implements SubscriberInterface
 
 		$data = [
 			'SITEURL'           => Uri::base(),
-			'SITENAME'          => $this->app->get('sitename', 'A Joomla! site'),
+			'SITENAME'          => $this->getApplication()->get('sitename', 'A Joomla! site'),
 			'NAME'              => htmlentities($commentUser->name),
 			'EMAIL'             => htmlentities($commentUser->email),
 			'IP'                => htmlentities($comment->ip),
@@ -429,7 +416,7 @@ class Email extends CMSPlugin implements SubscriberInterface
 			// Get the localised “created on” date
 			try
 			{
-				$tz = new DateTimeZone($recipient->getParam('timezone', $this->app->get('offset', 'UTC')));
+				$tz = new DateTimeZone($recipient->getParam('timezone', $this->getApplication()->get('offset', 'UTC')));
 			}
 			catch (Exception $e)
 			{

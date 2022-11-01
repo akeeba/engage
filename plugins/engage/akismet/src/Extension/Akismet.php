@@ -15,7 +15,6 @@ use Akeeba\Component\Engage\Site\Exceptions\BlatantSpam;
 use Akeeba\Component\Engage\Site\Helper\Meta;
 use Exception;
 use Joomla\CMS\Date\Date;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Http\HttpFactory;
 use Joomla\CMS\Language\LanguageHelper;
 use Joomla\CMS\Plugin\CMSPlugin;
@@ -36,8 +35,8 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 	/**
 	 * Disallow registering legacy listeners since we use SubscriberInterface
 	 *
-	 * @var   bool
 	 * @since 3.0.0
+	 * @var   bool
 	 */
 	protected $allowLegacyListeners = false;
 
@@ -108,10 +107,11 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 
 		try
 		{
-			$app = Factory::getApplication();
-
 			$additional = [
-				'referrer' => $app->input->server->getString('REFERER', null),
+				'referrer' => $this->getApplication()
+					->input
+					->server
+					->getString('REFERER', null),
 			];
 
 			if (!$isNew)
@@ -167,10 +167,11 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 
 		try
 		{
-			$app = Factory::getApplication();
-
 			$additional = [
-				'referrer' => $app->input->server->getString('REFERER', null),
+				'referrer' => $this->getApplication()
+					->input
+					->server
+					->getString('REFERER', null),
 			];
 
 			$this->apiCall($comment, 'submit-ham', $additional);
@@ -206,10 +207,11 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 
 		try
 		{
-			$app = Factory::getApplication();
-
 			$additional = [
-				'referrer' => $app->input->server->getString('REFERER', null),
+				'referrer' => $this->getApplication()
+					->input
+					->server
+					->getString('REFERER', null),
 			];
 
 			$this->apiCall($comment, 'submit-spam', $additional);

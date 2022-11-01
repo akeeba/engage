@@ -20,6 +20,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Event\Event;
 use Joomla\Event\SubscriberInterface;
@@ -30,6 +31,8 @@ use SimpleXMLElement;
  */
 class Engage extends CMSPlugin implements SubscriberInterface
 {
+	use DatabaseAwareTrait;
+
 	/**
 	 * Disallow registering legacy listeners since we use SubscriberInterface
 	 *
@@ -39,28 +42,12 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	protected $allowLegacyListeners = false;
 
 	/**
-	 * The current CMS application
-	 *
-	 * @var   CMSApplication
-	 * @since 3.0.0
-	 */
-	protected $app;
-
-	/**
 	 * Affects constructor behavior. If true, language files will be loaded automatically.
 	 *
 	 * @var    boolean
 	 * @since  3.0
 	 */
 	protected $autoloadLanguage = true;
-
-	/**
-	 * The application's database connection object
-	 *
-	 * @var   DatabaseDriver
-	 * @since 3.0.0
-	 */
-	protected $db;
 
 	/**
 	 * Returns an array of events this subscriber will listen to.
@@ -117,8 +104,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 
 		$user = UserFetcher::getUser($userID);
 
-		$this->app->getLanguage()->load('com_engage', JPATH_ADMINISTRATOR);
-		$this->app->getLanguage()->load('com_engage', JPATH_SITE);
+		$this->getApplication()->getLanguage()->load('com_engage', JPATH_ADMINISTRATOR);
+		$this->getApplication()->getLanguage()->load('com_engage', JPATH_SITE);
 
 		$ret['engage']['id'] = Meta::pseudonymiseUserComments($user);
 
@@ -144,7 +131,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		$result = $event->getArgument('result', []);
 
 		$export = new SimpleXMLElement("<root></root>");
-		$db     = $this->db;
+		$db     = $this->getDatabase();
 
 		// #__engage_comments by created_by
 		$domain = $export->addChild('domain');

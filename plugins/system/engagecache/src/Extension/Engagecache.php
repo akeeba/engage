@@ -54,15 +54,7 @@ class Engagecache extends CMSPlugin implements SubscriberInterface
 	 */
 	public function onAfterInitialise(Event $event)
 	{
-		try
-		{
-			$app = Factory::getApplication();
-		}
-		catch (Exception $e)
-		{
-			return;
-		}
-
+		$app              = $this->getApplication();
 		$cParams          = ComponentHelper::getParams('com_engage');
 		$defaultListLimit = $cParams->get('default_limit', 20);
 		$defaultListLimit = ($defaultListLimit == -1) ? 20 : $defaultListLimit;
@@ -76,7 +68,7 @@ class Engagecache extends CMSPlugin implements SubscriberInterface
 		}
 		else
 		{
-			$registeredurlparams = new \stdClass;
+			$registeredurlparams = new \stdClass();
 		}
 
 		if (!empty($limitStart))

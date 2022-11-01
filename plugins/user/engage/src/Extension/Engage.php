@@ -18,6 +18,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\User\User;
 use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Event\DispatcherInterface;
 use Joomla\Event\Event;
@@ -26,6 +27,8 @@ use Joomla\Utilities\ArrayHelper;
 
 class Engage extends CMSPlugin implements SubscriberInterface
 {
+	use DatabaseAwareTrait;
+
 	/**
 	 * Disallow registering legacy listeners since we use SubscriberInterface
 	 *
@@ -35,28 +38,12 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	protected $allowLegacyListeners = false;
 
 	/**
-	 * The current application
-	 *
-	 * @var   CMSApplication
-	 * @since 3.0.0
-	 */
-	protected $app;
-
-	/**
 	 * Affects constructor behavior. If true, language files will be loaded automatically.
 	 *
 	 * @var    boolean
 	 * @since  3.0.0
 	 */
 	protected $autoloadLanguage = true;
-
-	/**
-	 * Joomla's database driver (auto-assigned on class instantiation)
-	 *
-	 * @var   DatabaseDriver
-	 * @since 1.0.0.b3
-	 */
-	protected $db;
 
 	/**
 	 * Should this plugin be allowed to run?
@@ -155,8 +142,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		}
 
 		// Remove the comments and uncache the user object.
-		$this->app->getLanguage()->load('com_engage', JPATH_ADMINISTRATOR);
-		$this->app->getLanguage()->load('com_engage', JPATH_SITE);
+		$this->getApplication()->getLanguage()->load('com_engage', JPATH_ADMINISTRATOR);
+		$this->getApplication()->getLanguage()->load('com_engage', JPATH_SITE);
 
 		Meta::pseudonymiseUserComments($this->usersToRemove[$userId], true);
 
@@ -259,7 +246,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		}
 
 		// Run a simple update query to let the user own the comments
-		$db = $this->db;
+		$db = $this->getDatabase();
 
 		$query = $db->getQuery(true)
 			->update($db->qn('#__engage_comments'))
