@@ -5,13 +5,13 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Component\Engage\Administrator\Controller\Mixin;
+namespace Akeeba\Component\Engage\Administrator\Mixin;
 
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 
-trait TriggerEvent
+trait TriggerEventTrait
 {
 	/**
 	 * Triggers an object-specific event. The event runs both locally –if a suitable method exists– and through the

@@ -9,12 +9,12 @@ namespace Akeeba\Component\Engage\Administrator\Controller;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Component\Engage\Administrator\Controller\Mixin\ControllerEvents;
+use Akeeba\Component\Engage\Administrator\Mixin\ControllerEventsTrait;
 use Joomla\CMS\MVC\Controller\FormController;
 
 class CommentController extends FormController
 {
-	use ControllerEvents;
+	use ControllerEventsTrait;
 
 	/** @inheritdoc */
 	protected $text_prefix = 'COM_ENGAGE_COMMENT';

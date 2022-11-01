@@ -10,7 +10,7 @@ namespace Akeeba\Component\Engage\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
-use Akeeba\Component\Engage\Administrator\Model\Mixin\GetItemAware;
+use Akeeba\Component\Engage\Administrator\Mixin\ModelGetItemTrait;
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use Exception;
 use Joomla\CMS\Application\CMSApplication;
@@ -32,7 +32,7 @@ use RuntimeException;
  */
 class CommentModel extends AdminModel
 {
-	use GetItemAware;
+	use ModelGetItemTrait;
 
 	/**
 	 * Method for getting a form.

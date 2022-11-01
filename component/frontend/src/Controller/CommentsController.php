@@ -10,10 +10,10 @@ namespace Akeeba\Component\Engage\Site\Controller;
 defined('_JEXEC') or die;
 
 use Akeeba\Component\Engage\Administrator\Controller\CommentsController as AdminCommentsController;
-use Akeeba\Component\Engage\Administrator\Controller\Mixin\GetRedirectionAware;
-use Akeeba\Component\Engage\Administrator\Controller\Mixin\ReturnURLAware;
-use Akeeba\Component\Engage\Administrator\Controller\Mixin\ReusableModels;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
+use Akeeba\Component\Engage\Administrator\Mixin\ControllerRedirectionTrait;
+use Akeeba\Component\Engage\Administrator\Mixin\ControllerReturnURLTrait;
+use Akeeba\Component\Engage\Administrator\Mixin\ControllerReusableModelsTrait;
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use Akeeba\Component\Engage\Site\Model\CommentsModel;
 use Akeeba\Component\Engage\Site\View\Comments\HtmlView;
@@ -23,7 +23,6 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\MVC\View\ViewInterface;
-use Joomla\CMS\Uri\Uri;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Plugin\Content\Engage\Extension\Engage;
 use Joomla\Utilities\ArrayHelper;
@@ -32,12 +31,12 @@ use RuntimeException;
 class CommentsController extends AdminCommentsController
 {
 	use FrontendCommentsAware;
-	use GetRedirectionAware;
-	use ReturnURLAware;
-	use ReusableModels
+	use ControllerRedirectionTrait;
+	use ControllerReturnURLTrait;
+	use ControllerReusableModelsTrait
 	{
-		ReusableModels::getModel as reusableGetModel;
-		ReusableModels::getView as reusableGetView;
+		ControllerReusableModelsTrait::getModel as reusableGetModel;
+		ControllerReusableModelsTrait::getView as reusableGetView;
 	}
 
 	/**

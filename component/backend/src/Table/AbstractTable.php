@@ -9,8 +9,8 @@ namespace Akeeba\Component\Engage\Administrator\Table;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Component\Engage\Administrator\Controller\Mixin\TriggerEvent;
-use Akeeba\Component\Engage\Administrator\Table\Mixin\ColumnAliasAware;
+use Akeeba\Component\Engage\Administrator\Mixin\TableColumnAliasTrait;
+use Akeeba\Component\Engage\Administrator\Mixin\TriggerEventTrait;
 use Joomla\CMS\Table\Table;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Event\DispatcherInterface;
@@ -22,8 +22,8 @@ use Joomla\Event\DispatcherInterface;
  */
 abstract class AbstractTable extends Table
 {
-	use TriggerEvent;
-	use ColumnAliasAware;
+	use TriggerEventTrait;
+	use TableColumnAliasTrait;
 
 	/** @inheritdoc */
 	public function __construct($table, $key, DatabaseDriver $db, DispatcherInterface $dispatcher = null)

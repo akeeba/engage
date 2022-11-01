@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Component\Engage\Administrator\Model\Mixin;
+namespace Akeeba\Component\Engage\Administrator\Mixin;
 
 defined('_JEXEC') or die;
 
@@ -14,7 +14,7 @@ use Joomla\CMS\Factory;
 /**
  * Trait to easily manage model state fields for ListModel classes
  */
-trait PopulateStateAware
+trait ModelPopulateStateTrait
 {
 	/**
 	 * Default sort direction: ASC or DESC (case–sensitive)

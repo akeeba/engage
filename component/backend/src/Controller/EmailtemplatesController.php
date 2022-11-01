@@ -9,16 +9,16 @@ namespace Akeeba\Component\Engage\Administrator\Controller;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Component\Engage\Administrator\Helper\TemplateEmails;
-use Akeeba\Component\Engage\Administrator\Controller\Mixin\ControllerEvents;
 use Akeeba\Component\Engage\Administrator\Controller\Mixin\CustomACL;
+use Akeeba\Component\Engage\Administrator\Helper\TemplateEmails;
+use Akeeba\Component\Engage\Administrator\Mixin\ControllerEventsTrait;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Router\Route;
 
 class EmailtemplatesController extends BaseController
 {
-	use ControllerEvents;
+	use ControllerEventsTrait;
 
 	public function updateEmails($cachable = false, $urlparams = [])
 	{

@@ -5,14 +5,14 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Component\Engage\Administrator\Controller\Mixin;
+namespace Akeeba\Component\Engage\Administrator\Mixin;
 
 defined('_JEXEC') or die;
 
 /**
  * Allows controllers to return information about a redirection which has been set in them.
  */
-trait GetRedirectionAware
+trait ControllerRedirectionTrait
 {
 	/**
 	 * Get the redirection URL

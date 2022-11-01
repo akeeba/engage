@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.2.0
+================================================================================
+~ Requires Joomla 4.2, PHP 7.4 or later
+
 Akeeba Engage 3.1.1
 ================================================================================
 ~ Save and Save & Close buttons are now separate, as per Joomla 4.2 UI guidelines

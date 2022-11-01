@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Component\Engage\Administrator\View\Mixin;
+namespace Akeeba\Component\Engage\Administrator\Mixin;
 
 defined('_JEXEC') || die;
 
@@ -15,13 +15,16 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Language\Text;
 use Throwable;
+use function Akeeba\Component\Engage\Administrator\View\Mixin\count;
+use const Akeeba\Component\Engage\Administrator\View\Mixin\JPATH_BASE;
+use const Akeeba\Component\Engage\Administrator\View\Mixin\JPATH_THEMES;
 
 /**
  * Adds support for loading any template or layout, of any view of the current component, in an HTML view.
  *
  * @since  9.0.0
  */
-trait LoadAnyTemplate
+trait ViewLoadAnyTemplateTrait
 {
 	/**
 	 * Load any view template of the current component.

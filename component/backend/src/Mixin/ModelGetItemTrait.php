@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Component\Engage\Administrator\Model\Mixin;
+namespace Akeeba\Component\Engage\Administrator\Mixin;
 
 defined('_JEXEC') or die;
 
@@ -16,7 +16,7 @@ use Joomla\CMS\Language\Text;
 /**
  * A trait to replace getItem with something which returns a real table instead of a plain old, stupid object
  */
-trait GetItemAware
+trait ModelGetItemTrait
 {
 	/**
 	 * Method to get a single record.

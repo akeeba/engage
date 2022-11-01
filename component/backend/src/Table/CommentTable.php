@@ -7,11 +7,11 @@
 
 namespace Akeeba\Component\Engage\Administrator\Table;
 
-use Akeeba\Component\Engage\Administrator\Controller\Mixin\TriggerEvent;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
+use Akeeba\Component\Engage\Administrator\Mixin\TableColumnAliasTrait;
+use Akeeba\Component\Engage\Administrator\Mixin\TableCreateModifyTrait;
+use Akeeba\Component\Engage\Administrator\Mixin\TriggerEventTrait;
 use Akeeba\Component\Engage\Administrator\Model\CommentsModel;
-use Akeeba\Component\Engage\Administrator\Table\Mixin\ColumnAliasAware;
-use Akeeba\Component\Engage\Administrator\Table\Mixin\CreateModifyAware;
 use Exception;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Event\AbstractEvent;
@@ -48,11 +48,11 @@ defined('_JEXEC') or die;
  */
 class CommentTable extends AbstractTable
 {
-	use TriggerEvent;
-	use ColumnAliasAware;
-	use CreateModifyAware
+	use TriggerEventTrait;
+	use TableColumnAliasTrait;
+	use TableCreateModifyTrait
 	{
-		CreateModifyAware::onBeforeStore as onBeforeStoreCreateModifyAware;
+		TableCreateModifyTrait::onBeforeStore as onBeforeStoreCreateModifyAware;
 	}
 
 	/**

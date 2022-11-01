@@ -9,9 +9,9 @@ namespace Akeeba\Component\Engage\Administrator\Controller;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Component\Engage\Administrator\Controller\Mixin\ControllerEvents;
-use Akeeba\Component\Engage\Administrator\Controller\Mixin\RegisterControllerTasks;
-use Akeeba\Component\Engage\Administrator\Controller\Mixin\ReturnURLAware;
+use Akeeba\Component\Engage\Administrator\Mixin\ControllerEventsTrait;
+use Akeeba\Component\Engage\Administrator\Mixin\ControllerRegisterTasksTrait;
+use Akeeba\Component\Engage\Administrator\Mixin\ControllerReturnURLTrait;
 use Akeeba\Component\Engage\Administrator\Model\CommentModel;
 use Exception;
 use Joomla\CMS\Application\CMSApplication;
@@ -26,9 +26,9 @@ use Joomla\Utilities\ArrayHelper;
 
 class CommentsController extends AdminController
 {
-	use ControllerEvents;
-	use RegisterControllerTasks;
-	use ReturnURLAware;
+	use ControllerEventsTrait;
+	use ControllerRegisterTasksTrait;
+	use ControllerReturnURLTrait;
 
 	/** @inheritdoc */
 	protected $text_prefix = 'COM_ENGAGE_COMMENTS';

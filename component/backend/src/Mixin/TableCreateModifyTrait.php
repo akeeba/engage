@@ -5,14 +5,14 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Component\Engage\Administrator\Table\Mixin;
+namespace Akeeba\Component\Engage\Administrator\Mixin;
 
 defined('_JEXEC') or die;
 
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Joomla\CMS\Factory;
 
-trait CreateModifyAware
+trait TableCreateModifyTrait
 {
 	private $updateCreated = true;
 

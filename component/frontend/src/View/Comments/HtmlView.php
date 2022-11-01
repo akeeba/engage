@@ -10,7 +10,7 @@ namespace Akeeba\Component\Engage\Site\View\Comments;
 defined('_JEXEC') or die;
 
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
-use Akeeba\Component\Engage\Administrator\View\Mixin\LoadAnyTemplate;
+use Akeeba\Component\Engage\Administrator\Mixin\ViewLoadAnyTemplateTrait;
 use Akeeba\Component\Engage\Site\Helper\Meta;
 use Akeeba\Component\Engage\Site\Model\CommentModel;
 use Akeeba\Component\Engage\Site\Model\CommentsModel;
@@ -32,7 +32,7 @@ use Joomla\Registry\Registry;
 
 class HtmlView extends BaseHtmlView
 {
-	use LoadAnyTemplate;
+	use ViewLoadAnyTemplateTrait;
 	use ModuleRenderAware;
 
 	/**

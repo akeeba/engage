@@ -9,7 +9,7 @@ namespace Akeeba\Component\Engage\Administrator\Dispatcher;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Component\Engage\Administrator\Controller\Mixin\TriggerEvent;
+use Akeeba\Component\Engage\Administrator\Mixin\TriggerEventTrait;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Dispatcher\ComponentDispatcher;
 use Joomla\CMS\Document\HtmlDocument;
@@ -17,7 +17,7 @@ use Throwable;
 
 class Dispatcher extends ComponentDispatcher
 {
-	use TriggerEvent;
+	use TriggerEventTrait;
 
 	/**
 	 * Keys of common media files to load.

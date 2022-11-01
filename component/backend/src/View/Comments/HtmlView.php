@@ -11,8 +11,8 @@ defined('_JEXEC') or die;
 
 use Akeeba\Component\Engage\Administrator\Helper\HtmlFilter;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
+use Akeeba\Component\Engage\Administrator\Mixin\ViewLoadAnyTemplateTrait;
 use Akeeba\Component\Engage\Administrator\Model\CommentsModel;
-use Akeeba\Component\Engage\Administrator\View\Mixin\LoadAnyTemplate;
 use Exception;
 use HTMLPurifier;
 use HTMLPurifier_Config;
@@ -34,7 +34,7 @@ use Joomla\Registry\Registry;
  */
 class HtmlView extends BaseHtmlView
 {
-	use LoadAnyTemplate;
+	use ViewLoadAnyTemplateTrait;
 
 	/**
 	 * The active search filters

@@ -10,7 +10,7 @@ namespace Akeeba\Component\Engage\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Akeeba\Component\Engage\Administrator\Helper\Timer;
-use Akeeba\Component\Engage\Administrator\Model\Mixin\PopulateStateAware;
+use Akeeba\Component\Engage\Administrator\Mixin\ModelPopulateStateTrait;
 use DateInterval;
 use Exception;
 use Joomla\CMS\Date\Date;
@@ -28,7 +28,7 @@ use Joomla\Database\ParameterType;
  */
 class CommentsModel extends ListModel
 {
-	use PopulateStateAware;
+	use ModelPopulateStateTrait;
 
 	/**
 	 * The number of tree-aware comments fetched by commentIDTreeSliceWithDepth

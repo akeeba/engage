@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Component\Engage\Administrator\Controller\Mixin;
+namespace Akeeba\Component\Engage\Administrator\Mixin;
 
 defined('_JEXEC') || die;
 
@@ -13,7 +13,7 @@ use Exception;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\MVC\View\ViewInterface;
 
-trait ReusableModels
+trait ControllerReusableModelsTrait
 {
 	static public $_models = [];
 

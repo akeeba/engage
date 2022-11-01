@@ -5,14 +5,14 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Component\Engage\Administrator\Controller\Mixin;
+namespace Akeeba\Component\Engage\Administrator\Mixin;
 
 defined('_JEXEC') || die;
 
 use ReflectionMethod;
 use ReflectionObject;
 
-trait RegisterControllerTasks
+trait ControllerRegisterTasksTrait
 {
 	/**
 	 * Automatically register controller tasks.
