@@ -124,10 +124,6 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		$this->setMVCFactory($MVCFactory);
 
 		$this->comDispatcherFactory = $comDispatcherFactory;
-
-		$this->loadLanguage();
-
-		$this->autoCleanSpam();
 	}
 
 	public static function getSubscribedEvents(): array
@@ -162,6 +158,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 */
 	public function onAkeebaEngageGetAssetIDsByTitle(Event $event): void
 	{
+		$this->autoCleanSpam();
+
 		/**
 		 * @var ?string $filter The partial article name to match.
 		 */
