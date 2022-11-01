@@ -218,6 +218,9 @@ class UpgradeModel extends BaseDatabaseModel
 			// Refactored helpers
 			JPATH_ADMINISTRATOR . '/components/com_engage/Helper/CacheCleaner.php',
 			JPATH_ADMINISTRATOR . '/components/com_engage/Helper/ComponentParams.php',
+
+			// Removed common templates
+			JPATH_ADMINISTRATOR . '/components/com_engage/tmpl/common/phpversion_warning.php',
 		],
 		'folders' => [
 			// Old backend templates

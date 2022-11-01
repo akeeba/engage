@@ -37,11 +37,6 @@ $filteredAsset = $this->activeFilters['asset_id'] ?? null;
 $i = 0;
 
 ?>
-<?= $this->loadAnyTemplate('common/phpversion_warning', false, [
-	'softwareName'  => 'Akeeba Engage',
-	'minPHPVersion' => '7.4.0',
-]) ?>
-
 <form action="<?= Route::_('index.php?option=com_engage&view=comments'); ?>"
       method="post" name="adminForm" id="adminForm">
 	<div class="row">
