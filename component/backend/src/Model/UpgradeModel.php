@@ -221,6 +221,7 @@ class UpgradeModel extends BaseDatabaseModel
 
 			// Removed common templates
 			JPATH_ADMINISTRATOR . '/components/com_engage/tmpl/common/phpversion_warning.php',
+			JPATH_ADMINISTRATOR . '/components/com_engage/tmpl/common/wrongphp.php',
 		],
 		'folders' => [
 			// Old backend templates

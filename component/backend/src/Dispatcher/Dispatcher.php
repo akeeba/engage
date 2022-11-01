@@ -63,9 +63,9 @@ class Dispatcher extends ComponentDispatcher
 		$softwareName  = 'Akeeba Engage';
 		$silentResults = $this->app->isClient('site');
 
-		if (!@include_once JPATH_ADMINISTRATOR . '/components/com_engage/tmpl/common/wrongphp.php')
+		if (version_compare(PHP_VERSION, $minPHPVersion, 'lt'))
 		{
-			return;
+			die(sprintf('%s requires PHP %s or later.', $softwareName, $minPHPVersion));
 		}
 
 		try
