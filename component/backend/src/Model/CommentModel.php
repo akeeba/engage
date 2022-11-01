@@ -30,6 +30,7 @@ use RuntimeException;
  *
  * @since 3.0.0
  */
+#[\AllowDynamicProperties]
 class CommentModel extends AdminModel
 {
 	use ModelGetItemTrait;

@@ -26,6 +26,7 @@ use Joomla\Database\ParameterType;
  *
  * @since 3.0.0
  */
+#[\AllowDynamicProperties]
 class CommentsModel extends ListModel
 {
 	use ModelPopulateStateTrait;

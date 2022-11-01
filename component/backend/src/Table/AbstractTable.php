@@ -20,6 +20,7 @@ use Joomla\Event\DispatcherInterface;
  *
  * @since  3.0.0
  */
+#[\AllowDynamicProperties]
 abstract class AbstractTable extends Table
 {
 	use TriggerEventTrait;

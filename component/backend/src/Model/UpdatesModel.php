@@ -18,6 +18,7 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\ParameterType;
 use SimpleXMLElement;
 
+#[\AllowDynamicProperties]
 class UpdatesModel extends BaseDatabaseModel
 {
 	protected $extensionKey = 'pkg_engage';

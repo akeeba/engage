@@ -26,6 +26,7 @@ use RuntimeException;
 use SimpleXMLElement;
 use Throwable;
 
+#[\AllowDynamicProperties]
 class UpgradeModel extends BaseDatabaseModel
 {
 	/** @var string[] Included extensions to automatically publish on NEW INSTALLATION OR UPGRADE */
