@@ -82,7 +82,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		// Only register CLI commands if we can boot up the Akeeba Backup component enough to make it usable.
 		try
 		{
-			$this->initialiseComponent($this->getApplication());
+			$this->initialiseComponent();
 		}
 		catch (Throwable $e)
 		{
@@ -114,7 +114,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		}
 	}
 
-	private function initialiseComponent(ConsoleApplication $app): void
+	private function initialiseComponent(): void
 	{
 		// Load the Akeeba Ticket System language files
 		$lang = JoomlaFactory::getApplication()->getLanguage();
