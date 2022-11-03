@@ -15,9 +15,6 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Language\Text;
 use Throwable;
-use function Akeeba\Component\Engage\Administrator\View\Mixin\count;
-use const Akeeba\Component\Engage\Administrator\View\Mixin\JPATH_BASE;
-use const Akeeba\Component\Engage\Administrator\View\Mixin\JPATH_THEMES;
 
 /**
  * Adds support for loading any template or layout, of any view of the current component, in an HTML view.
