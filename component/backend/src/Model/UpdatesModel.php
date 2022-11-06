@@ -519,7 +519,7 @@ class UpdatesModel extends BaseDatabaseModel
 
 		$content = <<< XML
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="4.0.0" type="package" method="upgrade">
+<extension type="package" method="upgrade">
     <name>pkg_engage</name>
     <version>{$this->version}</version>
     <creationDate>$date</creationDate>
