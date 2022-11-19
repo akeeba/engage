@@ -29,6 +29,8 @@
 	<languages folder="language">
 		<language tag="en-GB">en-GB/mod_engage_latest.ini</language>
 		<language tag="en-GB">en-GB/mod_engage_latest.sys.ini</language>
+		<language tag="de-DE">de-DE/mod_engage_latest.ini</language>
+		<language tag="de-DE">de-DE/mod_engage_latest.sys.ini</language>
 		<language tag="fr-FR">fr-FR/mod_engage_latest.ini</language>
 		<language tag="fr-FR">fr-FR/mod_engage_latest.sys.ini</language>
 	</languages>
