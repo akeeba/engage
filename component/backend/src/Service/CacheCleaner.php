@@ -83,7 +83,7 @@ class CacheCleaner
 	public function clearGroups(array $clearGroups, ?string $event = null): void
 	{
 		// Early return on nonsensical input
-		if (empty($clearGroups) || empty($cacheClients))
+		if (empty($clearGroups))
 		{
 			return;
 		}
