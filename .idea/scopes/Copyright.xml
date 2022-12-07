@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Copyright" pattern="(file:assets/email/0_make_lang_strings.php||file:build/templates//*||file:build/autoloader_for_rector.php||file:component//*)&amp;&amp;!file:component/backend/vendor//*||file:modules//*||file:plugins//*" />
+</component>
