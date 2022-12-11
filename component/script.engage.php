@@ -11,16 +11,18 @@ defined('_JEXEC') or die();
 use Akeeba\Component\Engage\Administrator\Helper\TemplateEmails;
 use Akeeba\Component\Engage\Administrator\Model\UpgradeModel;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Installer\Adapter\PackageAdapter;
 use Joomla\CMS\Log\Log;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseInterface;
 
 /**
  * Akeeba Engage package extension installation script file.
  *
  * @see https://docs.joomla.org/Manifest_files#Script_file
- * @see \Akeeba\Component\Engage\Administrator\Model\UpgradeModel
+ * @see UpgradeModel
  */
 class Pkg_EngageInstallerScript extends InstallerScript
 {
@@ -80,7 +82,7 @@ class Pkg_EngageInstallerScript extends InstallerScript
 		return true;
 	}
 
-	public function preflight(string $type, PackageAdapter $parent): bool
+	public function preflight($type, $parent)
 	{
 		// Do not run on uninstall.
 		if ($type === 'uninstall')
