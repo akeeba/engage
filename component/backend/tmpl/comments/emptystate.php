@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Layout\LayoutHelper;
+use Akeeba\Component\Engage\Administrator\Helper\LayoutHelper;
 
 $displayData = [
 	'textPrefix' => 'COM_ENGAGE_COMMENTS',
