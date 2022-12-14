@@ -282,6 +282,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 */
 	public function onContentAfterDelete(Event $event): void
 	{
+		$this->loadLanguage();
+
 		/**
 		 * @var   string|null          $context
 		 * @var   Content|object|mixed $data
@@ -330,6 +332,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 */
 	public function onContentAfterDisplay(Event $event): void
 	{
+		$this->loadLanguage();
+
 		/**
 		 * @var   string|null $context The context of the content being prepared. We only respond to
 		 *                                 'com_content.article'
@@ -356,6 +360,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 */
 	public function onContentBeforeDisplay(Event $event): void
 	{
+		$this->loadLanguage();
+
 		/**
 		 * @var   string|null $context The context of the content being prepared. We only respond to
 		 *                                 'com_content.article'
@@ -381,6 +387,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 */
 	public function onContentBeforeSave(Event $event): void
 	{
+		$this->loadLanguage();
+
 		/**
 		 * @var   string|null  $context Context for the content being saved
 		 * @var   Table|object $table   Joomla table object where the content is being saved to
@@ -422,6 +430,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 */
 	public function onContentPrepareData(Event $event)
 	{
+		$this->loadLanguage();
+
 		/**
 		 * @var   string|null $context Context for the content being loaded
 		 * @var   object      $data    Data being saved
@@ -460,6 +470,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 */
 	public function onContentPrepareForm(Event $event): void
 	{
+		$this->loadLanguage();
+
 		/**
 		 * @var   Form   $form The Joomla Form object we are manipulating
 		 * @var   object $data The data assigned to the form.
