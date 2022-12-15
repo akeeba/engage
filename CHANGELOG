@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.2.1
+================================================================================
+! Bug in LayoutHelper would make the backend of the component inaccessible
+
 Akeeba Engage 3.2.0
 ================================================================================
 ~ Requires Joomla 4.2, PHP 7.4 or later

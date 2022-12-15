@@ -82,14 +82,14 @@ class LayoutHelper
 	 * Get a FileLayout object instance.
 	 *
 	 * @param   string               $layoutFile  Dot separated path to the layout file, relative to base path
-	 * @param   string               $basePath    Base path to use when loading layout files
+	 * @param   string|null          $basePath    Base path to use when loading layout files
 	 * @param   Registry|array|null  $options     Optional custom options to load. Registry or array format
 	 *
 	 * @return  FileLayout
 	 *
 	 * @since   3.2.0
 	 */
-	private static function getFileLayout(string $layoutFile, string $basePath = '', $options = null)
+	private static function getFileLayout(string $layoutFile, ?string $basePath = '', $options = null)
 	{
 		$layoutFile = new FileLayout($layoutFile, null, $options);
 
