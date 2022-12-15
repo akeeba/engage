@@ -7,7 +7,7 @@
 
 <extension version="4.0.0" type="plugin" group="console" method="upgrade">
 	<name>PLG_CONSOLE_ENGAGE</name>
-	<version>3.2.0</version>
+	<version>3.2.1</version>
 	<creationDate>2022-12-15</creationDate>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>

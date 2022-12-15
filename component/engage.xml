@@ -13,7 +13,7 @@
 	<authorUrl>https://www.akeeba.com</authorUrl>
 	<copyright>Copyright (c)2020-2021 Akeeba Ltd</copyright>
 	<license>GNU/GPL v3 or any later version</license>
-	<version>3.2.0</version>
+	<version>3.2.1</version>
 	<description>COM_ENGAGE_XML_DESCRIPTION</description>
 	<namespace path="src">Akeeba\Component\Engage</namespace>
 

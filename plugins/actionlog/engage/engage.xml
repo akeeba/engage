@@ -7,7 +7,7 @@
 <extension version="3.9.0" type="plugin" group="actionlog" method="upgrade">
     <name>PLG_ACTIONLOG_ENGAGE</name>
     <description>PLG_ACTIONLOG_ENGAGE_XML_DESC</description>
-    <version>3.2.0</version>
+    <version>3.2.1</version>
     <creationDate>2022-12-15</creationDate>
     <author>Akeeba Ltd</author>
     <authorEmail>no-reply@akeeba.com</authorEmail>
