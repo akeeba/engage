@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.2.3
+================================================================================
+# [HIGH] CacheCleaner depends on Akeeba Ticket System instead of having all necessary code built-in (gh-236)
+
 Akeeba Engage 3.2.2
 ================================================================================
 # [HIGH] Backend content form language not loading correctly

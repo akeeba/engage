@@ -7,7 +7,7 @@
 
 namespace Akeeba\Component\Engage\Administrator\Service;
 
-use Akeeba\Component\ATS\Administrator\Mixin\RunPluginsTrait;
+use Akeeba\Component\Engage\Administrator\Mixin\RunPluginsTrait;
 use Exception;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Cache\CacheControllerFactoryInterface;
