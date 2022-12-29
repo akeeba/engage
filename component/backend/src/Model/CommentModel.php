@@ -226,7 +226,7 @@ class CommentModel extends AdminModel
 	protected function prepareTable($table)
 	{
 		// Set up the created / modified date
-		$date  = Factory::getDate();
+		$date  = clone Factory::getDate();
 		$user  = UserFetcher::getUser() ?? new User();
 		$isNew = empty($table->getId());
 

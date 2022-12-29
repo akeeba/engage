@@ -272,7 +272,7 @@ class CommentModel extends AdminCommentModel
 		$cParams = ComponentHelper::getParams('com_engage');
 
 		// Set the created and modified information
-		$date               = Factory::getDate();
+		$date               = clone Factory::getDate();
 		$table->created     = $date->toSql();
 		$table->created_by  = $user->guest ? null : $user->id;
 		$table->modified_by = null;

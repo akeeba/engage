@@ -329,7 +329,7 @@ class CommentsModel extends ListModel
 		try
 		{
 			$interval     = new DateInterval(sprintf('P%uD', $maxDays));
-			$earliestDate = Factory::getDate()->sub($interval);
+			$earliestDate = (clone Factory::getDate())->sub($interval);
 		}
 		catch (Exception $e)
 		{

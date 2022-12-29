@@ -156,7 +156,7 @@ final class Meta
 			'url'           => null,
 			'public_url'    => null,
 			'published'     => false,
-			'published_on'  => Factory::getDate(),
+			'published_on'  => clone Factory::getDate(),
 			'access'        => 0,
 			'parent_access' => null,
 			'parameters'    => new Registry(),

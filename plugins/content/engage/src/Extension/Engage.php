@@ -242,7 +242,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 			$url = 'index.php?option=com_content&task=article.edit&id=' . $row->id;
 		}
 
-		$publishUp = Factory::getDate();
+		$publishUp = clone Factory::getDate();
 		$db        = $this->getDatabase();
 
 		if (!empty($row->publish_up) && ($row->publish_up != $db->getNullDate()))
