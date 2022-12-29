@@ -13,7 +13,6 @@ use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use DateTimeZone;
 use Exception;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\Helpers\JGrid;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -218,7 +217,7 @@ final class Engage
 		// Special state for dates
 		if ($publishUp || $publishDown)
 		{
-			$nullDate = Factory::getDbo()->getNullDate();
+			$nullDate = Factory::getContainer()->get('DatabaseDriver')->getNullDate();
 			$nowDate  = Factory::getDate()->toUnix();
 
 			$tz = Factory::getUser()->getTimezone();
@@ -294,7 +293,7 @@ final class Engage
 	 */
 	public function date(?string $date, ?string $format = null, bool $local = true, bool $timezone = false): string
 	{
-		$date   = new Date($date ?? 'now', 'GMT');
+		$date   = Factory::getDate($date ?? 'now', 'GMT');
 		$format = $format ?: Text::_('DATE_FORMAT_LC2');
 
 		if ($timezone && substr($format, -1) != 'T')

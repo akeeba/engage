@@ -13,7 +13,6 @@ use Akeeba\Component\Engage\Administrator\Helper\Timer;
 use Akeeba\Component\Engage\Administrator\Mixin\ModelPopulateStateTrait;
 use DateInterval;
 use Exception;
-use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\ListModel;
@@ -330,7 +329,7 @@ class CommentsModel extends ListModel
 		try
 		{
 			$interval     = new DateInterval(sprintf('P%uD', $maxDays));
-			$earliestDate = (new Date())->sub($interval);
+			$earliestDate = Factory::getDate()->sub($interval);
 		}
 		catch (Exception $e)
 		{
@@ -550,7 +549,7 @@ class CommentsModel extends ListModel
 		// -- Convert to Joomla date objects
 		try
 		{
-			$fltFrom = $fltFrom ? new Date($fltFrom) : null;
+			$fltFrom = $fltFrom ? Factory::getDate($fltFrom) : null;
 		}
 		catch (Exception $e)
 		{
@@ -559,7 +558,7 @@ class CommentsModel extends ListModel
 
 		try
 		{
-			$fltTo = $fltFrom ? new Date($fltTo) : null;
+			$fltTo = $fltFrom ? Factory::getDate($fltTo) : null;
 		}
 		catch (Exception $e)
 		{

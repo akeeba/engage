@@ -15,7 +15,7 @@ defined('_JEXEC') or die();
 
 use Akeeba\Component\Engage\Administrator\Helper\Avatar;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
-use Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
@@ -68,7 +68,7 @@ else: ?>
 $previousLevel = $comment->depth;
 $avatar        = Avatar::getUserAvatar($comment->created_by, $maxAvatarWidth, $comment->email);
 $profile       = Avatar::getProfileURL($user);
-$commentDate   = (new Date($comment->created))->setTimezone($this->userTimezone);
+$commentDate   = Factory::getDate($comment->created)->setTimezone($this->userTimezone);
 $ipLookupURL  = $this->getIPLookupURL($comment->ip);
 $openListItem++;
 $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
@@ -224,7 +224,7 @@ $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->ena
 			<?= HTMLHelper::_('engage.processCommentTextForDisplay', $comment->body) ?>
 			<?php if (!empty($comment->modified_by)): ?>
 			<div class="my-2 border-top border-1 border-muted text-muted small">
-				<?= Text::sprintf('COM_ENGAGE_LBL_COMMENT_MODIFIED', (new Date($comment->modified))->setTimezone($this->userTimezone)->format(Text::_('DATE_FORMAT_LC2'), true), $comment->name ?: UserFetcher::getUser($comment->modified_by)->name) ?>
+				<?= Text::sprintf('COM_ENGAGE_LBL_COMMENT_MODIFIED', Factory::getDate($comment->modified)->setTimezone($this->userTimezone)->format(Text::_('DATE_FORMAT_LC2'), true), $comment->name ?: UserFetcher::getUser($comment->modified_by)->name) ?>
 			</div>
 			<?php endif; ?>
 		</div>

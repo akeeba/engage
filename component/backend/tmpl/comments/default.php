@@ -11,7 +11,6 @@ use Akeeba\Component\Engage\Administrator\Helper\LayoutHelper;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use Akeeba\Component\Engage\Site\Helper\Meta;
-use Joomla\CMS\Date\Date;
 use Joomla\CMS\Environment\Browser;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -311,7 +310,7 @@ $i = 0;
 									</div>
 								</td>
 								<td class="w-20 d-none d-md-table-cell">
-									<?= (new Date($item->created))->format(Text::_('DATE_FORMAT_LC2'), true, true) ?>
+									<?= Factory::getDate($item->created)->format(Text::_('DATE_FORMAT_LC2'), true, true) ?>
 								</td>
 								<td class="w-5 d-none d-md-table-cell text-center">
 									<?php echo HTMLHelper::_('engage.published', $item->enabled, $i, 'comments.', $canChange, 'cb'); ?>

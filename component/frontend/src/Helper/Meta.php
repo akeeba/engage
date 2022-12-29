@@ -10,7 +10,6 @@ namespace Akeeba\Component\Engage\Site\Helper;
 defined('_JEXEC') or die();
 
 use Akeeba\Component\Engage\Administrator\Model\CommentsModel;
-use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use DateInterval;
 use Exception;
 use InvalidArgumentException;
@@ -157,7 +156,7 @@ final class Meta
 			'url'           => null,
 			'public_url'    => null,
 			'published'     => false,
-			'published_on'  => new Date(),
+			'published_on'  => Factory::getDate(),
 			'access'        => 0,
 			'parent_access' => null,
 			'parameters'    => new Registry(),

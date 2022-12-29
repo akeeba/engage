@@ -20,11 +20,10 @@ defined('_JEXEC') or die;
 
 use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use Akeeba\Component\Engage\Site\Helper\Meta;
-use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\HTML\HTMLHelper;
 
 /** @var CommentTable $commentTable */
 $commentTable = Factory::getApplication()
@@ -94,7 +93,7 @@ endif;
 					'MOD_ENGAGE_LATEST_LBL_COMMENTED_ON',
 					$comment->user_name,
 					$commentUri->toString(),
-					HTMLHelper::_('engage.date', new Date($comment->created))
+					HTMLHelper::_('engage.date', Factory::getDate($comment->created))
 				) ?>
 			</div>
 			<div>

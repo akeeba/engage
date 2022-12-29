@@ -14,7 +14,7 @@ use Akeeba\Component\Engage\Administrator\Table\CommentTable;
 use Akeeba\Component\Engage\Site\Exceptions\BlatantSpam;
 use Akeeba\Component\Engage\Site\Helper\Meta;
 use Exception;
-use Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Http\HttpFactory;
 use Joomla\CMS\Language\LanguageHelper;
 use Joomla\CMS\Plugin\CMSPlugin;
@@ -246,7 +246,7 @@ class Akismet extends CMSPlugin implements SubscriberInterface
 
 		try
 		{
-			$createdOn = (new Date($comment->created_on))->toISO8601();
+			$createdOn = Factory::getDate($comment->created_on)->toISO8601();
 		}
 		catch (Exception $e)
 		{

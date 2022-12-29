@@ -20,9 +20,7 @@ use Exception;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 use Joomla\CMS\Access\Access;
-use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Application\WebApplication;
-use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -30,7 +28,6 @@ use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 use Joomla\Database\DatabaseAwareTrait;
-use Joomla\Database\DatabaseDriver;
 use Joomla\Database\ParameterType;
 use Joomla\Event\Event;
 use Joomla\Event\SubscriberInterface;
@@ -423,7 +420,7 @@ class Email extends CMSPlugin implements SubscriberInterface
 				$tz = new DateTimeZone('UTC');
 			}
 
-			$jCreatedOn = new Date($comment->created);
+			$jCreatedOn = Factory::getDate($comment->created);
 			$jCreatedOn->setTimezone($tz);
 
 			// Try to send an email

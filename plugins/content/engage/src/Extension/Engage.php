@@ -14,8 +14,6 @@ namespace Joomla\Plugin\Content\Engage\Extension;
 defined('_JEXEC') or die;
 
 use Akeeba\Component\Engage\Administrator\Extension\EngageComponent;
-use Akeeba\Component\Engage\Administrator\Helper\CacheCleaner;
-use Akeeba\Component\Engage\Administrator\Helper\ComponentParams;
 use Akeeba\Component\Engage\Administrator\Helper\LayoutHelper;
 use Akeeba\Component\Engage\Administrator\Helper\UserFetcher;
 use Akeeba\Component\Engage\Administrator\Model\CommentsModel;
@@ -23,7 +21,6 @@ use Akeeba\Component\Engage\Administrator\Service\ComponentParameters;
 use Akeeba\Component\Engage\Site\Helper\Meta;
 use Exception;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Date\Date;
 use Joomla\CMS\Dispatcher\ComponentDispatcherFactory;
 use Joomla\CMS\Document\HtmlDocument;
 use Joomla\CMS\Factory;
@@ -245,12 +242,12 @@ class Engage extends CMSPlugin implements SubscriberInterface
 			$url = 'index.php?option=com_content&task=article.edit&id=' . $row->id;
 		}
 
-		$publishUp = new Date();
+		$publishUp = Factory::getDate();
 		$db        = $this->getDatabase();
 
 		if (!empty($row->publish_up) && ($row->publish_up != $db->getNullDate()))
 		{
-			$publishUp = new Date($row->publish_up);
+			$publishUp = Factory::getDate($row->publish_up);
 		}
 
 		$event->setArgument('result', array_merge($result, [
@@ -928,7 +925,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		{
 			try
 			{
-				$publishUp = new Date($row->publish_up);
+				$publishUp = Factory::getDate($row->publish_up);
 
 				if ($publishUp->toUnix() > time())
 				{
@@ -945,7 +942,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		{
 			try
 			{
-				$publishDown = new Date($row->publish_down);
+				$publishDown = Factory::getDate($row->publish_down);
 
 				if ($publishDown->toUnix() < time())
 				{
