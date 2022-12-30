@@ -337,6 +337,11 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		[$context, $row, $params, $page] = $event->getArguments();
 		$result = $event->getArgument('result', []);
 
+		if (($row->access ?? 0) > 0 && !in_array($row->access, $this->getApplication()->getIdentity()->getAuthorisedViewLevels()))
+		{
+			return;
+		}
+
 		$event->setArgument('result', array_merge($result, [
 			$this->renderCommentCount($params, $row, $context, false) .
 			$this->renderComments($params, $row, $context),
@@ -362,6 +367,11 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 */
 		[$context, $row, $params, $page] = $event->getArguments();
 		$result = $event->getArgument('result', []);
+
+		if (($row->access ?? 0) > 0 && !in_array($row->access, $this->getApplication()->getIdentity()->getAuthorisedViewLevels()))
+		{
+			return;
+		}
 
 		$event->setArgument('result', array_merge($result, [
 			$this->renderCommentCount($params, $row, $context, true),
