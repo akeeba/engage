@@ -467,10 +467,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 */
 	public function onContentPrepareForm(Event $event): void
 	{
-		if ($this->getApplication()->isClient('administrator'))
-		{
-			$this->loadLanguage();
-		}
+		$this->loadLanguage();
 
 		/**
 		 * @var   Form   $form The Joomla Form object we are manipulating
