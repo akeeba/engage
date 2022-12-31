@@ -369,14 +369,14 @@ class Email extends CMSPlugin implements SubscriberInterface
 		$data = [
 			'SITEURL'           => Uri::base(),
 			'SITENAME'          => $this->getApplication()->get('sitename', 'A Joomla! site'),
-			'NAME'              => htmlentities($commentUser->name),
-			'EMAIL'             => htmlentities($commentUser->email),
-			'IP'                => htmlentities($comment->ip),
-			'USER_AGENT'        => htmlentities($comment->user_agent),
+			'NAME'              => strip_tags($commentUser->name),
+			'EMAIL'             => strip_tags($commentUser->email),
+			'IP'                => strip_tags($comment->ip),
+			'USER_AGENT'        => strip_tags($comment->user_agent),
 			'CONTENT_LINK'      => $meta['public_url'],
 			'COMMENT_LINK'      => $publicUri->toString(),
-			'CONTENT_TITLE'     => htmlentities($meta['title']),
-			'CONTENT_CATEGORY'  => htmlentities($meta['category']),
+			'CONTENT_TITLE'     => strip_tags($meta['title']),
+			'CONTENT_CATEGORY'  => strip_tags($meta['category']),
 			'AVATAR_URL'        => $avatarUrl,
 			'COMMENT_SANITIZED' => $processedComment,
 			'COMMENT_PLAINTEXT' => $plainTextConverter->getText(),
@@ -427,8 +427,8 @@ class Email extends CMSPlugin implements SubscriberInterface
 			try
 			{
 				TemplateEmails::sendMail($type, array_merge($data, [
-					'RECIPIENT_NAME'   => htmlentities($recipient->name),
-					'RECIPIENT_EMAIL'  => htmlentities($recipient->email),
+					'RECIPIENT_NAME'   => strip_tags($recipient->name),
+					'RECIPIENT_EMAIL'  => strip_tags($recipient->email),
 					'DATE_LOCAL'       => $jCreatedOn->format($dateFormat, true),
 					'PUBLISH_URL'      => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.publish', urlencode($returnUrlComment)), $comment, $recipient->email),
 					'UNPUBLISH_URL'    => SignedURL::getAbsoluteSignedURL(sprintf($protoUrl, 'comments.unpublish', urlencode($returnUrl)), $comment, $recipient->email),
