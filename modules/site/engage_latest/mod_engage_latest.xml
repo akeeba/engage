@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--~
   ~ @package   AkeebaEngage
-  ~ @copyright Copyright (c)2020-2022 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @copyright Copyright (c)2020-2023 Nicholas K. Dionysopoulos / Akeeba Ltd
   ~ @license   GNU General Public License version 3, or later
   -->
 
@@ -9,7 +9,7 @@
 	<name>MOD_ENGAGE_LATEST</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<creationDate>2023-01-03</creationDate>
-	<copyright>Copyright (c)2020-2021 Nicholas K. Dionysopoulos / Akeeba Ltd</copyright>
+	<copyright>Copyright (c)2020-2023 Nicholas K. Dionysopoulos / Akeeba Ltd</copyright>
 	<license>GNU GPL v3 or later</license>
 	<authorEmail>nicholas@akeeba.com</authorEmail>
 	<authorUrl>www.akeeba.com</authorUrl>

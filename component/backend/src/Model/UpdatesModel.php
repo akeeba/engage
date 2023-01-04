@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaEngage
- * @copyright Copyright (c)2020-2022 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2020-2023 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -533,7 +533,7 @@ class UpdatesModel extends BaseDatabaseModel
     <packager>Akeeba Ltd</packager>
     <packagerurl>https://www.akeeba.com</packagerurl>
 
-    <copyright>Copyright (c)2020-2021 Akeeba Ltd</copyright>
+    <copyright>Copyright (c)2020-2023 Akeeba Ltd</copyright>
     <license>GNU GPL v3 or later</license>
 
     <description>Akeeba Engage installation package</description>
