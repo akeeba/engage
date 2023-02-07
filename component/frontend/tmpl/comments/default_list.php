@@ -222,7 +222,7 @@ $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->ena
 
 		<div class="akengage-comment-body" itemprop="text">
 			<?= HTMLHelper::_('engage.processCommentTextForDisplay', $comment->body) ?>
-			<?php if (!empty($comment->modified_by)): ?>
+			<?php if ((!empty($comment->modified_by)) && (Factory::getDate($comment->modified)->setTimezone($this->userTimezone) != $commentDate)): ?>
 			<div class="my-2 border-top border-1 border-muted text-muted small">
 				<?= Text::sprintf('COM_ENGAGE_LBL_COMMENT_MODIFIED', Factory::getDate($comment->modified)->setTimezone($this->userTimezone)->format(Text::_('DATE_FORMAT_LC2'), true), $comment->name ?: UserFetcher::getUser($comment->modified_by)->name) ?>
 			</div>
