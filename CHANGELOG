@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.2.5
+================================================================================
+# [MEDIUM] Just created comments appear as edited
+
 Akeeba Engage 3.2.4
 ================================================================================
 ~ Prevent comments display when “Show unauthorised links” option is enabled in Joomla's content component or menu item

@@ -69,7 +69,13 @@ $previousLevel = $comment->depth;
 $avatar        = Avatar::getUserAvatar($comment->created_by, $maxAvatarWidth, $comment->email);
 $profile       = Avatar::getProfileURL($user);
 $commentDate   = Factory::getDate($comment->created)->setTimezone($this->userTimezone);
-$ipLookupURL  = $this->getIPLookupURL($comment->ip);
+$ipLookupURL   = $this->getIPLookupURL($comment->ip);
+$isModified    = !empty($comment->modified_by) && !empty($comment->modified) && (
+		empty($comment->created_by) || empty($comment->created) || (
+			($comment->modified_by != $comment->created_by) &&
+			($comment->modified != $comment->created)
+		)
+	);
 $openListItem++;
 $this->ensureHasParentInfo($comment, $parentIds, $parentNames);
 $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->enabled == -3) ? 'warning' : 'danger')
@@ -222,7 +228,7 @@ $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->ena
 
 		<div class="akengage-comment-body" itemprop="text">
 			<?= HTMLHelper::_('engage.processCommentTextForDisplay', $comment->body) ?>
-			<?php if (!empty($comment->modified_by)): ?>
+			<?php if ($isModified): ?>
 			<div class="my-2 border-top border-1 border-muted text-muted small">
 				<?= Text::sprintf('COM_ENGAGE_LBL_COMMENT_MODIFIED', Factory::getDate($comment->modified)->setTimezone($this->userTimezone)->format(Text::_('DATE_FORMAT_LC2'), true), $comment->name ?: UserFetcher::getUser($comment->modified_by)->name) ?>
 			</div>

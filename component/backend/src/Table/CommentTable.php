@@ -349,13 +349,6 @@ class CommentTable extends AbstractTable
 		);
 		$this->getDispatcher()->dispatch('onTableBeforeStore', $event);
 
-		$currentAssetId = 0;
-
-		if (!empty($this->asset_id))
-		{
-			$currentAssetId = $this->asset_id;
-		}
-
 		// We have to unset typeAlias since updateObject / insertObject will try to insert / update all public variables...
 		$typeAlias = $this->typeAlias;
 		unset($this->typeAlias);
