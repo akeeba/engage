@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Engage 3.2.5
 ================================================================================
+# [MEDIUM] Plugins not enabled on clean installation
 # [MEDIUM] Just created comments appear as edited
 
 Akeeba Engage 3.2.4

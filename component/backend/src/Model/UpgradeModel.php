@@ -10,24 +10,24 @@ namespace Akeeba\Component\Engage\Administrator\Model;
 defined('_JEXEC') or die;
 
 use DirectoryIterator;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Installer\Adapter\PackageAdapter;
 use Joomla\CMS\Installer\Installer;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\MVC\Model\BaseModel;
 use Joomla\CMS\Table\Extension;
 use Joomla\CMS\User\UserHelper;
-use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Database\ParameterType;
 use RuntimeException;
 use SimpleXMLElement;
 use Throwable;
 
 #[\AllowDynamicProperties]
-class UpgradeModel extends BaseDatabaseModel
+class UpgradeModel extends BaseModel
 {
+	use DatabaseAwareTrait;
+
 	/** @var string[] Included extensions to automatically publish on NEW INSTALLATION OR UPGRADE */
 	private const ALWAYS_ENABLE_EXTENSIONS = [
 	];
