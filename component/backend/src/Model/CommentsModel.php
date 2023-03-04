@@ -458,7 +458,7 @@ class CommentsModel extends ListModel
 				$fsValue = '%' . substr($fltSearch, 3) . '%';
 
 				$query->where($db->quoteName('c.ip') . ' LIKE :filter_search')
-					->bind(':filter_search', $fsValue, ParameterType::INTEGER);
+					->bind(':filter_search', $fsValue, ParameterType::STRING);
 			}
 			elseif (substr($fltSearch, 0, 5) === 'user:')
 			{
