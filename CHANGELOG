@@ -4,6 +4,7 @@ Akeeba Engage 3.2.5
 # [MEDIUM] Plugins not enabled on clean installation
 # [MEDIUM] Just created comments appear as edited
 # [LOW] Filtering by IP does not work in the backend Comments page (gh-267)
+# [LOW] Button to apply IP filtering does not work in the backend Comments page (gh-267)
 
 Akeeba Engage 3.2.4
 ================================================================================

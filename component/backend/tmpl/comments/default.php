@@ -161,7 +161,7 @@ $i = 0;
 									<div class="d-flex flex-row flex-wrap gap-1">
 										<div class="comEngageIpArea flex-grow-1 d-flex d-row gap-1">
 											<div class="flex-shrink-1">
-												<a href="<?= Route::_('index.php?option=com_engage&view=comments&filter_search=ip%3A' . urlencode($item->ip) . '&limitstart=0') ?>"
+												<a href="<?= Route::_('index.php?option=com_engage&view=comments&filter[search]=ip:' . urlencode($item->ip) . '&limitstart=0') ?>"
 												   class="btn btn-outline-primary btn-sm hasTooltip"
 												   title="<?= Text::_('JSEARCH_FILTER_LABEL') . ' ' . $this->escape($item->ip) ?>"
 												>
