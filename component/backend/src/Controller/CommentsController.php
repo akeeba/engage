@@ -123,20 +123,26 @@ class CommentsController extends AdminController
 			{
 				$model->publish($cid, -3);
 				$errors = $model->getErrors();
-				$ntext  = null;
 
-				if ($errors)
+				if (empty($errors))
 				{
-					Factory::getApplication()->enqueueMessage(Text::plural($this->text_prefix . '_N_ITEMS_MARKED_POSSIBLE_SPAM', \count($cid)), 'error');
+					Factory::getApplication()
+						->enqueueMessage(
+							Text::plural(
+								$this->text_prefix . '_N_ITEMS_MARKED_POSSIBLE_SPAM',
+								\count($cid)
+							)
+						);
 				}
-				else
+				elseif (\count($cid))
 				{
-					$ntext = $this->text_prefix . '_N_ITEMS_FAILED_MARK_POSSIBLE_SPAM';
-				}
-
-				if (\count($cid))
-				{
-					$this->setMessage(Text::plural($ntext, \count($cid)));
+					$this->setMessage(
+						Text::plural(
+							$this->text_prefix . '_N_ITEMS_FAILED_MARK_POSSIBLE_SPAM',
+							\count($cid)
+						),
+						'error'
+					);
 				}
 			}
 			catch (\Exception $e)
