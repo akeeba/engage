@@ -193,7 +193,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 * @return  void
 	 * @since   1.0.0
 	 */
-	public function onDataComplianceGetWipeBulletpoints(Event $event): ?array
+	public function onDataComplianceGetWipeBulletpoints(Event $event)
 	{
 		$event->setArgument('result', array_merge($event->getArgument('result', []), [
 			[
