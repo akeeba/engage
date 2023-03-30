@@ -286,7 +286,7 @@ abstract class TemplateEmails
 		}
 
 		//if ($user->guest || $user->block || !$user->sendEmail)
-		if ($user->guest || $user->block)
+		if ($user->block)
 		{
 			return false;
 		}

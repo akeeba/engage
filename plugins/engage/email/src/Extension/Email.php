@@ -390,7 +390,7 @@ class Email extends CMSPlugin implements SubscriberInterface
 			// Get the recipient Joomla user
 			try
 			{
-				$recipient = UserFetcher::getUser($userIDs[$email]);
+				$recipient = isset($userIDs[$email]) ? UserFetcher::getUser($userIDs[$email]) : null;
 			}
 			catch (Exception $e)
 			{
