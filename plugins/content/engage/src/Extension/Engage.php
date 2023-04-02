@@ -401,7 +401,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 			true,
 		]));
 
-		if (!in_array($context, ['com_categories.category', 'com_content.article']))
+		// In the frontend it uses com_content.form because screw you, that's why.
+		if (!in_array($context, ['com_categories.category', 'com_content.article', 'com_content.form']))
 		{
 			return;
 		}
@@ -446,7 +447,32 @@ class Engage extends CMSPlugin implements SubscriberInterface
 
 		$key = ($context === 'com_categories.category') ? 'params' : 'attribs';
 
-		if (!isset($data->{$key}) || !isset($data->{$key}['engage']))
+		if (!isset($data->{$key}))
+		{
+			return;
+		}
+
+		// In the frontend Joomla doesn't decode the article attribs. Why should it be consistent when it can be a PITA?
+		if (is_string($data->{$key}))
+		{
+			try
+			{
+				$temp = @json_decode($data->{$key}, true);
+			}
+			catch (Exception $e)
+			{
+				$temp = null;
+			}
+
+			if ($temp === null)
+			{
+				return;
+			}
+
+			$data->{$key} = $temp;
+		}
+
+		if (!isset($data->{$key}['engage']))
 		{
 			return;
 		}

@@ -1,8 +1,9 @@
 <?php die(); ?>
 Akeeba Engage 3.2.6
 ================================================================================
-# [LOW] Wrong email recipient when replying to guest user comment (gh-271)
 # [HIGH] The DataCompliance plugin crashed when viewing the data options for a user
+# [LOW] Wrong email recipient when replying to guest user comment (gh-271)
+# [LOW] Comment options don't work in the frontend in Joomla 4 (gh-274)
 
 Akeeba Engage 3.2.5
 ================================================================================
