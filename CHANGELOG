@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.2.7
+================================================================================
+# [LOW] opcache_invalidate may not invalidate a file
+
 Akeeba Engage 3.2.6
 ================================================================================
 # [HIGH] The DataCompliance plugin crashed when viewing the data options for a user
