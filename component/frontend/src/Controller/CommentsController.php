@@ -181,7 +181,15 @@ class CommentsController extends AdminCommentsController
 
 		// I need at least a comment ID and an email to unsubscribe
 		$id               = $this->input->get->getInt('id', 0);
+		$cid              = $this->input->get->get('cid', [], 'raw');
 		$unsubscribeEmail = $this->input->get->getString('email', '');
+
+		$cid = array_filter(ArrayHelper::toInteger($cid));
+
+		if (empty($id) && !empty($cid))
+		{
+			$id = array_shift($cid);
+		}
 
 		/** @var CommentTable $comment */
 		$comment = $this->getModel()->getTable('Comment', 'Administrator');
