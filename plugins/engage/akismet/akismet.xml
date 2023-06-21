@@ -32,6 +32,8 @@
         <language tag="el-GR">el-GR/plg_engage_akismet.sys.ini</language>
         <language tag="fr-FR">fr-FR/plg_engage_akismet.ini</language>
         <language tag="fr-FR">fr-FR/plg_engage_akismet.sys.ini</language>
+        <language tag="nl-NL">nl-NL/plg_engage_akismet.ini</language>
+        <language tag="nl-NL">nl-NL/plg_engage_akismet.sys.ini</language>
     </languages>
 
     <config>

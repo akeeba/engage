@@ -30,8 +30,10 @@
         <language tag="en-GB">en-GB/plg_system_engagecache.sys.ini</language>
         <language tag="el-GR">el-GR/plg_system_engagecache.ini</language>
         <language tag="el-GR">el-GR/plg_system_engagecache.sys.ini</language>
+        <language tag="es-ES">es-ES/plg_system_engagecache.sys.ini</language>
         <language tag="fr-FR">fr-FR/plg_system_engagecache.ini</language>
         <language tag="fr-FR">fr-FR/plg_system_engagecache.sys.ini</language>
-        <language tag="es-ES">es-ES/plg_system_engagecache.sys.ini</language>
+        <language tag="nl-NL">nl-NL/plg_system_engagecache.ini</language>
+        <language tag="nl-NL">nl-NL/plg_system_engagecache.sys.ini</language>
     </languages>
 </extension>

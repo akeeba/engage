@@ -32,6 +32,8 @@
         <language tag="el-GR">el-GR/plg_actionlog_engage.sys.ini</language>
         <language tag="fr-FR">fr-FR/plg_actionlog_engage.ini</language>
         <language tag="fr-FR">fr-FR/plg_actionlog_engage.sys.ini</language>
+        <language tag="nl-NL">nl-NL/plg_actionlog_engage.ini</language>
+        <language tag="nl-NL">nl-NL/plg_actionlog_engage.sys.ini</language>
     </languages>
 
     <config>

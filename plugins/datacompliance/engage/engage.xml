@@ -30,10 +30,12 @@
         <language tag="en-GB">en-GB/plg_datacompliance_engage.sys.ini</language>
         <language tag="el-GR">el-GR/plg_datacompliance_engage.ini</language>
         <language tag="el-GR">el-GR/plg_datacompliance_engage.sys.ini</language>
-        <language tag="fr-FR">fr-FR/plg_datacompliance_engage.ini</language>
-        <language tag="fr-FR">fr-FR/plg_datacompliance_engage.sys.ini</language>
         <language tag="es-ES">es-ES/plg_datacompliance_engage.ini</language>
         <language tag="es-ES">es-ES/plg_datacompliance_engage.sys.ini</language>
+        <language tag="fr-FR">fr-FR/plg_datacompliance_engage.ini</language>
+        <language tag="fr-FR">fr-FR/plg_datacompliance_engage.sys.ini</language>
+        <language tag="nl-NL">nl-NL/plg_datacompliance_engage.ini</language>
+        <language tag="nl-NL">nl-NL/plg_datacompliance_engage.sys.ini</language>
     </languages>
 
 </extension>

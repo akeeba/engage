@@ -30,5 +30,7 @@
 		<language tag="de-DE">de-DE/plg_console_engage.sys.ini</language>
 		<language tag="fr-FR">fr-FR/plg_console_engage.ini</language>
 		<language tag="fr-FR">fr-FR/plg_console_engage.sys.ini</language>
+		<language tag="nl-NL">nl-NL/plg_console_engage.ini</language>
+		<language tag="nl-NL">nl-NL/plg_console_engage.sys.ini</language>
 	</languages>
 </extension>

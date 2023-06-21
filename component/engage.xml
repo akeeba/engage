@@ -32,8 +32,9 @@
 		<language tag="en-GB">en-GB/com_engage.ini</language>
 		<language tag="de-DE">de-DE/com_engage.ini</language>
 		<language tag="el-GR">el-GR/com_engage.ini</language>
-		<language tag="fr-FR">fr-FR/com_engage.ini</language>
 		<language tag="es-ES">es-ES/com_engage.ini</language>
+		<language tag="fr-FR">fr-FR/com_engage.ini</language>
+		<language tag="nl-NL">nl-NL/com_engage.ini</language>
 	</languages>
 
 	<!-- Administrator back-end section -->
@@ -69,11 +70,14 @@
 			<language tag="el-GR">el-GR/com_engage.ini</language>
 			<language tag="el-GR">el-GR/com_engage.sys.ini</language>
 
+			<language tag="es-ES">es-ES/com_engage.ini</language>
+			<language tag="es-ES">es-ES/com_engage.sys.ini</language>
+
 			<language tag="fr-FR">fr-FR/com_engage.ini</language>
 			<language tag="fr-FR">fr-FR/com_engage.sys.ini</language>
 
-			<language tag="es-ES">es-ES/com_engage.ini</language>
-			<language tag="es-ES">es-ES/com_engage.sys.ini</language>
+			<language tag="nl-NL">nl-NL/com_engage.ini</language>
+			<language tag="nl-NL">nl-NL/com_engage.sys.ini</language>
 		</languages>
 	</administration>
 
