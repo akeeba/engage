@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Engage 3.2.7
 ================================================================================
+~ Block uninstallation of child extensions
 # [HIGH] Unsubscribe URL does not work (gh-279)
 # [LOW] opcache_invalidate may not invalidate a file
 

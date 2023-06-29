@@ -19,6 +19,7 @@
     <copyright>Copyright (c)2020-2023 Akeeba Ltd</copyright>
     <license>GNU GPL v3 or later</license>
     <description>PKG_ENGAGE_XML_DESCRIPTION</description>
+    <blockChildUninstall>true</blockChildUninstall>
 
     <files>
         <file type="component" id="com_engage">com_engage.zip</file>
