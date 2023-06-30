@@ -7,8 +7,8 @@
 <extension version="4.0.0" type="plugin" group="engage" method="upgrade">
     <name>PLG_ENGAGE_GRAVATAR</name>
     <description>PLG_ENGAGE_GRAVATAR_XML_DESC</description>
-    <version>3.2.6</version>
-    <creationDate>2023-05-10</creationDate>
+    <version>3.2.7</version>
+    <creationDate>2023-06-30</creationDate>
     <author>Akeeba Ltd</author>
     <authorEmail>no-reply@akeeba.com</authorEmail>
     <authorUrl>https://www.akeeba.com</authorUrl>
