@@ -14,6 +14,7 @@ use Joomla\CMS\Extension\Service\Provider\MVCFactory;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Database\DatabaseInterface;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
 use Joomla\Event\DispatcherInterface;
@@ -46,7 +47,7 @@ return new class implements ServiceProviderInterface {
 				$plugin = new Engage($subject, $config, $mvcFactory, $comDispatcherFactory);
 
 				$plugin->setApplication(Factory::getApplication());
-				$plugin->setDatabase($container->get('DatabaseDriver'));
+				$plugin->setDatabase($container->get(DatabaseInterface::class));
 
 				return $plugin;
 			}

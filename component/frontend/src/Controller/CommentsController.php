@@ -25,6 +25,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\MVC\View\ViewInterface;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Plugin\Content\Engage\Extension\Engage;
 use Joomla\Utilities\ArrayHelper;
 use RuntimeException;
@@ -205,7 +206,7 @@ class CommentsController extends AdminCommentsController
 			'email'    => $unsubscribeEmail,
 		];
 		/** @var DatabaseDriver $db */
-		$db = Factory::getContainer()->get('DatabaseDriver');
+		$db = Factory::getContainer()->get(DatabaseInterface::class);
 
 		try
 		{

@@ -15,6 +15,7 @@ use Akeeba\Component\Engage\Administrator\Service\Html\Engage;
 use Joomla\CMS\Extension\BootableExtensionInterface;
 use Joomla\CMS\Extension\MVCComponent;
 use Joomla\CMS\HTML\HTMLRegistryAwareTrait;
+use Joomla\Database\DatabaseInterface;
 use Joomla\DI\Container;
 use Psr\Container\ContainerInterface;
 
@@ -34,7 +35,7 @@ class EngageComponent extends MVCComponent implements BootableExtensionInterface
 	public function boot(ContainerInterface $container)
 	{
 		$this->container = $container;
-		$db              = $container->get('DatabaseDriver');
+		$db              = $container->get(DatabaseInterface::class);
 		$this->getRegistry()->register('engage', new Engage($db));
 	}
 

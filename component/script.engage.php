@@ -113,7 +113,7 @@ class Pkg_EngageInstallerScript extends InstallerScript
 	private function addUnsubscribeKey()
 	{
 		/** @var DatabaseDriver $db */
-		$db    = Factory::getContainer()->get('DatabaseDriver');
+		$db    = Factory::getContainer()->get(DatabaseInterface::class);
 		$query = "ALTER TABLE `#__engage_unsubscribe` ADD PRIMARY KEY (`asset_id`,`email`(100))";
 		try
 		{
@@ -128,7 +128,7 @@ class Pkg_EngageInstallerScript extends InstallerScript
 	private function dropUnsubscribeKey()
 	{
 		/** @var DatabaseDriver $db */
-		$db    = Factory::getContainer()->get('DatabaseDriver');
+		$db    = Factory::getContainer()->get(DatabaseInterface::class);
 		$query = "ALTER TABLE `#__engage_unsubscribe` DROP KEY `#__engage_unsubscribe_unique`";
 		try
 		{
@@ -183,11 +183,11 @@ class Pkg_EngageInstallerScript extends InstallerScript
 
 		if (method_exists($upgradeModel, 'setDatabase'))
 		{
-			$upgradeModel->setDatabase($this->dbo ?? Factory::getContainer()->get('DatabaseDriver'));
+			$upgradeModel->setDatabase($this->dbo ?? Factory::getContainer()->get(DatabaseInterface::class));
 		}
 		elseif (method_exists($upgradeModel, 'setDbo'))
 		{
-			$upgradeModel->setDbo($this->dbo ?? Factory::getContainer()->get('DatabaseDriver'));
+			$upgradeModel->setDbo($this->dbo ?? Factory::getContainer()->get(DatabaseInterface::class));
 		}
 
 		if (method_exists($upgradeModel, 'init'))
@@ -269,6 +269,6 @@ class Pkg_EngageInstallerScript extends InstallerScript
 			}
 		}
 
-		$this->dbo = Factory::getContainer()->get('DatabaseDriver');
+		$this->dbo = Factory::getContainer()->get(DatabaseInterface::class);
 	}
 }

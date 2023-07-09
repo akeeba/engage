@@ -19,6 +19,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseInterface;
 
 defined('_JEXEC') or die;
 
@@ -217,7 +218,7 @@ final class Engage
 		// Special state for dates
 		if ($publishUp || $publishDown)
 		{
-			$nullDate = Factory::getContainer()->get('DatabaseDriver')->getNullDate();
+			$nullDate = Factory::getContainer()->get(DatabaseInterface::class)->getNullDate();
 			$nowDate  = Factory::getDate()->toUnix();
 
 			$tz = Factory::getUser()->getTimezone();

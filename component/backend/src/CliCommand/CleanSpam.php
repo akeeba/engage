@@ -21,6 +21,7 @@ use Joomla\CMS\MVC\Factory\MVCFactoryAwareTrait;
 use Joomla\CMS\Router\Route;
 use Joomla\Console\Command\AbstractCommand;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -77,7 +78,7 @@ class CleanSpam extends AbstractCommand
 
 		// Disable database query logging (causes out–of–memory errors)
 		/** @var DatabaseDriver $db */
-		$db = Factory::getContainer()->get('DatabaseDriver');
+		$db = Factory::getContainer()->get(DatabaseInterface::class);
 		$db->setMonitor(null);
 
 		// Initialise the CLI routing

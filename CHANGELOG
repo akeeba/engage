@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.2.8
+================================================================================
+~ Joomla 5 preparation: Use DatabaseInterface instead of DatabaseDriver
+
 Akeeba Engage 3.2.7
 ================================================================================
 ~ Block uninstallation of child extensions

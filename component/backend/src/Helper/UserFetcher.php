@@ -15,6 +15,7 @@ use Joomla\CMS\Mail\MailHelper;
 use Joomla\CMS\User\User;
 use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseInterface;
 
 /**
  * Utility class to retrieve user objects given the user ID.
@@ -140,7 +141,7 @@ class UserFetcher
 		}
 
 		/** @var DatabaseDriver $db */
-		$db = Factory::getContainer()->get('DatabaseDriver');
+		$db = Factory::getContainer()->get(DatabaseInterface::class);
 		$q  = $db->getQuery(true)
 			->select($db->qn('id'))
 			->from($db->qn('#__users'))

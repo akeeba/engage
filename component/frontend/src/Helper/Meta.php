@@ -22,6 +22,7 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Event\Event;
 use Joomla\Registry\Registry;
 
@@ -280,7 +281,7 @@ final class Meta
 		}
 
 		/** @var DatabaseDriver $db */
-		$db        = Factory::getContainer()->get('DatabaseDriver');
+		$db        = Factory::getContainer()->get(DatabaseInterface::class);
 		$cid       = [];
 
 		// Nuke comments directly attributed to the user ID

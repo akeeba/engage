@@ -17,6 +17,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Database\DatabaseInterface;
 
 /** @var \Akeeba\Component\Engage\Administrator\View\Comments\HtmlView $this */
 
@@ -28,7 +29,7 @@ $user      = $app->getIdentity();
 $userId    = $user->get('id');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
-$nullDate  = Factory::getContainer()->get('DatabaseDriver')->getNullDate();
+$nullDate  = Factory::getContainer()->get(DatabaseInterface::class)->getNullDate();
 
 // The asset we are filtered by
 $filteredAsset = $this->activeFilters['asset_id'] ?? null;
