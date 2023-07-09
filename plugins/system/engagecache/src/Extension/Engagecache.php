@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Joomla\Plugin\System\Engagecache\Extension;
+namespace Akeeba\Plugin\System\EngageCache\Extension;
 
 defined('_JEXEC') or die;
 

@@ -15,7 +15,7 @@
 	<copyright>Copyright (c)2020-2023 Nicholas K. Dionysopoulos</copyright>
 	<license>GNU General Public License version 3, or later</license>
 	<description>PLG_CONSOLE_ENGAGE_XML_DESCRIPTION</description>
-	<namespace path="src">Joomla\Plugin\Console\Engage</namespace>
+	<namespace path="src">Akeeba\Plugin\Console\Engage</namespace>
 	<files>
 		<folder>services</folder>
 		<folder plugin="engage">src</folder>

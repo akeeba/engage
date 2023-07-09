@@ -14,7 +14,7 @@ use Joomla\Database\DatabaseInterface;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
 use Joomla\Event\DispatcherInterface;
-use Joomla\Plugin\Datacompliance\Engage\Extension\Engage;
+use Akeeba\Plugin\Datacompliance\Engage\Extension\Engage;
 
 return new class implements ServiceProviderInterface {
 	/**

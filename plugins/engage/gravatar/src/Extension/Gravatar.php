@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Joomla\Plugin\Engage\Gravatar\Extension;
+namespace Akeeba\Plugin\Engage\Gravatar\Extension;
 
 defined('_JEXEC') or die;
 

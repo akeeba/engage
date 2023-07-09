@@ -14,7 +14,7 @@
     <authorUrl>https://www.akeeba.com</authorUrl>
     <copyright>Copyright (c)2020-2023 Akeeba Ltd</copyright>
     <license>GNU/GPL v3 or any later version</license>
-    <namespace path="src">Joomla\Plugin\Engage\Gravatar</namespace>
+    <namespace path="src">Akeeba\Plugin\Engage\Gravatar</namespace>
 
     <files>
         <folder plugin="gravatar">src</folder>

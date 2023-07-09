@@ -13,7 +13,7 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
 use Joomla\Event\DispatcherInterface;
-use Joomla\Plugin\Engage\Akismet\Extension\Akismet;
+use Akeeba\Plugin\Engage\Akismet\Extension\Akismet;
 
 return new class implements ServiceProviderInterface {
 	/**

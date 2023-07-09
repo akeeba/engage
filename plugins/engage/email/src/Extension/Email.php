@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Joomla\Plugin\Engage\Email\Extension;
+namespace Akeeba\Plugin\Engage\Email\Extension;
 
 use Akeeba\Component\Engage\Administrator\Helper\Avatar;
 use Akeeba\Component\Engage\Administrator\Helper\Html2Text;

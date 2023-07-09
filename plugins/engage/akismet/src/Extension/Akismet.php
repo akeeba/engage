@@ -5,7 +5,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Joomla\Plugin\Engage\Akismet\Extension;
+namespace Akeeba\Plugin\Engage\Akismet\Extension;
 
 defined('_JEXEC') or die();
 

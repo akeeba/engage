@@ -26,7 +26,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\MVC\View\ViewInterface;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseInterface;
-use Joomla\Plugin\Content\Engage\Extension\Engage;
+use Akeeba\Plugin\Content\Engage\Extension\Engage;
 use Joomla\Utilities\ArrayHelper;
 use RuntimeException;
 
