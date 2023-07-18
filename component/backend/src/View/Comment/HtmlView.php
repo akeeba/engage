@@ -98,8 +98,8 @@ class HtmlView extends BaseHtmlView
 			'icon-engage'
 		);
 
-		ToolbarHelper::apply('comment.save');
-		ToolbarHelper::save('comment.apply');
+		ToolbarHelper::apply('comment.apply');
+		ToolbarHelper::save('comment.save');
 
 		ToolbarHelper::cancel('comment.cancel', 'JTOOLBAR_CLOSE');
 	}
