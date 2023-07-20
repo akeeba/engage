@@ -1,8 +1,9 @@
 <?php die(); ?>
-Akeeba Engage 3.2.8
+Akeeba Engage 3.3.0
 ================================================================================
 ~ Joomla 5 preparation: Use DatabaseInterface instead of DatabaseDriver
 ~ Change the plugins' namespaces
+~ Force Joomla to create its namespace map afresh at the end of installation, in case it failed to do that automatically
 # [HIGH] The Engage user plugin may crash logging in a user if the Engage content plugin is disabled
 # [LOW] Save and Save And Close are swapped
 
