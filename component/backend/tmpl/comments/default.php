@@ -21,6 +21,11 @@ use Joomla\Database\DatabaseInterface;
 
 /** @var \Akeeba\Component\Engage\Administrator\View\Comments\HtmlView $this */
 
+if (version_compare(JVERSION, '4.999.999', 'lt'))
+{
+	$this->loadAnyTemplate('Common/joomla_eol');
+}
+
 HTMLHelper::_('bootstrap.tooltip', '.hasTooltip');
 HTMLHelper::_('bootstrap.modal');
 
