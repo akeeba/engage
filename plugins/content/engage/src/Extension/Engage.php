@@ -158,7 +158,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		/**
 		 * @var ?string $filter The partial article name to match.
 		 */
-		[$filter] = $event->getArguments();
+		[$filter] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 
 		$filter = trim($filter ?? '');
@@ -207,7 +207,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   int  $assetId        The asset ID to get the information for
 		 * @var   bool $loadParameters Should I load the comment parameters? (It's slow!)
 		 */
-		[$assetId, $loadParameters] = $event->getArguments();
+		[$assetId, $loadParameters] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 
 		if (empty($assetId))
@@ -283,7 +283,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   string|null          $context
 		 * @var   Content|object|mixed $data
 		 */
-		[$context, $data] = $event->getArguments();
+		[$context, $data] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 
 		if ($context != 'com_content.article')
@@ -334,7 +334,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   object      $params  The category parameters, computed through the categories' hierarchy
 		 * @var   int|null    $page    Page number for multi-page articles
 		 */
-		[$context, $row, $params, $page] = $event->getArguments();
+		[$context, $row, $params, $page] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 
 		if (($row->access ?? 0) > 0 && !in_array($row->access, $this->getApplication()->getIdentity()->getAuthorisedViewLevels()))
@@ -365,7 +365,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   object      $params  The category parameters, computed through the categories' hierarchy
 		 * @var   int|null    $page    Page number for multi-page articles
 		 */
-		[$context, $row, $params, $page] = $event->getArguments();
+		[$context, $row, $params, $page] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 
 		if (($row->access ?? 0) > 0 && !in_array($row->access, $this->getApplication()->getIdentity()->getAuthorisedViewLevels()))
@@ -394,7 +394,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   bool         $isNew   Is this a new record?
 		 * @var   object       $data    Data being saved
 		 */
-		[$context, $table, $isNew, $data] = $event->getArguments();
+		[$context, $table, $isNew, $data] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 
 		$event->setArgument('result', array_merge($result, [
@@ -434,7 +434,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   string|null $context Context for the content being loaded
 		 * @var   object      $data    Data being saved
 		 */
-		[$context, $data] = $event->getArguments();
+		[$context, $data] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [
 			true,
@@ -499,7 +499,8 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   Form   $form The Joomla Form object we are manipulating
 		 * @var   object $data The data assigned to the form.
 		 */
-		[$form, $data] = $event->getArguments();
+		[$form, $data] = array_values($event->getArguments());
+
 		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [
 			true,

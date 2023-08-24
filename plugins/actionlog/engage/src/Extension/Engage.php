@@ -94,7 +94,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	public function onAkeebaEngageReportHam(Event $event): void
 	{
 		/** @var   CommentTable $comment */
-		[$comment] = $event->getArguments();
+		[$comment] = array_values($event->getArguments());
 
 		if ($this->getApplication()->getIdentity()->guest)
 		{
@@ -124,7 +124,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	public function onAkeebaEngageReportSpam(Event $event): void
 	{
 		/** @var   CommentTable $comment */
-		[$comment] = $event->getArguments();
+		[$comment] = array_values($event->getArguments());
 
 		if ($this->getApplication()->getIdentity()->guest)
 		{
@@ -153,7 +153,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	public function onComEngageCommentTableAfterCreate(Event $event): void
 	{
 		/** @var   CommentTable $comment */
-		[$comment] = $event->getArguments();
+		[$comment] = array_values($event->getArguments());
 
 		if ($this->getApplication()->getIdentity()->guest)
 		{
@@ -186,7 +186,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 	public function onComEngageCommentTableAfterUpdate(Event $event): void
 	{
 		/** @var   CommentTable $comment */
-		[$comment] = $event->getArguments();
+		[$comment] = array_values($event->getArguments());
 
 		if ($this->getApplication()->getIdentity()->guest)
 		{
@@ -216,7 +216,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 		 * @var   string       $context
 		 * @var   CommentTable $comment
 		 */
-		[$context, $comment] = $event->getArguments();
+		[$context, $comment] = array_values($event->getArguments());
 
 		if (!in_array($context, ['com_engage.comment', 'com_engage.comments']))
 		{
@@ -258,7 +258,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 		 * @var  array  $pks
 		 * @var  int    $value
 		 */
-		[$context, $pks, $value] = $event->getArguments();
+		[$context, $pks, $value] = array_values($event->getArguments());
 
 		if (!in_array($context, ['com_engage.comment', 'com_engage.comments']))
 		{
@@ -319,7 +319,7 @@ class Engage extends ActionLogPlugin implements SubscriberInterface
 		 * @var   CommentTable $comment The comment which was used as a reference for the conversation
 		 * @var   string|null  $email   The email address being unsubscribed
 		 */
-		[$comment, $email] = $event->getArguments();
+		[$comment, $email] = array_values($event->getArguments());
 
 		if ($this->getApplication()->getIdentity()->guest)
 		{

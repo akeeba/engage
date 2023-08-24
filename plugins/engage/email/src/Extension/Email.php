@@ -71,7 +71,7 @@ class Email extends CMSPlugin implements SubscriberInterface
 	public function sendEmailsAfterPostCreation(Event $event): void
 	{
 		/** @var CommentTable $comment The comment table being saved */
-		[$comment] = $event->getArguments();
+		[$comment] = array_values($event->getArguments());
 
 		// No emails in non-web applications, please
 		if (!($this->getApplication() instanceof WebApplication))

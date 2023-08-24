@@ -109,7 +109,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 */
 	public function onUserAfterDelete(Event $event): void
 	{
-		[$user, $success, $msg] = $event->getArguments();
+		[$user, $success, $msg] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [true]));
 
@@ -164,7 +164,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	 */
 	public function onUserBeforeDelete(Event $event): void
 	{
-		[$user] = $event->getArguments();
+		[$user] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [true]));
 
@@ -209,7 +209,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   array $user    Holds the user data
 		 * @var   array $options Array holding options (remember, autoregister, group)
 		 */
-		[$user, $options] = $event->getArguments();
+		[$user, $options] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 		$event->setArgument('result', array_merge($result, [true]));
 

@@ -59,7 +59,7 @@ class Gravatar extends CMSPlugin implements SubscriberInterface
 		 * @var   User $user The Joomla user object
 		 * @var   int  $size The size of the avatar in pixels (avatars are square)
 		 */
-		[$user, $size] = $event->getArguments();
+		[$user, $size] = array_values($event->getArguments());
 
 		$hash   = md5($user->email);
 		$rating = $this->params->get('rating', 'g');
@@ -109,7 +109,7 @@ class Gravatar extends CMSPlugin implements SubscriberInterface
 		/**
 		 * @var   User $user The Joomla user object
 		 */
-		[$user] = $event->getArguments();
+		[$user] = array_values($event->getArguments());
 
 		$useProfile = $this->params->get('profile_link', 1);
 		$url        = null;

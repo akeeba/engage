@@ -91,7 +91,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   int    $userID The user ID we are asked to delete
 		 * @var   string $type   The export type (user, admin, lifecycle)
 		 */
-		[$userID, $type] = $event->getArguments();
+		[$userID, $type] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 
 		$ret = [
@@ -127,7 +127,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	public function onDataComplianceExportUser(Event $event): void
 	{
 		/** @var   int $userID The user ID to export data for */
-		[$int] = $event->getArguments();
+		[$int] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 
 		$export = new SimpleXMLElement("<root></root>");

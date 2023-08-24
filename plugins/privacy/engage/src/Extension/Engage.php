@@ -72,7 +72,7 @@ class Engage extends PrivacyPlugin implements SubscriberInterface
 		 * @var   PrivacyTableRequest $request The request record being processed
 		 * @var   User                $user    The user account associated with this request if available
 		 */
-		[$request, $user] = $event->getArguments();
+		[$request, $user] = array_values($event->getArguments());
 		$result = $event->getArgument('result', []);
 
 		/** @var UserTable $userTable */
@@ -132,7 +132,7 @@ class Engage extends PrivacyPlugin implements SubscriberInterface
 		 * @var   PrivacyTableRequest $request The request record being processed
 		 * @var   User                $user    The user account associated with this request if available
 		 */
-		[$request, $user] = $event->getArguments();
+		[$request, $user] = array_values($event->getArguments());
 
 		$language = $this->getApplication()->getLanguage();
 		$language->load('com_engage', JPATH_ADMINISTRATOR);
