@@ -24,6 +24,7 @@ use Joomla\CMS\Application\WebApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Mail\MailerFactoryInterface;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
@@ -328,7 +329,10 @@ class Email extends CMSPlugin implements SubscriberInterface
 
 		try
 		{
-			$mailer = Factory::getMailer();
+			$mailer = clone
+			(class_exists(MailerFactoryInterface::class)
+				? Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer()
+				: Factory::getMailer());
 
 			$mailer->isHtml(true);
 			$mailer->CharSet = 'UTF-8';

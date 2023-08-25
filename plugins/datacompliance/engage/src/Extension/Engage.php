@@ -20,6 +20,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Event\Event;
@@ -159,7 +160,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		}
 
 		// #__engage_comments by email
-		$user = Factory::getUser($userID);
+		$user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($userID);
 
 		$selectQuery = $db->getQuery(true)
 			->select('*')

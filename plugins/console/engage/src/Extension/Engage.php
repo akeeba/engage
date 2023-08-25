@@ -12,17 +12,19 @@ defined('_JEXEC') or die;
 use Akeeba\Component\Engage\Administrator\CliCommand\CleanSpam;
 use Joomla\Application\ApplicationEvents;
 use Joomla\Application\Event\ApplicationEvent;
-use Joomla\CMS\Application\ConsoleApplication;
-use Joomla\CMS\Factory as JoomlaFactory;
 use Joomla\CMS\MVC\Factory\MVCFactory;
 use Joomla\CMS\MVC\Factory\MVCFactoryAwareTrait;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\Console\Command\AbstractCommand;
+use Joomla\Database\DatabaseAwareInterface;
+use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Event\SubscriberInterface;
 use Throwable;
 
-class Engage extends CMSPlugin implements SubscriberInterface
+class Engage extends CMSPlugin implements SubscriberInterface, DatabaseAwareInterface
 {
 	use MVCFactoryAwareTrait;
+	use DatabaseAwareTrait;
 
 	private static $commands = [
 		CleanSpam::class,
@@ -98,11 +100,19 @@ class Engage extends CMSPlugin implements SubscriberInterface
 					continue;
 				}
 
+				/** @var AbstractCommand $command */
 				$command = new $commandFQN();
 
 				if (method_exists($command, 'setMVCFactory'))
 				{
 					$command->setMVCFactory($this->getMVCFactory());
+				}
+
+				$command->setApplication($this->getApplication());
+
+				if ($command instanceof DatabaseAwareInterface)
+				{
+					$command->setDatabase($this->getDatabase());
 				}
 
 				$this->getApplication()->addCommand($command);
@@ -117,7 +127,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 	private function initialiseComponent(): void
 	{
 		// Load the Akeeba Ticket System language files
-		$lang = JoomlaFactory::getApplication()->getLanguage();
+		$lang = $this->getApplication()->getLanguage();
 		$lang->load('com_engage', JPATH_SITE, null, true, false);
 		$lang->load('com_engage', JPATH_ADMINISTRATOR, null, true, false);
 

@@ -1230,7 +1230,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		try
 		{
 			/** @var HtmlDocument $doc */
-			$doc = Factory::getApplication()->getDocument();
+			$doc = $this->getApplication()->getDocument();
 
 			$doc->getWebAssetManager()->getRegistry()->addRegistryFile('media/com_engage/joomla.asset.json');
 
