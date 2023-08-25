@@ -284,7 +284,6 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   Content|object|mixed $data
 		 */
 		[$context, $data] = array_values($event->getArguments());
-		$result = $event->getArgument('result', []);
 
 		if ($context != 'com_content.article')
 		{
@@ -435,10 +434,6 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   object      $data    Data being saved
 		 */
 		[$context, $data] = array_values($event->getArguments());
-		$result = $event->getArgument('result', []);
-		$event->setArgument('result', array_merge($result, [
-			true,
-		]));
 
 		if (!in_array($context, ['com_categories.category', 'com_content.article']))
 		{
@@ -500,11 +495,6 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		 * @var   object $data The data assigned to the form.
 		 */
 		[$form, $data] = array_values($event->getArguments());
-
-		$result = $event->getArgument('result', []);
-		$event->setArgument('result', array_merge($result, [
-			true,
-		]));
 
 		if (!in_array($form->getName(), ['com_categories.categorycom_content', 'com_content.article']))
 		{
