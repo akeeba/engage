@@ -9,10 +9,10 @@ namespace Akeeba\Component\Engage\Site\Helper;
 
 defined('_JEXEC') or die();
 
+use Akeeba\Component\Engage\Administrator\Mixin\RunPluginsTrait;
 use Akeeba\Component\Engage\Administrator\Model\CommentsModel;
 use DateInterval;
 use Exception;
-use InvalidArgumentException;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -23,7 +23,6 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseInterface;
-use Joomla\Event\Event;
 use Joomla\Registry\Registry;
 
 /**
@@ -33,6 +32,8 @@ use Joomla\Registry\Registry;
  */
 final class Meta
 {
+	use RunPluginsTrait;
+
 	/**
 	 * Cached results of resource metadata per asset ID
 	 *
@@ -164,7 +165,7 @@ final class Meta
 		];
 
 		PluginHelper::importPlugin('content');
-		$pluginResults = self::runPlugins('onAkeebaEngageGetAssetMeta', [$assetId, $loadParameters]);
+		$pluginResults = self::triggerPluginEventStatic('onAkeebaEngageGetAssetMeta', [$assetId, $loadParameters]);
 
 		$pluginResults = array_filter($pluginResults, function ($x) {
 			return is_array($x);
@@ -372,59 +373,5 @@ final class Meta
 		self::$mvcFactory = $component->getMVCFactory();
 
 		return self::$mvcFactory;
-	}
-
-	/**
-	 * Calls all handlers associated with an event group.
-	 *
-	 * This method will only return the 'result' argument of the event
-	 *
-	 * @param   string       $eventName  The event name.
-	 * @param   array|Event  $args       An array of arguments or an Event object (optional).
-	 *
-	 * @return  array  An array of results from each function call. Note this will be an empty array if no dispatcher
-	 *                 is set.
-	 *
-	 * @throws      InvalidArgumentException
-	 * @since       3.0.0
-	 */
-	private static function runPlugins($eventName, $args = [])
-	{
-		try
-		{
-			$app = Factory::getApplication();
-		}
-		catch (Exception $e)
-		{
-			return [];
-		}
-
-		try
-		{
-			$dispatcher = $app->getDispatcher();
-		}
-		catch (\UnexpectedValueException $exception)
-		{
-			$app->getLogger()->error(sprintf('Dispatcher not set in %s, cannot trigger events.', \get_class($app)));
-
-			return [];
-		}
-
-		if ($args instanceof Event)
-		{
-			$event = $args;
-		}
-		elseif (\is_array($args))
-		{
-			$event = new Event($eventName, $args);
-		}
-		else
-		{
-			throw new InvalidArgumentException('The arguments must either be an event or an array');
-		}
-
-		$result = $dispatcher->dispatch($eventName, $event);
-
-		return !isset($result['result']) || \is_null($result['result']) ? [] : $result['result'];
 	}
 }
