@@ -201,7 +201,7 @@ class CommentModel extends AdminModel
 
 		if ($noSavedData)
 		{
-			$data             = $this->getItemTable();
+			$data             = (object) $this->getItemTable()->getProperties();
 			$data->created_by = $data->created_by ?? (UserFetcher::getUser() ?? new User())->id;
 		}
 
