@@ -74,12 +74,10 @@ HTMLHelper::_('behavior.formvalidator');
 		} ?>
 
 		<div class="control-group">
-			<div class="control-label d-none d-md-block">
-				&nbsp;
-			</div>
 			<div class="controls">
 				<button type="submit"
-						class="btn btn-lg btn-primary w-100">
+						class="btn btn-lg btn-primary w-100 akengage-comment-submit-btn"
+				>
 					<span class="fa fa-comment-dots" aria-hidden="true"></span>
 					<?= Text::_('COM_ENGAGE_COMMENTS_FORM_EDIT_BTN_SUBMIT') ?>
 				</button>

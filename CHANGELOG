@@ -2,6 +2,7 @@
 Akeeba Engage 3.3.0
 ================================================================================
 + Notice about Joomla 4 End of Service
++ Feature to show a "please wait" message while the comment is being submitted (gh-288)
 ~ Joomla 5 preparation: Use DatabaseInterface instead of DatabaseDriver
 ~ Joomla 5 preparation: Work around backwards incompatible changes in core plugin events
 ~ Joomla 5 preparation: Normalise plugin event calling

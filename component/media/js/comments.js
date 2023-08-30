@@ -293,6 +293,32 @@ akeeba.Engage.Comments.unhideReplyArea = function ()
     }
 };
 
+akeeba.Engage.Comments.onSubmit = function (e) {
+    const elButton = akeeba.Engage.Comments.getElementFromEvent(e);
+
+    if (!elButton)
+    {
+        return;
+    }
+
+    const elForm = document.forms['akengageCommentForm'];
+
+    if (!elForm)
+    {
+        console.log('Trombeta');
+        return;
+    }
+
+    e.preventDefault();
+
+    elButton.classList.add('disabled');
+    elButton.style.disabled = "disabled";
+    elButton.innerHTML      = Joomla.Text._("COM_ENGAGE_COMMENTS_FORM_BTN_SUBMIT_PLEASE_WAIT");
+
+    // The small delay is necessary for the browser to have the chance to redraw the button
+    window.setTimeout(() => elForm.submit(), 150);
+};
+
 [].slice.call(document.querySelectorAll("button.akengage-comment-edit-btn")).forEach(function (el)
 {
     el.addEventListener("click", akeeba.Engage.Comments.onEditButton);
@@ -349,6 +375,14 @@ var elHider = document.getElementById("akengage-comment-hider-button");
 if (elHider)
 {
     elHider.addEventListener("click", akeeba.Engage.Comments.onHiderButton);
+}
+
+if (Joomla.getOptions("akeeba.Engage.Comments.pleaseWait", 0) == 1)
+{
+    [].slice.call(document.querySelectorAll("button.akengage-comment-submit-btn")).forEach(function (el)
+    {
+        el.addEventListener("click", akeeba.Engage.Comments.onSubmit);
+    });
 }
 
 akeeba.Engage.Comments.loadCommenterInfo();

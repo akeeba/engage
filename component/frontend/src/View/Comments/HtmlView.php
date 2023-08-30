@@ -285,6 +285,9 @@ class HtmlView extends BaseHtmlView
 		$baseUrl->setVar('task', 'comments.possiblespam');
 		$doc->addScriptOptions('akeeba.Engage.Comments.possiblespamURL', $baseUrl->toString());
 
+		$doc->addScriptOptions('akeeba.Engage.Comments.pleaseWait', $params->get('pleaseWait', 0) ? 1 : 0);
+		Text::script('COM_ENGAGE_COMMENTS_FORM_BTN_SUBMIT_PLEASE_WAIT');
+
 		Text::script('COM_ENGAGE_COMMENTS_DELETE_PROMPT');
 
 		// Comment form
