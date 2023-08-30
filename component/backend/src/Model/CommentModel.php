@@ -201,17 +201,19 @@ class CommentModel extends AdminModel
 
 		if ($noSavedData)
 		{
-			$data             = (object) $this->getItemTable()->getProperties();
+			$data             = $this->getItemTable();
 			$data->created_by = $data->created_by ?? (UserFetcher::getUser() ?? new User())->id;
 		}
 
 		// Make sure data is an array
-		$data = is_object($data) ? $data->getProperties() : $data;
+		if (is_object($data))
+		{
+			$data = method_exists($data, 'getProperties') ? $data->getProperties() : (array) $data;
+		}
 
 		$this->preprocessData('com_engage.comment', $data);
 
 		return $data;
-
 	}
 
 	/**
