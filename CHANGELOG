@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.3.1
+================================================================================
+# [LOW] Possible PHP error when updating this along other extensions using the same post-installation script
+
 Akeeba Engage 3.3.0
 ================================================================================
 + Notice about Joomla 4 End of Service
