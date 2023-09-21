@@ -234,6 +234,9 @@ class CommentModel extends AdminCommentModel
 			case 'nonmanager':
 				$showCaptcha = !$user->guest && !$user->authorise('core.manage', 'com_engage');
 				break;
+
+			default:
+				$showCaptcha = true;
 		}
 
 		$showCaptcha &= ($captchaPlugin !== '-1');

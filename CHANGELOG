@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.3.2
+================================================================================
+# [LOW] Show CAPTCHA for all does not show CAPTCHA for anyone
+
 Akeeba Engage 3.3.1
 ================================================================================
 # [LOW] Possible PHP error when updating this along other extensions using the same post-installation script
