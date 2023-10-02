@@ -301,11 +301,10 @@ akeeba.Engage.Comments.onSubmit = function (e) {
         return;
     }
 
-    const elForm = document.forms['akengageCommentForm'];
+    const elForm = document.forms['akengage-comment-form'];
 
     if (!elForm)
     {
-        console.log('Trombeta');
         return;
     }
 
