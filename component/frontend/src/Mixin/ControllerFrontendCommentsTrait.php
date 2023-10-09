@@ -144,6 +144,13 @@ trait ControllerFrontendCommentsTrait
 			          ],
 			          'onEngageClearCache'
 		          );
+
+		$cacheCleanerService
+		          ->clearGroups(
+			          [
+				          'com_content',
+			          ]
+		          );
 	}
 
 	/**

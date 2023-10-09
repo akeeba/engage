@@ -9,9 +9,8 @@ namespace Akeeba\Plugin\System\EngageCache\Extension;
 
 defined('_JEXEC') or die;
 
-use Exception;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Event\Event;
 use Joomla\Event\SubscriberInterface;
@@ -31,7 +30,10 @@ class Engagecache extends CMSPlugin implements SubscriberInterface
 
 	public static function getSubscribedEvents(): array
 	{
-		return ['onAfterInitialise' => 'onAfterInitialise'];
+		return [
+			'onAfterInitialise' => 'onAfterInitialise',
+			'onBeforeRender'    => 'onBeforeRender',
+		];
 	}
 
 	/**
@@ -79,5 +81,26 @@ class Engagecache extends CMSPlugin implements SubscriberInterface
 		$registeredurlparams->akengage_limit = $limit;
 
 		$app->registeredurlparams = $registeredurlparams;
+	}
+
+	/**
+	 * Fixes some perplexingly stupid behaviour in Joomla.
+	 *
+	 * When caching is enabled Joomla will cache the JavaScript we told it load (good!) and its script options (great!),
+	 * but not… the language strings. Which are used by the JavaScript code. Are you drunk, Joomla? AGAIN?
+	 *
+	 *
+	 * @param   Event  $event
+	 *
+	 * @since version
+	 */
+	public function onBeforeRender(Event $event)
+	{
+		// When caching is enabled Joomla does not call the events which allow for these lang strings to be included.
+		$language = $this->getApplication()->getLanguage();
+		$language->load('com_engage', JPATH_SITE);
+
+		Text::script('COM_ENGAGE_COMMENTS_FORM_BTN_SUBMIT_PLEASE_WAIT');
+		Text::script('COM_ENGAGE_COMMENTS_DELETE_PROMPT');
 	}
 }
