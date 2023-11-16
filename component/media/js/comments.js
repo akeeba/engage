@@ -155,6 +155,7 @@ akeeba.Engage.Comments.onReplyButton = function (e)
 
     form["jform[parent_id]"].value = parentId;
     wrapper.classList.add('d-none');
+    wrapper.style.display = "none";
 
     if (parentId !== 0)
     {
@@ -162,6 +163,7 @@ akeeba.Engage.Comments.onReplyButton = function (e)
         inReplyTo.innerText = inReplyToName;
 
         wrapper.classList.remove('d-none');
+        wrapper.style.display = "";
     }
 
     document.location.hash = "";
@@ -178,6 +180,7 @@ akeeba.Engage.Comments.onCancelReplyButton = function (e)
 
     form["jform[parent_id]"].value = 0;
     wrapper.style.display          = "none";
+    wrapper.classList.add('d-none');
     inReplyTo.innerText            = "";
 };
 

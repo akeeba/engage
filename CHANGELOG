@@ -4,6 +4,7 @@ Akeeba Engage 3.3.3
 ~ Update Gravatar URLs with SHA-256
 # [HIGH] Joomla failed to clean the content cache when submitting a comment
 # [HIGH] The Please Wait message feature was not working
+# [MEDIUM] In-reply-to container fails to re-appear after being dismissed
 
 Akeeba Engage 3.3.2
 ================================================================================
