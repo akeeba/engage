@@ -33,10 +33,28 @@ trait CliRouting
 
 		$refClass     = new ReflectionClass(Uri::class);
 		$refInstances = $refClass->getProperty('instances');
+
 		$refInstances->setAccessible(true);
-		$instances           = $refInstances->getValue();
+
+		if (version_compare(PHP_VERSION, '8.3.0', 'ge'))
+		{
+			$instances = $refClass->getStaticPropertyValue('instances');
+		}
+		else
+		{
+			$instances = $refInstances->getValue();
+		}
+
 		$instances['SERVER'] = $uri;
-		$refInstances->setValue($instances);
+
+		if (version_compare(PHP_VERSION, '8.3.0', 'ge'))
+		{
+			$refClass->setStaticPropertyValue('instances', $instances);
+		}
+		else
+		{
+			$refInstances->setValue($instances);
+		}
 
 		$base = [
 			'prefix' => $uri->toString(['scheme', 'host', 'port']),
@@ -45,17 +63,43 @@ trait CliRouting
 
 		$refBase = $refClass->getProperty('base');
 		$refBase->setAccessible(true);
-		$refBase->setValue($base);
+
+		if (version_compare(PHP_VERSION, '8.3.0', 'ge'))
+		{
+			$refClass->setStaticPropertyValue('base', $base);
+		}
+		else
+		{
+			$refBase->setValue($base);
+		}
 
 		// DO NOT REMOVE — This initialises the internal object cache of the CMS Router.
 		$siteRouter = Router::getInstance('site');
 		$refClass   = new ReflectionClass(Route::class);
 		$refCache   = $refClass->getProperty('_router');
+
 		$refCache->setAccessible(true);
-		$cache         = $refCache->getValue();
+
+		if (version_compare(PHP_VERSION, '8.3.0', 'ge'))
+		{
+			$cache = $refClass->getStaticPropertyValue('_router');
+		}
+		else
+		{
+			$cache = $refCache->getValue();
+		}
+
 		$cache['site'] = $siteRouter;
 		$cache['cli']  = $siteRouter;
-		$refCache->setValue($cache);
+
+		if (version_compare(PHP_VERSION, '8.3.0', 'ge'))
+		{
+			$refClass->setStaticPropertyValue('_router', $cache);
+		}
+		else
+		{
+			$refCache->setValue($cache);
+		}
 	}
 
 }

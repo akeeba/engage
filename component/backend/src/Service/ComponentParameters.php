@@ -24,16 +24,16 @@ class ComponentParameters
 	/**
 	 * The Cache Cleaner service
 	 *
-	 * @since 3.2.0
 	 * @var   CacheCleaner
+	 * @since 3.2.0
 	 */
 	private CacheCleaner $cacheCleanerService;
 
 	/**
 	 * Default extension to save parameters to
 	 *
-	 * @since 3.2.0
 	 * @var   string
+	 * @since 3.2.0
 	 */
 	private string $defaultExtension;
 
@@ -57,17 +57,17 @@ class ComponentParameters
 		$data = $params->toString('JSON');
 
 		$query = $db->getQuery(true)
-		            ->update($db->qn('#__extensions'))
-		            ->set($db->qn('params') . ' = ' . $db->q($data))
-		            ->where($db->qn('element') . ' = :element')
-		            ->where($db->qn('type') . ' = :type')
-		            ->bind(':element', $criteria['element'], ParameterType::STRING)
-		            ->bind(':type', $criteria['type'], ParameterType::STRING);
+			->update($db->qn('#__extensions'))
+			->set($db->qn('params') . ' = ' . $db->q($data))
+			->where($db->qn('element') . ' = :element')
+			->where($db->qn('type') . ' = :type')
+			->bind(':element', $criteria['element'], ParameterType::STRING)
+			->bind(':type', $criteria['type'], ParameterType::STRING);
 
 		if (isset($criteria['folder']) && !empty($criteria['folder']))
 		{
 			$query->where($db->quoteName('folder') . ' = :folder')
-			      ->bind(':folder', $criteria['folder'], ParameterType::STRING);
+				->bind(':folder', $criteria['folder'], ParameterType::STRING);
 		}
 
 		$db->setQuery($query);
@@ -94,11 +94,25 @@ class ComponentParameters
 			$refProp  = $refClass->getProperty('components');
 			$refProp->setAccessible(true);
 
-			$components = $refProp->getValue();
+			if (version_compare(PHP_VERSION, '8.3.0', 'ge'))
+			{
+				$components = $refClass->getStaticPropertyValue('components');
+			}
+			else
+			{
+				$components = $refProp->getValue();
+			}
 
 			$components[$criteria['element']]->params = $params;
 
-			$refProp->setValue($components);
+			if (version_compare(PHP_VERSION, '8.3.0', 'ge'))
+			{
+				$refClass->setStaticPropertyValue('components', $components);
+			}
+			else
+			{
+				$refProp->setValue($components);
+			}
 		}
 		elseif ($criteria['type'] === 'plugin')
 		{
@@ -107,7 +121,14 @@ class ComponentParameters
 
 			$refProp->setAccessible(true);
 
-			$plugins = $refProp->getValue();
+			if (version_compare(PHP_VERSION, '8.3.0', 'ge'))
+			{
+				$plugins = $refClass->getStaticPropertyValue('plugins');
+			}
+			else
+			{
+				$plugins = $refProp->getValue();
+			}
 
 			foreach ($plugins as $plugin)
 			{
@@ -117,7 +138,14 @@ class ComponentParameters
 				}
 			}
 
-			$refProp->setValue($plugins);
+			if (version_compare(PHP_VERSION, '8.3.0', 'ge'))
+			{
+				$refClass->setStaticPropertyValue('plugins', $plugins);
+			}
+			else
+			{
+				$refProp->setValue($plugins);
+			}
 		}
 	}
 

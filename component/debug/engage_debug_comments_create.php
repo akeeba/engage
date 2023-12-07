@@ -268,9 +268,26 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 		$refClass     = new ReflectionClass(Uri::class);
 		$refInstances = $refClass->getProperty('instances');
 		$refInstances->setAccessible(true);
-		$instances           = $refInstances->getValue();
+
+		if (version_compare(PHP_VERSION, '8.3.0', 'ge'))
+		{
+			$instances = $refClass->getStaticPropertyValue('instances');
+		}
+		else
+		{
+			$instances = $refInstances->getValue();
+		}
+
 		$instances['SERVER'] = $uri;
-		$refInstances->setValue($instances);
+
+		if (version_compare(PHP_VERSION, '8.3.0', 'ge'))
+		{
+			$refClass->setStaticPropertyValue('instances', $instances);
+		}
+		else
+		{
+			$refInstances->setValue($instances);
+		}
 
 		$base = [
 			'prefix' => $uri->toString(['scheme', 'host', 'port']),
@@ -279,7 +296,15 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 
 		$refBase = $refClass->getProperty('base');
 		$refBase->setAccessible(true);
-		$refBase->setValue($base);
+
+		if (version_compare(PHP_VERSION, '8.3.0', 'ge'))
+		{
+			$refClass->setStaticPropertyValue('base', $base);
+		}
+		else
+		{
+			$refBase->setValue($base);
+		}
 
 		// Set up the SEF mode in the router
 		if (version_compare(JVERSION, '3.999.999', 'le'))
@@ -308,9 +333,11 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 		for ($level = 1; $level <= $maxLevel; $level++)
 		{
 			// Get the parent comments we are replying to (for level 1 that's the root node)
-			$toComment = array_filter($commentsInfo, function ($info) use ($level) {
+			$toComment = array_filter(
+				$commentsInfo, function ($info) use ($level) {
 				return $info['level'] == $level - 1;
-			});
+			}
+			);
 
 			foreach ($toComment as $parent)
 			{
@@ -323,7 +350,7 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 					$earliestDate = new FOF40\Date\Date($earliestDate);
 				}
 
-				$latestDate   = (clone $earliestDate)->add(new DateInterval('P2Y'));
+				$latestDate = (clone $earliestDate)->add(new DateInterval('P2Y'));
 
 				if ($latestDate->getTimestamp() > time())
 				{
@@ -338,10 +365,13 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 				// Create info for $numComments in total
 				for ($j = 0; $j < $numComments; $j++)
 				{
-					$randomTimestamp = $this->faker->biasedNumberBetween($earliestDate->toUnix(), $latestDate->toUnix(), [
-						Biased::class, 'linearLow',
-					]);
-					$jDate = new FOF40\Date\Date($randomTimestamp);
+					$randomTimestamp = $this->faker->biasedNumberBetween(
+						$earliestDate->toUnix(), $latestDate->toUnix(), [
+							Biased::class,
+							'linearLow',
+						]
+					);
+					$jDate           = new FOF40\Date\Date($randomTimestamp);
 
 					$commentsInfo[] = [
 						'uuid'      => $this->faker->uuid,
@@ -378,7 +408,9 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 		$faker      = FakerFactory::create();
 		$limitStart = 0;
 		$db         = $this->container->db;
-		$query      = $db->getQuery(true)->select('*')->from($db->qn('#__engage_temp_info'))->order($db->qn('date') . ' ASC');
+		$query      = $db->getQuery(true)->select('*')->from($db->qn('#__engage_temp_info'))->order(
+			$db->qn('date') . ' ASC'
+		);
 
 		$this->out('Committing comments in chronological order');
 
@@ -414,18 +446,20 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 					$info['parent_id'] = $db->setQuery($infoQ)->loadResult();
 				}
 
-				$cModel->reset()->bind([
-					'asset_id'   => $info['asset_id'],
-					'parent_id'  => ($info['parent_id'] == 0) ? null : $info['parent_id'],
-					'enabled'    => 1,
-					'body'       => $this->getCommentText($faker),
-					'name'       => $faker->name,
-					'email'      => $faker->email,
-					'ip'         => $faker->ipv4,
-					'user_agent' => $faker->userAgent,
-					'created_by' => 0,
-					'created_on' => $info['date'],
-				]);
+				$cModel->reset()->bind(
+					[
+						'asset_id'   => $info['asset_id'],
+						'parent_id'  => ($info['parent_id'] == 0) ? null : $info['parent_id'],
+						'enabled'    => 1,
+						'body'       => $this->getCommentText($faker),
+						'name'       => $faker->name,
+						'email'      => $faker->email,
+						'ip'         => $faker->ipv4,
+						'user_agent' => $faker->userAgent,
+						'created_by' => 0,
+						'created_on' => $info['date'],
+					]
+				);
 
 				if (!$faker->boolean($this->guestCommentProbability * 100))
 				{
@@ -589,10 +623,11 @@ class EngageDebugCommentsCreate extends FOFApplicationCLI
 		$groups = $db->setQuery($q)->loadColumn();
 
 		// Get the groups that can create comments or are Super Users
-		$groups = array_filter($groups, function ($gid) {
-			return Access::checkGroup($gid, 'core.create', 'com_engage') ||
-				Access::checkGroup($gid, 'core.admin');
-		});
+		$groups = array_filter(
+			$groups, function ($gid) {
+			return Access::checkGroup($gid, 'core.create', 'com_engage') || Access::checkGroup($gid, 'core.admin');
+		}
+		);
 
 		$this->allowedUsers = [];
 
@@ -645,9 +680,13 @@ MySQL;
 			return "<p>" . implode(". ", $faker->sentences($numSentences, false)) . ".</p>";
 		}
 
-		return implode("\n", array_map(function ($p) {
-			return "<p>$p</p>";
-		}, $faker->paragraphs($numParagraphs)));
+		return implode(
+			"\n", array_map(
+				function ($p) {
+					return "<p>$p</p>";
+				}, $faker->paragraphs($numParagraphs)
+			)
+		);
 	}
 }
 

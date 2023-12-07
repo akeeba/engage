@@ -5,6 +5,7 @@ Akeeba Engage 3.3.3
 # [HIGH] Joomla failed to clean the content cache when submitting a comment
 # [HIGH] The Please Wait message feature was not working
 # [MEDIUM] In-reply-to container fails to re-appear after being dismissed
+# [LOW] PHP 8.3 deprecated notice in ComponentParameters service (no functional issue)
 
 Akeeba Engage 3.3.2
 ================================================================================
