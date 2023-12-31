@@ -1,7 +1,7 @@
 <?php /** @noinspection PhpComposerExtensionStubsInspection */
 /*
  * @package   paddle
- * @copyright Copyright (c)2021-2023 Akeeba Ltd
+ * @copyright Copyright (c)2020-2024 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 

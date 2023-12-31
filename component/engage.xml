@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--~
   ~ @package   AkeebaEngage
-  ~ @copyright Copyright (c)2020-2023 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @copyright Copyright (c)2020-2024 Nicholas K. Dionysopoulos / Akeeba Ltd
   ~ @license   GNU General Public License version 3, or later
   -->
 
@@ -11,7 +11,7 @@
 	<author>Akeeba Ltd</author>
 	<authorEmail>no-reply@akeeba.com</authorEmail>
 	<authorUrl>https://www.akeeba.com</authorUrl>
-	<copyright>Copyright (c)2020-2023 Akeeba Ltd</copyright>
+	<copyright>Copyright (c)2020-2024 Nicholas K. Dionysopoulos / Akeeba Ltd</copyright>
 	<license>GNU/GPL v3 or any later version</license>
 	<version>3.3.3</version>
 	<description>COM_ENGAGE_XML_DESCRIPTION</description>
