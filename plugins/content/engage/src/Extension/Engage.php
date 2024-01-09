@@ -230,7 +230,7 @@ class Engage extends CMSPlugin implements SubscriberInterface
 		$url = '';
 
 		$nonSefUrl  = "index.php?option=com_content&view=article&id=%s&catid=%s";
-		$nonSefUrl  .= empty($row->language) ? '' : "&lang={$row->language}";
+		$nonSefUrl  .= (empty($row->language) || ($row->language === '*')) ? '' : "&lang={$row->language}";
 		$public_url = Route::link('site', sprintf($nonSefUrl, $row->id, $row->catid), false, Route::TLS_IGNORE, true);
 
 		if ($this->getApplication()->isClient('site'))

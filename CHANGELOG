@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Engage 3.3.4
+================================================================================
+# [MEDIUM] Wrong lang parameter value in links [gh-304]
+
 Akeeba Engage 3.3.3
 ================================================================================
 ~ Update Gravatar URLs with SHA-256
