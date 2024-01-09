@@ -9,7 +9,6 @@ namespace Akeeba\Plugin\System\EngageCache\Extension;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Event\Event;
@@ -31,8 +30,8 @@ class Engagecache extends CMSPlugin implements SubscriberInterface
 	public static function getSubscribedEvents(): array
 	{
 		return [
-			'onAfterInitialise' => 'onAfterInitialise',
-			'onBeforeRender'    => 'onBeforeRender',
+			'onAfterRoute'   => 'onAfterRoute',
+			'onBeforeRender' => 'onBeforeRender',
 		];
 	}
 
@@ -54,15 +53,14 @@ class Engagecache extends CMSPlugin implements SubscriberInterface
 	 *
 	 * @see     BaseController::display()
 	 */
-	public function onAfterInitialise(Event $event)
+	public function onAfterRoute(Event $event)
 	{
-		$app              = $this->getApplication();
-		$cParams          = ComponentHelper::getParams('com_engage');
-		$defaultListLimit = $cParams->get('default_limit', 20);
-		$defaultListLimit = ($defaultListLimit == -1) ? 20 : $defaultListLimit;
+		$app = $this->getApplication();
 
-		$limitStart = $app->input->getInt('akengage_limitstart', 0);
-		$limit      = $app->input->getInt('akengage_limit', $defaultListLimit);
+		if ($app->input->getCmd('option') !== 'com_content')
+		{
+			return;
+		}
 
 		if (!empty($app->registeredurlparams))
 		{
@@ -73,26 +71,21 @@ class Engagecache extends CMSPlugin implements SubscriberInterface
 			$registeredurlparams = new \stdClass();
 		}
 
-		if (!empty($limitStart))
-		{
-			$registeredurlparams->akengage_limitstart = $limitStart;
-		}
-
-		$registeredurlparams->akengage_limit = $limit;
+		$registeredurlparams->akengage_limitstart = 'INT';
+		$registeredurlparams->akengage_limit      = 'INT';
+		$registeredurlparams->akengage_cid        = 'INT';
 
 		$app->registeredurlparams = $registeredurlparams;
 	}
 
 	/**
-	 * Fixes some perplexingly stupid behaviour in Joomla.
+	 * Fixes some perplexing behaviour in Joomla.
 	 *
 	 * When caching is enabled Joomla will cache the JavaScript we told it load (good!) and its script options (great!),
-	 * but not… the language strings. Which are used by the JavaScript code. Are you drunk, Joomla? AGAIN?
+	 * but not… the language strings. Which are used by the JavaScript code.
 	 *
 	 *
 	 * @param   Event  $event
-	 *
-	 * @since version
 	 */
 	public function onBeforeRender(Event $event)
 	{

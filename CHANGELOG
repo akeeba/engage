@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Engage 3.3.4
 ================================================================================
+# [MEDIUM] caching issues with conservative cache [gh-305]
 # [MEDIUM] Wrong lang parameter value in links [gh-304]
 
 Akeeba Engage 3.3.3
