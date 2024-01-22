@@ -8,6 +8,7 @@
 namespace Akeeba\Component\Engage\Administrator\CliCommand\Mixin;
 
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Router\Router;
 use Joomla\CMS\Uri\Uri;
@@ -74,9 +75,12 @@ trait CliRouting
 		}
 
 		// DO NOT REMOVE — This initialises the internal object cache of the CMS Router.
-		$siteRouter = Router::getInstance('site');
-		$refClass   = new ReflectionClass(Route::class);
-		$refCache   = $refClass->getProperty('_router');
+		$siteRouter = version_compare(JVERSION, '4.9999.9999', 'lt') ?
+			Router::getInstance('site')
+			: Factory::getContainer()->get('SiteRouter');
+
+		$refClass = new ReflectionClass(Route::class);
+		$refCache = $refClass->getProperty('_router');
 
 		$refCache->setAccessible(true);
 
