@@ -262,28 +262,28 @@ class HtmlView extends BaseHtmlView
 
 		$baseUrl->setVar('id', '__ID__');
 		$baseUrl->setVar('task', 'comment.edit');
-		$doc->addScriptOptions('akeeba.Engage.Comments.editURL', $baseUrl->toString());
+		$doc->addScriptOptions('akeeba.Engage.Comments.editURL', base64_encode($baseUrl->toString()));
 		$baseUrl->delVar('id');
 
 		$baseUrl->setVar('cid[]', '__ID__');
 
 		$baseUrl->setVar('task', 'comments.delete');
-		$doc->addScriptOptions('akeeba.Engage.Comments.deleteURL', $baseUrl->toString());
+		$doc->addScriptOptions('akeeba.Engage.Comments.deleteURL', base64_encode($baseUrl->toString()));
 
 		$baseUrl->setVar('task', 'comments.publish');
-		$doc->addScriptOptions('akeeba.Engage.Comments.publishURL', $baseUrl->toString());
+		$doc->addScriptOptions('akeeba.Engage.Comments.publishURL', base64_encode($baseUrl->toString()));
 
 		$baseUrl->setVar('task', 'comments.unpublish');
-		$doc->addScriptOptions('akeeba.Engage.Comments.unpublishURL', $baseUrl->toString());
+		$doc->addScriptOptions('akeeba.Engage.Comments.unpublishURL', base64_encode($baseUrl->toString()));
 
 		$baseUrl->setVar('task', 'comments.reportham');
-		$doc->addScriptOptions('akeeba.Engage.Comments.markhamURL', $baseUrl->toString());
+		$doc->addScriptOptions('akeeba.Engage.Comments.markhamURL', base64_encode($baseUrl->toString()));
 
 		$baseUrl->setVar('task', 'comments.reportspam');
-		$doc->addScriptOptions('akeeba.Engage.Comments.markspamURL', $baseUrl->toString());
+		$doc->addScriptOptions('akeeba.Engage.Comments.markspamURL', base64_encode($baseUrl->toString()));
 
 		$baseUrl->setVar('task', 'comments.possiblespam');
-		$doc->addScriptOptions('akeeba.Engage.Comments.possiblespamURL', $baseUrl->toString());
+		$doc->addScriptOptions('akeeba.Engage.Comments.possiblespamURL', base64_encode($baseUrl->toString()));
 
 		$doc->addScriptOptions('akeeba.Engage.Comments.pleaseWait', $params->get('pleaseWait', 0) ? 1 : 0);
 		Text::script('COM_ENGAGE_COMMENTS_FORM_BTN_SUBMIT_PLEASE_WAIT');

@@ -1,5 +1,15 @@
 <h3>What's new?</h3>
 
 <p>
+	<strong>~ Workaround for Google indexing temporary URLs which are NOT in href or src attributes</strong>.
+	See https://github.com/akeeba/engage/discussions/310. We use prototype URLs for comment admin actions. These are
+	passed to the frontend using Joomla's script options, which places them in a JSON document embedded in the HTML
+	output of the page. Apparently, Google scans this document (even though it really shouldn't!), and indexes these
+	URLs. There is no way to tell Google or any search engine to not index stuff in the JSON document they should not
+	be parsing to begin with, therefore we can only do the one reasonable thing: base64-encode these URLs, and decode
+	them in the frontend JavaScript code. This works, at the expense of transparency and performance.
+</p>
+
+<p>
 	<strong>Bug fixes and minor improvements</strong>. Please take a look at the CHANGELOG below.
 </p>

@@ -59,7 +59,7 @@ akeeba.Engage.Comments.onEditButton = function (e)
      */
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.editURL").replace("__ID__", id);
+    window.location = atob(Joomla.getOptions("akeeba.Engage.Comments.editURL")).replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onDeleteButton = function (e)
@@ -79,7 +79,7 @@ akeeba.Engage.Comments.onDeleteButton = function (e)
      */
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.deleteURL").replace("__ID__", id);
+    window.location = atob(Joomla.getOptions("akeeba.Engage.Comments.deleteURL")).replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onPublishButton = function (e)
@@ -92,7 +92,7 @@ akeeba.Engage.Comments.onPublishButton = function (e)
      */
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.publishURL").replace("__ID__", id);
+    window.location = atob(Joomla.getOptions("akeeba.Engage.Comments.publishURL")).replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onUnpublishButton = function (e)
@@ -105,7 +105,7 @@ akeeba.Engage.Comments.onUnpublishButton = function (e)
      */
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.unpublishURL").replace("__ID__", id);
+    window.location = atob(Joomla.getOptions("akeeba.Engage.Comments.unpublishURL")).replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onMarkHamButton = function (e)
@@ -114,7 +114,7 @@ akeeba.Engage.Comments.onMarkHamButton = function (e)
 
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.markhamURL").replace("__ID__", id);
+    window.location = atob(Joomla.getOptions("akeeba.Engage.Comments.markhamURL")).replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onMarkSpamButton = function (e)
@@ -123,7 +123,7 @@ akeeba.Engage.Comments.onMarkSpamButton = function (e)
 
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.markspamURL").replace("__ID__", id);
+    window.location = atob(Joomla.getOptions("akeeba.Engage.Comments.markspamURL")).replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onMarkPossibleSpamButton = function (e)
@@ -132,7 +132,7 @@ akeeba.Engage.Comments.onMarkPossibleSpamButton = function (e)
 
     var id = akeeba.Engage.Comments.getAssetIdFromEvent(e);
 
-    window.location = Joomla.getOptions("akeeba.Engage.Comments.possiblespamURL").replace("__ID__", id);
+    window.location = atob(Joomla.getOptions("akeeba.Engage.Comments.possiblespamURL")).replace("__ID__", id);
 };
 
 akeeba.Engage.Comments.onReplyButton = function (e)
