@@ -132,7 +132,9 @@ $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->ena
 								class="text-body text-decoration-none"
 						>
 						<span itemprop="dateCreated" content="<?= $commentDate->toISO8601(false) ?>">
-							<?= $commentDate->format(Text::_('DATE_FORMAT_LC2'), true) ?>
+							<span itemprop="datePublished" content="<?= $commentDate->toISO8601(false) ?>" class="akeeba-sr-only visually-hidden">
+								<?= $commentDate->format(Text::_('DATE_FORMAT_LC2'), true) ?>
+							</span>
 						</span>
 						</a>
 					</div>
