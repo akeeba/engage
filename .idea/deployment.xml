@@ -2,10 +2,14 @@
 <project version="4">
   <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
-      <paths name="The Boot — Joomla! 5">
+      <paths name="Blog">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/components/com_engage" local="$PROJECT_DIR$/component/frontend" web="/components/com_engage" />
+            <mapping deploy="/administrator/components/com_engage" local="$PROJECT_DIR$/component/backend" web="/administrator/components/com_engage" />
+            <mapping deploy="/media/com_engage" local="$PROJECT_DIR$/component/media" web="/media/com_engage" />
+            <mapping deploy="/plugins" local="$PROJECT_DIR$/plugins" web="/plugins" />
+            <mapping deploy="/modules" local="$PROJECT_DIR$/modules/site" web="/modules" />
           </mappings>
         </serverdata>
       </paths>

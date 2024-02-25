@@ -85,6 +85,10 @@ $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->ena
 	<article
 			class="akengage-comment--<?= ($comment->enabled == 1) ? 'primary' : (($comment->enabled == -3) ? 'spam' : 'unpublished') ?> border-start border-4 border-<?= $bsCommentStateClass ?> ps-2 mb-2"
 			id="akengage-comment-<?= $comment->id ?>" itemscope itemtype="http://schema.org/Comment">
+
+		<span itemprop="dateCreated" content="<?= $commentDate->toISO8601(false) ?>"></span>
+		<span itemprop="datePublished" content="<?= $commentDate->toISO8601(false) ?>"></span>
+
 		<footer
 				itemprop="author" itemscope itemtype="http://schema.org/Person"
 				class="akengage-comment-properties d-flex flex-row gap-1 mb-1 bg-light p-1 small border-bottom border-2">
@@ -131,11 +135,7 @@ $bsCommentStateClass =  ($comment->enabled == 1) ? 'secondary' : (($comment->ena
 						<a href="<?= $tempUri->toString() ?>"
 								class="text-body text-decoration-none"
 						>
-						<span itemprop="dateCreated" content="<?= $commentDate->toISO8601(false) ?>">
-							<span itemprop="datePublished" content="<?= $commentDate->toISO8601(false) ?>" class="akeeba-sr-only visually-hidden">
-								<?= $commentDate->format(Text::_('DATE_FORMAT_LC2'), true) ?>
-							</span>
-						</span>
+							<?= $commentDate->format(Text::_('DATE_FORMAT_LC2'), true) ?>
 						</a>
 					</div>
 					<div class="akengage-comment-actions d-flex gap-1">
